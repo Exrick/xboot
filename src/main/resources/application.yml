@@ -1,0 +1,75 @@
+# 配置文件加密key
+jasypt:
+  encryptor:
+    password: xboot
+
+server:
+  port: 8888
+
+spring:
+  # 数据源
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/xboot?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    # Jasypt加密 可到common-utils中找到JasyptUtil加解密工具类生成加密结果 格式为ENC(加密结果)
+    password: ENC(F4B0s6u9xcDw3V+P0qC4CA==)
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    logSlowSql: true
+  jpa:
+    show-sql: true
+    # 自动生成表结构
+    generate-ddl: true
+    hibernate:
+      ddl-auto: none
+  # Redis
+  redis:
+    host: 127.0.0.1
+    password:
+    # 数据库索引 默认0
+    database: 0
+    port: 6379
+    timeout: 10000
+  # Elasticsearch
+  data:
+    elasticsearch:
+      cluster-nodes: 127.0.0.1:9200
+  # 文件大小上传配置
+  servlet:
+    multipart:
+      max-file-size: 5Mb
+      max-request-size: 5Mb
+
+# 忽略鉴权url
+ignored:
+  urls:
+    - /user/regist
+    - /ip/**
+    - /captcha/**
+    - /swagger-ui.html
+    - /swagger-resources/**
+    - /swagger/**
+    - /**/v2/api-docs
+    - /**/*.js
+    - /**/*.css
+    - /**/*.png
+    - /**/*.ico
+
+xboot:
+  # JWT过期时间（分钟）
+  jwtExpireTime: 60
+  # 限制用户登陆错误次数
+  loginTimeLimit: 10
+  # 错误超过次数后多少分钟后才能继续登录
+  loginAfterTime: 10
+
+# Swagger界面内容配置
+swagger:
+  title: XBoot API接口文档
+  description: XBoot Api Documentation
+  version: 1.0.0
+  termsOfServiceUrl: http://blog.exrick.cn
+  contact:
+    name: Exrick
+    url: http://blog.exrick.cn
+    email: 1012139570@qq.com
