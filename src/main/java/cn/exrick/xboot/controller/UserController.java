@@ -14,6 +14,10 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,6 +36,7 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @Api(description = "用户接口")
 @RequestMapping("/user")
+@CacheConfig(cacheNames = "user")
 public class UserController extends XbootBaseController<User, String> {
 
     @Autowired
@@ -93,7 +98,8 @@ public class UserController extends XbootBaseController<User, String> {
     }
 
     @RequestMapping(value = "/edit",method = RequestMethod.POST)
-    @ApiOperation(value = "修改资料",notes = "用户名密码不会修改 需要通过id获取原用户信息")
+    @ApiOperation(value = "修改资料",notes = "用户名密码不会修改 需要通过id获取原用户信息 需要username更新缓存")
+    @CacheEvict(key = "#u.username")
     public Result<Object> edit(@ModelAttribute User u){
 
         User old = userService.get(u.getId());
@@ -128,6 +134,9 @@ public class UserController extends XbootBaseController<User, String> {
             return new ResultUtil<Object>().setErrorMsg("修改失败");
         }
 
+        //手动更新缓存
+        redisTemplate.delete("user:"+user.getUsername());
+
         return new ResultUtil<Object>().setData(user);
     }
 
@@ -159,12 +168,14 @@ public class UserController extends XbootBaseController<User, String> {
     @ApiOperation(value = "后台禁用用户")
     public Result<Object> disable(@ApiParam("用户唯一id标识") @RequestParam String userId){
 
-        User a=userService.get(userId);
-        if(a==null){
+        User user=userService.get(userId);
+        if(user==null){
             return new ResultUtil<Object>().setErrorMsg("通过userId获取用户失败");
         }
-        a.setStatus(CommonConstant.USER_STATUS_LOCK);
-        userService.update(a);
+        user.setStatus(CommonConstant.USER_STATUS_LOCK);
+        userService.update(user);
+        //手动更新缓存
+        redisTemplate.delete("user:"+user.getUsername());
         return new ResultUtil<Object>().setData(null);
     }
 
@@ -173,12 +184,14 @@ public class UserController extends XbootBaseController<User, String> {
     @ApiOperation(value = "后台启用用户")
     public Result<Object> enable(@ApiParam("用户唯一id标识") @RequestParam String userId){
 
-        User a=userService.get(userId);
-        if(a==null){
+        User user=userService.get(userId);
+        if(user==null){
             return new ResultUtil<Object>().setErrorMsg("通过userId获取用户失败");
         }
-        a.setStatus(CommonConstant.USER_STATUS_NORMAL);
-        userService.update(a);
+        user.setStatus(CommonConstant.USER_STATUS_NORMAL);
+        userService.update(user);
+        //手动更新缓存
+        redisTemplate.delete("user:"+user.getUsername());
         return new ResultUtil<Object>().setData(null);
     }
 

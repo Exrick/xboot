@@ -5,6 +5,7 @@ import cn.exrick.xboot.base.XbootBaseService;
 import cn.exrick.xboot.dao.RoleDao;
 import cn.exrick.xboot.entity.Role;
 import cn.exrick.xboot.entity.UserRole;
+import org.springframework.cache.annotation.CacheConfig;
 
 import java.util.List;
 

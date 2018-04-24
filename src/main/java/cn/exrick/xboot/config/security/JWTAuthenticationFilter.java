@@ -42,7 +42,6 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
         String header = request.getHeader(SecurityConstant.HEADER);
         if (StrUtil.isBlank(header) || !header.startsWith(SecurityConstant.TOKEN_SPLIT)) {
             chain.doFilter(request, response);
-            //ResponseUtil.out(response, ResponseUtil.resultMap(false,500,"您还未认证"));
             return;
         }
         try {

@@ -3,6 +3,8 @@ package cn.exrick.xboot.service;
 
 import cn.exrick.xboot.base.XbootBaseService;
 import cn.exrick.xboot.entity.User;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -10,6 +12,7 @@ import java.util.List;
  * 用户接口
  * @author Exrickx
  */
+@CacheConfig(cacheNames = "user")
 public interface UserService extends XbootBaseService<User,String> {
 
     /**
@@ -17,6 +20,7 @@ public interface UserService extends XbootBaseService<User,String> {
      * @param username
      * @return
      */
+    @Cacheable(key = "#username")
     User findByUsername(String username);
 
     /**

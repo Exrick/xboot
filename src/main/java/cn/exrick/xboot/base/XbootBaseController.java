@@ -6,6 +6,7 @@ import cn.exrick.xboot.common.vo.PageVo;
 import cn.exrick.xboot.common.vo.Result;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +28,7 @@ public abstract class XbootBaseController<E, ID extends Serializable> {
     @RequestMapping(value = "/get/{id}",method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(value = "通过id获取")
+    @Cacheable(key = "'id:' + #id")
     public Result<E> get(@PathVariable ID id){
 
         E entity = getService().get(id);
