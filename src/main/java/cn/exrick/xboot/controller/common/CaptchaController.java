@@ -1,4 +1,4 @@
-package cn.exrick.xboot.controller;
+package cn.exrick.xboot.controller.common;
 
 import cn.exrick.xboot.common.utils.CreateVerifyCode;
 import cn.exrick.xboot.common.utils.ResultUtil;

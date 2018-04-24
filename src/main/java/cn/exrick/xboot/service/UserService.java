@@ -12,7 +12,7 @@ import java.util.List;
  * 用户接口
  * @author Exrickx
  */
-@CacheConfig(cacheNames = "user")
+
 public interface UserService extends XbootBaseService<User,String> {
 
     /**
@@ -20,7 +20,6 @@ public interface UserService extends XbootBaseService<User,String> {
      * @param username
      * @return
      */
-    @Cacheable(key = "#username")
     User findByUsername(String username);
 
     /**

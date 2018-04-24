@@ -1,4 +1,4 @@
-package cn.exrick.xboot.controller;
+package cn.exrick.xboot.controller.base;
 
 import cn.exrick.xboot.base.XbootBaseController;
 import cn.exrick.xboot.common.utils.ResultUtil;

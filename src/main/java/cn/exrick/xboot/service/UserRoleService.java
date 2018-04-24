@@ -6,6 +6,7 @@ import cn.exrick.xboot.dao.RoleDao;
 import cn.exrick.xboot.entity.Role;
 import cn.exrick.xboot.entity.UserRole;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * 用户角色接口
  * @author Exrickx
  */
+//@CacheConfig(cacheNames = "userRole")
 public interface UserRoleService extends XbootBaseService<UserRole,String> {
 
     /**
@@ -20,5 +22,6 @@ public interface UserRoleService extends XbootBaseService<UserRole,String> {
      * @param userId
      * @return
      */
+//    @Cacheable(key = "#userId")
     List<String> findByUserId(String userId);
 }

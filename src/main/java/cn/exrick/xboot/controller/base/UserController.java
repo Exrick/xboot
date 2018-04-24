@@ -1,4 +1,4 @@
-package cn.exrick.xboot.controller;
+package cn.exrick.xboot.controller.base;
 
 import cn.exrick.xboot.base.XbootBaseController;
 import cn.exrick.xboot.common.constant.CommonConstant;
@@ -135,7 +135,7 @@ public class UserController extends XbootBaseController<User, String> {
         }
 
         //手动更新缓存
-        redisTemplate.delete("user:"+user.getUsername());
+        redisTemplate.delete("user::"+user.getUsername());
 
         return new ResultUtil<Object>().setData(user);
     }
@@ -175,7 +175,7 @@ public class UserController extends XbootBaseController<User, String> {
         user.setStatus(CommonConstant.USER_STATUS_LOCK);
         userService.update(user);
         //手动更新缓存
-        redisTemplate.delete("user:"+user.getUsername());
+        redisTemplate.delete("user::"+user.getUsername());
         return new ResultUtil<Object>().setData(null);
     }
 
@@ -191,7 +191,7 @@ public class UserController extends XbootBaseController<User, String> {
         user.setStatus(CommonConstant.USER_STATUS_NORMAL);
         userService.update(user);
         //手动更新缓存
-        redisTemplate.delete("user:"+user.getUsername());
+        redisTemplate.delete("user::"+user.getUsername());
         return new ResultUtil<Object>().setData(null);
     }
 

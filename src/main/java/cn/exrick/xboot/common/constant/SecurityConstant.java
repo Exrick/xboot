@@ -18,7 +18,7 @@ public interface SecurityConstant {
     /**
      * token参数头
      */
-    String HEADER = "Authorization";
+    String HEADER = "accessToken";
 
     /**
      * 权限参数头
