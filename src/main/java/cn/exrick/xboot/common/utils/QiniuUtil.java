@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -23,7 +25,11 @@ import java.util.UUID;
  * @author Exrickx
  */
 @Slf4j
+@Component
 public class QiniuUtil {
+
+    @Value("${xboot.qiniu.isLim}")
+    private static boolean isLim;
 
     /**
      * 生成上传凭证，然后准备上传
@@ -59,7 +65,10 @@ public class QiniuUtil {
             Response response = uploadManager.put(filePath, key, upToken);
             //解析上传成功的结果
             DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
-            return origin+putRet.key;
+            if(isLim){
+                return origin + putRet.key + "?imageslim";
+            }
+            return origin + putRet.key;
         }catch(QiniuException ex){
             Response r = ex.response;
             log.warn(r.toString());
@@ -85,7 +94,10 @@ public class QiniuUtil {
             Response response = uploadManager.put(file,key,upToken,null, null);
             //解析上传成功的结果
             DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
-            return origin+putRet.key;
+            if(isLim){
+                return origin + putRet.key + "?imageslim";
+            }
+            return origin + putRet.key;
         } catch (QiniuException ex) {
             Response r = ex.response;
             log.warn(r.toString());
@@ -106,7 +118,7 @@ public class QiniuUtil {
      */
     public static String qiniuBase64Upload(String data64){
 
-        String key = renamePic(".png");
+        String key = renamePic("");
         //服务端http://up-z2.qiniup.com
         String url = "http://up-z2.qiniup.com/putb64/-1/key/"+ UrlSafeBase64.encodeToString(key);
         RequestBody rb = RequestBody.create(null, data64);
@@ -115,13 +127,15 @@ public class QiniuUtil {
                 addHeader("Content-Type", "application/octet-stream")
                 .addHeader("Authorization", "UpToken " + getUpToken())
                 .post(rb).build();
-        System.out.println(request.headers());
         OkHttpClient client = new OkHttpClient();
         okhttp3.Response response = null;
         try {
             response = client.newCall(request).execute();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        if(isLim){
+            return origin + key + "?imageslim";
         }
         return origin + key;
     }

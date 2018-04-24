@@ -56,12 +56,17 @@ ignored:
     - /**/*.ico
 
 xboot:
-  # JWT过期时间（分钟）
-  jwtExpireTime: 60
+  # token过期时间（小时）
+  tokenExpireTime: 1
+  # 用户选择保存登录状态对应token过期时间（天）
+  saveLoginTime: 7
   # 限制用户登陆错误次数
   loginTimeLimit: 10
   # 错误超过次数后多少分钟后才能继续登录
   loginAfterTime: 10
+  qiniu:
+    # 是否开启七牛云图片瘦身压缩
+    isLim: true
 
 # Swagger界面内容配置
 swagger:

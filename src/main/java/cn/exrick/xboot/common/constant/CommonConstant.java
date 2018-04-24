@@ -51,24 +51,4 @@ public interface CommonConstant {
      * 删除标志
      */
     Integer DEL_FLAG=1;
-
-    /**
-     * token分割
-     */
-    String TOKEN_SPLIT = "Bearer ";
-
-    /**
-     * JWT签名加密key
-     */
-    String JWT_SIGN_KEY = "xboot";
-
-    /**
-     * token参数头
-     */
-    String HEADER = "Authorization";
-
-    /**
-     * 权限
-     */
-    String AUTHORITIES = "authorities";
 }

@@ -97,7 +97,7 @@ public class SnowFlakeUtil {
     }
 
     public static void main(String[] args) {
-        for(int i=0;i<5;i++){
+        for(int i=0;i<100;i++){
             SnowFlakeUtil snowFlakeUtil = SnowFlakeUtil.getFlowIdInstance();
             System.out.println(snowFlakeUtil.nextId());
         }

@@ -1,6 +1,6 @@
 package cn.exrick.xboot.common.utils;
 
-import cn.exrick.xboot.common.constant.CommonConstant;
+import cn.exrick.xboot.common.constant.SecurityConstant;
 import cn.exrick.xboot.exception.XbootException;
 import cn.hutool.core.util.StrUtil;
 import com.google.gson.Gson;
@@ -27,8 +27,8 @@ public class JWTUtil {
         Claims claims = null;
         try {
             claims = Jwts.parser()
-                    .setSigningKey(CommonConstant.JWT_SIGN_KEY)
-                    .parseClaimsJws(token.replace(CommonConstant.TOKEN_SPLIT, ""))
+                    .setSigningKey(SecurityConstant.JWT_SIGN_KEY)
+                    .parseClaimsJws(token.replace(SecurityConstant.TOKEN_SPLIT, ""))
                     .getBody();
 
             //获取用户名

@@ -1,6 +1,6 @@
 package cn.exrick.xboot.config.security;
 
-import cn.exrick.xboot.common.constant.CommonConstant;
+import cn.exrick.xboot.common.constant.SecurityConstant;
 import cn.exrick.xboot.common.utils.ResponseUtil;
 import cn.hutool.core.util.StrUtil;
 import io.jsonwebtoken.*;
@@ -39,10 +39,10 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-        String header = request.getHeader(CommonConstant.HEADER);
-        if (StrUtil.isBlank(header) || !header.startsWith(CommonConstant.TOKEN_SPLIT)) {
-
-            ResponseUtil.out(response, ResponseUtil.resultMap(false,500,CommonConstant.HEADER +"参数为空或格式错误"));
+        String header = request.getHeader(SecurityConstant.HEADER);
+        if (StrUtil.isBlank(header) || !header.startsWith(SecurityConstant.TOKEN_SPLIT)) {
+            chain.doFilter(request, response);
+            //ResponseUtil.out(response, ResponseUtil.resultMap(false,500,"您还未认证"));
             return;
         }
         try {
@@ -57,14 +57,14 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request, HttpServletResponse response) {
 
-        String token = request.getHeader(CommonConstant.HEADER);
+        String token = request.getHeader(SecurityConstant.HEADER);
         if (StrUtil.isNotBlank(token)) {
             // 解析token
             Claims claims = null;
             try {
                 claims = Jwts.parser()
-                        .setSigningKey(CommonConstant.JWT_SIGN_KEY)
-                        .parseClaimsJws(token.replace(CommonConstant.TOKEN_SPLIT, ""))
+                        .setSigningKey(SecurityConstant.JWT_SIGN_KEY)
+                        .parseClaimsJws(token.replace(SecurityConstant.TOKEN_SPLIT, ""))
                         .getBody();
 
                 //获取用户名
@@ -72,7 +72,7 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
 
                 //获取权限（角色）
                 List<GrantedAuthority> authorities = new ArrayList<>();
-                String authority = claims.get(CommonConstant.AUTHORITIES).toString();
+                String authority = claims.get(SecurityConstant.AUTHORITIES).toString();
 
                 if(StrUtil.isNotBlank(authority)){
                     authorities =  AuthorityUtils.commaSeparatedStringToAuthorityList(authority);
