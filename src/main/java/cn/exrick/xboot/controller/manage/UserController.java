@@ -1,8 +1,10 @@
-package cn.exrick.xboot.controller.base;
+package cn.exrick.xboot.controller.manage;
 
 import cn.exrick.xboot.base.XbootBaseController;
+import cn.exrick.xboot.common.annotation.RateLimiter;
 import cn.exrick.xboot.common.constant.CommonConstant;
-import cn.exrick.xboot.common.utils.JasyptUtil;
+import cn.exrick.xboot.common.lock.Callback;
+import cn.exrick.xboot.common.lock.RedisDistributedLockTemplate;
 import cn.exrick.xboot.common.utils.ResultUtil;
 import cn.exrick.xboot.common.vo.Result;
 import cn.exrick.xboot.entity.User;
@@ -13,20 +15,15 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
+import redis.clients.jedis.JedisPool;
 
 
 /**
@@ -40,6 +37,9 @@ import java.util.concurrent.TimeUnit;
 public class UserController extends XbootBaseController<User, String> {
 
     @Autowired
+    private RedisDistributedLockTemplate lockTemplate;
+
+    @Autowired
     private UserService userService;
 
     @Autowired
@@ -48,6 +48,27 @@ public class UserController extends XbootBaseController<User, String> {
     @Override
     public UserService getService() {
         return userService;
+    }
+
+    @RequestMapping(value = "/test",method = RequestMethod.GET)
+    @RateLimiter(limit = 1, timeout = 5000)
+    public Result<Object> test(){
+
+        lockTemplate.execute("订单流水号", 5000, new Callback() {
+            @Override
+            public Object onGetLock() throws InterruptedException {
+                //TODO 获得锁后要做的事
+                log.info("生成订单流水号");
+                return null;
+            }
+
+            @Override
+            public Object onTimeout() throws InterruptedException {
+                //TODO 获得锁超时后要做的事
+                return null;
+            }
+        });
+        return new ResultUtil<Object>().setData(null);
     }
 
     @RequestMapping(value = "/regist",method = RequestMethod.POST)

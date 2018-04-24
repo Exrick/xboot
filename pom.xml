@@ -113,6 +113,11 @@
             <artifactId>jasypt-spring-boot-starter</artifactId>
             <version>1.18</version>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>es.moki.ratelimitj</groupId>-->
+            <!--<artifactId>ratelimitj-redis</artifactId>-->
+            <!--<version>0.4.2</version>-->
+        <!--</dependency>-->
     </dependencies>
 
     <build>

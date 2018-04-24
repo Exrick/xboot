@@ -1,26 +1,48 @@
 package cn.exrick.xboot.config.interceptor;
 
+import cn.exrick.xboot.common.annotation.RateLimiter;
+import cn.exrick.xboot.common.constant.CommonConstant;
+import cn.exrick.xboot.common.limit.RedisRaterLimiter;
 import cn.exrick.xboot.common.utils.ResponseUtil;
+import cn.exrick.xboot.exception.XbootException;
 import cn.hutool.core.util.StrUtil;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Method;
 
 /**
+ * 限流拦截器
  * @author Exrickx
  */
 @Slf4j
 @Component
-public class LoginInterceptor extends HandlerInterceptorAdapter {
+public class LimitRaterInterceptor extends HandlerInterceptorAdapter {
+
+    @Value("${xboot.rateLimit.enable}")
+    private boolean rateLimitEnable;
+
+    @Value("${xboot.rateLimit.limit}")
+    private Integer limit;
+
+    @Value("${xboot.rateLimit.timeout}")
+    private Integer timeout;
 
     @Autowired
-    private StringRedisTemplate redisTemplate;
+    private JedisPool jedisPool;
+
+    @Autowired
+    private RedisRaterLimiter redisRaterLimiter;
 
     /**
      * 预处理回调方法，实现处理器的预处理（如登录检查）
@@ -32,18 +54,28 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
                              Object handler) throws Exception {
 
-        // 验证accessToken参数
-        String accessToken = request.getParameter("accessToken");
-        if(StrUtil.isBlank(accessToken)) {
-            ResponseUtil.out(response, ResponseUtil.resultMap(false, 500, "accessToken参数不能为空"));
-            return false;
-        }
-        String value = redisTemplate.opsForValue().get(accessToken);
-        if(StrUtil.isBlank(value)){
-            ResponseUtil.out(response, ResponseUtil.resultMap(false, 500, "accessToken错误或已失效"));
-            return false;
+        Jedis jedis = jedisPool.getResource();
+
+        if(rateLimitEnable){
+            String token = redisRaterLimiter.acquireTokenFromBucket(jedis, CommonConstant.LIMIT_ALL, limit, timeout);
+            if (StrUtil.isBlank(token)) {
+                throw new XbootException("当前访问总人数太多啦，请稍后再试");
+            }
         }
 
+        HandlerMethod handlerMethod = (HandlerMethod) handler;
+        Method method = handlerMethod.getMethod();
+        RateLimiter rateLimiter = method.getAnnotation(RateLimiter.class);
+
+        if (rateLimiter != null) {
+            int limit = rateLimiter.limit();
+            int timeout = rateLimiter.timeout();
+            String token = redisRaterLimiter.acquireTokenFromBucket(jedis, method.getName(), limit, timeout);
+            if (StrUtil.isBlank(token)) {
+                throw new XbootException("当前访问人数太多啦，请稍后再试");
+            }
+            jedis.close();
+        }
         return true;
     }
 

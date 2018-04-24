@@ -14,7 +14,7 @@ import java.util.List;
  * 用户角色接口
  * @author Exrickx
  */
-//@CacheConfig(cacheNames = "userRole")
+@CacheConfig(cacheNames = "userRole")
 public interface UserRoleService extends XbootBaseService<UserRole,String> {
 
     /**
@@ -22,6 +22,6 @@ public interface UserRoleService extends XbootBaseService<UserRole,String> {
      * @param userId
      * @return
      */
-//    @Cacheable(key = "#userId")
+    @Cacheable(key = "#userId")
     List<String> findByUserId(String userId);
 }

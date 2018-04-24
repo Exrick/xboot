@@ -56,6 +56,13 @@ ignored:
     - /**/*.ico
 
 xboot:
+  # 全局限流
+  rateLimit:
+    enable: true
+    # 每1秒内
+    timeout: 1000
+    # 总限制100个请求
+    limit: 100
   # token过期时间（小时）
   tokenExpireTime: 1
   # 用户选择保存登录状态对应token过期时间（天）
