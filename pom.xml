@@ -118,6 +118,11 @@
             <!--<artifactId>ratelimitj-redis</artifactId>-->
             <!--<version>0.4.2</version>-->
         <!--</dependency>-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>2.2.0</version>
+        </dependency>
     </dependencies>
 
     <build>
