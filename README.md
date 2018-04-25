@@ -5,14 +5,16 @@
 [![GitHub stars](https://img.shields.io/github/stars/Exrick/x-boot.svg?style=social&label=Stars)](https://github.com/Exrick/x-boot)
 [![GitHub forks](https://img.shields.io/github/forks/Exrick/x-boot.svg?style=social&label=Fork)](https://github.com/Exrick/x-boot)
 
-> 作者目前大四 能力经验有限 如有错误欢迎指正期待您的捐赠支持！
+> 作者目前大四 能力经验有限 如有错误欢迎指正 期待您的捐赠支持！
 
+### 宣传视频
 ### 在线Demo
 
 ### 项目简介
-- 最新 SpringBoot 2.0.1.RELEASE
-- JPA + Mybatis-Plus 二选一
-    - 项目持久层默认推荐使用JPA，更简单易上手，且OOP首先应满足面向对象的要求，而不是面向数据库。但遇到复杂业务逻辑需联表查询时可选择Mybatis
+- 目前最新 SpringBoot 2.0.1.RELEASE，代码拥有详细注释
+- JPA + Mybatis-Plus 任意切换
+    - 项目持久层默认推荐使用JPA，更简单易上手，且OOP首先应满足面向对象的要求，而不是面向数据库。但遇到复杂业务逻辑需联表查询时可选择Mybatis-Plus写sql
+- AOP操作日志默认已使用Elasticseach全文检索引擎记录，使用Spring Data Elasticsearch简化开发
 - 为什么要前后端分离
     - 都什么时代了还在用JQuery？ 
 ### 分支说明
@@ -54,6 +56,7 @@
 - MySQL数据库新建 `xboot` 数据库，配置文件已开启ddl自动生成表结构，当然你也可以运行sql文件(优化字段)
 - 运行 `XbootApplication.java` 默认端口8888 访问接口文档 `http://localhost:8888/swagger-ui.html` 说明启动成功 管理员账密admin|123456
 - 前台页面请启动基于Vue的 [xboot-front]() 项目，并修改其接口代理配置
+
 ### 开发指南及相关技术栈说明
 - 项目使用 Lombok 插件简化开发，请自行在编译器中安装，不安装会报错但不影响运行，常用注解说明：
     
@@ -114,10 +117,11 @@ spring:
             });
 ```
 
-- 增删改查(CRUD)
+- 增删改查(CRUD) 
+    - JPA与MybatisPlus随意切换
     - 不想写sql？[Spring Data JPA](https://docs.spring.io/spring-data/jpa/docs/2.0.6.RELEASE/reference/html/#jpa.query-methods.query-creation) 了解一下
-    - 复杂业务逻辑JPA联表太蛋疼？[MyBatis-Plus](http://mp.baomidou.com) 
-    - 同时使用时需注意实体类注解区别，更多请见官方文档，常用注解区别：
+    - 复杂业务逻辑JPA联表太蛋疼？[MyBatis-Plus](http://mp.baomidou.com) 这就不用了解了吧
+    - JPA与MybatisPlus同时使用时需注意实体类注解区别，更多请见官方文档，常用注解区别：
     ```java
     //表名
     JPA: @Table(name = "t_user")

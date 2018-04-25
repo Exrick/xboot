@@ -33,7 +33,7 @@ spring:
   # Elasticsearch
   data:
     elasticsearch:
-      cluster-nodes: 127.0.0.1:9200
+      cluster-nodes: 127.0.0.1:9300
   # 文件大小上传配置
   servlet:
     multipart:
@@ -74,6 +74,8 @@ xboot:
   qiniu:
     # 是否开启七牛云图片瘦身压缩
     isLim: true
+  elasticsearch:
+    nodeClient: 127.0.0.1:9200
 
 # Swagger界面内容配置
 swagger:

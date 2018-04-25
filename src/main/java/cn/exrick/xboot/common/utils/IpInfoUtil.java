@@ -1,8 +1,10 @@
 package cn.exrick.xboot.common.utils;
 
 
+import cn.exrick.xboot.common.vo.IpWeatherResult;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
@@ -70,6 +72,27 @@ public class IpInfoUtil {
         if(StrUtil.isNotBlank(ip)){
             String url = GET_IP_INFO + ip;
             String result= HttpUtil.get(url);
+            return result;
+        }
+        return null;
+    }
+
+    /**
+     * 获取IP返回地理信息
+     * @param ip ip地址
+     * @return
+     */
+    public static String getIpCity(String ip){
+        if(null != ip){
+            String url = GET_IP_INFO + ip;
+            String json= HttpUtil.get(url);
+            String result="未知";
+            try{
+                IpWeatherResult weather=new Gson().fromJson(json,IpWeatherResult.class);
+                result=weather.getResult().get(0).getCity()+" "+weather.getResult().get(0).getDistrct();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
             return result;
         }
         return null;

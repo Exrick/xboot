@@ -1,5 +1,6 @@
 package cn.exrick.xboot.config.security;
 
+import cn.exrick.xboot.common.annotation.SystemLog;
 import cn.exrick.xboot.common.constant.SecurityConstant;
 import cn.exrick.xboot.common.utils.ResponseUtil;
 import cn.hutool.core.util.StrUtil;
@@ -34,6 +35,7 @@ public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticatio
     private Integer saveLoginTime;
 
     @Override
+    @SystemLog(description="登录系统")
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
         //用户选择保存多保存登录状态几天
