@@ -9,10 +9,12 @@
 
 ### 在线Demo
 
-### 为什么要前后端分离
-
-- 都什么时代了还在用JQuery？ 
-
+### 项目简介
+- 最新 SpringBoot 2.0.1.RELEASE
+- JPA + Mybatis-Plus 二选一
+    - 项目持久层默认推荐使用JPA，更简单易上手，且OOP首先应满足面向对象的要求，而不是面向数据库。但遇到复杂业务逻辑需联表查询时可选择Mybatis
+- 为什么要前后端分离
+    - 都什么时代了还在用JQuery？ 
 ### 分支说明
 
 ### 前端所用技术
@@ -23,8 +25,8 @@
 - SpringMVC
 - Spring Security
 - [Spring Data JPA](https://docs.spring.io/spring-data/jpa/docs/2.0.6.RELEASE/reference/html/)
-- [Redis](https://github.com/Exrick/xmall/blob/master/study/Redis.md)
 - [MyBatis-Plus](http://mp.baomidou.com)
+- [Redis](https://github.com/Exrick/xmall/blob/master/study/Redis.md)
 - [Elasticsearch](https://github.com/Exrick/xmall/blob/master/study/Elasticsearch.md)：基于Lucene分布式搜索引擎
 - [Druid](http://druid.io/)：阿里高性能数据库连接池
 - Json Web Token(JWT)
@@ -115,6 +117,15 @@ spring:
 - 增删改查(CRUD)
     - 不想写sql？[Spring Data JPA](https://docs.spring.io/spring-data/jpa/docs/2.0.6.RELEASE/reference/html/#jpa.query-methods.query-creation) 了解一下
     - 复杂业务逻辑JPA联表太蛋疼？[MyBatis-Plus](http://mp.baomidou.com) 
+    - 同时使用时需注意实体类注解区别，更多请见官方文档，常用注解区别：
+    ```java
+    //表名
+    JPA: @Table(name = "t_user")
+    MP:  @TableName("t_user")
+    //排除非表字段
+    JPA: @Transient
+    MP:  @TableField(exist=false)
+    ```
     
 ### 技术疑问交流
 - 给作者项目Star或捐赠后可加入交流群 `475743731`，还可免费获取最新源码和 [UI框架](https://github.com/Exrick/xmall/blob/master/study/FlatLab.md) [![](http://pub.idqqimg.com/wpa/images/group.png)](http://shang.qq.com/wpa/qunwpa?idkey=7b60cec12ba93ebed7568b0a63f22e6e034c0d1df33125ac43ed753342ec6ce7)

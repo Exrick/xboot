@@ -91,8 +91,8 @@ mybatis-plus:
   # 放在resource目录 classpath:/mapper/*Mapper.xml
   mapper-locations: classpath:/mapper/*Mapper.xml
   #实体扫描，多个package用逗号或者分号分隔
-  typeAliasesPackage: com.baomidou.springboot.entity
-  typeEnumsPackage: com.baomidou.springboot.entity.enums
+  typeAliasesPackage: cn.exrick.xboot.entity
+  typeEnumsPackage: cn.exrick.xboot.entity
   global-config:
     #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
     id-type: 2
@@ -104,15 +104,9 @@ mybatis-plus:
     refresh-mapper: true
     #数据库大写下划线转换
     #capital-mode: true
-    #序列接口实现类配置,不在推荐使用此方式进行配置,请使用自定义bean注入
-    key-generator: com.baomidou.mybatisplus.incrementer.H2KeyGenerator
     #逻辑删除配置（下面3个配置）
     logic-delete-value: 0
     logic-not-delete-value: 1
-    #自定义sql注入器,不在推荐使用此方式进行配置,请使用自定义bean注入
-    sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
-    #自定义填充策略接口实现,不在推荐使用此方式进行配置,请使用自定义bean注入
-    meta-object-handler: com.baomidou.springboot.MyMetaObjectHandler
     # SQL 解析缓存，开启后多租户 @SqlParser 注解生效
     sql-parser-cache: true
   configuration:

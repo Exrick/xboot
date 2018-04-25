@@ -9,8 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * 原作者 wangiegie@gmail.com https://gitee.com/boding1/pig-cloud
- * @author Exrickx
+ * @author wangiegie@gmail.com https://gitee.com/boding1/pig-cloud
  */
 @Component
 public class RedisRaterLimiter {

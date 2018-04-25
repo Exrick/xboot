@@ -2,6 +2,8 @@ package cn.exrick.xboot.entity;
 
 import cn.exrick.xboot.base.XbootBaseEntity;
 import cn.exrick.xboot.common.constant.CommonConstant;
+import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -18,6 +20,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "t_user")
+@TableName("t_user")
 public class User extends XbootBaseEntity {
 
     private static final long serialVersionUID = 1L;
@@ -58,6 +61,7 @@ public class User extends XbootBaseEntity {
     private String description;
 
     @Transient
+    @TableField(exist=false)
     @ApiModelProperty(value = "用户拥有角色")
     private List<String> roleNames;
 
