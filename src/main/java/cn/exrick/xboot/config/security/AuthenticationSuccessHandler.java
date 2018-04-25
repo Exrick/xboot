@@ -39,7 +39,7 @@ public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticatio
         //用户选择保存多保存登录状态几天
         String saveTime = request.getParameter(SecurityConstant.SAVE_TIME);
         if(StrUtil.isNotBlank(saveTime)&&Boolean.valueOf(saveTime)){
-            tokenExpireTime = saveLoginTime * 24;
+            tokenExpireTime = saveLoginTime * 60 * 24;
         }
         String username = ((UserDetails)authentication.getPrincipal()).getUsername();
         String authorities = new Gson().toJson(((UserDetails)authentication.getPrincipal()).getAuthorities());
@@ -50,7 +50,7 @@ public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticatio
                 //自定义属性 放入用户拥有权限
                 .claim(SecurityConstant.AUTHORITIES, authorities)
                 //失效时间
-                .setExpiration(new Date(System.currentTimeMillis() + tokenExpireTime * 60 * 60 * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + tokenExpireTime * 60 * 1000))
                 //签名算法和密钥
                 .signWith(SignatureAlgorithm.HS512, SecurityConstant.JWT_SIGN_KEY)
                 .compact();

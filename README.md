@@ -55,8 +55,9 @@
 ### 开发指南及相关技术栈说明
 - 项目使用Lombok插件简化开发，请自行在编译器中安装，不安装会报错但不影响运行，常用注解说明：
     
-    - @Data：自动生成get、set等方法
-    - @Slf4j：日志打印可直接使用log.info()等
+    - `@Data`：自动生成get、set等方法
+    - `@Slf4j`：日志打印可直接使用log.info()等
+    
 - 配置文件可使用Jasypt加密，可到cn.exrick.xboot.common包中找到JasyptUtil工具类生成加解密结果
 ```yaml
 # 配置文件加密key
@@ -72,6 +73,7 @@ spring:
     # Jasypt加密 可到common-utils中找到JasyptUtil加解密工具类生成加密结果 格式为ENC(加密结果)
     password: ENC(F4B0s6u9xcDw3V+P0qC4CA==)
 ```
+
 - 分布式限流(基于Redis令牌桶算法)
     - 全局限流
     ```yaml
@@ -85,7 +87,10 @@ spring:
         limit: 100
     ```
     - 指定方法限流注解
-    `@RateLimiter(limit = 1, timeout = 5000)`
+    ```java
+    @RateLimiter(limit = 1, timeout = 5000)
+    ```
+    
 - 分布式同步锁(基于Redis)
 ```java
     @Autowired
@@ -106,9 +111,11 @@ spring:
                 }
             });
 ```
+
 - 增删改查(CRUD)
     - 不想写sql？[Spring Data JPA](https://docs.spring.io/spring-data/jpa/docs/2.0.6.RELEASE/reference/html/#jpa.query-methods.query-creation) 了解一下
     - 复杂业务逻辑JPA联表太蛋疼？[MyBatis-Plus](http://mp.baomidou.com) 
+    
 ### 技术疑问交流
 - 给作者项目Star或捐赠后可加入交流群 `475743731`，还可免费获取最新源码和 [UI框架](https://github.com/Exrick/xmall/blob/master/study/FlatLab.md) [![](http://pub.idqqimg.com/wpa/images/group.png)](http://shang.qq.com/wpa/qunwpa?idkey=7b60cec12ba93ebed7568b0a63f22e6e034c0d1df33125ac43ed753342ec6ce7)
 - 作者博客：[http://blog.exrick.cn](http://blog.exrick.cn)

@@ -63,13 +63,13 @@ xboot:
     timeout: 1000
     # 总限制100个请求
     limit: 100
-  # token过期时间（小时）
+  # token过期时间（分钟）
   tokenExpireTime: 1
   # 用户选择保存登录状态对应token过期时间（天）
   saveLoginTime: 7
-  # 限制用户登陆错误次数
+  # 限制用户登陆错误次数（次）
   loginTimeLimit: 10
-  # 错误超过次数后多少分钟后才能继续登录
+  # 错误超过次数后多少分钟后才能继续登录（分钟）
   loginAfterTime: 10
   qiniu:
     # 是否开启七牛云图片瘦身压缩
@@ -88,8 +88,7 @@ swagger:
 
 # Mybatis-plus
 mybatis-plus:
-  # 如果是放在src/main/java目录下 classpath:/com/yourpackage/*/mapper/*Mapper.xml
-  # 如果是放在resource目录 classpath:/mapper/*Mapper.xml
+  # 放在resource目录 classpath:/mapper/*Mapper.xml
   mapper-locations: classpath:/mapper/*Mapper.xml
   #实体扫描，多个package用逗号或者分号分隔
   typeAliasesPackage: com.baomidou.springboot.entity
