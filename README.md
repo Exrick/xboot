@@ -50,7 +50,7 @@
 - 使用IDEA([破解/免费注册](http://idea.lanyus.com/)) 导入该Maven项目 都什么时代了还用Eclipse？
 - 修改配置文件 `application.yml` 相应配置，其中有详细注释
 - MySQL数据库新建 `xboot` 数据库，配置文件已开启ddl自动生成表结构，当然你也可以运行sql文件(优化字段)
-- 运行 `XbootApplication.java` 默认端口8888 访问接口文档http://localhost:8888/swagger-ui.html说明启动成功 管理员账密admin|123456
+- 运行 `XbootApplication.java` 默认端口8888 访问接口文档 `http://localhost:8888/swagger-ui.html` 说明启动成功 管理员账密admin|123456
 - 前台页面请启动基于Vue的 [xboot-front]() 项目，并修改其接口代理配置
 ### 开发指南及相关技术栈说明
 - 项目使用Lombok插件简化开发，请自行在编译器中安装，不安装会报错但不影响运行，常用注解说明：
