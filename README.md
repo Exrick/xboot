@@ -53,12 +53,12 @@
 - 运行 `XbootApplication.java` 默认端口8888 访问接口文档 `http://localhost:8888/swagger-ui.html` 说明启动成功 管理员账密admin|123456
 - 前台页面请启动基于Vue的 [xboot-front]() 项目，并修改其接口代理配置
 ### 开发指南及相关技术栈说明
-- 项目使用Lombok插件简化开发，请自行在编译器中安装，不安装会报错但不影响运行，常用注解说明：
+- 项目使用 Lombok 插件简化开发，请自行在编译器中安装，不安装会报错但不影响运行，常用注解说明：
     
     - `@Data`：自动生成get、set等方法
     - `@Slf4j`：日志打印可直接使用log.info()等
     
-- 配置文件可使用Jasypt加密，可到cn.exrick.xboot.common包中找到JasyptUtil工具类生成加解密结果
+- 配置文件可使用Jasypt加密，可到 `cn.exrick.xboot.common` 包中找到 JasyptUtil 工具类生成加解密结果
 ```yaml
 # 配置文件加密key
 jasypt:
