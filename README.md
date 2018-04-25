@@ -56,7 +56,7 @@
 - 项目使用Lombok插件简化开发，请自行在编译器中安装，不安装会报错但不影响运行，常用注解说明：
     
     - @Data：自动生成get、set等方法
-    - @Sl4j：日志打印可直接使用log.info()等
+    - @Slf4j：日志打印可直接使用log.info()等
 - 配置文件可使用Jasypt加密，可到cn.exrick.xboot.common包中找到JasyptUtil工具类生成加解密结果
 ```yaml
 # 配置文件加密key
