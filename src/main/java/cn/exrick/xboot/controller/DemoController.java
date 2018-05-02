@@ -5,7 +5,9 @@ import cn.exrick.xboot.common.lock.Callback;
 import cn.exrick.xboot.common.lock.RedisDistributedLockTemplate;
 import cn.exrick.xboot.common.utils.ResultUtil;
 import cn.exrick.xboot.common.vo.Result;
+import cn.exrick.xboot.entity.Role;
 import cn.exrick.xboot.entity.User;
+import cn.exrick.xboot.service.RoleService;
 import cn.exrick.xboot.service.mybatis.IUserService;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
@@ -18,13 +20,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * @author Exrickx
+ */
 @Slf4j
 @RestController
-@Api(description = "测试接口")
-public class TestController {
+@Api(description = "在线Demo所需接口")
+public class DemoController {
 
     @Autowired
     private IUserService iUserService;
+
+    @Autowired
+    private RoleService roleService;
 
     @Autowired
     private RedisDistributedLockTemplate lockTemplate;
@@ -54,5 +62,12 @@ public class TestController {
             }
         });
         return new ResultUtil<Object>().setData(userList);
+    }
+
+    @RequestMapping(value = "/role/getAllList",method = RequestMethod.GET)
+    public Result<Object> roleGetAll(){
+
+        List<Role> list = roleService.getAll();
+        return new ResultUtil<Object>().setData(list);
     }
 }

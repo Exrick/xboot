@@ -27,7 +27,7 @@ public class SecurityUserDetails extends User implements UserDetails {
             this.setUsername(user.getUsername());
             this.setPassword(user.getPassword());
             this.setStatus(user.getStatus());
-            this.setRoleNames(user.getRoleNames());
+            this.setRoles(user.getRoles());
         }
     }
 
@@ -35,10 +35,10 @@ public class SecurityUserDetails extends User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         List<GrantedAuthority> authorityList = new ArrayList<>();
-        List<String> roleNames = this.getRoleNames();
-        if(roleNames!=null){
-            for (String roleName : roleNames) {
-                authorityList.add(new SimpleGrantedAuthority(roleName));
+        List<Role> roles = this.getRoles();
+        if(roles!=null&&roles.size()>0){
+            for (Role role : roles) {
+                authorityList.add(new SimpleGrantedAuthority(role.getName()));
             }
         }
         return authorityList;

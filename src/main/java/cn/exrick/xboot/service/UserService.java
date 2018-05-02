@@ -5,6 +5,8 @@ import cn.exrick.xboot.base.XbootBaseService;
 import cn.exrick.xboot.entity.User;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -30,4 +32,11 @@ public interface UserService extends XbootBaseService<User,String> {
      * @return
      */
     List<User> findByStatusAndType(Integer status, Integer type);
+
+    /**
+     * 多条件分页获取用户
+     * @param user
+     * @return
+     */
+    Page<User> findByCondition(User user, Pageable pageable);
 }

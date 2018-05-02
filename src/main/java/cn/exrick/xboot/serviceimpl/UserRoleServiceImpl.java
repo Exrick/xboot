@@ -25,10 +25,4 @@ public class UserRoleServiceImpl implements UserRoleService {
     public UserRoleDao getRepository() {
         return userRoleDao;
     }
-
-    @Override
-    public List<String> findByUserId(String userId) {
-
-        return userRoleDao.findByUserId(userId);
-    }
 }

@@ -11,7 +11,8 @@
 ### 在线Demo
 
 ### 项目简介
-- 目前最新 SpringBoot 2.0.1.RELEASE，代码拥有详细注释
+- 代码拥有详细注释 学习与实战的不错选择
+- 核心使用目前最新 SpringBoot 2.0.1.RELEASE
 - JPA + Mybatis-Plus 任意切换
     - 项目持久层默认推荐使用JPA，更简单易上手，且OOP首先应满足面向对象的要求，而不是面向数据库。但遇到复杂业务逻辑需联表查询时可选择Mybatis-Plus写sql
 - AOP操作日志默认已使用Elasticseach全文检索引擎记录，使用Spring Data Elasticsearch简化开发
@@ -47,14 +48,14 @@
     - [JRebel](https://github.com/Exrick/xmall/blob/master/study/JRebel.md)：开发热部署
     - [阿里JAVA开发规约插件](https://github.com/alibaba/p3c)
 
-### 运行部署
+### 项目运行部署
 - 下载zip直接解压或安装git后执行克隆命令 `git clone https://github.com/Exrick/xmall.git`
 - 安装依赖并启动：[Redis](https://github.com/Exrick/xmall/blob/master/study/Redis.md)、[Elasticsearch](https://github.com/Exrick/xmall/blob/master/study/Elasticsearch.md)
 - [Maven安装和在IDEA中配置](https://github.com/Exrick/xmall/blob/master/study/Maven.md)
 - 使用IDEA([破解/免费注册](http://idea.lanyus.com/)) 导入该Maven项目 都什么时代了还用Eclipse？
 - 修改配置文件 `application.yml` 相应配置，其中有详细注释
-- MySQL数据库新建 `xboot` 数据库，配置文件已开启ddl自动生成表结构，当然你也可以运行sql文件(优化字段)
-- 运行 `XbootApplication.java` 默认端口8888 访问接口文档 `http://localhost:8888/swagger-ui.html` 说明启动成功 管理员账密admin|123456
+- MySQL数据库新建 `xboot` 数据库，配置文件已开启ddl自动生成表结构但无初始数据，请记得运行导入sql文件
+- 启动运行 `XbootApplication.java` 默认端口8888 访问接口文档 `http://localhost:8888/swagger-ui.html` 说明启动成功 管理员账密admin|123456
 - 前台页面请启动基于Vue的 [xboot-front]() 项目，并修改其接口代理配置
 
 ### 开发指南及相关技术栈说明

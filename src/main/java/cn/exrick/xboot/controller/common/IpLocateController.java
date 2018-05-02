@@ -19,8 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 @RestController
 @Api(description = "IP接口")
-@RequestMapping("/ip")
-@CrossOrigin
+@RequestMapping("/common/ip")
 public class IpLocateController {
 
     @RequestMapping(value = "/info",method = RequestMethod.GET)

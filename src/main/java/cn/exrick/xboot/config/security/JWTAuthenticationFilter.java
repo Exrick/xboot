@@ -2,6 +2,7 @@ package cn.exrick.xboot.config.security;
 
 import cn.exrick.xboot.common.constant.SecurityConstant;
 import cn.exrick.xboot.common.utils.ResponseUtil;
+import cn.exrick.xboot.exception.XbootException;
 import cn.hutool.core.util.StrUtil;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
@@ -82,9 +83,9 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
                     return new UsernamePasswordAuthenticationToken(principal, null, authorities);
                 }
             } catch (ExpiredJwtException e) {
-                ResponseUtil.out(response, ResponseUtil.resultMap(false,500,"JWT已过期"));
+                throw new XbootException("登录已失效，请重新登录");
             } catch (Exception e){
-                ResponseUtil.out(response, ResponseUtil.resultMap(false,500,"解析JWT错误"));
+                ResponseUtil.out(response, ResponseUtil.resultMap(false,500,"解析token错误"));
             }
         }
         return null;

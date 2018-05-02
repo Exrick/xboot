@@ -39,18 +39,18 @@ public class AuthenticationFailHandler extends SimpleUrlAuthenticationFailureHan
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
 
-        String username = request.getParameter("username");
-        recordLoginTime(username);
-        String key = "loginTimeLimit:"+username;
-        String value = redisTemplate.opsForValue().get(key);
-        if(StrUtil.isBlank(value)){
-            value = "0";
-        }
-        //获取已登录错误次数
-        int loginFailTime = Integer.parseInt(value);
-        int restLoginTime = loginTimeLimit - loginFailTime;
-        log.info("用户"+username+"登录失败，还有"+restLoginTime+"次机会");
         if (e instanceof UsernameNotFoundException || e instanceof BadCredentialsException) {
+            String username = request.getParameter("username");
+            recordLoginTime(username);
+            String key = "loginTimeLimit:"+username;
+            String value = redisTemplate.opsForValue().get(key);
+            if(StrUtil.isBlank(value)){
+                value = "0";
+            }
+            //获取已登录错误次数
+            int loginFailTime = Integer.parseInt(value);
+            int restLoginTime = loginTimeLimit - loginFailTime;
+            log.info("用户"+username+"登录失败，还有"+restLoginTime+"次机会");
             ResponseUtil.out(response, ResponseUtil.resultMap(false,500,"用户名或密码错误"));
         } else if (e instanceof DisabledException) {
             ResponseUtil.out(response, ResponseUtil.resultMap(false,500,"账户被禁用，请联系管理员"));

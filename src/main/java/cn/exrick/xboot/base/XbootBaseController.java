@@ -73,10 +73,10 @@ public abstract class XbootBaseController<E, ID extends Serializable> {
     @RequestMapping(value = "/del",method = RequestMethod.DELETE)
     @ResponseBody
     @ApiOperation(value = "删除数据")
-    public Result<Object> delAll(@ModelAttribute E entity){
+    public Result<Object> delAll(@RequestBody List<E> entities){
 
-        getService().delete(entity);
-        return new ResultUtil<Object>().setSuccessMsg("删除数据成功");
+        getService().delete(entities);
+        return new ResultUtil<Object>().setSuccessMsg("批量删除数据成功");
     }
 
     @RequestMapping(value = "/delByIds",method = RequestMethod.DELETE)
@@ -87,6 +87,6 @@ public abstract class XbootBaseController<E, ID extends Serializable> {
         for(ID id:ids){
             getService().delete(id);
         }
-        return new ResultUtil<Object>().setSuccessMsg("批量删除数据成功");
+        return new ResultUtil<Object>().setSuccessMsg("批量通过id删除数据成功");
     }
 }

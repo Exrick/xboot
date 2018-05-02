@@ -1,11 +1,14 @@
 package cn.exrick.xboot.controller.manage;
 
-import cn.exrick.xboot.base.XbootBaseController;
 import cn.exrick.xboot.common.constant.CommonConstant;
+import cn.exrick.xboot.common.utils.PageUtil;
 import cn.exrick.xboot.common.utils.ResultUtil;
+import cn.exrick.xboot.common.vo.PageVo;
 import cn.exrick.xboot.common.vo.Result;
+import cn.exrick.xboot.entity.Role;
 import cn.exrick.xboot.entity.User;
 import cn.exrick.xboot.service.UserService;
+import cn.exrick.xboot.service.mybatis.IUserRoleService;
 import cn.hutool.core.util.StrUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,12 +17,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.domain.Page;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 /**
@@ -30,18 +36,16 @@ import org.springframework.web.bind.annotation.*;
 @Api(description = "用户接口")
 @RequestMapping("/user")
 @CacheConfig(cacheNames = "user")
-public class UserController extends XbootBaseController<User, String> {
+public class UserController {
 
     @Autowired
     private UserService userService;
 
     @Autowired
-    private StringRedisTemplate redisTemplate;
+    private IUserRoleService iUserRoleService;
 
-    @Override
-    public UserService getService() {
-        return userService;
-    }
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     @RequestMapping(value = "/regist",method = RequestMethod.POST)
     @ApiOperation(value = "注册用户")
@@ -82,29 +86,28 @@ public class UserController extends XbootBaseController<User, String> {
 
     @RequestMapping(value = "/info",method = RequestMethod.GET)
     @ApiOperation(value = "获取当前登录用户接口")
-    public Result<Object> getUserInfo(){
+    public Result<User> getUserInfo(){
 
         UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User u = userService.findByUsername(user.getUsername());
         u.setPassword(null);
-        return new ResultUtil<Object>().setData(u);
+        return new ResultUtil<User>().setData(u);
     }
 
     @RequestMapping(value = "/edit",method = RequestMethod.POST)
     @ApiOperation(value = "修改资料",notes = "用户名密码不会修改 需要通过id获取原用户信息 需要username更新缓存")
     @CacheEvict(key = "#u.username")
-    public Result<Object> edit(@ModelAttribute User u){
+    public Result<Object> edit(@ModelAttribute User u,
+                               @RequestParam(required = false) String[] roleIds){
 
         User old = userService.get(u.getId());
         u.setUsername(old.getUsername());
         u.setPassword(old.getPassword());
-
         User user=userService.update(u);
         if(user==null){
             return new ResultUtil<Object>().setErrorMsg("修改失败");
         }
-
-        return new ResultUtil<Object>().setData(user);
+        return new ResultUtil<Object>().setSuccessMsg("修改成功");
     }
 
     @RequestMapping(value = "/modifyPass",method = RequestMethod.POST)
@@ -115,8 +118,7 @@ public class UserController extends XbootBaseController<User, String> {
 
         User old = userService.get(id);
 
-        String oldPass = new BCryptPasswordEncoder().encode(password);
-        if(!old.getPassword().equals(oldPass)){
+        if(!new BCryptPasswordEncoder().matches(password,old.getPassword())){
             return new ResultUtil<Object>().setErrorMsg("旧密码不正确");
         }
 
@@ -133,10 +135,25 @@ public class UserController extends XbootBaseController<User, String> {
         return new ResultUtil<Object>().setData(user);
     }
 
+    @RequestMapping(value = "/getByCondition",method = RequestMethod.GET)
+    @ApiOperation(value = "多条件分页获取用户列表")
+    public Result<Page<User>> getByCondition(@ModelAttribute User user, @ModelAttribute PageVo pageVo){
+
+        //默认时间倒序
+        pageVo.setSort("createTime");
+        Page<User> page = userService.findByCondition(user, PageUtil.initPage(pageVo));
+        for(User u: page.getContent()){
+            List<Role> list = iUserRoleService.findByUserId(u.getId());
+            u.setRoles(list);
+        }
+        return new ResultUtil<Page<User>>().setData(page);
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/admin/add",method = RequestMethod.POST)
     @ApiOperation(value = "添加用户")
-    public Result<Object> regist(@ModelAttribute User u){
+    public Result<Object> regist(@ModelAttribute User u,
+                                 @RequestParam(required = false) String[] roleIds){
 
         if(StrUtil.isBlank(u.getUsername()) || StrUtil.isBlank(u.getPassword())){
             return new ResultUtil<Object>().setErrorMsg("缺少必需表单字段");
@@ -186,6 +203,18 @@ public class UserController extends XbootBaseController<User, String> {
         //手动更新缓存
         redisTemplate.delete("user::"+user.getUsername());
         return new ResultUtil<Object>().setData(null);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @RequestMapping(value = "/delByIds",method = RequestMethod.DELETE)
+    @ResponseBody
+    @ApiOperation(value = "批量通过ids删除")
+    public Result<Object> delAllByIds(@RequestParam String[] ids){
+
+        for(String id:ids){
+            userService.delete(id);
+        }
+        return new ResultUtil<Object>().setSuccessMsg("批量通过id删除数据成功");
     }
 
 }

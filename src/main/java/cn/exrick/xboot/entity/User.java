@@ -2,9 +2,11 @@ package cn.exrick.xboot.entity;
 
 import cn.exrick.xboot.base.XbootBaseEntity;
 import cn.exrick.xboot.common.constant.CommonConstant;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -49,7 +51,7 @@ public class User extends XbootBaseEntity {
 
     @ApiModelProperty(value = "用户头像")
     @Column(length=1000)
-    private String avatar = "http://ow2h3ee9w.bkt.clouddn.com/%E4%B8%8B%E8%BD%BD.png";
+    private String avatar = "http://ow2h3ee9w.bkt.clouddn.com/%E4%B8%8B%E8%BD%BD.png?imageslim";
 
     @ApiModelProperty(value = "用户类型 0普通用户 1管理员")
     private Integer type = CommonConstant.USER_TYPE_NORMAL;
@@ -63,6 +65,6 @@ public class User extends XbootBaseEntity {
     @Transient
     @TableField(exist=false)
     @ApiModelProperty(value = "用户拥有角色")
-    private List<String> roleNames;
+    private List<Role> roles;
 
 }

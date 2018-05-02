@@ -3,7 +3,10 @@ package cn.exrick.xboot.config.security;
 import cn.exrick.xboot.config.IgnoredUrlsProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,6 +14,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 /**
  * Security 核心配置类
@@ -56,7 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         registry.and()
                 //表单登录方式
                 .formLogin()
-                .loginPage("/needLogin")
+                .loginPage("/common/needLogin")
                 //登录需要经过的url请求
                 .loginProcessingUrl("/login")
                 .permitAll()
@@ -68,7 +74,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .permitAll()
                 .and()
-                //请求授权
                 .authorizeRequests()
                 //任何请求
                 .anyRequest()

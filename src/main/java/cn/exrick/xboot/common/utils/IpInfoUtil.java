@@ -91,7 +91,7 @@ public class IpInfoUtil {
                 IpWeatherResult weather=new Gson().fromJson(json,IpWeatherResult.class);
                 result=weather.getResult().get(0).getCity()+" "+weather.getResult().get(0).getDistrct();
             }catch (Exception e){
-                e.printStackTrace();
+                log.info("获取IP信息失败");
             }
             return result;
         }

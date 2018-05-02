@@ -29,7 +29,7 @@ import java.util.UUID;
 public class QiniuUtil {
 
     @Value("${xboot.qiniu.isLim}")
-    private static boolean isLim;
+    private boolean isLim;
 
     /**
      * 生成上传凭证，然后准备上传
@@ -44,8 +44,6 @@ public class QiniuUtil {
 
     private static Auth auth = Auth.create(accessKey, secretKey);
 
-    private static String upToken = auth.uploadToken(bucket);
-
     /**
      * 构造一个带指定Zone对象的配置类 zone2华南
      */
@@ -59,8 +57,9 @@ public class QiniuUtil {
      * @param key 文件名
      * @return
      */
-    public static String qiniuUpload(String filePath, String key){
+    public String qiniuUpload(String filePath, String key){
 
+        String upToken = auth.uploadToken(bucket);
         try {
             Response response = uploadManager.put(filePath, key, upToken);
             //解析上传成功的结果
@@ -88,8 +87,9 @@ public class QiniuUtil {
      * @param key 文件名
      * @return
      */
-    public static String qiniuInputStreamUpload(FileInputStream file,String key){
+    public String qiniuInputStreamUpload(FileInputStream file,String key){
 
+        String upToken = auth.uploadToken(bucket);
         try {
             Response response = uploadManager.put(file,key,upToken,null, null);
             //解析上传成功的结果
@@ -116,7 +116,7 @@ public class QiniuUtil {
      * @param data64
      * @return
      */
-    public static String qiniuBase64Upload(String data64){
+    public String qiniuBase64Upload(String data64){
 
         String key = renamePic("");
         //服务端http://up-z2.qiniup.com
@@ -144,7 +144,7 @@ public class QiniuUtil {
         return auth.uploadToken(bucket, null, 3600, new StringMap().put("insertOnly", 1));
     }
 
-    public static String base64Data(String data){
+    public String base64Data(String data){
 
         if(data==null||data.isEmpty()){
             return "";
@@ -158,12 +158,9 @@ public class QiniuUtil {
      * @param fileName
      * @return
      */
-    public static String renamePic(String fileName){
+    public String renamePic(String fileName){
         String extName = fileName.substring(fileName.lastIndexOf("."));
         return UUID.randomUUID().toString().replace("-","")+extName;
     }
 
-    public static void main(String[] args){
-        base64Data("data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2");
-    }
 }

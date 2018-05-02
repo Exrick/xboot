@@ -34,9 +34,9 @@ public class PageUtil {
                 d = Sort.Direction.valueOf(order.toUpperCase());
             }
             Sort s = new Sort(d,sort);
-            pageable = new PageRequest(pageNumber-1, pageSize,s);
+            pageable = PageRequest.of(pageNumber-1, pageSize,s);
         }else {
-            pageable = new PageRequest(pageNumber-1, pageSize);
+            pageable = PageRequest.of(pageNumber-1, pageSize);
         }
         return pageable;
     }

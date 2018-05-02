@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(description = "Elasticsearch信息接口")
 @RequestMapping("/es")
 @PreAuthorize("hasRole('ADMIN')")
-public class ElasticsearchController {
+public class EsController {
 
     @Value("${xboot.elasticsearch.nodeClient}")
     private String ES_NODE_CLIENT;
