@@ -16,4 +16,9 @@ import java.util.List;
  */
 public interface UserRoleService extends XbootBaseService<UserRole,String> {
 
+    /**
+     * 删除用户角色
+     * @param userId
+     */
+    void deleteByUserId(String userId);
 }

@@ -7,6 +7,8 @@ import cn.exrick.xboot.common.vo.PageVo;
 import cn.exrick.xboot.common.vo.Result;
 import cn.exrick.xboot.entity.Role;
 import cn.exrick.xboot.entity.User;
+import cn.exrick.xboot.entity.UserRole;
+import cn.exrick.xboot.service.UserRoleService;
 import cn.exrick.xboot.service.UserService;
 import cn.exrick.xboot.service.mybatis.IUserRoleService;
 import cn.hutool.core.util.StrUtil;
@@ -25,6 +27,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -43,6 +46,9 @@ public class UserController {
 
     @Autowired
     private IUserRoleService iUserRoleService;
+
+    @Autowired
+    private UserRoleService userRoleService;
 
     @Autowired
     private StringRedisTemplate redisTemplate;
@@ -98,7 +104,7 @@ public class UserController {
     @ApiOperation(value = "修改资料",notes = "用户名密码不会修改 需要通过id获取原用户信息 需要username更新缓存")
     @CacheEvict(key = "#u.username")
     public Result<Object> edit(@ModelAttribute User u,
-                               @RequestParam(required = false) String[] roleIds){
+                               @RequestParam(required = false) String[] roles){
 
         User old = userService.get(u.getId());
         u.setUsername(old.getUsername());
@@ -107,6 +113,19 @@ public class UserController {
         if(user==null){
             return new ResultUtil<Object>().setErrorMsg("修改失败");
         }
+        //删除该用户角色
+        userRoleService.deleteByUserId(u.getId());
+        if(roles!=null&&roles.length>0){
+            //新角色
+            for(String roleId : roles){
+                UserRole ur = new UserRole();
+                ur.setRoleId(roleId);
+                ur.setUserId(u.getId());
+                userRoleService.save(ur);
+            }
+        }
+        //手动删除缓存
+        redisTemplate.delete("userRole::"+u.getId());
         return new ResultUtil<Object>().setSuccessMsg("修改成功");
     }
 
@@ -145,6 +164,7 @@ public class UserController {
         for(User u: page.getContent()){
             List<Role> list = iUserRoleService.findByUserId(u.getId());
             u.setRoles(list);
+            u.setPassword(null);
         }
         return new ResultUtil<Page<User>>().setData(page);
     }
@@ -153,7 +173,7 @@ public class UserController {
     @RequestMapping(value = "/admin/add",method = RequestMethod.POST)
     @ApiOperation(value = "添加用户")
     public Result<Object> regist(@ModelAttribute User u,
-                                 @RequestParam(required = false) String[] roleIds){
+                                 @RequestParam(required = false) String[] roles){
 
         if(StrUtil.isBlank(u.getUsername()) || StrUtil.isBlank(u.getPassword())){
             return new ResultUtil<Object>().setErrorMsg("缺少必需表单字段");
@@ -168,6 +188,15 @@ public class UserController {
         User user=userService.save(u);
         if(user==null){
             return new ResultUtil<Object>().setErrorMsg("添加失败");
+        }
+        if(roles!=null&&roles.length>0){
+            //添加角色
+            for(String roleId : roles){
+                UserRole ur = new UserRole();
+                ur.setUserId(u.getId());
+                ur.setRoleId(roleId);
+                userRoleService.save(ur);
+            }
         }
 
         return new ResultUtil<Object>().setData(user);
@@ -207,7 +236,6 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/delByIds",method = RequestMethod.DELETE)
-    @ResponseBody
     @ApiOperation(value = "批量通过ids删除")
     public Result<Object> delAllByIds(@RequestParam String[] ids){
 

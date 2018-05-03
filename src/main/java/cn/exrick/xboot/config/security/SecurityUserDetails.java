@@ -41,6 +41,7 @@ public class SecurityUserDetails extends User implements UserDetails {
                 authorityList.add(new SimpleGrantedAuthority(role.getName()));
             }
         }
+
         return authorityList;
     }
 

@@ -2,14 +2,19 @@ package cn.exrick.xboot.config.security;
 
 import cn.exrick.xboot.common.constant.SecurityConstant;
 import cn.exrick.xboot.common.utils.ResponseUtil;
+import cn.exrick.xboot.common.vo.Authority;
+import cn.exrick.xboot.entity.Role;
 import cn.exrick.xboot.exception.XbootException;
 import cn.hutool.core.util.StrUtil;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -75,7 +80,10 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
                 String authority = claims.get(SecurityConstant.AUTHORITIES).toString();
 
                 if(StrUtil.isNotBlank(authority)){
-                    authorities =  AuthorityUtils.commaSeparatedStringToAuthorityList(authority);
+                    List<String> list = new Gson().fromJson(authority, new TypeToken<List<String>>(){}.getType());
+                    for(String role : list){
+                        authorities.add(new SimpleGrantedAuthority(role));
+                    }
                 }
                 if(StrUtil.isNotBlank(username)) {
                     //此处password不能为null

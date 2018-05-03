@@ -15,4 +15,9 @@ import java.util.List;
  */
 public interface UserRoleDao extends XbootBaseDao<UserRole,String> {
 
+    /**
+     * 删除用户角色
+     * @param userId
+     */
+    void deleteByUserId(String userId);
 }
