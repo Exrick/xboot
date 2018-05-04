@@ -9,7 +9,7 @@
 
 ### 宣传视频
 ### 在线Demo
-
+### 前台为基于Vue+iView的独立项目请跳转至 [x-boot-front](https://github.com/Exrick/x-boot-front) 项目仓库查看
 ### 项目简介
 - 代码拥有详细注释 学习与实战的不错选择
 - 核心使用目前最新 SpringBoot 2.0.1.RELEASE
@@ -18,10 +18,27 @@
 - AOP操作日志默认已使用Elasticseach全文检索引擎记录，使用Spring Data Elasticsearch简化开发
 - 为什么要前后端分离
     - 都什么时代了还在用JQuery？ 
-### 分支说明
 
+
+![](http://oweupqzdv.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20180504215410.png)
+
+![](http://oweupqzdv.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20180504215449.png)
+
+![](http://oweupqzdv.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20180504215601.png)
+
+![](http://oweupqzdv.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20180504215541.png)
+
+![](http://oweupqzdv.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20180504215621.png)
+
+![](http://oweupqzdv.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20180504215656.png)
+
+### 分支说明
+- master：基于Redis的‘JWT’ (待提交)
+- jwt：基于JWT，由于刷新token机制较麻烦，作者不推荐(待提交)
+- oauth2：基于OAuth2协议(待开发)
 ### 前端所用技术
-    
+- Vue 2.5.x、iView、iview-admin、iview-area、Vuex、Vue Router、ES6、webpack、axios、echarts、cookie等
+- 前台为基于Vue+iView的独立项目请跳转至 [x-boot-front](https://github.com/Exrick/x-boot-front) 项目仓库查看
 ### 后端所用技术
 ##### 各框架依赖版本皆使用目前最新版本
 - Spring Boot 2.0.1.RELEASE
@@ -56,7 +73,7 @@
 - 修改配置文件 `application.yml` 相应配置，其中有详细注释
 - MySQL数据库新建 `xboot` 数据库，配置文件已开启ddl自动生成表结构但无初始数据，请记得运行导入sql文件
 - 启动运行 `XbootApplication.java` 默认端口8888 访问接口文档 `http://localhost:8888/swagger-ui.html` 说明启动成功 管理员账密admin|123456
-- 前台页面请启动基于Vue的 [xboot-front]() 项目，并修改其接口代理配置
+- 前台页面请启动基于Vue的 [xboot-front](https://github.com/Exrick/x-boot-front) 项目，并修改其接口代理配置
 
 ### 开发指南及相关技术栈说明
 - 项目使用 Lombok 插件简化开发，请自行在编译器中安装，不安装会报错但不影响运行，常用注解说明：
