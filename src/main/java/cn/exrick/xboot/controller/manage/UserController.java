@@ -158,8 +158,6 @@ public class UserController {
     @ApiOperation(value = "多条件分页获取用户列表")
     public Result<Page<User>> getByCondition(@ModelAttribute User user, @ModelAttribute PageVo pageVo){
 
-        //默认时间倒序
-        pageVo.setSort("createTime");
         Page<User> page = userService.findByCondition(user, PageUtil.initPage(pageVo));
         for(User u: page.getContent()){
             List<Role> list = iUserRoleService.findByUserId(u.getId());

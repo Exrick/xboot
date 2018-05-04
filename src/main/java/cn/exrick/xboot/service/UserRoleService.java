@@ -17,6 +17,13 @@ import java.util.List;
 public interface UserRoleService extends XbootBaseService<UserRole,String> {
 
     /**
+     * 通过roleId查找
+     * @param roleId
+     * @return
+     */
+    List<UserRole> findByRoleId(String roleId);
+
+    /**
      * 删除用户角色
      * @param userId
      */

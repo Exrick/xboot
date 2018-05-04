@@ -22,4 +22,7 @@ public class Role extends XbootBaseEntity {
     @ApiModelProperty(value = "角色名 以ROLE_开头")
     private String name;
 
+    @ApiModelProperty(value = "对应权限值 权限菜单所需")
+    private Integer access;
+
 }

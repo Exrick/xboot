@@ -20,8 +20,14 @@ public interface LogService {
 
     /**
      * 通过id删除日志
+     * @param id
      */
     void deleteLog(String id);
+
+    /**
+     * 删除全部日志
+     */
+    void deleteAll();
 
     /**
      * 分页获取全部日志

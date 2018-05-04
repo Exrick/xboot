@@ -1,6 +1,7 @@
 package cn.exrick.xboot.serviceimpl;
 
 import cn.exrick.xboot.dao.UserRoleDao;
+import cn.exrick.xboot.entity.UserRole;
 import cn.exrick.xboot.service.UserRoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,11 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Override
     public UserRoleDao getRepository() {
         return userRoleDao;
+    }
+
+    @Override
+    public List<UserRole> findByRoleId(String roleId) {
+        return userRoleDao.findByRoleId(roleId);
     }
 
     @Override

@@ -3,6 +3,7 @@ package cn.exrick.xboot.config.interceptor;
 import cn.exrick.xboot.common.annotation.RateLimiter;
 import cn.exrick.xboot.common.constant.CommonConstant;
 import cn.exrick.xboot.common.limit.RedisRaterLimiter;
+import cn.exrick.xboot.common.utils.IpInfoUtil;
 import cn.exrick.xboot.common.utils.ResponseUtil;
 import cn.exrick.xboot.exception.XbootException;
 import cn.hutool.core.util.StrUtil;
@@ -54,11 +55,17 @@ public class LimitRaterInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
                              Object handler) throws Exception {
 
-        Jedis jedis = jedisPool.getResource();
+        Jedis jedis = jedisPool.getResource();;
+
+        // IP限流 在线Demo所需 一秒限5个请求
+        String token1 = redisRaterLimiter.acquireTokenFromBucket(jedis, IpInfoUtil.getIpAddr(request), 5, 1000);
+        if (StrUtil.isBlank(token1)) {
+            throw new XbootException("你手速怎么这么快，请点慢一点");
+        }
 
         if(rateLimitEnable){
-            String token = redisRaterLimiter.acquireTokenFromBucket(jedis, CommonConstant.LIMIT_ALL, limit, timeout);
-            if (StrUtil.isBlank(token)) {
+            String token2 = redisRaterLimiter.acquireTokenFromBucket(jedis, CommonConstant.LIMIT_ALL, limit, timeout);
+            if (StrUtil.isBlank(token2)) {
                 throw new XbootException("当前访问总人数太多啦，请稍后再试");
             }
         }
@@ -70,12 +77,12 @@ public class LimitRaterInterceptor extends HandlerInterceptorAdapter {
         if (rateLimiter != null) {
             int limit = rateLimiter.limit();
             int timeout = rateLimiter.timeout();
-            String token = redisRaterLimiter.acquireTokenFromBucket(jedis, method.getName(), limit, timeout);
-            if (StrUtil.isBlank(token)) {
+            String token3 = redisRaterLimiter.acquireTokenFromBucket(jedis, method.getName(), limit, timeout);
+            if (StrUtil.isBlank(token3)) {
                 throw new XbootException("当前访问人数太多啦，请稍后再试");
             }
-            jedis.close();
         }
+        jedis.close();
         return true;
     }
 

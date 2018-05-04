@@ -35,7 +35,7 @@ public class EsLog implements Serializable{
 
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "创建时间")
-    private Date createTime;
+    private Date createTime = new Date();
 
     @ApiModelProperty(value = "更新者")
     private String updateBy;

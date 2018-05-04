@@ -3,7 +3,9 @@ package cn.exrick.xboot.controller;
 import cn.exrick.xboot.common.annotation.RateLimiter;
 import cn.exrick.xboot.common.lock.Callback;
 import cn.exrick.xboot.common.lock.RedisDistributedLockTemplate;
+import cn.exrick.xboot.common.utils.PageUtil;
 import cn.exrick.xboot.common.utils.ResultUtil;
+import cn.exrick.xboot.common.vo.PageVo;
 import cn.exrick.xboot.common.vo.Result;
 import cn.exrick.xboot.entity.Role;
 import cn.exrick.xboot.entity.User;
@@ -12,11 +14,10 @@ import cn.exrick.xboot.service.mybatis.IUserService;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -39,6 +40,7 @@ public class DemoController {
 
     @RequestMapping(value = "/test",method = RequestMethod.GET)
     @RateLimiter(limit = 1, timeout = 5000)
+    @ApiOperation(value = "同步锁限流测试")
     public Result<Object> test(){
 
         //MybatisPlus分页查找
@@ -65,9 +67,18 @@ public class DemoController {
     }
 
     @RequestMapping(value = "/role/getAllList",method = RequestMethod.GET)
+    @ApiOperation(value = "获取全部角色")
     public Result<Object> roleGetAll(){
 
         List<Role> list = roleService.getAll();
         return new ResultUtil<Object>().setData(list);
+    }
+
+    @RequestMapping(value = "/role/getAllByPage",method = RequestMethod.GET)
+    @ApiOperation(value = "分页获取角色")
+    public Result<org.springframework.data.domain.Page<Role>> getRoleByPage(@ModelAttribute PageVo page){
+
+        org.springframework.data.domain.Page<Role> list = roleService.findAll(PageUtil.initPage(page));
+        return new ResultUtil<org.springframework.data.domain.Page<Role>>().setData(list);
     }
 }

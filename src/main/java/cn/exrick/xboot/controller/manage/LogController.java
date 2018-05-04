@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Api(description = "日志管理接口")
 @RequestMapping("/log")
-@PreAuthorize("hasRole('ADMIN')")
 public class LogController {
 
     @Autowired
@@ -44,5 +43,25 @@ public class LogController {
 
         Page<EsLog> page = logService.searchLog(key, PageUtil.initPage(pageVo));
         return new ResultUtil<Page<EsLog>>().setData(page);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @RequestMapping(value = "/delByIds",method = RequestMethod.DELETE)
+    @ApiOperation(value = "批量删除")
+    public Result<Object> delByIds(@RequestParam String[] ids){
+
+        for(String id : ids){
+            logService.deleteLog(id);
+        }
+        return new ResultUtil<Object>().setSuccessMsg("删除成功");
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @RequestMapping(value = "/delAll",method = RequestMethod.DELETE)
+    @ApiOperation(value = "全部删除")
+    public Result<Object> delAll(){
+
+        logService.deleteAll();
+        return new ResultUtil<Object>().setSuccessMsg("删除成功");
     }
 }

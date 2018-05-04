@@ -85,9 +85,9 @@ public class IpInfoUtil {
     public static String getIpCity(String ip){
         if(null != ip){
             String url = GET_IP_INFO + ip;
-            String json= HttpUtil.get(url);
             String result="未知";
             try{
+                String json= HttpUtil.get(url, 3000);
                 IpWeatherResult weather=new Gson().fromJson(json,IpWeatherResult.class);
                 result=weather.getResult().get(0).getCity()+" "+weather.getResult().get(0).getDistrct();
             }catch (Exception e){

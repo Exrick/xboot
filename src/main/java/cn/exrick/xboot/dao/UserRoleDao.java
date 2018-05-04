@@ -16,6 +16,13 @@ import java.util.List;
 public interface UserRoleDao extends XbootBaseDao<UserRole,String> {
 
     /**
+     * 通过roleId查找
+     * @param roleId
+     * @return
+     */
+    List<UserRole> findByRoleId(String roleId);
+
+    /**
      * 删除用户角色
      * @param userId
      */
