@@ -18,7 +18,6 @@
 - AOP操作日志默认已使用Elasticseach全文检索引擎记录，使用Spring Data Elasticsearch简化开发
 - 为什么要前后端分离
     - 都什么时代了还在用JQuery？ 
-### [Spring Boot 2.x 区别总结](https://github.com/Exrick/x-boot/wiki/SpringBoot2.x%E5%8C%BA%E5%88%AB%E6%80%BB%E7%BB%93)
 
 ![](http://oweupqzdv.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20180504215410.png)
 
@@ -76,8 +75,8 @@
 - 前台页面请启动基于Vue的 [xboot-front](https://github.com/Exrick/x-boot-front) 项目，并修改其接口代理配置
 
 ### 学习记录（更新中）
-1.Spring Security整合JWT
-
+1.[Spring Boot 2.x 区别总结](https://github.com/Exrick/x-boot/wiki/SpringBoot2.x%E5%8C%BA%E5%88%AB%E6%80%BB%E7%BB%93)
+2.Spring Security整合JWT
 
 ### 开发指南及相关技术栈说明
 - 项目使用 Lombok 插件简化开发，请自行在编译器中安装，不安装会报错但不影响运行，常用注解说明：
@@ -100,7 +99,11 @@ spring:
 ```
 - 接口相关
     - 登录成功后前台请在返回的`result`字段中保存token
+    
+    ![](http://oweupqzdv.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20180505113233.png)
     - 之后的请求中请在header中放入该token即可
+    
+    ![](http://oweupqzdv.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20180505113302.png)
 - 分布式限流(基于Redis令牌桶算法)
     - 全局限流
     ```yaml
@@ -142,6 +145,7 @@ spring:
 - 增删改查(CRUD) 
     - JPA与MybatisPlus随意切换
     - 不想写sql？[Spring Data JPA](https://docs.spring.io/spring-data/jpa/docs/2.0.6.RELEASE/reference/html/#jpa.query-methods.query-creation) 了解一下
+        
         [具体x-boot增删改文档示例](https://github.com/Exrick/x-boot/wiki/CRUD)
     - 复杂业务逻辑JPA联表太蛋疼？[MyBatis-Plus](http://mp.baomidou.com) 这就不用了解了吧
     - JPA与MybatisPlus同时使用时需注意实体类注解区别，更多请见官方文档，常用注解区别：
@@ -163,8 +167,17 @@ spring:
     ```
     - 删除刷新注解 `@CacheEvict(key = "#u.username")` 手动删除刷新缓存时注意key为：`user::username`
 - Spring定时：`@Scheduled(cron="cron表达式")` Spring异步：`@Async` 等自行了解
+### 作者其他项目推荐
+- [XMall：基于SOA架构的分布式电商购物商城](https://github.com/Exrick/xmall)
+
+    ![](http://oweupqzdv.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20171022183906.jpg)
+    
+- 微信小程序APP 
+    - 捐赠≥19.9可加群私聊群主提前下载前台源码 赠送[慕课网SpringCloud学习资源](https://coding.imooc.com/class/187.html) [预览视频](https://v.qq.com/x/page/f0627kf4x1e.html)
+
+    ![](http://oweupqzdv.bkt.clouddn.com/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E9%A2%84%E8%A7%881.png)
 ### 技术疑问交流
-- 给作者项目Star或捐赠后可加入交流群 `475743731`，还可免费获取最新源码和 [UI框架](https://github.com/Exrick/xmall/blob/master/study/FlatLab.md) [![](http://pub.idqqimg.com/wpa/images/group.png)](http://shang.qq.com/wpa/qunwpa?idkey=7b60cec12ba93ebed7568b0a63f22e6e034c0d1df33125ac43ed753342ec6ce7)
+- 给作者项目Star或捐赠后可加入交流群 `475743731`，还可免费获取[慕课网学习资源](https://coding.imooc.com/class/203.html)和 [UI框架](https://github.com/Exrick/xmall/blob/master/study/FlatLab.md) [![](http://pub.idqqimg.com/wpa/images/group.png)](http://shang.qq.com/wpa/qunwpa?idkey=7b60cec12ba93ebed7568b0a63f22e6e034c0d1df33125ac43ed753342ec6ce7)
 - 作者博客：[http://blog.exrick.cn](http://blog.exrick.cn)
 ### 捐赠
 ![](http://oweupqzdv.bkt.clouddn.com/FgwHSk1Rnd-8FKqNJhFSSdcq2QVB.png)
