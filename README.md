@@ -18,7 +18,7 @@
 - AOP操作日志默认已使用Elasticseach全文检索引擎记录，使用Spring Data Elasticsearch简化开发
 - 为什么要前后端分离
     - 都什么时代了还在用JQuery？ 
-
+### [Spring Boot 2.x 区别总结](https://github.com/Exrick/x-boot/wiki/SpringBoot2.x%E5%8C%BA%E5%88%AB%E6%80%BB%E7%BB%93)
 
 ![](http://oweupqzdv.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20180504215410.png)
 
@@ -67,13 +67,17 @@
 
 ### 项目运行部署
 - 下载zip直接解压或安装git后执行克隆命令 `git clone https://github.com/Exrick/xmall.git`
-- 安装依赖并启动：[Redis](https://github.com/Exrick/xmall/blob/master/study/Redis.md)、[Elasticsearch](https://github.com/Exrick/xmall/blob/master/study/Elasticsearch.md)
+- 安装依赖并启动：[Redis](https://github.com/Exrick/xmall/blob/master/study/Redis.md)、[Elasticsearch](https://github.com/Exrick/xmall/blob/master/study/Elasticsearch.md)(非必需，但影响日志功能)
 - [Maven安装和在IDEA中配置](https://github.com/Exrick/xmall/blob/master/study/Maven.md)
 - 使用IDEA([破解/免费注册](http://idea.lanyus.com/)) 导入该Maven项目 都什么时代了还用Eclipse？
 - 修改配置文件 `application.yml` 相应配置，其中有详细注释
 - MySQL数据库新建 `xboot` 数据库，配置文件已开启ddl自动生成表结构但无初始数据，请记得运行导入sql文件
 - 启动运行 `XbootApplication.java` 默认端口8888 访问接口文档 `http://localhost:8888/swagger-ui.html` 说明启动成功 管理员账密admin|123456
 - 前台页面请启动基于Vue的 [xboot-front](https://github.com/Exrick/x-boot-front) 项目，并修改其接口代理配置
+
+### 学习记录（更新中）
+1.Spring Security整合JWT
+
 
 ### 开发指南及相关技术栈说明
 - 项目使用 Lombok 插件简化开发，请自行在编译器中安装，不安装会报错但不影响运行，常用注解说明：
@@ -91,12 +95,12 @@ jasypt:
 spring:
   # 数据源
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/xboot?useUnicode=true&characterEncoding=utf-8&useSSL=false
-    username: root
     # Jasypt加密 可到common-utils中找到JasyptUtil加解密工具类生成加密结果 格式为ENC(加密结果)
     password: ENC(F4B0s6u9xcDw3V+P0qC4CA==)
 ```
-
+- 接口相关
+    - 登录成功后前台请在返回的`result`字段中保存token
+    - 之后的请求中请在header中放入该token即可
 - 分布式限流(基于Redis令牌桶算法)
     - 全局限流
     ```yaml
@@ -113,7 +117,7 @@ spring:
     ```java
     @RateLimiter(limit = 1, timeout = 5000)
     ```
-    
+    - 支持多维度IP、uid等限流 详见代码
 - 分布式同步锁(基于Redis)
 ```java
     @Autowired
@@ -138,6 +142,7 @@ spring:
 - 增删改查(CRUD) 
     - JPA与MybatisPlus随意切换
     - 不想写sql？[Spring Data JPA](https://docs.spring.io/spring-data/jpa/docs/2.0.6.RELEASE/reference/html/#jpa.query-methods.query-creation) 了解一下
+        [具体x-boot增删改文档示例](https://github.com/Exrick/x-boot/wiki/CRUD)
     - 复杂业务逻辑JPA联表太蛋疼？[MyBatis-Plus](http://mp.baomidou.com) 这就不用了解了吧
     - JPA与MybatisPlus同时使用时需注意实体类注解区别，更多请见官方文档，常用注解区别：
     ```java
@@ -148,7 +153,16 @@ spring:
     JPA: @Transient
     MP:  @TableField(exist=false)
     ```
-    
+- Spring缓存注解
+    ```java
+    @CacheConfig(cacheNames = "user")
+    public interface UserService extends XbootBaseService<User,String> {
+        @Cacheable(key = "#username")
+        User findByUsername(String username);
+    }
+    ```
+    - 删除刷新注解 `@CacheEvict(key = "#u.username")` 手动删除刷新缓存时注意key为：`user::username`
+- Spring定时：`@Scheduled(cron="cron表达式")` Spring异步：`@Async` 等自行了解
 ### 技术疑问交流
 - 给作者项目Star或捐赠后可加入交流群 `475743731`，还可免费获取最新源码和 [UI框架](https://github.com/Exrick/xmall/blob/master/study/FlatLab.md) [![](http://pub.idqqimg.com/wpa/images/group.png)](http://shang.qq.com/wpa/qunwpa?idkey=7b60cec12ba93ebed7568b0a63f22e6e034c0d1df33125ac43ed753342ec6ce7)
 - 作者博客：[http://blog.exrick.cn](http://blog.exrick.cn)

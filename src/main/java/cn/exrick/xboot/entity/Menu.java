@@ -44,7 +44,7 @@ public class Menu extends XbootBaseEntity {
     private String parentId;
 
     @ApiModelProperty(value = "所需权限值")
-    private String access;
+    private Integer access;
 
     @Transient
     @TableField(exist=false)

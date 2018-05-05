@@ -29,7 +29,7 @@ spring:
     # 数据库索引 默认0
     database: 0
     port: 6379
-    timeout: 10000
+    timeout: 3000
   # Elasticsearch
   data:
     elasticsearch:

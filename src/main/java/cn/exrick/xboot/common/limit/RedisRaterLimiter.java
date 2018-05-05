@@ -57,6 +57,7 @@ public class RedisRaterLimiter {
             transaction.zrem(BUCKET + point, token);
             transaction.exec();
         }
+        jedis.close();
         return null;
     }
 }

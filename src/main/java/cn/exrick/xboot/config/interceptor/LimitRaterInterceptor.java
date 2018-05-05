@@ -55,7 +55,7 @@ public class LimitRaterInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
                              Object handler) throws Exception {
 
-        Jedis jedis = jedisPool.getResource();;
+        Jedis jedis = jedisPool.getResource();
 
         // IP限流 在线Demo所需 一秒限5个请求
         String token1 = redisRaterLimiter.acquireTokenFromBucket(jedis, IpInfoUtil.getIpAddr(request), 5, 1000);
@@ -82,7 +82,6 @@ public class LimitRaterInterceptor extends HandlerInterceptorAdapter {
                 throw new XbootException("当前访问人数太多啦，请稍后再试");
             }
         }
-        jedis.close();
         return true;
     }
 

@@ -19,7 +19,7 @@ public class RedisConfig {
     @Bean
     public JedisPool jedisPool() {
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-        jedisPoolConfig.setMaxTotal(100);
+        jedisPoolConfig.setMaxTotal(1000);
         return new JedisPool(jedisPoolConfig,
                 jedisConnectionFactory.getHostName(), jedisConnectionFactory.getPort(),
                 jedisConnectionFactory.getTimeout(), jedisConnectionFactory.getPassword());
