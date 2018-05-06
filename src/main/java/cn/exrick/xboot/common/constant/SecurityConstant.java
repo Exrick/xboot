@@ -28,5 +28,5 @@ public interface SecurityConstant {
     /**
      * 用户选择JWT保存时间参数头
      */
-    String SAVE_TIME = "saveTime";
+    String SAVE_LOGIN = "saveLogin";
 }

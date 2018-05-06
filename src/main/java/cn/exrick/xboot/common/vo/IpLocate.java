@@ -9,10 +9,10 @@ import java.util.List;
  * @author Exrickx
  */
 @Data
-public class IpWeatherResult implements Serializable {
+public class IpLocate implements Serializable {
 
-    String msg;
+    private String retCode;
 
-    List<City> result;
+    private City result;
 }
 

@@ -42,7 +42,7 @@ public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticatio
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
         //用户选择保存多保存登录状态几天
-        String saveTime = request.getParameter(SecurityConstant.SAVE_TIME);
+        String saveTime = request.getParameter(SecurityConstant.SAVE_LOGIN);
         if(StrUtil.isNotBlank(saveTime)&&Boolean.valueOf(saveTime)){
             tokenExpireTime = saveLoginTime * 60 * 24;
         }

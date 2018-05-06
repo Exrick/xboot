@@ -129,6 +129,14 @@ public class UserController {
         return new ResultUtil<Object>().setSuccessMsg("修改成功");
     }
 
+    /**
+     * 线上demo仅允许ADMIN权限改密码
+     * @param id
+     * @param password
+     * @param newPass
+     * @return
+     */
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/modifyPass",method = RequestMethod.POST)
     @ApiOperation(value = "修改密码")
     public Result<Object> modifyPass(@ApiParam("需用户id获取原用户数据") @RequestParam String id,

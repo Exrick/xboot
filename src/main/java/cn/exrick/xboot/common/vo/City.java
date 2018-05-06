@@ -10,7 +10,9 @@ import java.io.Serializable;
 @Data
 public class City implements Serializable {
 
-    String city;
+    String country;
 
-    String distrct;
+    String province;
+
+    String city;
 }

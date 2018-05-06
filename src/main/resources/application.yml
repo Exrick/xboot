@@ -43,6 +43,7 @@ spring:
 # 忽略鉴权url
 ignored:
   urls:
+    - /menu/getAllList
     - /user/regist
     - /common/**
     - /swagger-ui.html

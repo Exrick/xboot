@@ -1,7 +1,7 @@
 package cn.exrick.xboot.common.utils;
 
 
-import cn.exrick.xboot.common.vo.IpWeatherResult;
+import cn.exrick.xboot.common.vo.IpLocate;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 import com.google.gson.Gson;
@@ -22,6 +22,11 @@ public class IpInfoUtil {
      * Mob IP查询接口
      */
     private final static String GET_IP_INFO="http://apicloud.mob.com/ip/query?key=appkey&ip=";
+
+    /**
+     * Mob IP查询接口
+     */
+    private final static String GET_IP_WEATHER="http://apicloud.mob.com/v1/weather/ip?key=appkey&ip=";
 
     /**
      * 获取客户端IP地址
@@ -70,7 +75,7 @@ public class IpInfoUtil {
     public static String getIpInfo(String ip){
 
         if(StrUtil.isNotBlank(ip)){
-            String url = GET_IP_INFO + ip;
+            String url = GET_IP_WEATHER + ip;
             String result= HttpUtil.get(url);
             return result;
         }
@@ -88,8 +93,14 @@ public class IpInfoUtil {
             String result="未知";
             try{
                 String json= HttpUtil.get(url, 3000);
-                IpWeatherResult weather=new Gson().fromJson(json,IpWeatherResult.class);
-                result=weather.getResult().get(0).getCity()+" "+weather.getResult().get(0).getDistrct();
+                IpLocate locate=new Gson().fromJson(json, IpLocate.class);
+                if(("200").equals(locate.getRetCode())){
+                    if(StrUtil.isNotBlank(locate.getResult().getProvince())){
+                        result=locate.getResult().getProvince()+" "+locate.getResult().getCity();
+                    }else{
+                        result=locate.getResult().getCountry();
+                    }
+                }
             }catch (Exception e){
                 log.info("获取IP信息失败");
             }
