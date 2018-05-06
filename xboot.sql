@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50527
 File Encoding         : 65001
 
-Date: 2018-05-05 22:05:33
+Date: 2018-05-06 22:48:22
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -40,8 +40,15 @@ CREATE TABLE `t_menu` (
 -- ----------------------------
 -- Records of t_menu
 -- ----------------------------
-INSERT INTO `t_menu` VALUES ('5129710648430592', null, '2018-05-05 17:56:01', '0', null, '2018-05-05 17:56:01', null, '', 'ios-gear', 'sys', '', '', '/form', '系统管理');
-INSERT INTO `t_menu` VALUES ('5180911259750400', null, '2018-05-05 21:19:26', '0', null, '2018-05-05 21:19:26', null, 'user-manage/userManage', 'android-person', 'user-manage', '\0', '5129710648430592', 'user-manage', '用户管理');
+INSERT INTO `t_menu` VALUES ('5129710648430592', null, '2018-05-05 17:56:01', '0', null, '2018-05-05 17:56:01', null, 'Main', 'ios-gear', 'sys', '', '', '/form', '系统管理');
+INSERT INTO `t_menu` VALUES ('5180911259750400', null, '2018-05-05 21:19:26', '0', null, '2018-05-05 21:19:26', null, 'sys/user-manage/userManage', 'android-person', 'user-manage', '\0', '5129710648430592', 'user-manage', '用户管理');
+INSERT INTO `t_menu` VALUES ('5180911259750401', null, '2018-05-06 15:35:49', '0', null, '2018-05-06 15:35:53', null, 'sys/role-manage/roleManage', 'android-contacts', 'role-manage', '\0', '5129710648430592', 'role-manage', '角色管理');
+INSERT INTO `t_menu` VALUES ('5180911259750402', null, '2018-05-06 15:37:13', '0', null, '2018-05-06 15:37:17', null, 'sys/menu-manage/menuManage', 'navicon-round', 'menu-manage', '\0', '5129710648430592', 'menu-manage', '菜单管理');
+INSERT INTO `t_menu` VALUES ('5180911259750403', null, '2018-05-06 15:38:17', '0', null, '2018-05-06 15:38:21', null, 'sys/log-manage/logManage', 'android-list', 'log-manage', '\0', '5129710648430592', 'log-manage', '日志管理');
+INSERT INTO `t_menu` VALUES ('5469445191372800', null, '2018-05-06 16:25:58', '0', null, '2018-05-06 16:25:58', null, 'Main', 'key', 'access', '', '', '/access', '权限管理');
+INSERT INTO `t_menu` VALUES ('5470922253275136', null, '2018-05-06 16:31:50', '0', null, '2018-05-06 16:31:50', null, 'access/access', 'locked', 'access_index', '\0', '5469445191372800', 'index', '权限管理');
+INSERT INTO `t_menu` VALUES ('5471478141161472', null, '2018-05-06 16:34:03', '0', null, '2018-05-06 16:34:03', '0', 'Main', 'lock-combination', 'accesstest', '', '', '/access-test', '权限测试页');
+INSERT INTO `t_menu` VALUES ('5472290074529792', '', '2018-05-06 16:37:16', '0', '', '2018-05-06 16:45:21', '0', 'access/access-test', 'alert-circled', 'accesstest_index', '\0', '5471478141161472', 'index', '权限测试页');
 
 -- ----------------------------
 -- Table structure for t_role

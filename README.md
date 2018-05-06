@@ -167,7 +167,11 @@ spring:
     }
     ```
     - 删除刷新注解 `@CacheEvict(key = "#u.username")` 手动删除刷新缓存时注意key为：`user::username`
-- Spring定时：`@Scheduled(cron="cron表达式")` Spring异步：`@Async` 等自行了解
+- Spring Security权限：`@PreAuthorize("hasRole('ADMIN')")`
+- Spring定时：`@Scheduled(cron="cron表达式")` 
+- Spring异步：`@Async` 
+
+等自行了解
 ### 作者其他项目推荐
 - [XMall：基于SOA架构的分布式电商购物商城](https://github.com/Exrick/xmall)
 
