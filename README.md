@@ -8,7 +8,8 @@
 > 作者目前大四 能力经验有限 如有错误欢迎指正 期待您的捐赠支持！
 
 ### 宣传视频
-### 在线Demo
+### 在线Demo 
+http://xboot.exrick.cn (暂时无法登陆修复中)
 ### 前台为基于Vue+iView的独立项目请跳转至 [x-boot-front](https://github.com/Exrick/x-boot-front) 项目仓库查看
 ### 项目简介
 - 代码拥有详细注释 学习与实战的不错选择
