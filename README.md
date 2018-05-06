@@ -167,7 +167,7 @@ spring:
     }
     ```
     - 删除刷新注解 `@CacheEvict(key = "#u.username")` 手动删除刷新缓存时注意key为：`user::username`
-- Spring Security权限：`@PreAuthorize("hasRole('ADMIN')")`
+- Spring Security权限：`@PreAuthorize("hasRole('ADMIN')")` 
 - Spring定时：`@Scheduled(cron="cron表达式")` 
 - Spring异步：`@Async` 
 
