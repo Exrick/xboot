@@ -7,7 +7,8 @@
 
 > 作者目前大四 能力经验有限 如有错误欢迎指正 期待您的捐赠支持！
 
-### 宣传视频
+### [宣传视频](https://www.bilibili.com/video/av23121122/)
+- 作者亲自制作 可接单做视频... 视频已上传至[B站](https://www.bilibili.com/video/av23121122/)
 ### 在线Demo 
 http://xboot.exrick.cn (暂时无法登陆修复中)
 ### 前台为基于Vue+iView的独立项目请跳转至 [x-boot-front](https://github.com/Exrick/x-boot-front) 项目仓库查看
