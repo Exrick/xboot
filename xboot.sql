@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50527
 File Encoding         : 65001
 
-Date: 2018-05-06 22:48:22
+Date: 2018-05-07 16:56:24
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -100,9 +100,9 @@ CREATE TABLE `t_user` (
 -- ----------------------------
 -- Records of t_user
 -- ----------------------------
-INSERT INTO `t_user` VALUES ('682265633886208', '', '2018-05-01 16:13:51', '', '2018-05-02 21:02:28', '[\"510000\",\"510100\",\"510104\"]', 'http://ow2h3ee9w.bkt.clouddn.com/%E4%B8%8B%E8%BD%BD.png?imageslim', 'null', '1012139570@qq.com', '18782059038', 'null', '$2a$10$PS04ecXfknNd3V8d.ymLTObQciapMU4xU8.GADBZZsuTZr7ymnagy', '1', '0', '1', 'admin', '0');
+INSERT INTO `t_user` VALUES ('682265633886208', '', '2018-05-01 16:13:51', '', '2018-05-02 21:02:28', '[\"510000\",\"510100\",\"510104\"]', 'http://ow2h3ee9w.bkt.clouddn.com/%E4%B8%8B%E8%BD%BD.png', 'null', '1012139570@qq.com', '18782059038', 'null', '$2a$10$PS04ecXfknNd3V8d.ymLTObQciapMU4xU8.GADBZZsuTZr7ymnagy', '1', '0', '1', 'admin', '0');
 INSERT INTO `t_user` VALUES ('7', 'null', '2018-04-30 23:28:42', 'null', '2018-05-03 15:48:14', 'null', 'null', 'null', '', '', 'null', '$2a$10$PS04ecXfknNd3V8d.ymLTObQciapMU4xU8.GADBZZsuTZr7ymnagy', '0', '-1', '1', 'xhy', '0');
-INSERT INTO `t_user` VALUES ('4363087427670016', '', '2018-05-03 15:09:42', '', '2018-05-03 16:06:55', '', 'http://ow2h3ee9w.bkt.clouddn.com/%E4%B8%8B%E8%BD%BD.png?imageslim', '', '1012139570@qq.com', '18782059038', '', '$2a$10$O0V2GlON6OHeUinx8CsJYOt1xQbD8/rjQ1ZuqPaQo5v600jwW7Uem', '1', '0', '0', 'test', '0');
+INSERT INTO `t_user` VALUES ('4363087427670016', '', '2018-05-03 15:09:42', '', '2018-05-03 16:06:55', '', 'http://ow2h3ee9w.bkt.clouddn.com/%E4%B8%8B%E8%BD%BD.png', '', '1012139570@qq.com', '18782059038', '', '$2a$10$O0V2GlON6OHeUinx8CsJYOt1xQbD8/rjQ1ZuqPaQo5v600jwW7Uem', '1', '0', '0', 'test', '0');
 
 -- ----------------------------
 -- Table structure for t_user_role

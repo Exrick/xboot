@@ -71,9 +71,6 @@ xboot:
   loginTimeLimit: 10
   # 错误超过次数后多少分钟后才能继续登录（分钟）
   loginAfterTime: 10
-  qiniu:
-    # 是否开启七牛云图片瘦身压缩
-    isLim: true
   elasticsearch:
     nodeClient: 127.0.0.1:9200
 
