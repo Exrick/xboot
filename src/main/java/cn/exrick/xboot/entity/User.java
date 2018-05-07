@@ -51,7 +51,7 @@ public class User extends XbootBaseEntity {
 
     @ApiModelProperty(value = "用户头像")
     @Column(length=1000)
-    private String avatar = "http://ow2h3ee9w.bkt.clouddn.com/%E4%B8%8B%E8%BD%BD.png?imageslim";
+    private String avatar = "http://ow2h3ee9w.bkt.clouddn.com/%E4%B8%8B%E8%BD%BD.png";
 
     @ApiModelProperty(value = "用户类型 0普通用户 1管理员")
     private Integer type = CommonConstant.USER_TYPE_NORMAL;
