@@ -11,4 +11,10 @@ import java.util.List;
  */
 public interface RoleDao extends XbootBaseDao<Role,String> {
 
+    /**
+     * 获取默认角色
+     * @param defaultRole
+     * @return
+     */
+    List<Role> findByDefaultRole(Boolean defaultRole);
 }

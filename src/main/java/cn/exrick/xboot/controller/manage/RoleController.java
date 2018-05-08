@@ -5,6 +5,7 @@ import cn.exrick.xboot.common.utils.ResultUtil;
 import cn.exrick.xboot.common.vo.Result;
 import cn.exrick.xboot.entity.Role;
 import cn.exrick.xboot.entity.UserRole;
+import cn.exrick.xboot.exception.XbootException;
 import cn.exrick.xboot.service.RoleService;
 import cn.exrick.xboot.service.UserRoleService;
 import io.swagger.annotations.Api;
@@ -42,6 +43,28 @@ public class RoleController extends XbootBaseController<Role, String> {
     @Override
     public RoleService getService() {
         return roleService;
+    }
+
+    @RequestMapping(value = "/setDefault",method = RequestMethod.POST)
+    @ApiOperation(value = "设置或取消默认角色")
+    public Result<Object> setDefault(@RequestParam String id,
+                                     @RequestParam Boolean isDefault){
+
+        Role role = roleService.get(id);
+        if(role==null){
+            return new ResultUtil<Object>().setErrorMsg("角色不存在");
+        }
+        role.setDefaultRole(isDefault);
+        roleService.update(role);
+        return new ResultUtil<Object>().setSuccessMsg("设置成功");
+    }
+
+    @RequestMapping(value = "/add",method = RequestMethod.POST)
+    @ApiOperation(value = "添加角色")
+    public Result<Role> add(@ModelAttribute Role role){
+
+        Role r = roleService.save(role);
+        return new ResultUtil<Role>().setData(r);
     }
 
     @RequestMapping(value = "/edit",method = RequestMethod.POST)

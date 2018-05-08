@@ -10,7 +10,7 @@
 ### [宣传视频](https://www.bilibili.com/video/av23121122/)
 - 作者亲自制作 可接单做视频... 视频已上传至[B站](https://www.bilibili.com/video/av23121122/)
 ### 在线Demo 
-http://xboot.exrick.cn (暂时无法登陆修复中)
+http://xboot.exrick.cn
 ### 前台为基于Vue+iView的独立项目请跳转至 [x-boot-front](https://github.com/Exrick/x-boot-front) 项目仓库查看
 ### 项目简介
 - 代码拥有详细注释 学习与实战的不错选择
@@ -20,6 +20,10 @@ http://xboot.exrick.cn (暂时无法登陆修复中)
 - AOP操作日志默认已使用Elasticseach全文检索引擎记录，使用Spring Data Elasticsearch简化开发
 - 为什么要前后端分离
     - 都什么时代了还在用JQuery？ 
+### 分支说明
+- master：基于Redis的‘JWT’ (待提交)
+- jwt：基于JWT，由于刷新token机制较麻烦，作者不推荐(待提交)
+- oauth2：基于OAuth2协议(待开发)
 
 ![](http://oweupqzdv.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20180504215410.png)
 
@@ -33,10 +37,6 @@ http://xboot.exrick.cn (暂时无法登陆修复中)
 
 ![](http://oweupqzdv.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20180504215656.png)
 
-### 分支说明
-- master：基于Redis的‘JWT’ (待提交)
-- jwt：基于JWT，由于刷新token机制较麻烦，作者不推荐(待提交)
-- oauth2：基于OAuth2协议(待开发)
 ### 前端所用技术
 - Vue 2.5.x、iView、iview-admin、iview-area、Vuex、Vue Router、ES6、webpack、axios、echarts、cookie等
 - 前台为基于Vue+iView的独立项目请跳转至 [x-boot-front](https://github.com/Exrick/x-boot-front) 项目仓库查看

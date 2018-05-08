@@ -12,4 +12,10 @@ import java.util.List;
  */
 public interface RoleService extends XbootBaseService<Role,String> {
 
+    /**
+     * 获取默认角色
+     * @param defaultRole
+     * @return
+     */
+    List<Role> findByDefaultRole(Boolean defaultRole);
 }

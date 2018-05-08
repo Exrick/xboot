@@ -25,4 +25,7 @@ public class Role extends XbootBaseEntity {
     @ApiModelProperty(value = "对应权限值 权限菜单所需")
     private Integer access;
 
+    @ApiModelProperty(value = "是否为注册默认角色")
+    private Boolean defaultRole;
+
 }

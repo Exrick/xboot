@@ -8,6 +8,7 @@ import cn.exrick.xboot.common.vo.Result;
 import cn.exrick.xboot.entity.Role;
 import cn.exrick.xboot.entity.User;
 import cn.exrick.xboot.entity.UserRole;
+import cn.exrick.xboot.service.RoleService;
 import cn.exrick.xboot.service.UserRoleService;
 import cn.exrick.xboot.service.UserService;
 import cn.exrick.xboot.service.mybatis.IUserRoleService;
@@ -45,6 +46,9 @@ public class UserController {
     private UserService userService;
 
     @Autowired
+    private RoleService roleService;
+
+    @Autowired
     private IUserRoleService iUserRoleService;
 
     @Autowired
@@ -57,7 +61,7 @@ public class UserController {
     @ApiOperation(value = "注册用户")
     public Result<Object> regist(@ModelAttribute User u,
                                  @RequestParam String verify,
-                                 @RequestParam String codeId){
+                                 @RequestParam String captchaId){
 
         if(StrUtil.isBlank(verify)|| StrUtil.isBlank(u.getUsername())
                 || StrUtil.isBlank(u.getPassword())){
@@ -65,7 +69,7 @@ public class UserController {
         }
 
         //验证码
-        String code=redisTemplate.opsForValue().get(codeId);
+        String code=redisTemplate.opsForValue().get(captchaId);
         if(StrUtil.isBlank(code)){
             return new ResultUtil<Object>().setErrorMsg("验证码已过期，请重新获取");
         }
@@ -78,6 +82,8 @@ public class UserController {
         if(userService.findByUsername(u.getUsername())!=null){
             return new ResultUtil<Object>().setErrorMsg("该用户名已被注册");
         }
+        //删除缓存
+        redisTemplate.delete("user::"+u.getUsername());
 
         String encryptPass = new BCryptPasswordEncoder().encode(u.getPassword());
         u.setPassword(encryptPass);
@@ -85,6 +91,16 @@ public class UserController {
         User user=userService.save(u);
         if(user==null){
             return new ResultUtil<Object>().setErrorMsg("注册失败");
+        }
+        // 默认角色
+        List<Role> roleList = roleService.findByDefaultRole(true);
+        if(roleList!=null&&roleList.size()>0){
+            for(Role role : roleList){
+                UserRole ur = new UserRole();
+                ur.setUserId(user.getId());
+                ur.setRoleId(role.getId());
+                iUserRoleService.insert(ur);
+            }
         }
 
         return new ResultUtil<Object>().setData(user);
@@ -100,6 +116,28 @@ public class UserController {
         return new ResultUtil<User>().setData(u);
     }
 
+    @RequestMapping(value = "/editOwn",method = RequestMethod.POST)
+    @ApiOperation(value = "修改用户自己资料",notes = "用户名密码不会修改 需要通过id获取原用户信息 需要username更新缓存")
+    @CacheEvict(key = "#u.username")
+    public Result<Object> editOwn(@ModelAttribute User u){
+
+        User old = userService.get(u.getId());
+        u.setUsername(old.getUsername());
+        u.setPassword(old.getPassword());
+        User user=userService.update(u);
+        if(user==null){
+            return new ResultUtil<Object>().setErrorMsg("修改失败");
+        }
+        return new ResultUtil<Object>().setSuccessMsg("修改成功");
+    }
+
+    /**
+     * 线上demo仅允许ADMIN权限
+     * @param u
+     * @param roles
+     * @return
+     */
+    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/edit",method = RequestMethod.POST)
     @ApiOperation(value = "修改资料",notes = "用户名密码不会修改 需要通过id获取原用户信息 需要username更新缓存")
     @CacheEvict(key = "#u.username")

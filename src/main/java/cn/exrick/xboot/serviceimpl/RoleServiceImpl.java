@@ -1,6 +1,7 @@
 package cn.exrick.xboot.serviceimpl;
 
 import cn.exrick.xboot.dao.RoleDao;
+import cn.exrick.xboot.entity.Role;
 import cn.exrick.xboot.service.RoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,4 +27,8 @@ public class RoleServiceImpl implements RoleService {
         return roleDao;
     }
 
+    @Override
+    public List<Role> findByDefaultRole(Boolean defaultRole) {
+        return roleDao.findByDefaultRole(defaultRole);
+    }
 }
