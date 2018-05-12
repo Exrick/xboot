@@ -34,9 +34,9 @@ public class QiniuUtil {
 
     private static String secretKey = "你的secretKey";
 
-    private static String bucket = "你的bucket";
+    private static String bucket = "你的bucket名称";
 
-    private static String origin = "你的访问域名前部分，例如 ：http://p77xsahe9.bkt.clouddn.com/";
+    private static String origin = "你的域名前部分链接，例如http://p77xsahe9.bkt.clouddn.com/";
 
     private static Auth auth = Auth.create(accessKey, secretKey);
 

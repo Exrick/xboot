@@ -95,7 +95,9 @@ class RedisLockInternals {
             args.add(value);
             Object r=jedis.eval(luaScript, keys, args);
         } finally {
-            if(jedis!=null) jedis.close();
+            if(jedis!=null){
+                jedis.close();
+            }
         }
     }
 

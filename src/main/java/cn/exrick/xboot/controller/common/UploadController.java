@@ -29,9 +29,6 @@ import java.io.FileInputStream;
 public class UploadController {
 
     @Autowired
-    private JedisPool jedisPool;
-
-    @Autowired
     private RedisRaterLimiter redisRaterLimiter;
 
     @Autowired
@@ -42,10 +39,8 @@ public class UploadController {
     public Result<Object> upload(@RequestParam("file") MultipartFile file,
                                  HttpServletRequest request) {
 
-        Jedis jedis = jedisPool.getResource();
-
         // IP限流 在线Demo所需 5分钟限1个请求
-        String token1 = redisRaterLimiter.acquireTokenFromBucket(jedis, IpInfoUtil.getIpAddr(request), 1, 300000);
+        String token1 = redisRaterLimiter.acquireTokenFromBucket("upload:"+IpInfoUtil.getIpAddr(request), 1, 300000);
         if (StrUtil.isBlank(token1)) {
             throw new XbootException("上传那么多干嘛，等等再传吧");
         }
