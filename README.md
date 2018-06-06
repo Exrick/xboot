@@ -116,10 +116,10 @@ xboot:
     - 为方便前台配置代理，所有接口建议以统一路径例如“/xboot”开头
     - 登录成功后前台请在返回的`result`字段中保存token
     
-    ![](http://oweupqzdv.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20180505113233.png)
+    ![](http://p77xsahe9.bkt.clouddn.com/18-6-6/65435347.jpg)
     - 之后的请求中请在header或参数中添加该token即可
     
-    ![](http://oweupqzdv.bkt.clouddn.com/QQ%E6%88%AA%E5%9B%BE20180505113302.png)
+    ![](http://p77xsahe9.bkt.clouddn.com/18-6-6/95613949.jpg)
 - 分布式限流(基于Redis令牌桶算法)
     - 全局限流
     ```yaml
@@ -157,7 +157,8 @@ xboot:
         }
     });
 ```
-- Mob接口 现在需要注册申请后使用 在 `cn.exrick.common.utils.IpInfoUtil` 中修改填入你的AppKey
+- Mob接口
+    - 现在需要注册申请后使用 在 `cn.exrick.common.utils.IpInfoUtil` 中修改填入你的AppKey
 - 后台开发代码生成
     - 代码生成方法在 `cn.exrick.xboot.generator` 包中的 `XbootGenerator.java` 工具类，修改好生成类配置后运行主函数main方法即可生成三层相关代码，别忘了在实体类中添加相关字段，运行项目后将自动生成数据库表
     

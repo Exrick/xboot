@@ -21,7 +21,7 @@ public class IpInfoUtil {
     /**
      * 你的APPKEY mob官网注册申请即可
      */
-    private final static String APPKEY = "";
+    private final static String APPKEY = "1b09491d9a01a";
 
     /**
      * Mob IP查询接口
