@@ -1,0 +1,35 @@
+package ${entity.controllerPackage};
+
+import cn.exrick.xboot.base.XbootBaseController;
+import cn.exrick.xboot.common.utils.PageUtil;
+import cn.exrick.xboot.common.utils.ResultUtil;
+import cn.exrick.xboot.common.vo.PageVo;
+import cn.exrick.xboot.common.vo.Result;
+import cn.exrick.xboot.entity.${entity.className};
+import cn.exrick.xboot.service.${entity.className}Service;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.*;
+
+
+/**
+ * @author ${entity.author}
+ */
+@Slf4j
+@RestController
+@Api(description = "${entity.description}管理接口")
+@RequestMapping("/xboot/${entity.classNameLowerCase}")
+public class ${entity.className}Controller extends XbootBaseController<${entity.className}, ${entity.primaryKeyType}>{
+
+    @Autowired
+    private ${entity.className}Service ${entity.classNameLowerCase}Service;
+
+    @Override
+    public ${entity.className}Service getService() {
+        return ${entity.classNameLowerCase}Service;
+    }
+
+}

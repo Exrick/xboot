@@ -1,12 +1,16 @@
 package cn.exrick.xboot.serviceimpl;
 
 import cn.exrick.xboot.common.constant.CommonConstant;
+import cn.exrick.xboot.common.vo.SearchVo;
 import cn.exrick.xboot.dao.UserDao;
 import cn.exrick.xboot.dao.UserRoleDao;
+import cn.exrick.xboot.dao.mapper.PermissionMapper;
 import cn.exrick.xboot.dao.mapper.UserRoleMapper;
+import cn.exrick.xboot.entity.Permission;
 import cn.exrick.xboot.entity.Role;
 import cn.exrick.xboot.entity.User;
 import cn.exrick.xboot.service.UserService;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,6 +41,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRoleMapper userRoleMapper;
 
+    @Autowired
+    private PermissionMapper permissionMapper;
+
     @Override
     public UserDao getRepository() {
         return userDao;
@@ -49,6 +57,8 @@ public class UserServiceImpl implements UserService {
             User user = list.get(0);
             List<Role> roleList = userRoleMapper.findByUserId(user.getId());
             user.setRoles(roleList);
+            List<Permission> permissionList = permissionMapper.findByUserId(user.getId());
+            user.setPermissions(permissionList);
             return user;
         }
         return null;
@@ -61,7 +71,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> findByCondition(User user, Pageable pageable) {
+    public Page<User> findByCondition(User user, SearchVo searchVo, Pageable pageable) {
 
         return userDao.findAll(new Specification<User>() {
             @Nullable
@@ -74,6 +84,7 @@ public class UserServiceImpl implements UserService {
                 Path<Integer> sexField=root.get("sex");
                 Path<Integer> typeField=root.get("type");
                 Path<Integer> statusField=root.get("status");
+                Path<Date> createTimeField=root.get("createTime");
 
                 List<Predicate> list = new ArrayList<Predicate>();
 
@@ -90,15 +101,21 @@ public class UserServiceImpl implements UserService {
 
                 //性别
                 if(user.getSex()!=null){
-                    list.add(cb.equal(sexField,user.getSex()));
+                    list.add(cb.equal(sexField, user.getSex()));
                 }
                 //类型
                 if(user.getType()!=null){
-                    list.add(cb.equal(typeField,user.getType()));
+                    list.add(cb.equal(typeField, user.getType()));
                 }
                 //状态
                 if(user.getStatus()!=null){
-                    list.add(cb.equal(statusField,user.getStatus()));
+                    list.add(cb.equal(statusField, user.getStatus()));
+                }
+                //创建时间
+                if(StrUtil.isNotBlank(searchVo.getStartDate())&&StrUtil.isNotBlank(searchVo.getEndDate())){
+                    Date start = DateUtil.parse(searchVo.getStartDate());
+                    Date end = DateUtil.parse(searchVo.getEndDate());
+                    list.add(cb.between(createTimeField, start, DateUtil.endOfDay(end)));
                 }
 
                 Predicate[] arr = new Predicate[list.size()];

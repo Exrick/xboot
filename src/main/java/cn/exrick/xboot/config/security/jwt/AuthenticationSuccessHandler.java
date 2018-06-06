@@ -1,4 +1,4 @@
-package cn.exrick.xboot.config.security;
+package cn.exrick.xboot.config.security.jwt;
 
 import cn.exrick.xboot.common.annotation.SystemLog;
 import cn.exrick.xboot.common.constant.SecurityConstant;
@@ -41,7 +41,7 @@ public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticatio
     @SystemLog(description="登录系统")
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
-        //用户选择保存多保存登录状态几天
+        //用户选择保存登录状态几天
         String saveTime = request.getParameter(SecurityConstant.SAVE_LOGIN);
         if(StrUtil.isNotBlank(saveTime)&&Boolean.valueOf(saveTime)){
             tokenExpireTime = saveLoginTime * 60 * 24;

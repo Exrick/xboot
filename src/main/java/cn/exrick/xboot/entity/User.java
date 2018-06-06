@@ -2,11 +2,8 @@ package cn.exrick.xboot.entity;
 
 import cn.exrick.xboot.base.XbootBaseEntity;
 import cn.exrick.xboot.common.constant.CommonConstant;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableName;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -28,6 +25,7 @@ public class User extends XbootBaseEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "用户名")
+    @Column(unique = true,nullable = false)
     private String username;
 
     @ApiModelProperty(value = "密码")
@@ -51,7 +49,7 @@ public class User extends XbootBaseEntity {
 
     @ApiModelProperty(value = "用户头像")
     @Column(length=1000)
-    private String avatar = "http://ow2h3ee9w.bkt.clouddn.com/%E4%B8%8B%E8%BD%BD.png";
+    private String avatar = "https://s1.ax1x.com/2018/05/19/CcdVQP.png";
 
     @ApiModelProperty(value = "用户类型 0普通用户 1管理员")
     private Integer type = CommonConstant.USER_TYPE_NORMAL;
@@ -67,4 +65,8 @@ public class User extends XbootBaseEntity {
     @ApiModelProperty(value = "用户拥有角色")
     private List<Role> roles;
 
+    @Transient
+    @TableField(exist=false)
+    @ApiModelProperty(value = "用户拥有的权限")
+    private List<Permission> permissions;
 }

@@ -1,12 +1,14 @@
 package cn.exrick.xboot.config.security;
 
 import cn.exrick.xboot.config.IgnoredUrlsProperties;
+import cn.exrick.xboot.config.security.jwt.AuthenticationFailHandler;
+import cn.exrick.xboot.config.security.jwt.AuthenticationSuccessHandler;
+import cn.exrick.xboot.config.security.jwt.JWTAuthenticationFilter;
+import cn.exrick.xboot.config.security.jwt.RestAccessDeniedHandler;
+import cn.exrick.xboot.config.security.permission.MyFilterSecurityInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,9 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 
 /**
  * Security 核心配置类
@@ -27,6 +27,9 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled=true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private IgnoredUrlsProperties ignoredUrlsProperties;
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
@@ -41,7 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private RestAccessDeniedHandler accessDeniedHandler;
 
     @Autowired
-    private IgnoredUrlsProperties ignoredUrlsProperties;
+    private MyFilterSecurityInterceptor myFilterSecurityInterceptor;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -62,9 +65,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         registry.and()
                 //表单登录方式
                 .formLogin()
-                .loginPage("/common/needLogin")
+                .loginPage("/xboot/common/needLogin")
                 //登录需要经过的url请求
-                .loginProcessingUrl("/login")
+                .loginProcessingUrl("/xboot/login")
                 .permitAll()
                 //成功处理类
                 .successHandler(successHandler)
@@ -88,6 +91,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //自定义权限拒绝处理类
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler)
                 .and()
+                //添加自定义权限过滤器
+                .addFilterBefore(myFilterSecurityInterceptor, FilterSecurityInterceptor.class)
                 //添加JWT过滤器 除/login其它请求都需经过此过滤器
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()));
     }

@@ -61,7 +61,7 @@ public abstract class XbootBaseController<E, ID extends Serializable> {
         return new ResultUtil<E>().setData(e);
     }
 
-    @RequestMapping(value = "/update",method = RequestMethod.POST)
+    @RequestMapping(value = "/update",method = RequestMethod.PUT)
     @ResponseBody
     @ApiOperation(value = "更新数据")
     public Result<E> update(@ModelAttribute E entity){

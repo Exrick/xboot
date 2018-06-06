@@ -1,4 +1,4 @@
-package cn.exrick.xboot.config.security;
+package cn.exrick.xboot.config.security.jwt;
 
 import cn.exrick.xboot.common.constant.SecurityConstant;
 import cn.exrick.xboot.common.utils.ResponseUtil;
@@ -46,6 +46,9 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 
         String header = request.getHeader(SecurityConstant.HEADER);
+        if(StrUtil.isBlank(header)){
+            header = request.getParameter(SecurityConstant.HEADER);
+        }
         if (StrUtil.isBlank(header) || !header.startsWith(SecurityConstant.TOKEN_SPLIT)) {
             chain.doFilter(request, response);
             return;
@@ -75,14 +78,14 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
                 //获取用户名
                 String username = claims.getSubject();
 
-                //获取权限（角色）
+                //获取权限
                 List<GrantedAuthority> authorities = new ArrayList<>();
                 String authority = claims.get(SecurityConstant.AUTHORITIES).toString();
 
                 if(StrUtil.isNotBlank(authority)){
                     List<String> list = new Gson().fromJson(authority, new TypeToken<List<String>>(){}.getType());
-                    for(String role : list){
-                        authorities.add(new SimpleGrantedAuthority(role));
+                    for(String ga : list){
+                        authorities.add(new SimpleGrantedAuthority(ga));
                     }
                 }
                 if(StrUtil.isNotBlank(username)) {

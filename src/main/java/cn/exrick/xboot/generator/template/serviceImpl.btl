@@ -1,0 +1,32 @@
+package ${entity.serviceImplPackage};
+
+import cn.exrick.xboot.dao.${entity.className}Dao;
+import cn.exrick.xboot.entity.${entity.className};
+import cn.exrick.xboot.service.${entity.className}Service;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * ${entity.description}接口实现
+ * @author ${entity.author}
+ */
+@Slf4j
+@Service
+@Transactional
+public class ${entity.className}ServiceImpl implements ${entity.className}Service {
+
+    @Autowired
+    private ${entity.className}Dao ${entity.classNameLowerCase}Dao;
+
+    @Override
+    public ${entity.className}Dao getRepository() {
+        return ${entity.classNameLowerCase}Dao;
+    }
+}

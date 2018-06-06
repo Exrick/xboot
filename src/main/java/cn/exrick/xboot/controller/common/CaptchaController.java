@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
  * @author Exrickx
  */
 @Api(description = "验证码接口")
-@RequestMapping("/common/captcha")
+@RequestMapping("/xboot/common/captcha")
 @RestController
 public class CaptchaController {
 

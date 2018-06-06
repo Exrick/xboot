@@ -1,0 +1,22 @@
+package ${entity.entityPackage};
+
+import cn.exrick.xboot.base.XbootBaseEntity;
+import com.baomidou.mybatisplus.annotations.TableName;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+/**
+ * @author ${entity.author}
+ */
+@Data
+@Entity
+@Table(name = "${entity.tableName}")
+@TableName("${entity.tableName}")
+public class ${entity.className} extends XbootBaseEntity {
+
+    private static final long serialVersionUID = 1L;
+
+}

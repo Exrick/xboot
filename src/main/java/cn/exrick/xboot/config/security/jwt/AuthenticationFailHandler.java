@@ -1,4 +1,4 @@
-package cn.exrick.xboot.config.security;
+package cn.exrick.xboot.config.security.jwt;
 
 import cn.exrick.xboot.common.utils.ResponseUtil;
 import cn.exrick.xboot.exception.LoginFailLimitException;

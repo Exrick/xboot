@@ -25,7 +25,7 @@ import java.io.FileInputStream;
 @Slf4j
 @RestController
 @Api(description = "文件上传接口")
-@RequestMapping("/upload")
+@RequestMapping("/xboot/upload")
 public class UploadController {
 
     @Autowired

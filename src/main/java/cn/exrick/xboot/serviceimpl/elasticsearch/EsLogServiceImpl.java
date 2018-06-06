@@ -1,8 +1,8 @@
 package cn.exrick.xboot.serviceimpl.elasticsearch;
 
-import cn.exrick.xboot.dao.elasticsearch.LogDao;
+import cn.exrick.xboot.dao.elasticsearch.EsLogDao;
 import cn.exrick.xboot.entity.elasticsearch.EsLog;
-import cn.exrick.xboot.service.elasticsearch.LogService;
+import cn.exrick.xboot.service.elasticsearch.EsLogService;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,18 +11,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.management.Query;
-import java.util.List;
-
 /**
  * @author Exrickx
  */
 @Service
 @Transactional
-public class LogServiceImpl implements LogService {
+public class EsLogServiceImpl implements EsLogService {
 
     @Autowired
-    private LogDao logDao;
+    private EsLogDao logDao;
 
     @Override
     public EsLog saveLog(EsLog esLog) {

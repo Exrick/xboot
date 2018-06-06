@@ -2,6 +2,7 @@ package cn.exrick.xboot.service;
 
 
 import cn.exrick.xboot.base.XbootBaseService;
+import cn.exrick.xboot.common.vo.SearchVo;
 import cn.exrick.xboot.entity.User;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
@@ -36,7 +37,9 @@ public interface UserService extends XbootBaseService<User,String> {
     /**
      * 多条件分页获取用户
      * @param user
+     * @param searchVo
+     * @param pageable
      * @return
      */
-    Page<User> findByCondition(User user, Pageable pageable);
+    Page<User> findByCondition(User user, SearchVo searchVo, Pageable pageable);
 }

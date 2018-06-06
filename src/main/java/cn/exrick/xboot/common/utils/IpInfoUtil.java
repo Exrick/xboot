@@ -19,14 +19,19 @@ import java.net.UnknownHostException;
 public class IpInfoUtil {
 
     /**
-     * Mob IP查询接口
+     * 你的APPKEY mob官网注册申请即可
      */
-    private final static String GET_IP_INFO="http://apicloud.mob.com/ip/query?key=appkey&ip=";
+    private final static String APPKEY = "";
 
     /**
      * Mob IP查询接口
      */
-    private final static String GET_IP_WEATHER="http://apicloud.mob.com/v1/weather/ip?key=appkey&ip=";
+    private final static String GET_IP_LOCATE = "http://apicloud.mob.com/ip/query?key="+ APPKEY +"&ip=";
+
+    /**
+     * Mob IP天气查询接口
+     */
+    private final static String GET_IP_WEATHER = "http://apicloud.mob.com/v1/weather/ip?key="+ APPKEY +"&ip=";
 
     /**
      * 获取客户端IP地址
@@ -72,7 +77,7 @@ public class IpInfoUtil {
      * @param ip ip地址
      * @return
      */
-    public static String getIpInfo(String ip){
+    public static String getIpWeatherInfo(String ip){
 
         if(StrUtil.isNotBlank(ip)){
             String url = GET_IP_WEATHER + ip;
@@ -89,7 +94,7 @@ public class IpInfoUtil {
      */
     public static String getIpCity(String ip){
         if(null != ip){
-            String url = GET_IP_INFO + ip;
+            String url = GET_IP_LOCATE + ip;
             String result="未知";
             try{
                 String json= HttpUtil.get(url, 3000);
@@ -107,9 +112,5 @@ public class IpInfoUtil {
             return result;
         }
         return null;
-    }
-
-    public static void main(String[] args){
-        log.info(getIpInfo("171.88.85.176"));
     }
 }

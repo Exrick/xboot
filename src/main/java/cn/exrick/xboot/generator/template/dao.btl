@@ -1,0 +1,14 @@
+package ${entity.daoPackage};
+
+import cn.exrick.xboot.base.XbootBaseDao;
+import cn.exrick.xboot.entity.${entity.className};
+
+import java.util.List;
+
+/**
+ * ${entity.description}数据处理层
+ * @author ${entity.author}
+ */
+public interface ${entity.className}Dao extends XbootBaseDao<${entity.className},${entity.primaryKeyType}> {
+
+}

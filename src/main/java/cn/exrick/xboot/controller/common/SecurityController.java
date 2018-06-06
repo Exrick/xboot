@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @Api(description = "Security相关接口")
-@RequestMapping("/common")
+@RequestMapping("/xboot/common")
 public class SecurityController {
 
     @RequestMapping(value = "/needLogin",method = RequestMethod.GET)

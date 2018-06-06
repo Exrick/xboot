@@ -1,48 +1,33 @@
-package cn.exrick.xboot.entity.elasticsearch;
+package cn.exrick.xboot.entity;
 
+import cn.exrick.xboot.base.XbootBaseEntity;
 import cn.exrick.xboot.common.constant.CommonConstant;
 import cn.exrick.xboot.common.utils.ObjectUtil;
-import cn.exrick.xboot.common.utils.SnowFlakeUtil;
 import cn.hutool.core.util.StrUtil;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableName;
 import com.google.gson.Gson;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.springframework.data.elasticsearch.annotations.Document;
 
-import javax.persistence.Id;
-import java.io.Serializable;
-import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-
 /**
- * Elasticsearch文档实体类
  * @author Exrickx
  */
 @Data
-@Document(indexName = "log", type = "log", shards = 1, replicas = 0, refreshInterval = "-1")
-public class EsLog implements Serializable{
+@Entity
+@Table(name = "t_log")
+@TableName("t_log")
+public class Log extends XbootBaseEntity {
 
     private static final long serialVersionUID = 1L;
-
-    @Id
-    @ApiModelProperty(value = "唯一标识")
-    private String id = String.valueOf(SnowFlakeUtil.getFlowIdInstance().nextId());
-
-    @ApiModelProperty(value = "创建者")
-    private String createBy;
-
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-    @ApiModelProperty(value = "创建时间")
-    private Date createTime = new Date();
-
-    @ApiModelProperty(value = "更新者")
-    private String updateBy;
-
-    @ApiModelProperty(value = "删除标志 默认0")
-    private Integer delFlag = CommonConstant.STATUS_NORMAL;
 
     @ApiModelProperty(value = "方法操作名称")
     private String name;
@@ -76,4 +61,5 @@ public class EsLog implements Serializable{
 
         this.requestParam = ObjectUtil.mapToString(paramMap);
     }
+
 }

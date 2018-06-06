@@ -19,14 +19,14 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 @RestController
 @Api(description = "IP接口")
-@RequestMapping("/common/ip")
-public class IpLocateController {
+@RequestMapping("/xboot/common/ip")
+public class IpInfoController {
 
     @RequestMapping(value = "/info",method = RequestMethod.GET)
     @ApiOperation(value = "IP及天气相关信息")
     public Result<Object> upload(HttpServletRequest request) {
 
-        String result= IpInfoUtil.getIpInfo(IpInfoUtil.getIpAddr(request));
+        String result= IpInfoUtil.getIpWeatherInfo(IpInfoUtil.getIpAddr(request));
         return new ResultUtil<Object>().setData(result);
     }
 }

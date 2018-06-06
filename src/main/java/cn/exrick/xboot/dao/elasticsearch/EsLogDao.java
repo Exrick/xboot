@@ -11,6 +11,6 @@ import java.util.List;
 /**
  * @author Exrickx
  */
-public interface LogDao extends ElasticsearchRepository<EsLog, String> {
+public interface EsLogDao extends ElasticsearchRepository<EsLog, String> {
 
 }

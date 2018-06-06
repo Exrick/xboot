@@ -1,0 +1,16 @@
+package ${entity.servicePackage};
+
+import cn.exrick.xboot.base.XbootBaseService;
+import cn.exrick.xboot.entity.${entity.className};
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
+
+/**
+ * ${entity.description}接口
+ * @author ${entity.author}
+ */
+public interface ${entity.className}Service extends XbootBaseService<${entity.className},${entity.primaryKeyType}> {
+
+}

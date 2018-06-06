@@ -3,8 +3,8 @@
 <mapper namespace="cn.exrick.xboot.dao.mapper.UserRoleMapper">
 
     <select id="findByUserId" resultType="cn.exrick.xboot.entity.Role">
-      select r.id id ,name, access
-      from t_user_role ur
+      SELECT r.id id, name
+      FROM t_user_role ur
       LEFT JOIN t_role r
       ON ur.role_id = r.id
       WHERE user_Id = #{userId}

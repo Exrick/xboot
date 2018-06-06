@@ -2,8 +2,10 @@ package cn.exrick.xboot.config.security;
 
 import cn.exrick.xboot.common.constant.CommonConstant;
 import cn.exrick.xboot.common.utils.JasyptUtil;
+import cn.exrick.xboot.entity.Permission;
 import cn.exrick.xboot.entity.Role;
 import cn.exrick.xboot.entity.User;
+import cn.hutool.core.collection.CollUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,6 +30,7 @@ public class SecurityUserDetails extends User implements UserDetails {
             this.setPassword(user.getPassword());
             this.setStatus(user.getStatus());
             this.setRoles(user.getRoles());
+            this.setPermissions(user.getPermissions());
         }
     }
 
@@ -35,13 +38,12 @@ public class SecurityUserDetails extends User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         List<GrantedAuthority> authorityList = new ArrayList<>();
-        List<Role> roles = this.getRoles();
-        if(roles!=null&&roles.size()>0){
-            for (Role role : roles) {
-                authorityList.add(new SimpleGrantedAuthority(role.getName()));
+        List<Permission> permissions = this.getPermissions();
+        if(CollUtil.isNotEmpty(permissions)&&permissions.get(0)!=null){
+            for (Permission permission : permissions) {
+                authorityList.add(new SimpleGrantedAuthority(permission.getTitle()));
             }
         }
-
         return authorityList;
     }
 

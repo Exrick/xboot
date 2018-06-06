@@ -5,6 +5,7 @@ import cn.exrick.xboot.common.utils.PageUtil;
 import cn.exrick.xboot.common.utils.ResultUtil;
 import cn.exrick.xboot.common.vo.PageVo;
 import cn.exrick.xboot.common.vo.Result;
+import cn.exrick.xboot.common.vo.SearchVo;
 import cn.exrick.xboot.entity.Role;
 import cn.exrick.xboot.entity.User;
 import cn.exrick.xboot.entity.UserRole;
@@ -38,7 +39,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @Api(description = "用户接口")
-@RequestMapping("/user")
+@RequestMapping("/xboot/user")
 @CacheConfig(cacheNames = "user")
 public class UserController {
 
@@ -116,7 +117,19 @@ public class UserController {
         return new ResultUtil<User>().setData(u);
     }
 
-    @RequestMapping(value = "/editOwn",method = RequestMethod.POST)
+    @RequestMapping(value = "/unlock",method = RequestMethod.POST)
+    @ApiOperation(value = "解锁验证密码")
+    public Result<Object> unLock(@RequestParam String password){
+
+        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User u = userService.findByUsername(user.getUsername());
+        if(!new BCryptPasswordEncoder().matches(password, u.getPassword())){
+            return new ResultUtil<Object>().setErrorMsg("密码不正确");
+        }
+        return new ResultUtil<Object>().setData(null);
+    }
+
+    @RequestMapping(value = "/edit",method = RequestMethod.POST)
     @ApiOperation(value = "修改用户自己资料",notes = "用户名密码不会修改 需要通过id获取原用户信息 需要username更新缓存")
     @CacheEvict(key = "#u.username")
     public Result<Object> editOwn(@ModelAttribute User u){
@@ -132,20 +145,29 @@ public class UserController {
     }
 
     /**
-     * 线上demo仅允许ADMIN权限
      * @param u
      * @param roles
      * @return
      */
-    @PreAuthorize("hasRole('ADMIN')")
-    @RequestMapping(value = "/edit",method = RequestMethod.POST)
-    @ApiOperation(value = "修改资料",notes = "用户名密码不会修改 需要通过id获取原用户信息 需要username更新缓存")
+    @RequestMapping(value = "/admin/edit",method = RequestMethod.POST)
+    @ApiOperation(value = "修改资料",notes = "需要通过id获取原用户信息 需要username更新缓存")
     @CacheEvict(key = "#u.username")
     public Result<Object> edit(@ModelAttribute User u,
                                @RequestParam(required = false) String[] roles){
 
         User old = userService.get(u.getId());
-        u.setUsername(old.getUsername());
+        //所修改了用户名
+        if(!old.getUsername().equals(u.getUsername())){
+            //若修改用户名删除原用户名缓存
+            redisTemplate.delete("user::"+old.getUsername());
+            //判断新用户名是否存在
+            if(userService.findByUsername(u.getUsername())!=null){
+                return new ResultUtil<Object>().setErrorMsg("该用户名已被存在");
+            }
+            //删除缓存
+            redisTemplate.delete("user::"+u.getUsername());
+        }
+
         u.setPassword(old.getPassword());
         User user=userService.update(u);
         if(user==null){
@@ -174,7 +196,6 @@ public class UserController {
      * @param newPass
      * @return
      */
-    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/modifyPass",method = RequestMethod.POST)
     @ApiOperation(value = "修改密码")
     public Result<Object> modifyPass(@ApiParam("需用户id获取原用户数据") @RequestParam String id,
@@ -185,6 +206,11 @@ public class UserController {
 
         if(!new BCryptPasswordEncoder().matches(password,old.getPassword())){
             return new ResultUtil<Object>().setErrorMsg("旧密码不正确");
+        }
+
+        //在线DEMO所需
+        if("test".equals(old.getUsername())||"test2".equals(old.getUsername())){
+            return new ResultUtil<Object>().setErrorMsg("演示账号不支持修改密码");
         }
 
         String newEncryptPass= new BCryptPasswordEncoder().encode(newPass);
@@ -202,9 +228,11 @@ public class UserController {
 
     @RequestMapping(value = "/getByCondition",method = RequestMethod.GET)
     @ApiOperation(value = "多条件分页获取用户列表")
-    public Result<Page<User>> getByCondition(@ModelAttribute User user, @ModelAttribute PageVo pageVo){
+    public Result<Page<User>> getByCondition(@ModelAttribute User user,
+                                             @ModelAttribute SearchVo searchVo,
+                                             @ModelAttribute PageVo pageVo){
 
-        Page<User> page = userService.findByCondition(user, PageUtil.initPage(pageVo));
+        Page<User> page = userService.findByCondition(user, searchVo, PageUtil.initPage(pageVo));
         for(User u: page.getContent()){
             List<Role> list = iUserRoleService.findByUserId(u.getId());
             u.setRoles(list);
@@ -213,7 +241,6 @@ public class UserController {
         return new ResultUtil<Page<User>>().setData(page);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/admin/add",method = RequestMethod.POST)
     @ApiOperation(value = "添加用户")
     public Result<Object> regist(@ModelAttribute User u,
@@ -226,6 +253,8 @@ public class UserController {
         if(userService.findByUsername(u.getUsername())!=null){
             return new ResultUtil<Object>().setErrorMsg("该用户名已被注册");
         }
+        //删除缓存
+        redisTemplate.delete("user::"+u.getUsername());
 
         String encryptPass = new BCryptPasswordEncoder().encode(u.getPassword());
         u.setPassword(encryptPass);
@@ -246,10 +275,9 @@ public class UserController {
         return new ResultUtil<Object>().setData(user);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @RequestMapping(value = "/admin/disable",method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/disable/{userId}",method = RequestMethod.POST)
     @ApiOperation(value = "后台禁用用户")
-    public Result<Object> disable(@ApiParam("用户唯一id标识") @RequestParam String userId){
+    public Result<Object> disable(@ApiParam("用户唯一id标识") @PathVariable String userId){
 
         User user=userService.get(userId);
         if(user==null){
@@ -262,10 +290,9 @@ public class UserController {
         return new ResultUtil<Object>().setData(null);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @RequestMapping(value = "/admin/enable",method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/enable/{userId}",method = RequestMethod.POST)
     @ApiOperation(value = "后台启用用户")
-    public Result<Object> enable(@ApiParam("用户唯一id标识") @RequestParam String userId){
+    public Result<Object> enable(@ApiParam("用户唯一id标识") @PathVariable String userId){
 
         User user=userService.get(userId);
         if(user==null){
@@ -278,7 +305,6 @@ public class UserController {
         return new ResultUtil<Object>().setData(null);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping(value = "/delByIds",method = RequestMethod.DELETE)
     @ApiOperation(value = "批量通过ids删除")
     public Result<Object> delAllByIds(@RequestParam String[] ids){

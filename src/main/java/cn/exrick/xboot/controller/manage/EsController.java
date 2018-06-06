@@ -25,8 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @Api(description = "Elasticsearch信息接口")
-@RequestMapping("/es")
-@PreAuthorize("hasRole('ADMIN')")
+@RequestMapping("/xboot/es")
 public class EsController {
 
     @Value("${xboot.elasticsearch.nodeClient}")

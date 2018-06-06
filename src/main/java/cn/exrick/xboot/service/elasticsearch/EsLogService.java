@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author Exrickx
  */
-public interface LogService {
+public interface EsLogService {
 
     /**
      * 添加日志
