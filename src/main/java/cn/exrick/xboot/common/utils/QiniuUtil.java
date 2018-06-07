@@ -30,13 +30,13 @@ public class QiniuUtil {
     /**
      * 生成上传凭证，然后准备上传
      */
-    private static String accessKey = "_VKlMONYct_cXOibOAOQWukdZjHTd2p7J4NPjKn3";
+    private static String accessKey = "你的accessKey";
 
-    private static String secretKey = "G4POT7bN4DM5rmirdXCyuPhBAOls2J6WWVKETrEa";
+    private static String secretKey = "你的secretKey";
 
-    private static String bucket = "rent";
+    private static String bucket = "你的bucket名称";
 
-    private static String origin = "http://p77xsahe9.bkt.clouddn.com/";
+    private static String origin = "你的访问域名，如http://p77xsahe9.bkt.clouddn.com/";
 
     private static Auth auth = Auth.create(accessKey, secretKey);
 

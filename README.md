@@ -73,9 +73,12 @@ http://xboot.exrick.cn
 ### 项目运行部署
 - 安装依赖并启动：[Redis](https://github.com/Exrick/xmall/blob/master/study/Redis.md)、[Elasticsearch](https://github.com/Exrick/xmall/blob/master/study/Elasticsearch.md)(当配置使用ES记录日志时需要)
 - [Maven安装和在IDEA中配置](https://github.com/Exrick/xmall/blob/master/study/Maven.md)
-- 使用IDEA([破解/免费注册](http://idea.lanyus.com/)) 导入该Maven项目 都什么时代了还用Eclipse？
+- 使用IDEA([破解/免费注册](http://idea.lanyus.com/)) 导入该Maven项目
 - 修改配置文件 `application.yml` 相应配置，其中有详细注释
 - MySQL数据库新建 `xboot` 数据库，配置文件已开启ddl自动生成表结构但无初始数据，请记得运行导入sql文件
+- 配置第三方服务
+    - Mob接口 现在需要注册申请后使用 在 `cn.exrick.common.utils.IpInfoUtil` 中修改填入你的AppKey
+    - 七牛云对象存储 `cn.exrick.common.utils.QiniuUtil` 中修改填入你的配置
 - 启动运行 `XbootApplication.java` 默认端口8888 访问接口文档 `http://localhost:8888/swagger-ui.html` 说明启动成功 管理员账密admin|123456
 - 前台页面请启动基于Vue的 [xboot-front](https://github.com/Exrick/x-boot-front) 项目，并修改其接口代理配置
 
@@ -112,6 +115,7 @@ xboot:
   logRecord:
     es: false
 ```
+    - 注解使用 `@SystemLog(description="操作日志名称")`
 - 接口相关
     - 为方便前台配置代理，所有接口建议以统一路径例如“/xboot”开头
     - 登录成功后前台请在返回的`result`字段中保存token
@@ -157,8 +161,6 @@ xboot:
         }
     });
 ```
-- Mob接口
-    - 现在需要注册申请后使用 在 `cn.exrick.common.utils.IpInfoUtil` 中修改填入你的AppKey
 - 后台开发代码生成
     - 代码生成方法在 `cn.exrick.xboot.generator` 包中的 `XbootGenerator.java` 工具类，修改好生成类配置后运行主函数main方法即可生成三层相关代码，别忘了在实体类中添加相关字段，运行项目后将自动生成数据库表
     
