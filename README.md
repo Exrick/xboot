@@ -108,14 +108,13 @@ spring:
     # Jasypt加密 可到common-utils中找到JasyptUtil加解密工具类生成加密结果 格式为ENC(加密结果)
     password: ENC(F4B0s6u9xcDw3V+P0qC4CA==)
 ```
-- 操作日志使用ES或数据库记录配置
+- 操作日志使用ES或数据库记录配置 注解使用 `@SystemLog(description="操作日志名称")`
 ```yaml
 xboot:
   # 日志记录方式 true使用Elasticsearch记录 false记录至数据库中
   logRecord:
     es: false
 ```
-    - 注解使用 `@SystemLog(description="操作日志名称")`
 - 接口相关
     - 为方便前台配置代理，所有接口建议以统一路径例如“/xboot”开头
     - 登录成功后前台请在返回的`result`字段中保存token
