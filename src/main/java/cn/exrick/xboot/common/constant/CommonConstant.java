@@ -23,7 +23,7 @@ public interface CommonConstant {
     Integer USER_TYPE_NORMAL = 0;
 
     /**
-     * 普通用户
+     * 体统管理员
      */
     Integer USER_TYPE_ADMIN = 1;
 
