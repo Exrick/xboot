@@ -4,6 +4,7 @@ import cn.exrick.xboot.common.utils.PageUtil;
 import cn.exrick.xboot.common.utils.ResultUtil;
 import cn.exrick.xboot.common.vo.PageVo;
 import cn.exrick.xboot.common.vo.Result;
+import cn.exrick.xboot.common.vo.SearchVo;
 import cn.exrick.xboot.entity.Log;
 import cn.exrick.xboot.entity.elasticsearch.EsLog;
 import cn.exrick.xboot.service.LogService;
@@ -52,13 +53,15 @@ public class LogController{
 
     @RequestMapping(value = "/search",method = RequestMethod.GET)
     @ApiOperation(value = "分页搜索")
-    public Result<Object> search(@RequestParam String key, @ModelAttribute PageVo pageVo){
+    public Result<Object> search(@RequestParam String key,
+                                 @ModelAttribute SearchVo searchVo,
+                                 @ModelAttribute PageVo pageVo){
 
         if(esRecord){
-            Page<EsLog> es = esLogService.searchLog(key, PageUtil.initPage(pageVo));
+            Page<EsLog> es = esLogService.searchLog(key, searchVo, PageUtil.initPage(pageVo));
             return new ResultUtil<Object>().setData(es);
         }else{
-            Page<Log> log = logService.searchLog(key, PageUtil.initPage(pageVo));
+            Page<Log> log = logService.searchLog(key, searchVo, PageUtil.initPage(pageVo));
             return new ResultUtil<Object>().setData(log);
         }
     }

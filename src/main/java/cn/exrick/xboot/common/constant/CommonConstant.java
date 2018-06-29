@@ -23,7 +23,7 @@ public interface CommonConstant {
     Integer USER_TYPE_NORMAL = 0;
 
     /**
-     * 普通用户
+     * 管理员
      */
     Integer USER_TYPE_ADMIN = 1;
 
@@ -50,7 +50,7 @@ public interface CommonConstant {
     /**
      * 禁用状态
      */
-    Integer STATUS_DISABLE = 1;
+    Integer STATUS_DISABLE = -1;
 
     /**
      * 删除标志

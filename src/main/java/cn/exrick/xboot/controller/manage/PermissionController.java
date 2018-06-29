@@ -5,6 +5,7 @@ import cn.exrick.xboot.common.utils.PageUtil;
 import cn.exrick.xboot.common.utils.ResultUtil;
 import cn.exrick.xboot.common.vo.PageVo;
 import cn.exrick.xboot.common.vo.Result;
+import cn.exrick.xboot.config.security.permission.MySecurityMetadataSource;
 import cn.exrick.xboot.entity.Permission;
 import cn.exrick.xboot.entity.RolePermission;
 import cn.exrick.xboot.service.PermissionService;
@@ -50,6 +51,9 @@ public class PermissionController {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
+    @Autowired
+    private MySecurityMetadataSource mySecurityMetadataSource;
+
     @RequestMapping(value = "/getMenuList/{userId}",method = RequestMethod.GET)
     @ApiOperation(value = "获取用户页面菜单数据")
     @Cacheable(key = "'userMenuList:'+#userId")
@@ -82,13 +86,13 @@ public class PermissionController {
 
         //匹配二级页面拥有权限
         for(Permission p : secondMenuList){
-            List<String> buttonTypes = new ArrayList<>();
+            List<String> permTypes = new ArrayList<>();
             for(Permission pe : buttonPermissions){
                 if(p.getId().equals(pe.getParentId())){
-                    buttonTypes.add(pe.getButtonType());
+                    permTypes.add(pe.getButtonType());
                 }
             }
-            p.setButtonTypes(buttonTypes);
+            p.setPermTypes(permTypes);
         }
         //匹配一级页面拥有二级页面
         for(Permission p : menuList){
@@ -130,6 +134,8 @@ public class PermissionController {
     public Result<Permission> add(@ModelAttribute Permission permission){
 
         Permission u = permissionService.save(permission);
+        //重新加载权限
+        mySecurityMetadataSource.loadResourceDefine();
         //手动删除缓存
         redisTemplate.delete("permission::allList");
         return new ResultUtil<Permission>().setData(u);
@@ -140,6 +146,8 @@ public class PermissionController {
     public Result<Permission> edit(@ModelAttribute Permission permission){
 
         Permission u = permissionService.update(permission);
+        //重新加载权限
+        mySecurityMetadataSource.loadResourceDefine();
         //手动批量删除缓存
         Set<String> keys = redisTemplate.keys("userPermission:" + "*");
         redisTemplate.delete(keys);
@@ -165,6 +173,8 @@ public class PermissionController {
         for(String id:ids){
             permissionService.delete(id);
         }
+        //重新加载权限
+        mySecurityMetadataSource.loadResourceDefine();
         //手动删除缓存
         redisTemplate.delete("permission::allList");
         return new ResultUtil<Object>().setSuccessMsg("批量通过id删除数据成功");

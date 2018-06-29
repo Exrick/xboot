@@ -139,6 +139,8 @@ public class RoleController extends XbootBaseController<Role, String> {
         }
         for(String id:ids){
             roleService.delete(id);
+            //删除关联权限
+            rolePermissionService.deleteByRoleId(id);
         }
         return new ResultUtil<Object>().setSuccessMsg("批量通过id删除数据成功");
     }

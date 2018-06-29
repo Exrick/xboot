@@ -3,6 +3,7 @@ package cn.exrick.xboot.base;
 import cn.exrick.xboot.common.constant.CommonConstant;
 import cn.exrick.xboot.common.utils.SnowFlakeUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -21,6 +22,7 @@ import java.util.Date;
 @Data
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
+@JsonIgnoreProperties(value={"hibernateLazyInitializer","handler","fieldHandler"})
 public abstract class XbootBaseEntity implements Serializable{
 
     private static final long serialVersionUID = 1L;

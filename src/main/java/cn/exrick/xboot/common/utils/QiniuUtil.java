@@ -36,7 +36,7 @@ public class QiniuUtil {
 
     private static String bucket = "你的bucket名称";
 
-    private static String origin = "你的访问域名，如http://p77xsahe9.bkt.clouddn.com/";
+    private static String domain = "你的访问域名，如http://p77xsahe9.bkt.clouddn.com/";
 
     private static Auth auth = Auth.create(accessKey, secretKey);
 
@@ -61,7 +61,7 @@ public class QiniuUtil {
             Response response = uploadManager.put(filePath, key, upToken);
             //解析上传成功的结果
             DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
-            return origin + putRet.key;
+            return domain + putRet.key;
         } catch (QiniuException ex) {
             Response r = ex.response;
             log.warn(r.toString());
@@ -71,8 +71,8 @@ public class QiniuUtil {
             } catch (QiniuException ex2) {
                 //ignore
             }
+            return r.toString();
         }
-        return null;
     }
 
     /**
@@ -89,18 +89,17 @@ public class QiniuUtil {
             Response response = uploadManager.put(file, key, upToken, null, null);
             //解析上传成功的结果
             DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
-            return origin + putRet.key;
+            return domain + putRet.key;
         } catch (QiniuException ex) {
             Response r = ex.response;
-            log.warn(r.toString());
             try {
                 log.warn(r.bodyString());
                 return r.bodyString();
             } catch (QiniuException ex2) {
                 //ignore
             }
+            return r.toString();
         }
-        return null;
     }
 
     /**
@@ -127,7 +126,7 @@ public class QiniuUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return origin + key;
+        return domain + key;
     }
 
     public static String getUpToken() {

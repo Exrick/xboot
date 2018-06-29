@@ -3,12 +3,13 @@ package cn.exrick.xboot.entity.elasticsearch;
 import cn.exrick.xboot.common.constant.CommonConstant;
 import cn.exrick.xboot.common.utils.ObjectUtil;
 import cn.exrick.xboot.common.utils.SnowFlakeUtil;
+import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.google.gson.Gson;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.*;
 
 import javax.persistence.Id;
 import java.io.Serializable;
@@ -36,7 +37,11 @@ public class EsLog implements Serializable{
 
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "创建时间")
+    @Field(type = FieldType.Date, index = false, format = DateFormat.custom, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime = new Date();
+
+    @ApiModelProperty(value = "时间戳 查询时间范围时使用")
+    private Long timeMillis = System.currentTimeMillis();
 
     @ApiModelProperty(value = "更新者")
     private String updateBy;

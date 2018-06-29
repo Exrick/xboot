@@ -1,5 +1,6 @@
 package cn.exrick.xboot.service.elasticsearch;
 
+import cn.exrick.xboot.common.vo.SearchVo;
 import cn.exrick.xboot.entity.elasticsearch.EsLog;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,8 +40,9 @@ public interface EsLogService {
     /**
      * 分页搜索获取日志
      * @param key
+     * @param searchVo
      * @param pageable
      * @return
      */
-    Page<EsLog> searchLog(String key, Pageable pageable);
+    Page<EsLog> searchLog(String key, SearchVo searchVo, Pageable pageable);
 }

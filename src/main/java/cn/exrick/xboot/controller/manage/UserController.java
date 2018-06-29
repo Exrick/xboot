@@ -311,6 +311,8 @@ public class UserController {
 
         for(String id:ids){
             userService.delete(id);
+            //删除关联角色
+            userRoleService.deleteByUserId(id);
         }
         return new ResultUtil<Object>().setSuccessMsg("批量通过id删除数据成功");
     }

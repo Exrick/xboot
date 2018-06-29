@@ -40,21 +40,6 @@ spring:
       max-file-size: 5Mb
       max-request-size: 5Mb
 
-# 忽略鉴权url
-ignored:
-  urls:
-    - /xboot/permission/getMenuList/**
-    - /xboot/user/regist
-    - /xboot/common/**
-    - /swagger-ui.html
-    - /swagger-resources/**
-    - /swagger/**
-    - /**/v2/api-docs
-    - /**/*.js
-    - /**/*.css
-    - /**/*.png
-    - /**/*.ico
-
 xboot:
   # 全局限流
   rateLimit:
@@ -77,6 +62,21 @@ xboot:
   # 日志记录方式 true使用Elasticsearch记录 false记录至数据库中
   logRecord:
     es: false
+
+# 忽略鉴权url
+ignored:
+  urls:
+    - /xboot/permission/getMenuList/**
+    - /xboot/user/regist
+    - /xboot/common/**
+    - /swagger-ui.html
+    - /swagger-resources/**
+    - /swagger/**
+    - /**/v2/api-docs
+    - /**/*.js
+    - /**/*.css
+    - /**/*.png
+    - /**/*.ico
 
 # Swagger界面内容配置
 swagger:

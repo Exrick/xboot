@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50527
 File Encoding         : 65001
 
-Date: 2018-06-06 20:17:09
+Date: 2018-06-10 22:25:36
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -41,6 +41,57 @@ CREATE TABLE `t_log` (
 -- Records of t_log
 -- ----------------------------
 INSERT INTO `t_log` VALUES ('16752943696973824', null, '2018-06-06 19:42:34', '0', null, '2018-06-06 19:42:34', '312', '127.0.0.1', '本机地址', '登录系统', '{\"password\":\"你是看不见我的\",\"username\":\"admin\"}', 'POST', '/xboot/login', 'admin');
+
+-- ----------------------------
+-- Table structure for t_panel
+-- ----------------------------
+DROP TABLE IF EXISTS `t_panel`;
+CREATE TABLE `t_panel` (
+  `id` varchar(255) NOT NULL,
+  `create_by` varchar(255) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `del_flag` int(11) DEFAULT NULL,
+  `update_by` varchar(255) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `parent_id` varchar(255) DEFAULT NULL,
+  `sort_order` decimal(10,2) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `type` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of t_panel
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for t_panel_content
+-- ----------------------------
+DROP TABLE IF EXISTS `t_panel_content`;
+CREATE TABLE `t_panel_content` (
+  `id` varchar(255) NOT NULL,
+  `create_by` varchar(255) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `del_flag` int(11) DEFAULT NULL,
+  `update_by` varchar(255) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `category_id` varchar(255) DEFAULT NULL,
+  `full_url` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `panel_id` varchar(255) DEFAULT NULL,
+  `pic_url` varchar(255) DEFAULT NULL,
+  `pic_url2` varchar(255) DEFAULT NULL,
+  `pic_url3` varchar(255) DEFAULT NULL,
+  `product_id` varchar(255) DEFAULT NULL,
+  `type` int(11) DEFAULT NULL,
+  `use_product` bit(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of t_panel_content
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for t_permission
@@ -96,6 +147,59 @@ INSERT INTO `t_permission` VALUES ('16695107491205120', null, '2018-06-06 15:52:
 INSERT INTO `t_permission` VALUES ('16695243126607872', '', '2018-06-06 15:53:17', '0', '', '2018-06-06 18:49:57', '', '', '5129710648430595', '1', '1.33', '', '/xboot/permission/delByIds**', '删除菜单', '', '3', 'delete', '0');
 INSERT INTO `t_permission` VALUES ('16695482789138432', '', '2018-06-06 15:54:14', '0', '', '2018-06-06 18:50:03', '', '', '5129710648430596', '1', '1.41', '', '/xboot/log/delByIds**', '删除日志', '', '3', 'delete', '0');
 INSERT INTO `t_permission` VALUES ('16695638456537088', null, '2018-06-06 15:54:51', '0', null, '2018-06-06 15:54:51', null, null, '5129710648430596', '1', '1.42', null, '/xboot/log/delAll', '清空日志', null, '3', 'clearAll', '0');
+
+-- ----------------------------
+-- Table structure for t_product
+-- ----------------------------
+DROP TABLE IF EXISTS `t_product`;
+CREATE TABLE `t_product` (
+  `id` varchar(255) NOT NULL,
+  `create_by` varchar(255) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `del_flag` int(11) DEFAULT NULL,
+  `update_by` varchar(255) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `c_id` varchar(255) DEFAULT NULL,
+  `contact` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `detail` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `fax` varchar(255) DEFAULT NULL,
+  `logo` varchar(255) DEFAULT NULL,
+  `pic_url` varchar(255) DEFAULT NULL,
+  `pic_urls` varchar(255) DEFAULT NULL,
+  `service` varchar(255) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of t_product
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for t_product_category
+-- ----------------------------
+DROP TABLE IF EXISTS `t_product_category`;
+CREATE TABLE `t_product_category` (
+  `id` varchar(255) NOT NULL,
+  `create_by` varchar(255) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `del_flag` int(11) DEFAULT NULL,
+  `update_by` varchar(255) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `icon` varchar(255) DEFAULT NULL,
+  `level` int(11) DEFAULT NULL,
+  `parent_id` varchar(255) DEFAULT NULL,
+  `sort_order` decimal(10,2) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of t_product_category
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for t_role
@@ -230,12 +334,9 @@ CREATE TABLE `t_user_role` (
 -- ----------------------------
 -- Records of t_user_role
 -- ----------------------------
-INSERT INTO `t_user_role` VALUES ('16457761273417728', null, '2018-06-06 00:09:39', '0', null, '2018-06-06 00:09:39', '16457350655250432', '16457750745714688');
 INSERT INTO `t_user_role` VALUES ('16056421829316608', null, '2018-06-04 21:34:50', '0', null, '2018-06-04 21:34:50', '496138616573953', '6118792149078016');
 INSERT INTO `t_user_role` VALUES ('16674372718694400', null, '2018-06-06 14:30:21', '0', null, '2018-06-06 14:30:21', '496138616573953', '682265633886209');
 INSERT INTO `t_user_role` VALUES ('4365473638518788', null, '2018-05-08 11:25:45', '0', null, '2018-05-08 11:25:50', '496138616573952', '682265633886208');
 INSERT INTO `t_user_role` VALUES ('4365473638518784', null, '2018-05-03 15:19:11', '0', null, '2018-05-03 15:19:11', '496138616573953', '4363087427670016');
-INSERT INTO `t_user_role` VALUES ('15358614818525184', null, '2018-06-02 23:22:00', '0', null, '2018-06-02 23:22:00', '496138616573952', '15325672666828800');
 INSERT INTO `t_user_role` VALUES ('16674372659974144', null, '2018-06-06 14:30:21', '0', null, '2018-06-06 14:30:21', '496138616573952', '682265633886209');
-INSERT INTO `t_user_role` VALUES ('16738254220955648', null, '2018-06-06 18:44:11', '0', null, '2018-06-06 18:44:11', '16457350655250432', '16738253642141696');
 INSERT INTO `t_user_role` VALUES ('16741709752832000', null, '2018-06-06 18:57:55', '0', null, '2018-06-06 18:57:55', '16457350655250432', '16739222421508096');

@@ -61,7 +61,7 @@ public class Permission extends XbootBaseEntity {
     @Column(precision = 10, scale = 2)
     private BigDecimal sortOrder;
 
-    @ApiModelProperty(value = "是否启用 0启用 1禁用")
+    @ApiModelProperty(value = "是否启用 0启用 -1禁用")
     private Integer status = CommonConstant.STATUS_NORMAL;
 
     @Transient
@@ -71,8 +71,8 @@ public class Permission extends XbootBaseEntity {
 
     @Transient
     @TableField(exist=false)
-    @ApiModelProperty(value = "页面拥有的按钮类型")
-    private List<String> buttonTypes;
+    @ApiModelProperty(value = "页面拥有的权限类型")
+    private List<String> permTypes;
 
     @Transient
     @TableField(exist=false)

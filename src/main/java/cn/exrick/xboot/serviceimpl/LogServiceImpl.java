@@ -1,8 +1,10 @@
 package cn.exrick.xboot.serviceimpl;
 
+import cn.exrick.xboot.common.vo.SearchVo;
 import cn.exrick.xboot.dao.LogDao;
 import cn.exrick.xboot.entity.Log;
 import cn.exrick.xboot.service.LogService;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,7 +38,7 @@ public class LogServiceImpl implements LogService {
     }
 
     @Override
-    public Page<Log> searchLog(String key, Pageable pageable) {
+    public Page<Log> searchLog(String key, SearchVo searchVo, Pageable pageable) {
 
         return logDao.findAll(new Specification<Log>() {
             @Nullable
@@ -48,6 +51,7 @@ public class LogServiceImpl implements LogService {
                 Path<String> usernameField = root.get("username");
                 Path<String> ipField = root.get("ip");
                 Path<String> ipInfoField = root.get("ipInfo");
+                Path<Date> createTimeField=root.get("createTime");
 
                 List<Predicate> list = new ArrayList<Predicate>();
 
@@ -60,6 +64,13 @@ public class LogServiceImpl implements LogService {
                     Predicate p5 = cb.like(ipField,'%'+key+'%');
                     Predicate p6 = cb.like(ipInfoField,'%'+key+'%');
                     list.add(cb.or(p1,p2,p3,p4,p5,p6));
+                }
+
+                //创建时间
+                if(StrUtil.isNotBlank(searchVo.getStartDate())&&StrUtil.isNotBlank(searchVo.getEndDate())){
+                    Date start = DateUtil.parse(searchVo.getStartDate());
+                    Date end = DateUtil.parse(searchVo.getEndDate());
+                    list.add(cb.between(createTimeField, start, DateUtil.endOfDay(end)));
                 }
 
                 Predicate[] arr = new Predicate[list.size()];
