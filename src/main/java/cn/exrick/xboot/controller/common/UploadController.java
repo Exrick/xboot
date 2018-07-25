@@ -40,10 +40,10 @@ public class UploadController {
                                  HttpServletRequest request) {
 
         // IP限流 在线Demo所需 5分钟限1个请求
-//        String token1 = redisRaterLimiter.acquireTokenFromBucket("upload:"+IpInfoUtil.getIpAddr(request), 1, 300000);
-//        if (StrUtil.isBlank(token1)) {
-//            throw new XbootException("上传那么多干嘛，等等再传吧");
-//        }
+        String token1 = redisRaterLimiter.acquireTokenFromBucket("upload:"+IpInfoUtil.getIpAddr(request), 1, 300000);
+        if (StrUtil.isBlank(token1)) {
+            throw new XbootException("上传那么多干嘛，等等再传吧");
+        }
 
         String imagePath = null;
         String fileName = qiniuUtil.renamePic(file.getOriginalFilename());

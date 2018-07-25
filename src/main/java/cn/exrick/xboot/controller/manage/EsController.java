@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 
 /**
- * 拥有ROLE_ADMIN角色的用户可以访问
  * @author Exrickx
  */
 @Slf4j
@@ -32,7 +31,7 @@ public class EsController {
     private String ES_NODE_CLIENT;
 
     @RequestMapping(value = "/info",method = RequestMethod.GET)
-    @ApiOperation(value = "分页获取全部")
+    @ApiOperation(value = "获取es状态")
     public Result<EsInfo> getAllByPage(@ModelAttribute PageVo pageVo){
 
         String healthUrl="http://"+ES_NODE_CLIENT+"/_cluster/health";

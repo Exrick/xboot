@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50527
 File Encoding         : 65001
 
-Date: 2018-06-10 22:25:36
+Date: 2018-07-24 16:08:23
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -40,58 +40,10 @@ CREATE TABLE `t_log` (
 -- ----------------------------
 -- Records of t_log
 -- ----------------------------
-INSERT INTO `t_log` VALUES ('16752943696973824', null, '2018-06-06 19:42:34', '0', null, '2018-06-06 19:42:34', '312', '127.0.0.1', '本机地址', '登录系统', '{\"password\":\"你是看不见我的\",\"username\":\"admin\"}', 'POST', '/xboot/login', 'admin');
-
--- ----------------------------
--- Table structure for t_panel
--- ----------------------------
-DROP TABLE IF EXISTS `t_panel`;
-CREATE TABLE `t_panel` (
-  `id` varchar(255) NOT NULL,
-  `create_by` varchar(255) DEFAULT NULL,
-  `create_time` datetime DEFAULT NULL,
-  `del_flag` int(11) DEFAULT NULL,
-  `update_by` varchar(255) DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
-  `parent_id` varchar(255) DEFAULT NULL,
-  `sort_order` decimal(10,2) DEFAULT NULL,
-  `status` int(11) DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `type` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of t_panel
--- ----------------------------
-
--- ----------------------------
--- Table structure for t_panel_content
--- ----------------------------
-DROP TABLE IF EXISTS `t_panel_content`;
-CREATE TABLE `t_panel_content` (
-  `id` varchar(255) NOT NULL,
-  `create_by` varchar(255) DEFAULT NULL,
-  `create_time` datetime DEFAULT NULL,
-  `del_flag` int(11) DEFAULT NULL,
-  `update_by` varchar(255) DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
-  `category_id` varchar(255) DEFAULT NULL,
-  `full_url` varchar(255) DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `panel_id` varchar(255) DEFAULT NULL,
-  `pic_url` varchar(255) DEFAULT NULL,
-  `pic_url2` varchar(255) DEFAULT NULL,
-  `pic_url3` varchar(255) DEFAULT NULL,
-  `product_id` varchar(255) DEFAULT NULL,
-  `type` int(11) DEFAULT NULL,
-  `use_product` bit(1) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of t_panel_content
--- ----------------------------
+INSERT INTO `t_log` VALUES ('31621947041255424', null, '2018-07-17 20:26:40', '0', null, '2018-07-17 20:26:40', '263', '192.168.95.2', '局域网', '登录系统', '{\"password\":\"你是看不见我的\",\"saveLogin\":\"true\",\"username\":\"admin\"}', 'POST', '/xboot/login', 'admin');
+INSERT INTO `t_log` VALUES ('31620133831053312', null, '2018-07-17 20:19:28', '0', null, '2018-07-17 20:19:28', '230', '192.168.95.2', '局域网', '登录系统', '{\"password\":\"你是看不见我的\",\"saveLogin\":\"true\",\"username\":\"admin\"}', 'POST', '/xboot/login', 'admin');
+INSERT INTO `t_log` VALUES ('31615063169175552', null, '2018-07-17 19:59:19', '0', null, '2018-07-17 19:59:19', '176', '192.168.95.2', '局域网', '登录系统', '{\"password\":\"你是看不见我的\",\"saveLogin\":\"true\",\"username\":\"admin\"}', 'POST', '/xboot/login', 'admin');
+INSERT INTO `t_log` VALUES ('31614826144862208', null, '2018-07-17 19:58:23', '0', null, '2018-07-17 19:58:23', '417', '192.168.95.2', '局域网', '登录系统', '{\"password\":\"你是看不见我的\",\"saveLogin\":\"true\",\"username\":\"admin\"}', 'POST', '/xboot/login', 'admin');
 
 -- ----------------------------
 -- Table structure for t_permission
@@ -129,7 +81,7 @@ INSERT INTO `t_permission` VALUES ('5129710648430595', null, '2018-06-04 19:02:3
 INSERT INTO `t_permission` VALUES ('5129710648430596', null, '2018-06-04 19:02:40', '0', null, '2018-06-04 19:02:53', null, 'log-manage', '5129710648430592', '0', '1.40', 'sys/log-manage/logManage', 'log-manage', '日志管理', 'android-list', '2', null, '0');
 INSERT INTO `t_permission` VALUES ('15701400130424832', '', '2018-06-03 22:04:06', '0', '', '2018-06-06 18:17:20', '', '', '5129710648430593', '1', '1.11', '', '/xboot/user/admin/add', '添加用户', '', '3', 'add', '0');
 INSERT INTO `t_permission` VALUES ('15701915807518720', '', '2018-06-03 22:06:09', '0', '', '2018-06-06 14:46:51', '', '', '5129710648430593', '1', '1.13', '', '/xboot/user/admin/disable/**', '禁用用户', '', '3', 'disable', '0');
-INSERT INTO `t_permission` VALUES ('15708892205944832', '', '2018-06-03 22:33:52', '0', '', '2018-06-06 14:46:55', '', '', '5129710648430593', '1', '1.14', '', '/xboot/user/admin/enable/**', '启用用户', '', '3', 'undefined', '0');
+INSERT INTO `t_permission` VALUES ('15708892205944832', '', '2018-06-03 22:33:52', '0', '', '2018-06-28 16:44:48', '', '', '5129710648430593', '1', '1.14', '', '/xboot/user/admin/enable/**', '启用用户', '', '3', 'enable', '0');
 INSERT INTO `t_permission` VALUES ('16392452747300864', '', '2018-06-05 19:50:06', '0', '', '2018-06-05 23:08:36', '', 'access', '', '0', '2.00', 'Main', '/access', '权限按钮测试页', 'locked', '1', '', '0');
 INSERT INTO `t_permission` VALUES ('16392767785668608', '', '2018-06-05 19:51:21', '0', '', '2018-06-05 21:10:15', '', 'access_index', '16392452747300864', '0', '2.10', 'access/access', 'index', '权限按钮测试页', 'locked', '2', '', '0');
 INSERT INTO `t_permission` VALUES ('16438800255291392', '', '2018-06-05 22:54:18', '0', '', '2018-06-05 22:54:59', '', '', '16392767785668608', '1', '2.11', '', 'test-add', '添加按钮测试', '', '3', 'add', '0');
@@ -147,59 +99,7 @@ INSERT INTO `t_permission` VALUES ('16695107491205120', null, '2018-06-06 15:52:
 INSERT INTO `t_permission` VALUES ('16695243126607872', '', '2018-06-06 15:53:17', '0', '', '2018-06-06 18:49:57', '', '', '5129710648430595', '1', '1.33', '', '/xboot/permission/delByIds**', '删除菜单', '', '3', 'delete', '0');
 INSERT INTO `t_permission` VALUES ('16695482789138432', '', '2018-06-06 15:54:14', '0', '', '2018-06-06 18:50:03', '', '', '5129710648430596', '1', '1.41', '', '/xboot/log/delByIds**', '删除日志', '', '3', 'delete', '0');
 INSERT INTO `t_permission` VALUES ('16695638456537088', null, '2018-06-06 15:54:51', '0', null, '2018-06-06 15:54:51', null, null, '5129710648430596', '1', '1.42', null, '/xboot/log/delAll', '清空日志', null, '3', 'clearAll', '0');
-
--- ----------------------------
--- Table structure for t_product
--- ----------------------------
-DROP TABLE IF EXISTS `t_product`;
-CREATE TABLE `t_product` (
-  `id` varchar(255) NOT NULL,
-  `create_by` varchar(255) DEFAULT NULL,
-  `create_time` datetime DEFAULT NULL,
-  `del_flag` int(11) DEFAULT NULL,
-  `update_by` varchar(255) DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
-  `address` varchar(255) DEFAULT NULL,
-  `c_id` varchar(255) DEFAULT NULL,
-  `contact` varchar(255) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `detail` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `fax` varchar(255) DEFAULT NULL,
-  `logo` varchar(255) DEFAULT NULL,
-  `pic_url` varchar(255) DEFAULT NULL,
-  `pic_urls` varchar(255) DEFAULT NULL,
-  `service` varchar(255) DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of t_product
--- ----------------------------
-
--- ----------------------------
--- Table structure for t_product_category
--- ----------------------------
-DROP TABLE IF EXISTS `t_product_category`;
-CREATE TABLE `t_product_category` (
-  `id` varchar(255) NOT NULL,
-  `create_by` varchar(255) DEFAULT NULL,
-  `create_time` datetime DEFAULT NULL,
-  `del_flag` int(11) DEFAULT NULL,
-  `update_by` varchar(255) DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
-  `icon` varchar(255) DEFAULT NULL,
-  `level` int(11) DEFAULT NULL,
-  `parent_id` varchar(255) DEFAULT NULL,
-  `sort_order` decimal(10,2) DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of t_product_category
--- ----------------------------
+INSERT INTO `t_permission` VALUES ('25014528525733888', null, '2018-06-29 14:51:09', '0', null, '2018-06-29 14:51:09', null, null, '5129710648430593', '1', '1.16', null, 'upload', '上传图片', null, '3', 'upload', '0');
 
 -- ----------------------------
 -- Table structure for t_role
@@ -243,18 +143,18 @@ CREATE TABLE `t_role_permission` (
 -- ----------------------------
 -- Records of t_role_permission
 -- ----------------------------
-INSERT INTO `t_role_permission` VALUES ('16736297938849792', null, '2018-06-06 18:36:25', '0', null, '2018-06-06 18:36:25', '16439068543946752', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('16736297917878272', null, '2018-06-06 18:36:25', '0', null, '2018-06-06 18:36:25', '16438962738434048', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('16736297892712448', null, '2018-06-06 18:36:25', '0', null, '2018-06-06 18:36:25', '16438800255291392', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('16736297867546624', null, '2018-06-06 18:36:25', '0', null, '2018-06-06 18:36:25', '16392767785668608', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('16736297842380800', null, '2018-06-06 18:36:25', '0', null, '2018-06-06 18:36:25', '16392452747300864', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('16736297813020672', null, '2018-06-06 18:36:25', '0', null, '2018-06-06 18:36:25', '16695638456537088', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('16736297783660544', null, '2018-06-06 18:36:25', '0', null, '2018-06-06 18:36:25', '16695482789138432', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('16736297750106112', null, '2018-06-06 18:36:25', '0', null, '2018-06-06 18:36:25', '5129710648430596', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('16736297712357376', null, '2018-06-06 18:36:25', '0', null, '2018-06-06 18:36:25', '16695243126607872', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('16736297674608640', null, '2018-06-06 18:36:25', '0', null, '2018-06-06 18:36:25', '16695107491205120', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('16736297569751040', null, '2018-06-06 18:36:25', '0', null, '2018-06-06 18:36:25', '16694861252005888', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('16736297544585216', null, '2018-06-06 18:36:25', '0', null, '2018-06-06 18:36:25', '5129710648430595', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('25014843325026304', null, '2018-06-29 14:52:24', '0', null, '2018-06-29 14:52:24', '16438962738434048', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('25014843304054784', null, '2018-06-29 14:52:24', '0', null, '2018-06-29 14:52:24', '16438800255291392', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('25014843274694656', null, '2018-06-29 14:52:24', '0', null, '2018-06-29 14:52:24', '16392767785668608', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('25014843253723136', null, '2018-06-29 14:52:24', '0', null, '2018-06-29 14:52:24', '16392452747300864', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('25014843224363008', null, '2018-06-29 14:52:24', '0', null, '2018-06-29 14:52:24', '16695638456537088', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('25014843195002880', null, '2018-06-29 14:52:24', '0', null, '2018-06-29 14:52:24', '16695482789138432', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('25014843169837056', null, '2018-06-29 14:52:24', '0', null, '2018-06-29 14:52:24', '5129710648430596', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('25014843140476928', null, '2018-06-29 14:52:24', '0', null, '2018-06-29 14:52:24', '16695243126607872', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('25014843115311104', null, '2018-06-29 14:52:24', '0', null, '2018-06-29 14:52:24', '16695107491205120', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('25014843069173760', null, '2018-06-29 14:52:24', '0', null, '2018-06-29 14:52:24', '16694861252005888', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('25014843031425024', null, '2018-06-29 14:52:24', '0', null, '2018-06-29 14:52:24', '5129710648430595', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('25014842993676288', null, '2018-06-29 14:52:24', '0', null, '2018-06-29 14:52:24', '16690313745666048', '496138616573952');
 INSERT INTO `t_role_permission` VALUES ('16457624555884544', null, '2018-06-06 00:09:04', '0', null, '2018-06-06 00:09:04', '16392452747300864', '16457350655250432');
 INSERT INTO `t_role_permission` VALUES ('16457624597827584', null, '2018-06-06 00:09:04', '0', null, '2018-06-06 00:09:04', '16392767785668608', '16457350655250432');
 INSERT INTO `t_role_permission` VALUES ('16457624643964928', null, '2018-06-06 00:09:04', '0', null, '2018-06-06 00:09:04', '16439068543946752', '16457350655250432');
@@ -267,20 +167,21 @@ INSERT INTO `t_role_permission` VALUES ('16717356159995904', null, '2018-06-06 1
 INSERT INTO `t_role_permission` VALUES ('16717356147412992', null, '2018-06-06 17:21:09', '0', null, '2018-06-06 17:21:09', '5129710648430595', '496138616573953');
 INSERT INTO `t_role_permission` VALUES ('16717356130635776', null, '2018-06-06 17:21:09', '0', null, '2018-06-06 17:21:09', '5129710648430594', '496138616573953');
 INSERT INTO `t_role_permission` VALUES ('16717356097081344', null, '2018-06-06 17:21:09', '0', null, '2018-06-06 17:21:09', '5129710648430593', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('16736297527808000', null, '2018-06-06 18:36:25', '0', null, '2018-06-06 18:36:25', '16690313745666048', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('16736297511030784', null, '2018-06-06 18:36:25', '0', null, '2018-06-06 18:36:25', '16689883993083904', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('16736297494253568', null, '2018-06-06 18:36:25', '0', null, '2018-06-06 18:36:25', '16689745006432256', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('16736297469087744', null, '2018-06-06 18:36:25', '0', null, '2018-06-06 18:36:25', '16689632049631232', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('16736297448116224', null, '2018-06-06 18:36:25', '0', null, '2018-06-06 18:36:25', '16687383932047360', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('16736297397784576', null, '2018-06-06 18:36:25', '0', null, '2018-06-06 18:36:25', '5129710648430594', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('16736297355841536', null, '2018-06-06 18:36:25', '0', null, '2018-06-06 18:36:25', '16678447719911424', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('16736297326481408', null, '2018-06-06 18:36:25', '0', null, '2018-06-06 18:36:25', '15708892205944832', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('16736297276149760', null, '2018-06-06 18:36:25', '0', null, '2018-06-06 18:36:25', '15701915807518720', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('16736297217429504', null, '2018-06-06 18:36:25', '0', null, '2018-06-06 18:36:25', '16678126574637056', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('16736297179680768', null, '2018-06-06 18:36:25', '0', null, '2018-06-06 18:36:25', '15701400130424832', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('16736297137737728', null, '2018-06-06 18:36:25', '0', null, '2018-06-06 18:36:25', '5129710648430593', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('16736296999325696', null, '2018-06-06 18:36:25', '0', null, '2018-06-06 18:36:25', '5129710648430592', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('25014842972704768', null, '2018-06-29 14:52:24', '0', null, '2018-06-29 14:52:24', '16689883993083904', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('25014842934956032', null, '2018-06-29 14:52:24', '0', null, '2018-06-29 14:52:24', '16689745006432256', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('25014842913984512', null, '2018-06-29 14:52:24', '0', null, '2018-06-29 14:52:24', '16689632049631232', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('25014842888818688', null, '2018-06-29 14:52:24', '0', null, '2018-06-29 14:52:24', '16687383932047360', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('25014842859458560', null, '2018-06-29 14:52:24', '0', null, '2018-06-29 14:52:24', '5129710648430594', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('25014842834292736', null, '2018-06-29 14:52:24', '0', null, '2018-06-29 14:52:24', '25014528525733888', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('25014842804932608', null, '2018-06-29 14:52:24', '0', null, '2018-06-29 14:52:24', '16678447719911424', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('25014842775572480', null, '2018-06-29 14:52:24', '0', null, '2018-06-29 14:52:24', '15708892205944832', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('25014842746212352', null, '2018-06-29 14:52:24', '0', null, '2018-06-29 14:52:24', '15701915807518720', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('25014842721046528', null, '2018-06-29 14:52:24', '0', null, '2018-06-29 14:52:24', '16678126574637056', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('25014842695880704', null, '2018-06-29 14:52:24', '0', null, '2018-06-29 14:52:24', '15701400130424832', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('25014842666520576', null, '2018-06-29 14:52:24', '0', null, '2018-06-29 14:52:24', '5129710648430593', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('25014842603606016', null, '2018-06-29 14:52:24', '0', null, '2018-06-29 14:52:24', '5129710648430592', '496138616573952');
 INSERT INTO `t_role_permission` VALUES ('16717356080304128', null, '2018-06-06 17:21:09', '0', null, '2018-06-06 17:21:09', '5129710648430592', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('25014843350192128', null, '2018-06-29 14:52:24', '0', null, '2018-06-29 14:52:24', '16439068543946752', '496138616573952');
 
 -- ----------------------------
 -- Table structure for t_user

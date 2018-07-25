@@ -67,7 +67,7 @@ public class RedisRaterLimiter {
                 transaction.exec();
             }
         }catch (Exception e){
-            log.error("限流出错\n"+e.toString());
+            log.error("限流出错，请检查Redis运行状态\n"+e.toString());
         }finally {
             if(jedis!=null){
                 jedis.close();
