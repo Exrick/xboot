@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Api(description = "Elasticsearch信息接口")
 @RequestMapping("/xboot/es")
+@Transactional
 public class EsController {
 
     @Value("${xboot.elasticsearch.nodeClient}")
@@ -32,7 +34,7 @@ public class EsController {
 
     @RequestMapping(value = "/info",method = RequestMethod.GET)
     @ApiOperation(value = "获取es状态")
-    public Result<EsInfo> getAllByPage(@ModelAttribute PageVo pageVo){
+    public Result<EsInfo> getAllByPage(){
 
         String healthUrl="http://"+ES_NODE_CLIENT+"/_cluster/health";
         String countUrl="http://"+ES_NODE_CLIENT+"/_count";

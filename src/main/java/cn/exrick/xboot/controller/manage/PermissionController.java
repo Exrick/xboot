@@ -22,6 +22,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ import java.util.Set;
 @Api(description = "菜单/权限管理接口")
 @RequestMapping("/xboot/permission")
 @CacheConfig(cacheNames = "permission")
+@Transactional
 public class PermissionController {
 
     @Autowired
@@ -133,6 +135,13 @@ public class PermissionController {
     @CacheEvict(key = "'menuList'")
     public Result<Permission> add(@ModelAttribute Permission permission){
 
+        // 判断拦截请求的操作权限按钮名是否已存在
+        if(CommonConstant.PERMISSION_OPERATION.equals(permission.getType())){
+            List<Permission> list = permissionService.findByTitle(permission.getTitle());
+            if(list!=null&&list.size()>0){
+                return new ResultUtil<Permission>().setErrorMsg("名称已存在");
+            }
+        }
         Permission u = permissionService.save(permission);
         //重新加载权限
         mySecurityMetadataSource.loadResourceDefine();
@@ -145,6 +154,17 @@ public class PermissionController {
     @ApiOperation(value = "编辑")
     public Result<Permission> edit(@ModelAttribute Permission permission){
 
+        // 判断拦截请求的操作权限按钮名是否已存在
+        if(CommonConstant.PERMISSION_OPERATION.equals(permission.getType())){
+            // 若名称修改
+            Permission p = permissionService.get(permission.getId());
+            if(!p.getTitle().equals(permission.getTitle())){
+                List<Permission> list = permissionService.findByTitle(permission.getTitle());
+                if(list!=null&&list.size()>0){
+                    return new ResultUtil<Permission>().setErrorMsg("名称已存在");
+                }
+            }
+        }
         Permission u = permissionService.update(permission);
         //重新加载权限
         mySecurityMetadataSource.loadResourceDefine();
@@ -159,15 +179,15 @@ public class PermissionController {
         return new ResultUtil<Permission>().setData(u);
     }
 
-    @RequestMapping(value = "/delByIds",method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delByIds/{ids}",method = RequestMethod.DELETE)
     @ApiOperation(value = "批量通过id删除")
     @CacheEvict(key = "'menuList'")
-    public Result<Object> delByIds(@RequestParam String[] ids){
+    public Result<Object> delByIds(@PathVariable String[] ids){
 
         for(String id:ids){
             List<RolePermission> list = rolePermissionService.findByPermissionId(id);
             if(list!=null&&list.size()>0){
-                return new ResultUtil<Object>().setErrorMsg("删除失败，包含正被使用中的菜单或权限");
+                return new ResultUtil<Object>().setErrorMsg("删除失败，包含正被角色使用关联的菜单或权限");
             }
         }
         for(String id:ids){

@@ -5,6 +5,8 @@ jasypt:
 
 server:
   port: 8888
+  servlet:
+    context-path: /
 
 spring:
   # 数据源
@@ -16,6 +18,20 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.jdbc.Driver
     logSlowSql: true
+    # Druid StatViewServlet配置
+    druid:
+      stat-view-servlet:
+        # 默认true 内置监控页面首页/druid/index.html
+        enabled: true
+        url-pattern: /druid/*
+        # 允许清空统计数据
+        reset-enable: true
+        login-username: root
+        login-password: ENC(F4B0s6u9xcDw3V+P0qC4CA==)
+        # IP白名单 多个逗号分隔
+        allow:
+        # IP黑名单
+        deny:
   jpa:
     show-sql: true
     # 自动生成表结构
@@ -34,6 +50,10 @@ spring:
   data:
     elasticsearch:
       cluster-nodes: 127.0.0.1:9300
+  # 定时任务
+  quartz:
+    # 任务信息存储至数据库
+    job-store-type: jdbc
   # 文件大小上传配置
   servlet:
     multipart:
@@ -62,6 +82,15 @@ xboot:
   # 日志记录方式 true使用Elasticsearch记录 false记录至数据库中
   logRecord:
     es: false
+  # 七牛云配置
+  qiniu:
+    accessKey: 你的accessKey
+    secretKey: 你的secretKey
+    bucket: 你的空间名
+    domain: 你的测试域名，如http://p77xsahe9.bkt.clouddn.com/
+  # mob api配置 mob官网注册申请即可
+  mob:
+    appKey: 你的appKey
 
 # 忽略鉴权url
 ignored:
@@ -69,6 +98,7 @@ ignored:
     - /xboot/permission/getMenuList/**
     - /xboot/user/regist
     - /xboot/common/**
+    - /druid/**
     - /swagger-ui.html
     - /swagger-resources/**
     - /swagger/**
@@ -77,6 +107,7 @@ ignored:
     - /**/*.css
     - /**/*.png
     - /**/*.ico
+    - /test/**
 
 # Swagger界面内容配置
 swagger:
@@ -115,3 +146,7 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
     cache-enabled: false
+
+# 日志
+logging:
+  file: xboot-logs/xboot.log

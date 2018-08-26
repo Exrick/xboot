@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,7 +33,8 @@ import java.util.Set;
 @RestController
 @Api(description = "角色管理接口")
 @RequestMapping("/xboot/role")
-public class RoleController extends XbootBaseController<Role, String> {
+@Transactional
+public class RoleController {
 
     @Autowired
     private RoleService roleService;
@@ -48,11 +50,6 @@ public class RoleController extends XbootBaseController<Role, String> {
 
     @Autowired
     private StringRedisTemplate redisTemplate;
-
-    @Override
-    public RoleService getService() {
-        return roleService;
-    }
 
     @RequestMapping(value = "/getAllList",method = RequestMethod.GET)
     @ApiOperation(value = "获取全部角色")
@@ -114,6 +111,14 @@ public class RoleController extends XbootBaseController<Role, String> {
         return new ResultUtil<Object>().setData(null);
     }
 
+    @RequestMapping(value = "/save",method = RequestMethod.POST)
+    @ApiOperation(value = "保存数据")
+    public Result<Role> save(@ModelAttribute Role role){
+
+        Role r = roleService.save(role);
+        return new ResultUtil<Role>().setData(r);
+    }
+
     @RequestMapping(value = "/edit",method = RequestMethod.POST)
     @ApiOperation(value = "更新数据")
     public Result<Role> edit(@ModelAttribute Role entity){
@@ -127,14 +132,14 @@ public class RoleController extends XbootBaseController<Role, String> {
         return new ResultUtil<Role>().setData(r);
     }
 
-    @RequestMapping(value = "/delAllByIds",method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delAllByIds/{ids}",method = RequestMethod.DELETE)
     @ApiOperation(value = "批量通过ids删除")
-    public Result<Object> delByIds(@RequestParam String[] ids){
+    public Result<Object> delByIds(@PathVariable String[] ids){
 
         for(String id:ids){
             List<UserRole> list = userRoleService.findByRoleId(id);
             if(list!=null&&list.size()>0){
-                return new ResultUtil<Object>().setErrorMsg("删除失败，包含正被使用中的角色");
+                return new ResultUtil<Object>().setErrorMsg("删除失败，包含正被用户使用关联的角色");
             }
         }
         for(String id:ids){

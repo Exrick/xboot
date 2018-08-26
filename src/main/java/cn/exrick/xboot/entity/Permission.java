@@ -64,6 +64,9 @@ public class Permission extends XbootBaseEntity {
     @ApiModelProperty(value = "是否启用 0启用 -1禁用")
     private Integer status = CommonConstant.STATUS_NORMAL;
 
+    @ApiModelProperty(value = "网页链接")
+    private String url;
+
     @Transient
     @TableField(exist=false)
     @ApiModelProperty(value = "子菜单/权限")

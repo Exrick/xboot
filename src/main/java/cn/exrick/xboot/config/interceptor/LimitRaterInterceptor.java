@@ -42,6 +42,9 @@ public class LimitRaterInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     private RedisRaterLimiter redisRaterLimiter;
 
+    @Autowired
+    private IpInfoUtil ipInfoUtil;
+
     /**
      * 预处理回调方法，实现处理器的预处理（如登录检查）
      * 第三个参数为响应的处理器，即controller
@@ -53,7 +56,7 @@ public class LimitRaterInterceptor extends HandlerInterceptorAdapter {
                              Object handler) throws Exception {
 
         // IP限流 在线Demo所需 一秒限5个请求
-        String token1 = redisRaterLimiter.acquireTokenFromBucket(IpInfoUtil.getIpAddr(request), 5, 1000);
+        String token1 = redisRaterLimiter.acquireTokenFromBucket(ipInfoUtil.getIpAddr(request), 5, 1000);
         if (StrUtil.isBlank(token1)) {
             throw new XbootException("你手速怎么这么快，请点慢一点");
         }

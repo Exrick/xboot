@@ -48,8 +48,8 @@ public abstract class XbootBaseController<E, ID extends Serializable> {
     @ApiOperation(value = "分页获取")
     public Result<Page<E>> getByPage(@ModelAttribute PageVo page){
 
-        Page<E> list = getService().findAll(PageUtil.initPage(page));
-        return new ResultUtil<Page<E>>().setData(list);
+        Page<E> data = getService().findAll(PageUtil.initPage(page));
+        return new ResultUtil<Page<E>>().setData(data);
     }
 
     @RequestMapping(value = "/save",method = RequestMethod.POST)
@@ -70,19 +70,10 @@ public abstract class XbootBaseController<E, ID extends Serializable> {
         return new ResultUtil<E>().setData(e);
     }
 
-    @RequestMapping(value = "/del",method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delByIds/{ids}",method = RequestMethod.DELETE)
     @ResponseBody
-    @ApiOperation(value = "删除数据")
-    public Result<Object> delAll(@RequestBody List<E> entities){
-
-        getService().delete(entities);
-        return new ResultUtil<Object>().setSuccessMsg("批量删除数据成功");
-    }
-
-    @RequestMapping(value = "/delByIds",method = RequestMethod.DELETE)
-    @ResponseBody
-    @ApiOperation(value = "批量通过ids删除")
-    public Result<Object> delAllByIds(@RequestParam ID[] ids){
+    @ApiOperation(value = "批量通过id删除")
+    public Result<Object> delAllByIds(@PathVariable ID[] ids){
 
         for(ID id:ids){
             getService().delete(id);

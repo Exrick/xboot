@@ -2,6 +2,10 @@
 
 target/
 
+maven/
+
+xboot-logs/
+
 *.iml
 
 *.bak

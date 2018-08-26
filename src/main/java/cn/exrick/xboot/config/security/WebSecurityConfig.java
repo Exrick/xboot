@@ -66,7 +66,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //表单登录方式
                 .formLogin()
                 .loginPage("/xboot/common/needLogin")
-                //登录需要经过的url请求
+                //登录请求url
                 .loginProcessingUrl("/xboot/login")
                 .permitAll()
                 //成功处理类
@@ -93,7 +93,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 //添加自定义权限过滤器
                 .addFilterBefore(myFilterSecurityInterceptor, FilterSecurityInterceptor.class)
-                //添加JWT过滤器 除/login其它请求都需经过此过滤器
+                //添加JWT过滤器 除/xboot/login其它请求都需经过此过滤器
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()));
     }
 }

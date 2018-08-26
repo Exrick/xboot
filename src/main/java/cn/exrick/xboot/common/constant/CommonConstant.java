@@ -8,6 +8,11 @@ package cn.exrick.xboot.common.constant;
 public interface CommonConstant {
 
     /**
+     * 用户默认头像
+     */
+    String USER_DEFAULT_AVATAR = "https://s1.ax1x.com/2018/05/19/CcdVQP.png";
+
+    /**
      * 用户正常状态
      */
     Integer USER_STATUS_NORMAL = 0;
@@ -60,7 +65,7 @@ public interface CommonConstant {
     /**
      * 限流标识
      */
-    String LIMIT_ALL = "LIMIT_ALL";
+    String LIMIT_ALL = "XBOOT_LIMIT_ALL";
 
     /**
      * 页面类型权限
@@ -71,6 +76,11 @@ public interface CommonConstant {
      * 操作类型权限
      */
     Integer PERMISSION_OPERATION = 1;
+
+    /**
+     * 1级菜单
+     */
+    String PARENT_ID = "0";
 
     /**
      * 1级菜单

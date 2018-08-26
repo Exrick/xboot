@@ -19,10 +19,11 @@ public class RestCtrlExceptionHandler {
     @ExceptionHandler(XbootException.class)
     @ResponseStatus(value = HttpStatus.OK)
     public Result<Object> handleXCloudException(XbootException e) {
+
         String errorMsg="Xboot exception";
         if (e!=null){
             errorMsg=e.getMsg();
-            log.warn(e.toString());
+            log.error(e.toString());
         }
         return new ResultUtil<>().setErrorMsg(500, errorMsg);
     }
@@ -30,10 +31,11 @@ public class RestCtrlExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(value = HttpStatus.OK)
     public Result<Object> handleException(Exception e) {
+
         String errorMsg="Exception";
         if (e!=null){
             errorMsg=e.getMessage();
-            log.warn(e.toString());
+            log.error(e.toString());
         }
         return new ResultUtil<>().setErrorMsg(500, errorMsg);
     }

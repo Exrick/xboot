@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 @Api(description = "验证码接口")
 @RequestMapping("/xboot/common/captcha")
 @RestController
+@Transactional
 public class CaptchaController {
 
     @Autowired

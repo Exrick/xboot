@@ -2,10 +2,12 @@ package cn.exrick.xboot.serviceimpl;
 
 import cn.exrick.xboot.common.constant.CommonConstant;
 import cn.exrick.xboot.common.vo.SearchVo;
+import cn.exrick.xboot.dao.DepartmentDao;
 import cn.exrick.xboot.dao.UserDao;
 import cn.exrick.xboot.dao.UserRoleDao;
 import cn.exrick.xboot.dao.mapper.PermissionMapper;
 import cn.exrick.xboot.dao.mapper.UserRoleMapper;
+import cn.exrick.xboot.entity.Department;
 import cn.exrick.xboot.entity.Permission;
 import cn.exrick.xboot.entity.Role;
 import cn.exrick.xboot.entity.User;
@@ -44,6 +46,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PermissionMapper permissionMapper;
 
+    @Autowired
+    private DepartmentDao departmentDao;
+
     @Override
     public UserDao getRepository() {
         return userDao;
@@ -55,19 +60,20 @@ public class UserServiceImpl implements UserService {
         List<User> list=userDao.findByUsernameAndStatus(username, CommonConstant.USER_STATUS_NORMAL);
         if(list!=null&&list.size()>0){
             User user = list.get(0);
+            // 关联部门
+            if(StrUtil.isNotBlank(user.getDepartmentId())){
+                Department department = departmentDao.getOne(user.getDepartmentId());
+                user.setDepartmentTitle(department.getTitle());
+            }
+            // 关联角色
             List<Role> roleList = userRoleMapper.findByUserId(user.getId());
             user.setRoles(roleList);
+            // 关联权限菜单
             List<Permission> permissionList = permissionMapper.findByUserId(user.getId());
             user.setPermissions(permissionList);
             return user;
         }
         return null;
-    }
-
-    @Override
-    public List<User> findByStatusAndType(Integer status, Integer type) {
-
-        return userDao.findByStatusAndType(status, type);
     }
 
     @Override
@@ -81,6 +87,7 @@ public class UserServiceImpl implements UserService {
                 Path<String> usernameField = root.get("username");
                 Path<String> mobileField = root.get("mobile");
                 Path<String> emailField = root.get("email");
+                Path<String> departmentIdField = root.get("departmentId");
                 Path<Integer> sexField=root.get("sex");
                 Path<Integer> typeField=root.get("type");
                 Path<Integer> statusField=root.get("status");
@@ -97,6 +104,11 @@ public class UserServiceImpl implements UserService {
                 }
                 if(StrUtil.isNotBlank(user.getEmail())){
                     list.add(cb.like(emailField,'%'+user.getEmail()+'%'));
+                }
+
+                //部门
+                if(StrUtil.isNotBlank(user.getDepartmentId())){
+                    list.add(cb.equal(departmentIdField, user.getDepartmentId()));
                 }
 
                 //性别
@@ -123,5 +135,11 @@ public class UserServiceImpl implements UserService {
                 return null;
             }
         }, pageable);
+    }
+
+    @Override
+    public List<User> findByDepartmentId(String departmentId) {
+
+        return userDao.findByDepartmentId(departmentId);
     }
 }

@@ -16,17 +16,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 
 /**
- * 拥有ROLE_ADMIN角色的用户可以访问
  * @author Exrickx
  */
 @Slf4j
 @RestController
 @Api(description = "日志管理接口")
 @RequestMapping("/xboot/log")
+@Transactional
 public class LogController{
 
     @Value("${xboot.logRecord.es}")
@@ -66,9 +67,9 @@ public class LogController{
         }
     }
 
-    @RequestMapping(value = "/delByIds",method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delByIds/{ids}",method = RequestMethod.DELETE)
     @ApiOperation(value = "批量删除")
-    public Result<Object> delByIds(@RequestParam String[] ids){
+    public Result<Object> delByIds(@PathVariable String[] ids){
 
         for(String id : ids){
             if(esRecord){

@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.FileInputStream;
@@ -30,15 +31,17 @@ public class QiniuUtil {
     /**
      * 生成上传凭证，然后准备上传
      */
-    private static String accessKey = "你的accessKey";
+    @Value("${xboot.qiniu.accessKey}")
+    private String accessKey;
 
-    private static String secretKey = "你的secretKey";
+    @Value("${xboot.qiniu.secretKey}")
+    private String secretKey;
 
-    private static String bucket = "你的空间名";
+    @Value("${xboot.qiniu.bucket}")
+    private String bucket;
 
-    private static String domain = "你的空间测试域名，如http://p77xsahe9.bkt.clouddn.com/";
-
-    private static Auth auth = Auth.create(accessKey, secretKey);
+    @Value("${xboot.qiniu.domain}")
+    private String domain;
 
     /**
      * 构造一个带指定Zone对象的配置类 zone2华南
@@ -49,13 +52,13 @@ public class QiniuUtil {
 
     /**
      * 文件路径上传
-     *
      * @param filePath
-     * @param key      文件名
+     * @param key   文件名
      * @return
      */
     public String qiniuUpload(String filePath, String key) {
 
+        Auth auth = Auth.create(accessKey, secretKey);
         String upToken = auth.uploadToken(bucket);
         try {
             Response response = uploadManager.put(filePath, key, upToken);
@@ -77,13 +80,13 @@ public class QiniuUtil {
 
     /**
      * 文件流上传
-     *
      * @param file
      * @param key  文件名
      * @return
      */
     public String qiniuInputStreamUpload(FileInputStream file, String key) {
 
+        Auth auth = Auth.create(accessKey, secretKey);
         String upToken = auth.uploadToken(bucket);
         try {
             Response response = uploadManager.put(file, key, upToken, null, null);
@@ -104,7 +107,6 @@ public class QiniuUtil {
 
     /**
      * Base64上传
-     *
      * @param data64
      * @return
      */
@@ -129,7 +131,8 @@ public class QiniuUtil {
         return domain + key;
     }
 
-    public static String getUpToken() {
+    public String getUpToken() {
+        Auth auth = Auth.create(accessKey, secretKey);
         return auth.uploadToken(bucket, null, 3600, new StringMap().put("insertOnly", 1));
     }
 

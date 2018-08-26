@@ -27,14 +27,6 @@ public interface UserService extends XbootBaseService<User,String> {
     User findByUsername(String username);
 
     /**
-     * 通过状态和类型获取用户
-     * @param status
-     * @param type
-     * @return
-     */
-    List<User> findByStatusAndType(Integer status, Integer type);
-
-    /**
      * 多条件分页获取用户
      * @param user
      * @param searchVo
@@ -42,4 +34,11 @@ public interface UserService extends XbootBaseService<User,String> {
      * @return
      */
     Page<User> findByCondition(User user, SearchVo searchVo, Pageable pageable);
+
+    /**
+     * 通过部门id获取
+     * @param departmentId
+     * @return
+     */
+    List<User> findByDepartmentId(String departmentId);
 }

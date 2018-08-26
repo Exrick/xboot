@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import redis.clients.jedis.Jedis;
@@ -26,6 +27,7 @@ import java.io.FileInputStream;
 @RestController
 @Api(description = "文件上传接口")
 @RequestMapping("/xboot/upload")
+@Transactional
 public class UploadController {
 
     @Autowired
@@ -34,14 +36,17 @@ public class UploadController {
     @Autowired
     private QiniuUtil qiniuUtil;
 
+    @Autowired
+    private IpInfoUtil ipInfoUtil;
+
     @RequestMapping(value = "/file",method = RequestMethod.POST)
     @ApiOperation(value = "文件上传")
     public Result<Object> upload(@RequestParam("file") MultipartFile file,
                                  HttpServletRequest request) {
 
         // IP限流 在线Demo所需 5分钟限1个请求
-        String token1 = redisRaterLimiter.acquireTokenFromBucket("upload:"+IpInfoUtil.getIpAddr(request), 1, 300000);
-        if (StrUtil.isBlank(token1)) {
+        String token = redisRaterLimiter.acquireTokenFromBucket("upload:"+ipInfoUtil.getIpAddr(request), 1, 300000);
+        if (StrUtil.isBlank(token)) {
             throw new XbootException("上传那么多干嘛，等等再传吧");
         }
 

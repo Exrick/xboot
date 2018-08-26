@@ -14,7 +14,7 @@ import java.util.Iterator;
 
 /**
  * 权限管理决断器
- * 判断用户拥有的角色是否有资源访问权限
+ * 判断用户拥有的权限或角色是否有资源访问权限
  * @author Exrickx
  */
 @Slf4j
@@ -30,14 +30,15 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
         Iterator<ConfigAttribute> iterator = configAttributes.iterator();
         while (iterator.hasNext()){
             ConfigAttribute c = iterator.next();
-            String needRole = c.getAttribute();
+            String needPerm = c.getAttribute();
             for(GrantedAuthority ga : authentication.getAuthorities()) {
-                if(needRole.trim().equals(ga.getAuthority())) {
+                // 匹配用户拥有的ga 和 系统中的needPerm
+                if(needPerm.trim().equals(ga.getAuthority())) {
                     return;
                 }
             }
         }
-        throw new AccessDeniedException("您没有访问权限");
+        throw new AccessDeniedException("抱歉，您没有访问权限");
     }
 
     @Override

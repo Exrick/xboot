@@ -46,6 +46,9 @@ public class SystemLogAspect {
     @Autowired(required = false)
     private HttpServletRequest request;
 
+    @Autowired
+    private IpInfoUtil ipInfoUtil;
+
     /**
      * Controller层切点,注解方式
      */
@@ -96,9 +99,9 @@ public class SystemLogAspect {
                     //请求用户
                     esLog.setUsername(username);
                     //请求IP
-                    esLog.setIp(IpInfoUtil.getIpAddr(request));
+                    esLog.setIp(ipInfoUtil.getIpAddr(request));
                     //IP地址
-                    esLog.setIpInfo(IpInfoUtil.getIpCity(IpInfoUtil.getIpAddr(request)));
+                    esLog.setIpInfo(ipInfoUtil.getIpCity(ipInfoUtil.getIpAddr(request)));
                     //请求开始时间
                     Date logStartTime = beginTimeThreadLocal.get();
 
@@ -125,9 +128,9 @@ public class SystemLogAspect {
                     //请求用户
                     log.setUsername(username);
                     //请求IP
-                    log.setIp(IpInfoUtil.getIpAddr(request));
+                    log.setIp(ipInfoUtil.getIpAddr(request));
                     //IP地址
-                    log.setIpInfo(IpInfoUtil.getIpCity(IpInfoUtil.getIpAddr(request)));
+                    log.setIpInfo(ipInfoUtil.getIpCity(ipInfoUtil.getIpAddr(request)));
                     //请求开始时间
                     Date logStartTime = beginTimeThreadLocal.get();
 

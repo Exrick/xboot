@@ -2,12 +2,14 @@ package cn.exrick.xboot.config.security.jwt;
 
 import cn.exrick.xboot.common.annotation.SystemLog;
 import cn.exrick.xboot.common.constant.SecurityConstant;
+import cn.exrick.xboot.common.utils.IpInfoUtil;
 import cn.exrick.xboot.common.utils.ResponseUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.gson.Gson;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -37,6 +39,9 @@ public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticatio
     @Value("${xboot.saveLoginTime}")
     private Integer saveLoginTime;
 
+    @Autowired
+    private IpInfoUtil ipInfoUtil;
+
     @Override
     @SystemLog(description="登录系统")
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -52,11 +57,12 @@ public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticatio
         for(GrantedAuthority g : list){
             authorities.add(g.getAuthority());
         }
+        ipInfoUtil.getUrl(request);
         //登陆成功生成JWT
         String token = Jwts.builder()
                 //主题 放入用户名
                 .setSubject(username)
-                //自定义属性 放入用户拥有权限
+                //自定义属性 放入用户拥有请求权限
                 .claim(SecurityConstant.AUTHORITIES, new Gson().toJson(authorities))
                 //失效时间
                 .setExpiration(new Date(System.currentTimeMillis() + tokenExpireTime * 60 * 1000))

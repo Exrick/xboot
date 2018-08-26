@@ -27,4 +27,11 @@ public interface UserDao extends XbootBaseDao<User,String> {
      * @return
      */
     List<User> findByStatusAndType(Integer status, Integer type);
+
+    /**
+     * 通过部门id获取
+     * @param departmentId
+     * @return
+     */
+    List<User> findByDepartmentId(String departmentId);
 }

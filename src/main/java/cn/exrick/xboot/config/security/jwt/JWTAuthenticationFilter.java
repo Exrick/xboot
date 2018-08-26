@@ -2,8 +2,6 @@ package cn.exrick.xboot.config.security.jwt;
 
 import cn.exrick.xboot.common.constant.SecurityConstant;
 import cn.exrick.xboot.common.utils.ResponseUtil;
-import cn.exrick.xboot.common.vo.Authority;
-import cn.exrick.xboot.entity.Role;
 import cn.exrick.xboot.exception.XbootException;
 import cn.hutool.core.util.StrUtil;
 import com.google.gson.Gson;
@@ -13,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -89,7 +86,7 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
                     }
                 }
                 if(StrUtil.isNotBlank(username)) {
-                    //此处password不能为null
+                    //Exrick踩坑提醒 此处password不能为null
                     User principal = new User(username, "", authorities);
                     return new UsernamePasswordAuthenticationToken(principal, null, authorities);
                 }

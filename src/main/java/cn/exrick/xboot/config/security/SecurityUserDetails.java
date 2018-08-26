@@ -6,6 +6,7 @@ import cn.exrick.xboot.entity.Permission;
 import cn.exrick.xboot.entity.Role;
 import cn.exrick.xboot.entity.User;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -34,15 +35,35 @@ public class SecurityUserDetails extends User implements UserDetails {
         }
     }
 
+    /**
+     * 添加用户拥有的权限和角色
+     * @return
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         List<GrantedAuthority> authorityList = new ArrayList<>();
         List<Permission> permissions = this.getPermissions();
-        if(CollUtil.isNotEmpty(permissions)&&permissions.get(0)!=null){
+        // 添加请求权限
+        if(permissions!=null&&permissions.size()>0){
             for (Permission permission : permissions) {
-                authorityList.add(new SimpleGrantedAuthority(permission.getTitle()));
+                if(CommonConstant.PERMISSION_OPERATION.equals(permission.getType())
+                        &&StrUtil.isNotBlank(permission.getTitle())
+                        &&StrUtil.isNotBlank(permission.getPath())) {
+
+                    authorityList.add(new SimpleGrantedAuthority(permission.getTitle()));
+                }
             }
+        }
+        // 添加角色
+        List<Role> roles = this.getRoles();
+        if(roles!=null&&roles.size()>0){
+            // lambda表达式
+            roles.forEach(item -> {
+                if(StrUtil.isNotBlank(item.getName())){
+                    authorityList.add(new SimpleGrantedAuthority(item.getName()));
+                }
+            });
         }
         return authorityList;
     }

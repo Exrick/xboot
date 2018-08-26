@@ -6,9 +6,12 @@ import cn.exrick.xboot.common.utils.ResultUtil;
 import cn.exrick.xboot.common.vo.PageVo;
 import cn.exrick.xboot.common.vo.Result;
 import cn.exrick.xboot.common.vo.SearchVo;
+import cn.exrick.xboot.dao.DepartmentDao;
+import cn.exrick.xboot.entity.Department;
 import cn.exrick.xboot.entity.Role;
 import cn.exrick.xboot.entity.User;
 import cn.exrick.xboot.entity.UserRole;
+import cn.exrick.xboot.service.DepartmentService;
 import cn.exrick.xboot.service.RoleService;
 import cn.exrick.xboot.service.UserRoleService;
 import cn.exrick.xboot.service.UserService;
@@ -18,6 +21,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Session;
+import org.hibernate.jpa.HibernateEntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -27,8 +32,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +49,7 @@ import java.util.List;
 @Api(description = "用户接口")
 @RequestMapping("/xboot/user")
 @CacheConfig(cacheNames = "user")
+@Transactional
 public class UserController {
 
     @Autowired
@@ -50,6 +59,9 @@ public class UserController {
     private RoleService roleService;
 
     @Autowired
+    private DepartmentService departmentService;
+
+    @Autowired
     private IUserRoleService iUserRoleService;
 
     @Autowired
@@ -57,6 +69,9 @@ public class UserController {
 
     @Autowired
     private StringRedisTemplate redisTemplate;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @RequestMapping(value = "/regist",method = RequestMethod.POST)
     @ApiOperation(value = "注册用户")
@@ -113,6 +128,8 @@ public class UserController {
 
         UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User u = userService.findByUsername(user.getUsername());
+        // 清除持久上下文环境 避免后面语句导致持久化
+        entityManager.clear();
         u.setPassword(null);
         return new ResultUtil<User>().setData(u);
     }
@@ -234,8 +251,16 @@ public class UserController {
 
         Page<User> page = userService.findByCondition(user, searchVo, PageUtil.initPage(pageVo));
         for(User u: page.getContent()){
+            // 关联部门
+            if(StrUtil.isNotBlank(u.getDepartmentId())){
+                Department department = departmentService.get(u.getDepartmentId());
+                u.setDepartmentTitle(department.getTitle());
+            }
+            // 关联角色
             List<Role> list = iUserRoleService.findByUserId(u.getId());
             u.setRoles(list);
+            // 清除持久上下文环境 避免后面语句导致持久化
+            entityManager.clear();
             u.setPassword(null);
         }
         return new ResultUtil<Page<User>>().setData(page);
@@ -305,9 +330,9 @@ public class UserController {
         return new ResultUtil<Object>().setData(null);
     }
 
-    @RequestMapping(value = "/delByIds",method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delByIds/{ids}",method = RequestMethod.DELETE)
     @ApiOperation(value = "批量通过ids删除")
-    public Result<Object> delAllByIds(@RequestParam String[] ids){
+    public Result<Object> delAllByIds(@PathVariable String[] ids){
 
         for(String id:ids){
             userService.delete(id);

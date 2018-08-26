@@ -51,13 +51,19 @@ public class AuthenticationFailHandler extends SimpleUrlAuthenticationFailureHan
             int loginFailTime = Integer.parseInt(value);
             int restLoginTime = loginTimeLimit - loginFailTime;
             log.info("用户"+username+"登录失败，还有"+restLoginTime+"次机会");
-            ResponseUtil.out(response, ResponseUtil.resultMap(false,500,"用户名或密码错误"));
+            if(restLoginTime<=3&&restLoginTime>0){
+                ResponseUtil.out(response, ResponseUtil.resultMap(false,500,"用户名或密码错误，还有"+restLoginTime+"次尝试机会"));
+            } else if(restLoginTime<=0) {
+                ResponseUtil.out(response, ResponseUtil.resultMap(false,500,"登录错误次数超过限制，请"+loginAfterTime+"分钟后再试"));
+            } else {
+                ResponseUtil.out(response, ResponseUtil.resultMap(false,500,"用户名或密码错误"));
+            }
         } else if (e instanceof DisabledException) {
             ResponseUtil.out(response, ResponseUtil.resultMap(false,500,"账户被禁用，请联系管理员"));
         } else if (e instanceof LoginFailLimitException){
             ResponseUtil.out(response, ResponseUtil.resultMap(false,500,((LoginFailLimitException) e).getMsg()));
         } else {
-            ResponseUtil.out(response, ResponseUtil.resultMap(false,500,"登录失败"));
+            ResponseUtil.out(response, ResponseUtil.resultMap(false,500,"登录失败，其他内部错误"));
         }
     }
 

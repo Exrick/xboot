@@ -43,14 +43,14 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public List<Permission> findByLevelAndTypeOrderBySortOrder(Integer level, Integer type) {
+    public List<Permission> findByTypeAndStatusOrderBySortOrder(Integer type, Integer status) {
 
-        return permissionDao.findByLevelAndTypeOrderBySortOrder(level, type);
+        return permissionDao.findByTypeAndStatusOrderBySortOrder(type, status);
     }
 
     @Override
-    public List<Permission> findByTypeAndParentIdOrderBySortOrder(Integer type, String parentId) {
+    public List<Permission> findByTitle(String title) {
 
-        return permissionDao.findByTypeAndParentIdOrderBySortOrder(type, parentId);
+        return permissionDao.findByTitle(title);
     }
 }

@@ -1,5 +1,6 @@
 package cn.exrick.xboot.config.security.permission;
 
+import cn.exrick.xboot.common.constant.CommonConstant;
 import cn.exrick.xboot.entity.Permission;
 import cn.exrick.xboot.service.PermissionService;
 import cn.hutool.core.util.StrUtil;
@@ -30,23 +31,25 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
     private Map<String, Collection<ConfigAttribute>> map = null;
 
     /**
-     * 加载权限表中所有权限
+     * 加载权限表中所有操作请求权限
      */
     public void loadResourceDefine(){
 
         map = new HashMap<>(16);
         Collection<ConfigAttribute> configAttributes;
         ConfigAttribute cfg;
-        List<Permission> permissions = permissionService.getAll();
+        // 获取启用的权限操作请求
+        List<Permission> permissions = permissionService.findByTypeAndStatusOrderBySortOrder(CommonConstant.PERMISSION_OPERATION, CommonConstant.STATUS_NORMAL);
         for(Permission permission : permissions) {
-            configAttributes = new ArrayList<>();
-            cfg = new SecurityConfig(permission.getTitle());
-            //作为MyAccessDecisionManager类的decide的第三个参数
-            configAttributes.add(cfg);
-            //用权限的path作为map的key，用ConfigAttribute的集合作为value
-            map.put(permission.getPath(), configAttributes);
+            if(StrUtil.isNotBlank(permission.getTitle())&&StrUtil.isNotBlank(permission.getPath())){
+                configAttributes = new ArrayList<>();
+                cfg = new SecurityConfig(permission.getTitle());
+                //作为MyAccessDecisionManager类的decide的第三个参数
+                configAttributes.add(cfg);
+                //用权限的path作为map的key，用ConfigAttribute的集合作为value
+                map.put(permission.getPath(), configAttributes);
+            }
         }
-
     }
 
     /**

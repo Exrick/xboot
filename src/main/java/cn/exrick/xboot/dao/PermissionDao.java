@@ -27,18 +27,17 @@ public interface PermissionDao extends XbootBaseDao<Permission,String> {
     List<Permission> findByParentIdOrderBySortOrder(String parentId);
 
     /**
-     * 通过类型和层级查找
-     * @param level
+     * 通过类型和状态获取
      * @param type
+     * @param status
      * @return
      */
-    List<Permission> findByLevelAndTypeOrderBySortOrder(Integer level, Integer type);
+    List<Permission> findByTypeAndStatusOrderBySortOrder(Integer type, Integer status);
 
     /**
-     * 通过parendId和类型查找
-     * @param type
-     * @param parentId
+     * 通过名称获取
+     * @param title
      * @return
      */
-    List<Permission> findByTypeAndParentIdOrderBySortOrder(Integer type, String parentId);
+    List<Permission> findByTitle(String title);
 }
