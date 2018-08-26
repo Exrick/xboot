@@ -117,7 +117,7 @@ http://xboot.exrick.cn
 
 5.XBoot后端集群部署
 
-### 分布式扩展
+### [分布式扩展](https://github.com/alibaba/dubbo-spring-boot-starter/blob/master/README_zh.md)
 
 ### 作者其他项目推荐
 - [XPay个人免签收款支付系统v1.2](https://github.com/Exrick/xpay)
