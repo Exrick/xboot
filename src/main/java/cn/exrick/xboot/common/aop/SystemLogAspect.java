@@ -2,6 +2,7 @@ package cn.exrick.xboot.common.aop;
 
 import cn.exrick.xboot.common.annotation.SystemLog;
 import cn.exrick.xboot.common.utils.IpInfoUtil;
+import cn.exrick.xboot.common.utils.ObjectUtil;
 import cn.exrick.xboot.common.utils.ThreadPoolUtil;
 import cn.exrick.xboot.entity.Log;
 import cn.exrick.xboot.entity.elasticsearch.EsLog;
@@ -110,6 +111,7 @@ public class SystemLogAspect {
                     //请求耗时
                     Long logElapsedTime = endTime - beginTime;
                     esLog.setCostTime(logElapsedTime.intValue());
+                    ipInfoUtil.getInfo(request, ObjectUtil.mapToStringAll(request.getParameterMap()));
 
                     //调用线程保存至ES
                     ThreadPoolUtil.getPool().execute(new SaveEsSystemLogThread(esLog, esLogService));
@@ -139,6 +141,7 @@ public class SystemLogAspect {
                     //请求耗时
                     Long logElapsedTime = endTime - beginTime;
                     log.setCostTime(logElapsedTime.intValue());
+                    ipInfoUtil.getInfo(request, ObjectUtil.mapToStringAll(request.getParameterMap()));
 
                     //调用线程保存至ES
                     ThreadPoolUtil.getPool().execute(new SaveSystemLogThread(log, logService));
