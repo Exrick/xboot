@@ -24,13 +24,13 @@ public class XbootGenerator {
      * 实体类名
      * 建议仅需修改
      */
-    private static final String className = "Xboot";
+    private static final String className = "User";
 
     /**
      * 类说明描述
      * 建议仅需修改
      */
-    private static final String description = "测试";
+    private static final String description = "用户";
 
     /**
      * 作者名
