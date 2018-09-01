@@ -74,6 +74,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //失败
                 .failureHandler(failHandler)
                 .and()
+                //允许网页iframe
+                .headers().frameOptions().disable()
+                .and()
                 .logout()
                 .permitAll()
                 .and()
