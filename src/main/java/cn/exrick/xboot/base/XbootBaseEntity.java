@@ -2,6 +2,7 @@ package cn.exrick.xboot.base;
 
 import cn.exrick.xboot.common.constant.CommonConstant;
 import cn.exrick.xboot.common.utils.SnowFlakeUtil;
+import com.baomidou.mybatisplus.annotations.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -28,6 +29,7 @@ public abstract class XbootBaseEntity implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @Id
+    @TableId
     @ApiModelProperty(value = "唯一标识")
     private String id = String.valueOf(SnowFlakeUtil.getFlowIdInstance().nextId());
 

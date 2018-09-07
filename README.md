@@ -107,7 +107,7 @@ http://xboot.exrick.cn
 
 > 前端集群部署请跳转至[xboot-front](https://github.com/Exrick/xboot-front)项目查看
 
-1.Docker安装与常用命令
+1.[Docker安装与常用命令](https://github.com/Exrick/x-boot/wiki/Docker%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4)
 
 2.基于PXC架构Mysql数据库集群搭建
 
@@ -117,7 +117,7 @@ http://xboot.exrick.cn
 
 5.XBoot后端集群部署
 
-### [分布式扩展](https://github.com/alibaba/dubbo-spring-boot-starter/blob/master/README_zh.md)
+### 分布式扩展
 
 ### 作者其他项目推荐
 - [XPay个人免签收款支付系统v1.2](https://github.com/Exrick/xpay)
