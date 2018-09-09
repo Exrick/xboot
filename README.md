@@ -92,6 +92,8 @@ http://xboot.exrick.cn
     - [短信登录配置](https://github.com/Exrick/x-boot/wiki/%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE)
     - [Vaptcha人机验证码配置使用](https://github.com/Exrick/x-boot/wiki/vaptcha%E4%BA%BA%E6%9C%BA%E9%AA%8C%E8%AF%81%E7%A0%81%E9%85%8D%E7%BD%AE%E4%BD%BF%E7%94%A8)
 
+### [分布式扩展](https://github.com/alibaba/dubbo-spring-boot-starter/blob/master/README_zh.md)
+
 ### XBoot后端学习记录（更新中）
 1.[Spring Boot 2.x 区别总结](https://github.com/Exrick/x-boot/wiki/SpringBoot2.x%E5%8C%BA%E5%88%AB%E6%80%BB%E7%BB%93)
 
@@ -107,7 +109,7 @@ http://xboot.exrick.cn
 
 > 前端集群部署请跳转至[xboot-front](https://github.com/Exrick/xboot-front)项目查看
 
-1.[Docker安装与常用命令](https://github.com/Exrick/x-boot/wiki/Docker%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4)
+1.[Docker的安装与常用命令](https://github.com/Exrick/x-boot/wiki/Docker%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4)
 
 2.基于PXC架构Mysql数据库集群搭建
 
@@ -116,8 +118,6 @@ http://xboot.exrick.cn
 4.Elasticsearch集群搭建
 
 5.XBoot后端集群部署
-
-### 分布式扩展
 
 ### 作者其他项目推荐
 - [XPay个人免签收款支付系统v1.2](https://github.com/Exrick/xpay)
