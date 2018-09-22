@@ -1,7 +1,7 @@
 # X-Boot
 [![AUR](https://img.shields.io/aur/license/yaourt.svg)](https://github.com/Exrick/xmall/blob/master/License)
 [![](https://img.shields.io/badge/Author-Exrick-orange.svg)](http://blog.exrick.cn)
-[![](https://img.shields.io/badge/version-1.0-brightgreen.svg)](https://github.com/Exrick/x-boot)
+[![](https://img.shields.io/badge/version-1.1-brightgreen.svg)](https://github.com/Exrick/x-boot)
 [![GitHub stars](https://img.shields.io/github/stars/Exrick/x-boot.svg?style=social&label=Stars)](https://github.com/Exrick/x-boot)
 [![GitHub forks](https://img.shields.io/github/forks/Exrick/x-boot.svg?style=social&label=Fork)](https://github.com/Exrick/x-boot)
 
@@ -14,7 +14,7 @@
 http://xboot.exrick.cn
 ### 前台基于Vue+iView项目地址： [xboot-front](https://github.com/Exrick/xboot-front)
 ### 项目简介 
-- [x] 代码拥有详细注释 无复杂逻辑 核心使用 SpringBoot 2.0.4.RELEASE
+- [x] 代码拥有详细注释 无复杂逻辑 核心使用 SpringBoot 2.0.5.RELEASE
 - [x] JPA + Mybatis-Plus任意切换
 - [x] 操作日志记录方式任意切换Mysql或Elasticseach记录
 - [x] 极简代码生成 只需输入类名和字段 自动创建数据库表
@@ -46,7 +46,7 @@ http://xboot.exrick.cn
 - 前台为基于Vue+iView的独立项目请跳转至 [xboot-front](https://github.com/Exrick/xboot-front) 项目仓库查看
 ### 后端所用技术
 ##### 各框架依赖版本皆使用目前最新版本
-- Spring Boot 2.0.4.RELEASE
+- Spring Boot 2.0.5.RELEASE
 - SpringMVC
 - Spring Security
 - [Spring Data JPA](https://docs.spring.io/spring-data/jpa/docs/2.0.6.RELEASE/reference/html/)
@@ -94,7 +94,7 @@ http://xboot.exrick.cn
 
 ### [分布式扩展](https://github.com/alibaba/dubbo-spring-boot-starter/blob/master/README_zh.md)
 
-### XBoot后端学习记录（更新中）
+### XBoot后端学习分享（更新中）
 1.[Spring Boot 2.x 区别总结](https://github.com/Exrick/x-boot/wiki/SpringBoot2.x%E5%8C%BA%E5%88%AB%E6%80%BB%E7%BB%93)
 
 2.Spring Security整合JWT
@@ -134,6 +134,8 @@ http://xboot.exrick.cn
     - [前台源码点我提前获取](http://xpay.exrick.cn/pay) [预览视频](https://v.qq.com/x/page/f0627kf4x1e.html)
 
     ![](https://i.loli.net/2018/07/21/5b52e1de385e7.png)
+- 机器学习笔记
+    - [Machine-Learning](https://github.com/Exrick/Machine-Learning)
 ### 技术疑问交流
 - QQ交流群 `475743731(付费)`，可获取各项目详细图文文档、疑问解答 [![](http://pub.idqqimg.com/wpa/images/group.png)](http://shang.qq.com/wpa/qunwpa?idkey=7b60cec12ba93ebed7568b0a63f22e6e034c0d1df33125ac43ed753342ec6ce7)
 - 免费交流群 `562962309` [![](http://pub.idqqimg.com/wpa/images/group.png)](http://shang.qq.com/wpa/qunwpa?idkey=52f6003e230b26addeed0ba6cf343fcf3ba5d97829d17f5b8fa5b151dba7e842)

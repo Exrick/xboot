@@ -6,7 +6,6 @@ import cn.exrick.xboot.common.utils.ResultUtil;
 import cn.exrick.xboot.common.vo.PageVo;
 import cn.exrick.xboot.common.vo.Result;
 import cn.exrick.xboot.common.vo.SearchVo;
-import cn.exrick.xboot.dao.DepartmentDao;
 import cn.exrick.xboot.entity.Department;
 import cn.exrick.xboot.entity.Role;
 import cn.exrick.xboot.entity.User;
@@ -21,14 +20,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Session;
-import org.hibernate.jpa.HibernateEntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -37,7 +33,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -264,6 +259,24 @@ public class UserController {
             u.setPassword(null);
         }
         return new ResultUtil<Page<User>>().setData(page);
+    }
+
+    @RequestMapping(value = "/getAll",method = RequestMethod.GET)
+    @ApiOperation(value = "获取全部用户数据")
+    public Result<List<User>> getByCondition(){
+
+        List<User> list = userService.getAll();
+        for(User u: list){
+            // 关联部门
+            if(StrUtil.isNotBlank(u.getDepartmentId())){
+                Department department = departmentService.get(u.getDepartmentId());
+                u.setDepartmentTitle(department.getTitle());
+            }
+            // 清除持久上下文环境 避免后面语句导致持久化
+            entityManager.clear();
+            u.setPassword(null);
+        }
+        return new ResultUtil<List<User>>().setData(list);
     }
 
     @RequestMapping(value = "/admin/add",method = RequestMethod.POST)

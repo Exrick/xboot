@@ -7,6 +7,10 @@ server:
   port: 8888
   servlet:
     context-path: /
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 1000
+    min-spare-threads: 30
 
 spring:
   # 数据源
@@ -95,7 +99,6 @@ xboot:
 # 忽略鉴权url
 ignored:
   urls:
-    - /xboot/permission/getMenuList/**
     - /xboot/user/regist
     - /xboot/common/**
     - /druid/**

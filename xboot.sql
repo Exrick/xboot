@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50527
 File Encoding         : 65001
 
-Date: 2018-08-24 23:06:43
+Date: 2018-09-22 19:03:01
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -129,7 +129,6 @@ CREATE TABLE `qrtz_locks` (
 -- ----------------------------
 -- Records of qrtz_locks
 -- ----------------------------
-INSERT INTO `qrtz_locks` VALUES ('quartzScheduler', 'STATE_ACCESS');
 INSERT INTO `qrtz_locks` VALUES ('quartzScheduler', 'TRIGGER_ACCESS');
 
 -- ----------------------------
@@ -161,7 +160,6 @@ CREATE TABLE `qrtz_scheduler_state` (
 -- ----------------------------
 -- Records of qrtz_scheduler_state
 -- ----------------------------
-INSERT INTO `qrtz_scheduler_state` VALUES ('quartzScheduler', 'Exrick1534080302504', '1534080314417', '10000');
 
 -- ----------------------------
 -- Table structure for qrtz_simple_triggers
@@ -275,6 +273,28 @@ INSERT INTO `t_department` VALUES ('40652270295060480', '', '2018-08-11 18:29:57
 INSERT INTO `t_department` VALUES ('40389030113710080', '', '2018-08-11 01:03:56', '0', '', '2018-08-11 17:50:04', '40343262766043136', '1.00', '0', 'JAVA', '\0');
 INSERT INTO `t_department` VALUES ('40652338142121984', null, '2018-08-11 18:30:13', '0', null, '2018-08-11 18:30:13', '40652270295060480', '1.00', '0', '游客', '\0');
 
+-- ----------------------------
+-- Table structure for t_github
+-- ----------------------------
+DROP TABLE IF EXISTS `t_github`;
+CREATE TABLE `t_github` (
+  `id` varchar(255) NOT NULL,
+  `create_by` varchar(255) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `del_flag` int(11) DEFAULT NULL,
+  `update_by` varchar(255) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `avatar` varchar(255) DEFAULT NULL,
+  `is_related` bit(1) DEFAULT NULL,
+  `open_id` varchar(255) DEFAULT NULL,
+  `relate_username` varchar(255) DEFAULT NULL,
+  `username` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of t_github
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for t_log
@@ -301,6 +321,54 @@ CREATE TABLE `t_log` (
 -- ----------------------------
 -- Records of t_log
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for t_message
+-- ----------------------------
+DROP TABLE IF EXISTS `t_message`;
+CREATE TABLE `t_message` (
+  `id` varchar(255) NOT NULL,
+  `create_by` varchar(255) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `del_flag` int(11) DEFAULT NULL,
+  `update_by` varchar(255) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `create_send` bit(1) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `type` int(11) DEFAULT NULL,
+  `content` longtext,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of t_message
+-- ----------------------------
+INSERT INTO `t_message` VALUES ('43615268366192640', '', '2018-08-19 22:43:51', '0', '', '2018-08-24 23:02:13', '', '欢迎您注册账号使用X-Boot 点我查看使用须知', '0', '<p style=\"text-align: center;\">X-Boot是很棒的Web前后端分离开发平台，开源版本请遵循GPL v3.0开源协议，不得闭源，商用需求请联系作者签署授权协议。</p><p style=\"text-align: center;\">捐赠获取完整版：<a href=\"http://xpay.exrick.cn/pay?xboot\" target=\"_blank\" style=\"background-color: rgb(255, 255, 255);\">立即去捐赠获取</a></p><p style=\"text-align: center;\"><img src=\"https://i.loli.net/2018/08/24/5b801c8652227.png\" style=\"max-width:150px;\"><br></p><p style=\"text-align: center;\">（支持手机扫码支付）</p><p style=\"text-align: center;\">获取商用授权：<a href=\"http://wpa.qq.com/msgrd?v=3&amp;uin=1012139570&amp;site=qq&amp;menu=yes\" target=\"_blank\" style=\"background-color: rgb(255, 255, 255);\">立即联系作者获取商用授权</a></p>');
+
+-- ----------------------------
+-- Table structure for t_message_send
+-- ----------------------------
+DROP TABLE IF EXISTS `t_message_send`;
+CREATE TABLE `t_message_send` (
+  `id` varchar(255) NOT NULL,
+  `create_by` varchar(255) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `del_flag` int(11) DEFAULT NULL,
+  `update_by` varchar(255) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `message_id` varchar(255) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `user_id` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of t_message_send
+-- ----------------------------
+INSERT INTO `t_message_send` VALUES ('43615268663988224', null, '2018-08-19 22:43:51', '0', null, '2018-08-19 22:43:51', '43615268366192640', '0', '682265633886209');
+INSERT INTO `t_message_send` VALUES ('43615268663988225', null, '2018-08-19 22:43:51', '0', null, '2018-08-19 22:43:51', '43615268366192640', '0', '16739222421508096');
+INSERT INTO `t_message_send` VALUES ('43615268663988226', '', '2018-08-19 22:43:51', '0', '', '2018-08-24 12:41:24', '43615268366192640', '2', '4363087427670016');
+INSERT INTO `t_message_send` VALUES ('43615268663988227', '', '2018-08-19 22:43:51', '0', '', '2018-08-21 18:24:43', '43615268366192640', '1', '682265633886208');
 
 -- ----------------------------
 -- Table structure for t_permission
@@ -337,36 +405,36 @@ INSERT INTO `t_permission` VALUES ('5129710648430593', '', '2018-06-04 19:02:32'
 INSERT INTO `t_permission` VALUES ('5129710648430594', '', '2018-06-04 19:02:35', '0', '', '2018-08-23 17:31:27', '', 'role-manage', '5129710648430592', '0', '1.50', 'sys/role-manage/roleManage', 'role-manage', '角色管理', 'md-contacts', '2', '', '0', '');
 INSERT INTO `t_permission` VALUES ('5129710648430595', '', '2018-06-04 19:02:37', '0', '', '2018-08-23 17:31:33', '', 'menu-manage', '5129710648430592', '0', '1.60', 'sys/menu-manage/menuManage', 'menu-manage', '菜单权限管理', 'md-menu', '2', '', '0', '');
 INSERT INTO `t_permission` VALUES ('41375330996326400', '', '2018-08-13 18:23:08', '0', '', '2018-08-15 17:13:23', '', 'simple-table', '41373430515240960', '0', '4.10', 'xboot-vue-template/simple-table/simpleTable', 'simple-table', '简单表格', 'ios-grid-outline', '2', '', '0', '');
-INSERT INTO `t_permission` VALUES ('15701400130424832', '', '2018-06-03 22:04:06', '0', '', '2018-08-13 15:15:47', '', '', '5129710648430593', '1', '1.11', '', '/xboot/user/admin/add', '添加用户', '', '3', 'add', '0', '');
+INSERT INTO `t_permission` VALUES ('15701400130424832', '', '2018-06-03 22:04:06', '0', '', '2018-09-19 22:16:44', '', '', '5129710648430593', '1', '1.11', '', '/xboot/user/admin/add*', '添加用户', '', '3', 'add', '0', '');
 INSERT INTO `t_permission` VALUES ('15701915807518720', '', '2018-06-03 22:06:09', '0', '', '2018-06-06 14:46:51', '', '', '5129710648430593', '1', '1.13', '', '/xboot/user/admin/disable/**', '禁用用户', '', '3', 'disable', '0', null);
 INSERT INTO `t_permission` VALUES ('15708892205944832', '', '2018-06-03 22:33:52', '0', '', '2018-06-28 16:44:48', '', '', '5129710648430593', '1', '1.14', '', '/xboot/user/admin/enable/**', '启用用户', '', '3', 'enable', '0', null);
 INSERT INTO `t_permission` VALUES ('16392452747300864', '', '2018-06-05 19:50:06', '0', '', '2018-08-13 18:15:39', '', 'access', '', '0', '4.00', 'Main', '/access', '权限按钮测试页', 'md-lock', '1', '', '0', '');
-INSERT INTO `t_permission` VALUES ('16392767785668608', '', '2018-06-05 19:51:21', '0', '', '2018-08-13 18:15:46', '', 'access_index', '16392452747300864', '0', '4.10', 'access/access', 'index', '权限按钮测试页', 'md-lock', '2', '', '0', '');
+INSERT INTO `t_permission` VALUES ('16392767785668608', '', '2018-06-05 19:51:21', '0', '', '2018-09-21 23:31:06', '', 'access_index', '16392452747300864', '0', '4.10', 'access/access', 'index', '权限按钮测试页', 'md-lock', '2', '', '0', '');
 INSERT INTO `t_permission` VALUES ('16438800255291392', '', '2018-06-05 22:54:18', '0', '', '2018-08-13 18:15:51', '', '', '16392767785668608', '1', '4.11', '', 'test-add', '添加按钮测试', '', '3', 'add', '0', '');
 INSERT INTO `t_permission` VALUES ('16438962738434048', '', '2018-06-05 22:54:55', '0', '', '2018-08-13 18:16:29', '', '', '16392767785668608', '1', '4.12', '', 'edit-test', '编辑按钮测试', '', '3', 'edit', '0', '');
 INSERT INTO `t_permission` VALUES ('16439068543946752', '', '2018-06-05 22:55:20', '0', '', '2018-08-13 18:16:12', '', '', '16392767785668608', '1', '4.13', '', 'delete-test', '删除按钮测试', '', '3', 'delete', '0', '');
-INSERT INTO `t_permission` VALUES ('16678126574637056', '', '2018-06-06 14:45:16', '0', '', '2018-06-06 14:46:45', '', '', '5129710648430593', '1', '1.12', '', '/xboot/user/admin/edit', '编辑用户', '', '3', 'edit', '0', null);
+INSERT INTO `t_permission` VALUES ('16678126574637056', '', '2018-06-06 14:45:16', '0', '', '2018-09-19 22:16:48', '', '', '5129710648430593', '1', '1.12', '', '/xboot/user/admin/edit*', '编辑用户', '', '3', 'edit', '0', '');
 INSERT INTO `t_permission` VALUES ('16678447719911424', '', '2018-06-06 14:46:32', '0', '', '2018-08-10 21:41:16', '', '', '5129710648430593', '1', '1.15', '', '/xboot/user/delByIds/**', '删除用户', '', '3', 'delete', '0', '');
-INSERT INTO `t_permission` VALUES ('16687383932047360', null, '2018-06-06 15:22:03', '0', null, '2018-06-06 15:22:03', null, null, '5129710648430594', '1', '1.21', null, '/xboot/role/save', '添加角色', null, '3', 'add', '0', null);
-INSERT INTO `t_permission` VALUES ('16689632049631232', null, '2018-06-06 15:30:59', '0', null, '2018-06-06 15:30:59', null, null, '5129710648430594', '1', '1.22', null, '/xboot/role/edit', '编辑角色', null, '3', 'edit', '0', null);
+INSERT INTO `t_permission` VALUES ('16687383932047360', '', '2018-06-06 15:22:03', '0', '', '2018-09-19 22:07:34', '', '', '5129710648430594', '1', '1.21', '', '/xboot/role/save*', '添加角色', '', '3', 'add', '0', '');
+INSERT INTO `t_permission` VALUES ('16689632049631232', '', '2018-06-06 15:30:59', '0', '', '2018-09-19 22:07:37', '', '', '5129710648430594', '1', '1.22', '', '/xboot/role/edit*', '编辑角色', '', '3', 'edit', '0', '');
 INSERT INTO `t_permission` VALUES ('16689745006432256', '', '2018-06-06 15:31:26', '0', '', '2018-08-10 21:41:23', '', '', '5129710648430594', '1', '1.23', '', '/xboot/role/delAllByIds/**', '删除角色', '', '3', 'delete', '0', '');
 INSERT INTO `t_permission` VALUES ('16689883993083904', null, '2018-06-06 15:31:59', '0', null, '2018-06-06 15:31:59', null, null, '5129710648430594', '1', '1.24', null, '/xboot/role/editRolePerm/**', '分配权限', null, '3', 'editPerm', '0', null);
-INSERT INTO `t_permission` VALUES ('16690313745666048', null, '2018-06-06 15:33:41', '0', null, '2018-06-06 15:33:41', null, null, '5129710648430594', '1', '1.25', null, '/xboot/role/setDefault', '设为默认角色', null, '3', 'setDefault', '0', null);
-INSERT INTO `t_permission` VALUES ('16694861252005888', null, '2018-06-06 15:51:46', '0', null, '2018-06-06 15:51:46', null, null, '5129710648430595', '1', '1.31', null, '/xboot/permission/add', '添加菜单', null, '3', 'add', '0', null);
-INSERT INTO `t_permission` VALUES ('16695107491205120', null, '2018-06-06 15:52:44', '0', null, '2018-06-06 15:52:44', null, null, '5129710648430595', '1', '1.32', null, '/xboot/permission/edit', '编辑菜单', null, '3', 'edit', '0', null);
+INSERT INTO `t_permission` VALUES ('16690313745666048', '', '2018-06-06 15:33:41', '0', '', '2018-09-19 22:07:46', '', '', '5129710648430594', '1', '1.25', '', '/xboot/role/setDefault*', '设为默认角色', '', '3', 'setDefault', '0', '');
+INSERT INTO `t_permission` VALUES ('16694861252005888', '', '2018-06-06 15:51:46', '0', '', '2018-09-19 22:07:52', '', '', '5129710648430595', '1', '1.31', '', '/xboot/permission/add*', '添加菜单', '', '3', 'add', '0', '');
+INSERT INTO `t_permission` VALUES ('16695107491205120', '', '2018-06-06 15:52:44', '0', '', '2018-09-19 22:07:57', '', '', '5129710648430595', '1', '1.32', '', '/xboot/permission/edit*', '编辑菜单', '', '3', 'edit', '0', '');
 INSERT INTO `t_permission` VALUES ('16695243126607872', '', '2018-06-06 15:53:17', '0', '', '2018-08-10 21:41:33', '', '', '5129710648430595', '1', '1.33', '', '/xboot/permission/delByIds/**', '删除菜单', '', '3', 'delete', '0', '');
 INSERT INTO `t_permission` VALUES ('41371711400054784', '', '2018-08-13 18:08:45', '0', '', '2018-08-14 12:31:15', '', 'actuator', '39915540965232640', '0', '2.30', 'sys/actuator/actuator', 'actuator', 'Actuator监控[付费]', 'logo-angular', '2', '', '0', '');
 INSERT INTO `t_permission` VALUES ('41370251991977984', null, '2018-08-13 18:02:57', '0', null, '2018-08-13 18:02:57', null, 'quartz-job', '39915540965232640', '0', '2.10', 'sys/quartz-manage/quartzManage', 'quartz-job', '定时任务', 'md-time', '2', '', '0', null);
-INSERT INTO `t_permission` VALUES ('25014528525733888', null, '2018-06-29 14:51:09', '0', null, '2018-06-29 14:51:09', null, null, '5129710648430593', '1', '1.16', null, 'upload', '上传图片', null, '3', 'upload', '0', null);
+INSERT INTO `t_permission` VALUES ('25014528525733888', '', '2018-06-29 14:51:09', '0', '', '2018-09-19 22:16:59', '', '', '5129710648430593', '1', '1.16', '', 'upload*', '上传图片', '', '3', 'upload', '0', '');
 INSERT INTO `t_permission` VALUES ('39915540965232640', null, '2018-08-09 17:42:28', '0', null, '2018-08-09 17:42:28', null, 'monitor', null, '0', '2.00', 'Main', '/monitor', '系统监控', 'ios-analytics', '1', null, '0', null);
-INSERT INTO `t_permission` VALUES ('39916171171991552', '', '2018-08-09 17:44:57', '0', '', '2018-08-13 17:58:05', '', 'druid', '39915540965232640', '0', '2.40', 'sys/monitor/monitor', 'druid', 'SQL监控', 'md-analytics', '2', '', '0', 'http://localhost:8888/druid/login.html');
-INSERT INTO `t_permission` VALUES ('39918482854252544', '', '2018-08-09 17:54:08', '0', '', '2018-08-13 17:58:02', '', 'swagger', '39915540965232640', '0', '2.50', 'sys/monitor/monitor', 'swagger', '接口文档', 'md-document', '2', '', '0', 'http://127.0.0.1:8888/swagger-ui.html');
+INSERT INTO `t_permission` VALUES ('39916171171991552', '', '2018-08-09 17:44:57', '0', '', '2018-08-25 12:13:11', '', 'druid', '39915540965232640', '0', '2.40', 'sys/monitor/monitor', 'druid', 'SQL监控', 'md-analytics', '2', '', '0', 'http://xboot.exrick.cn/druid/login.html');
+INSERT INTO `t_permission` VALUES ('39918482854252544', '', '2018-08-09 17:54:08', '0', '', '2018-08-25 12:13:27', '', 'swagger', '39915540965232640', '0', '2.50', 'sys/monitor/monitor', 'swagger', '接口文档', 'md-document', '2', '', '0', 'http://xboot.exrick.cn/swagger-ui.html');
 INSERT INTO `t_permission` VALUES ('40238597734928384', null, '2018-08-10 15:06:10', '0', null, '2018-08-10 15:06:10', null, 'department-manage', '5129710648430592', '0', '1.20', 'sys/department-manage/departmentManage', 'department-manage', '部门管理', 'md-git-branch', '2', '', '0', null);
 INSERT INTO `t_permission` VALUES ('42082442672082944', '', '2018-08-15 17:12:57', '0', '', '2018-08-15 17:13:12', '', 'new-window', '41373430515240960', '0', '4.50', 'xboot-vue-template/new-window/newWindow', 'new-window', '新窗口操作[付费]', 'ios-browsers', '2', '', '0', '');
 INSERT INTO `t_permission` VALUES ('41373430515240960', '', '2018-08-13 18:15:35', '0', '', '2018-08-15 14:29:48', '', 'xboot-vue-template', '', '0', '3.00', 'Main', '/xboot-vue-template', '前端Vue模版', 'ios-albums', '1', '', '0', '');
 INSERT INTO `t_permission` VALUES ('41363147411427328', '', '2018-08-13 17:34:43', '0', '', '2018-08-20 20:05:21', '', 'log-manage', '39915540965232640', '0', '2.20', 'sys/log-manage/logManage', 'log-manage', '操作日志管理', 'md-list-box', '2', '', '0', '');
 INSERT INTO `t_permission` VALUES ('41363537456533504', '', '2018-08-13 17:36:16', '0', '', '2018-08-13 17:56:11', '', '', '41363147411427328', '1', '2.11', '', '/xboot/log/delByIds/**', '删除日志', '', '3', 'delete', '0', '');
-INSERT INTO `t_permission` VALUES ('41364927394353152', '', '2018-08-13 17:41:48', '0', '', '2018-08-13 17:56:17', '', '', '41363147411427328', '1', '2.12', '', '/xboot/log/delAll', '清空日志', '', '3', 'undefined', '0', '');
+INSERT INTO `t_permission` VALUES ('41364927394353152', '', '2018-08-13 17:41:48', '0', '', '2018-09-19 22:08:57', '', '', '41363147411427328', '1', '2.12', '', '/xboot/log/delAll*', '清空日志', '', '3', 'undefined', '0', '');
 INSERT INTO `t_permission` VALUES ('41376192166629376', '', '2018-08-13 18:26:33', '0', '', '2018-08-15 17:13:34', '', 'search-table', '41373430515240960', '0', '4.20', 'xboot-vue-template/search-table/searchTable', 'search-table', '搜索表格[付费]', 'md-grid', '2', '', '0', '');
 INSERT INTO `t_permission` VALUES ('41377034236071936', '', '2018-08-13 18:29:54', '0', '', '2018-08-15 17:13:40', '', 'complex-table', '41373430515240960', '0', '4.30', 'xboot-vue-template/complex-table/complexTable', 'complex-table', '复杂表格[付费]', 'ios-grid', '2', '', '0', '');
 INSERT INTO `t_permission` VALUES ('41378916912336896', '', '2018-08-13 18:37:23', '0', '', '2018-08-13 22:20:19', '', 'tree', '41373430515240960', '0', '4.40', 'xboot-vue-template/tree/tree', 'tree', '树形结构[付费]', 'ios-git-network', '2', '', '0', '');
@@ -375,19 +443,41 @@ INSERT INTO `t_permission` VALUES ('42087054753927168', '', '2018-08-15 17:31:16
 INSERT INTO `t_permission` VALUES ('43117268627886080', '', '2018-08-18 13:44:58', '0', '', '2018-08-18 20:55:04', '', 'message-manage', '5129710648430592', '0', '1.30', 'sys/message-manage/messageManage', 'message-manage', '消息管理[付费]', 'md-mail', '2', '', '0', '');
 INSERT INTO `t_permission` VALUES ('44986029924421632', '', '2018-08-23 17:30:46', '0', '', '2018-08-23 17:31:02', '', 'social-manage', '5129710648430592', '0', '1.40', 'sys/social-manage/socialManage', 'social-manage', '社交账号绑定[付费]', 'md-share', '2', '', '0', '');
 INSERT INTO `t_permission` VALUES ('45069342940860416', '', '2018-08-23 23:01:49', '0', '', '2018-08-24 10:01:09', '', '', '44986029924421632', '1', '1.42', '', '无', '查看社交账号数据', '', '3', 'view', '0', '');
-INSERT INTO `t_permission` VALUES ('45235228800716800', null, '2018-08-24 10:01:00', '0', null, '2018-08-24 10:01:00', null, '', '44986029924421632', '1', '1.41', '', '/xboot/relate/delByIds', '删除解绑', '', '3', 'delete', '0', null);
-INSERT INTO `t_permission` VALUES ('45235621697949696', null, '2018-08-24 10:02:33', '0', null, '2018-08-24 10:02:33', null, '', '40238597734928384', '1', '1.21', '', '/xboot/department/add', '添加部门', '', '3', 'add', '0', null);
-INSERT INTO `t_permission` VALUES ('45235787867885568', null, '2018-08-24 10:03:13', '0', null, '2018-08-24 10:03:13', null, '', '40238597734928384', '1', '1.22', '', '/xboot/department/edit', '编辑部门', '', '3', 'edit', '0', null);
+INSERT INTO `t_permission` VALUES ('45235228800716800', '', '2018-08-24 10:01:00', '0', '', '2018-09-19 22:07:23', '', '', '44986029924421632', '1', '1.41', '', '/xboot/relate/delByIds*', '删除解绑', '', '3', 'delete', '0', '');
+INSERT INTO `t_permission` VALUES ('45235621697949696', '', '2018-08-24 10:02:33', '0', '', '2018-09-19 22:06:57', '', '', '40238597734928384', '1', '1.21', '', '/xboot/department/add*', '添加部门', '', '3', 'add', '0', '');
+INSERT INTO `t_permission` VALUES ('45235787867885568', '', '2018-08-24 10:03:13', '0', '', '2018-09-19 22:07:02', '', '', '40238597734928384', '1', '1.22', '', '/xboot/department/edit*', '编辑部门', '', '3', 'edit', '0', '');
 INSERT INTO `t_permission` VALUES ('45235939278065664', null, '2018-08-24 10:03:49', '0', null, '2018-08-24 10:03:49', null, '', '40238597734928384', '1', '1.23', '', '/xboot/department/delByIds/*', '删除部门', '', '3', 'delete', '0', null);
-INSERT INTO `t_permission` VALUES ('45236734832676864', null, '2018-08-24 10:06:59', '0', null, '2018-08-24 10:06:59', null, '', '43117268627886080', '1', '1.31', '', '/xboot/message/add', '添加消息', '', '3', 'add', '0', null);
-INSERT INTO `t_permission` VALUES ('45237010692050944', null, '2018-08-24 10:08:04', '0', null, '2018-08-24 10:08:04', null, '', '43117268627886080', '1', '1.32', '', '/xboot/message/edit', '编辑消息', '', '3', 'edit', '0', null);
+INSERT INTO `t_permission` VALUES ('45236734832676864', '', '2018-08-24 10:06:59', '0', '', '2018-09-19 22:07:07', '', '', '43117268627886080', '1', '1.31', '', '/xboot/message/add*', '添加消息', '', '3', 'add', '0', '');
+INSERT INTO `t_permission` VALUES ('45237010692050944', '', '2018-08-24 10:08:04', '0', '', '2018-09-19 22:07:12', '', '', '43117268627886080', '1', '1.32', '', '/xboot/message/edit*', '编辑消息', '', '3', 'edit', '0', '');
 INSERT INTO `t_permission` VALUES ('45237170029465600', null, '2018-08-24 10:08:42', '0', null, '2018-08-24 10:08:42', null, '', '43117268627886080', '1', '1.33', '', '/xboot/message/delByIds/*', '删除消息', '', '3', 'delete', '0', null);
-INSERT INTO `t_permission` VALUES ('45264987354042368', null, '2018-08-24 11:59:14', '0', null, '2018-08-24 11:59:14', null, '', '41370251991977984', '1', '2.11', '', '/xboot/quartzJob/add', '添加定时任务', '', '3', 'add', '0', null);
-INSERT INTO `t_permission` VALUES ('45265487029866496', null, '2018-08-24 12:01:14', '0', null, '2018-08-24 12:01:14', null, '', '41370251991977984', '1', '2.12', '', '/xboot/quartzJob/edit', '编辑定时任务', '', '3', 'edit', '0', null);
-INSERT INTO `t_permission` VALUES ('45265762415284224', '', '2018-08-24 12:02:19', '0', '', '2018-08-24 12:03:00', '', '', '41370251991977984', '1', '2.13', '', '/xboot/quartzJob/pause', '暂停定时任务', '', '3', 'disable', '0', '');
-INSERT INTO `t_permission` VALUES ('45265886315024384', null, '2018-08-24 12:02:49', '0', null, '2018-08-24 12:02:49', null, '', '41370251991977984', '1', '2.14', '', '/xboot/quartzJob/resume', '恢复定时任务', '', '3', 'enable', '0', null);
+INSERT INTO `t_permission` VALUES ('45264987354042368', '', '2018-08-24 11:59:14', '0', '', '2018-09-19 22:08:11', '', '', '41370251991977984', '1', '2.11', '', '/xboot/quartzJob/add*', '添加定时任务', '', '3', 'add', '0', '');
+INSERT INTO `t_permission` VALUES ('45265487029866496', '', '2018-08-24 12:01:14', '0', '', '2018-09-19 22:08:17', '', '', '41370251991977984', '1', '2.12', '', '/xboot/quartzJob/edit*', '编辑定时任务', '', '3', 'edit', '0', '');
+INSERT INTO `t_permission` VALUES ('45265762415284224', '', '2018-08-24 12:02:19', '0', '', '2018-09-19 22:08:24', '', '', '41370251991977984', '1', '2.13', '', '/xboot/quartzJob/pause*', '暂停定时任务', '', '3', 'disable', '0', '');
+INSERT INTO `t_permission` VALUES ('45265886315024384', '', '2018-08-24 12:02:49', '0', '', '2018-09-19 22:09:13', '', '', '41370251991977984', '1', '2.14', '', '/xboot/quartzJob/resume*', '恢复定时任务', '', '3', 'enable', '0', '');
 INSERT INTO `t_permission` VALUES ('45266070000373760', null, '2018-08-24 12:03:33', '0', null, '2018-08-24 12:03:33', null, '', '41370251991977984', '1', '2.15', '', '/xboot/quartzJob/delByIds/*', '删除定时任务', '', '3', 'delete', '0', null);
 
+-- ----------------------------
+-- Table structure for t_qq
+-- ----------------------------
+DROP TABLE IF EXISTS `t_qq`;
+CREATE TABLE `t_qq` (
+  `id` varchar(255) NOT NULL,
+  `create_by` varchar(255) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `del_flag` int(11) DEFAULT NULL,
+  `update_by` varchar(255) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `avatar` varchar(255) DEFAULT NULL,
+  `is_related` bit(1) DEFAULT NULL,
+  `open_id` varchar(255) DEFAULT NULL,
+  `relate_username` varchar(255) DEFAULT NULL,
+  `username` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of t_qq
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for t_quartz_job
@@ -601,3 +691,25 @@ INSERT INTO `t_user_role` VALUES ('40679199995858945', null, '2018-08-11 20:16:5
 INSERT INTO `t_user_role` VALUES ('40679257113890816', null, '2018-08-11 20:17:11', '0', null, '2018-08-11 20:17:11', '496138616573953', '4363087427670016');
 INSERT INTO `t_user_role` VALUES ('40720091490291713', null, '2018-08-11 22:59:27', '0', null, '2018-08-11 22:59:27', '496138616573953', '682265633886209');
 
+-- ----------------------------
+-- Table structure for t_weibo
+-- ----------------------------
+DROP TABLE IF EXISTS `t_weibo`;
+CREATE TABLE `t_weibo` (
+  `id` varchar(255) NOT NULL,
+  `create_by` varchar(255) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `del_flag` int(11) DEFAULT NULL,
+  `update_by` varchar(255) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `avatar` varchar(255) DEFAULT NULL,
+  `is_related` bit(1) DEFAULT NULL,
+  `open_id` varchar(255) DEFAULT NULL,
+  `relate_username` varchar(255) DEFAULT NULL,
+  `username` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of t_weibo
+-- ----------------------------
