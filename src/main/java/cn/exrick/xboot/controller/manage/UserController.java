@@ -348,6 +348,9 @@ public class UserController {
     public Result<Object> delAllByIds(@PathVariable String[] ids){
 
         for(String id:ids){
+            User u = userService.get(id);
+            //删除缓存
+            redisTemplate.delete("user::"+u.getUsername());
             userService.delete(id);
             //删除关联角色
             userRoleService.deleteByUserId(id);
