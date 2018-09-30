@@ -91,7 +91,9 @@ xboot:
     accessKey: 你的accessKey
     secretKey: 你的secretKey
     bucket: 你的空间名
-    domain: 你的测试域名，如http://p77xsahe9.bkt.clouddn.com/
+    domain: 你的测试域名，如http://p77xsahe9.bkt.clouddn.com
+    # 存储区域 -1自动判断 0华东 1华北 2华南 3北美 4东南亚
+    zone: -1
   # mob api配置 mob官网注册申请即可
   mob:
     appKey: 你的appKey

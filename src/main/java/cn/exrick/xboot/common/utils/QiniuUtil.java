@@ -1,5 +1,6 @@
 package cn.exrick.xboot.common.utils;
 
+import cn.exrick.xboot.exception.XbootException;
 import com.google.gson.Gson;
 import com.qiniu.common.QiniuException;
 import com.qiniu.common.Zone;
@@ -43,12 +44,36 @@ public class QiniuUtil {
     @Value("${xboot.qiniu.domain}")
     private String domain;
 
+    @Value("${xboot.qiniu.zone}")
+    private Integer zone;
+
     /**
      * 构造一个带指定Zone对象的配置类 zone2华南
      */
-    private static Configuration cfg = new Configuration(Zone.zone2());
+    public Configuration getConfiguration(){
 
-    private static UploadManager uploadManager = new UploadManager(cfg);
+        Configuration cfg = null;
+        if(zone.equals(0)){
+            cfg = new Configuration(Zone.zone0());
+        }else if(zone.equals(1)){
+            cfg = new Configuration(Zone.zone1());
+        }else if(zone.equals(2)){
+            cfg = new Configuration(Zone.zone2());
+        }else if(zone.equals(3)){
+            cfg = new Configuration(Zone.zoneNa0());
+        }else if(zone.equals(4)){
+            cfg = new Configuration(Zone.zoneAs0());
+        }else {
+            cfg = new Configuration(Zone.autoZone());
+        }
+        return cfg;
+    }
+
+    public UploadManager getUploadManager(Configuration cfg){
+
+        UploadManager uploadManager = new UploadManager(cfg);
+        return uploadManager;
+    }
 
     /**
      * 文件路径上传
@@ -61,20 +86,12 @@ public class QiniuUtil {
         Auth auth = Auth.create(accessKey, secretKey);
         String upToken = auth.uploadToken(bucket);
         try {
-            Response response = uploadManager.put(filePath, key, upToken);
-            //解析上传成功的结果
+            Response response = getUploadManager(getConfiguration()).put(filePath, key, upToken);
             DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
-            return domain + putRet.key;
+            return domain + "/" + putRet.key;
         } catch (QiniuException ex) {
             Response r = ex.response;
-            log.warn(r.toString());
-            try {
-                log.warn(r.bodyString());
-                return r.bodyString();
-            } catch (QiniuException ex2) {
-                //ignore
-            }
-            return r.toString();
+            throw new XbootException("上传文件出错，请检查七牛云配置，" + r.toString());
         }
     }
 
@@ -89,19 +106,12 @@ public class QiniuUtil {
         Auth auth = Auth.create(accessKey, secretKey);
         String upToken = auth.uploadToken(bucket);
         try {
-            Response response = uploadManager.put(file, key, upToken, null, null);
-            //解析上传成功的结果
+            Response response = getUploadManager(getConfiguration()).put(file, key, upToken, null, null);
             DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
-            return domain + putRet.key;
+            return domain + "/" + putRet.key;
         } catch (QiniuException ex) {
             Response r = ex.response;
-            try {
-                log.warn(r.bodyString());
-                return r.bodyString();
-            } catch (QiniuException ex2) {
-                //ignore
-            }
-            return r.toString();
+            throw new XbootException("上传文件出错，请检查七牛云配置，" + r.toString());
         }
     }
 
@@ -113,7 +123,7 @@ public class QiniuUtil {
     public String qiniuBase64Upload(String data64) {
 
         String key = renamePic("");
-        //服务端http://up-z2.qiniup.com
+        // 服务端http://up-z2.qiniup.com 此处存储区域需自行修改
         String url = "http://up-z2.qiniup.com/putb64/-1/key/" + UrlSafeBase64.encodeToString(key);
         RequestBody rb = RequestBody.create(null, data64);
         Request request = new Request.Builder().
@@ -126,9 +136,9 @@ public class QiniuUtil {
         try {
             response = client.newCall(request).execute();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new XbootException("上传文件出错，请检查七牛云配置，" + e.toString());
         }
-        return domain + key;
+        return domain + "/" + key;
     }
 
     public String getUpToken() {

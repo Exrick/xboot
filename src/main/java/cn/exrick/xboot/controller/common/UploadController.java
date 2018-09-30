@@ -50,23 +50,17 @@ public class UploadController {
             throw new XbootException("上传那么多干嘛，等等再传吧");
         }
 
-        String imagePath = null;
+        String result = null;
         String fileName = qiniuUtil.renamePic(file.getOriginalFilename());
         try {
             FileInputStream inputStream = (FileInputStream) file.getInputStream();
             //上传七牛云服务器
-            imagePath= qiniuUtil.qiniuInputStreamUpload(inputStream,fileName);
-            if(StrUtil.isBlank(imagePath)){
-                return new ResultUtil<Object>().setErrorMsg("上传失败，请检查七牛云配置");
-            }
-            if(imagePath.contains("error")){
-                return new ResultUtil<Object>().setErrorMsg(imagePath);
-            }
+            result = qiniuUtil.qiniuInputStreamUpload(inputStream,fileName);
         } catch (Exception e) {
             log.error(e.toString());
             return new ResultUtil<Object>().setErrorMsg(e.toString());
         }
 
-        return new ResultUtil<Object>().setData(imagePath);
+        return new ResultUtil<Object>().setData(result);
     }
 }
