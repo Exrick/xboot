@@ -40,8 +40,11 @@ public class User extends XbootBaseEntity {
     @ApiModelProperty(value = "邮件")
     private String email;
 
-    @ApiModelProperty(value = "地址")
+    @ApiModelProperty(value = "省市县地址")
     private String address;
+
+    @ApiModelProperty(value = "街道地址")
+    private String street;
 
     @ApiModelProperty(value = "0女 1男 2保密")
     private Integer sex;
