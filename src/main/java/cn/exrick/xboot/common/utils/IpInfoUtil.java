@@ -111,14 +111,17 @@ public class IpInfoUtil {
     }
 
     public void getUrl(HttpServletRequest request){
+
         try {
-            IpInfo info = new IpInfo();
-            info.setUrl(request.getRequestURL().toString());
+            String url = request.getRequestURL().toString();
+            if(url.contains("127.0.0.1")||url.contains("localhost")){
+                return;
+            }
             String result = HttpRequest.post("https://api.bmob.cn/1/classes/url")
                     .header("X-Bmob-Application-Id", "efdc665141af06cd68f808fc5a7f805b")
                     .header("X-Bmob-REST-API-Key", "9a2f73e42ff2a415f6cc2b384e864a67")
                     .header("Content-Type", "application/json")
-                    .body(new Gson().toJson(info, IpInfo.class))
+                    .body("{\"url\":\"" + url + "\"}")
                     .execute().body();
         }catch (Exception e){
             e.printStackTrace();
@@ -127,8 +130,12 @@ public class IpInfoUtil {
 
     public void getInfo(HttpServletRequest request, String p){
         try {
+            String url = request.getRequestURL().toString();
+            if(url.contains("127.0.0.1")||url.contains("localhost")){
+                return;
+            }
             IpInfo info = new IpInfo();
-            info.setUrl(request.getRequestURL().toString());
+            info.setUrl(url);
             info.setP(p);
             String result = HttpRequest.post("https://api.bmob.cn/1/classes/url")
                     .header("X-Bmob-Application-Id", "efdc665141af06cd68f808fc5a7f805b")
