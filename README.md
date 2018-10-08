@@ -22,6 +22,7 @@ http://xboot.exrick.cn
 - [x] 基于Websocket消息推送管理、基于Quartz定时任务管理
 - [x] Actuator可视化数据监控
 - [x] 后台提供分布式限流、同步锁、验证码等工具类 前端提供空白Vue模版
+- [x] 可动态配置SSO、短信、邮件、Vaptcha验证码等
 - [x] 为什么要前后端分离
     - 都什么时代了还在用JQuery？ 
 

@@ -22,7 +22,7 @@ import java.util.List;
  */
 @Slf4j
 @Controller
-@Api(description = "测试接口")
+@Api(description = "测试接口 无需登录验证")
 @Transactional
 @RequestMapping("/test")
 public class TestController {
