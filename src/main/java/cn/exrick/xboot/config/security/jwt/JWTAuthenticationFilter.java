@@ -2,7 +2,7 @@ package cn.exrick.xboot.config.security.jwt;
 
 import cn.exrick.xboot.common.constant.SecurityConstant;
 import cn.exrick.xboot.common.utils.ResponseUtil;
-import cn.exrick.xboot.exception.XbootException;
+import cn.exrick.xboot.config.exception.XbootException;
 import cn.hutool.core.util.StrUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

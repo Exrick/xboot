@@ -1,7 +1,7 @@
 package ${entity.daoPackage};
 
 import cn.exrick.xboot.base.XbootBaseDao;
-import cn.exrick.xboot.entity.${entity.className};
+import ${entity.entityPackage}.${entity.className};
 
 import java.util.List;
 

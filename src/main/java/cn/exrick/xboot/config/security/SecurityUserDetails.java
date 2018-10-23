@@ -1,11 +1,9 @@
 package cn.exrick.xboot.config.security;
 
 import cn.exrick.xboot.common.constant.CommonConstant;
-import cn.exrick.xboot.common.utils.JasyptUtil;
-import cn.exrick.xboot.entity.Permission;
-import cn.exrick.xboot.entity.Role;
-import cn.exrick.xboot.entity.User;
-import cn.hutool.core.collection.CollUtil;
+import cn.exrick.xboot.modules.base.entity.Permission;
+import cn.exrick.xboot.modules.base.entity.Role;
+import cn.exrick.xboot.modules.base.entity.User;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;

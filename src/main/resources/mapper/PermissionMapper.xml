@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.exrick.xboot.dao.mapper.PermissionMapper">
+<mapper namespace="cn.exrick.xboot.modules.base.dao.mapper.PermissionMapper">
 
-    <select id="findByUserId" resultType="cn.exrick.xboot.entity.Permission">
+    <select id="findByUserId" resultType="cn.exrick.xboot.modules.base.entity.Permission">
       SELECT DISTINCT p.id, p.name, p.title, p.path, p.icon, p.type, p.component, p.level, p.button_type, p.parent_id, p.sort_order, p.description, p.status, p.url
       FROM t_user u
       LEFT JOIN t_user_role ur ON u.id = ur.user_id
@@ -12,7 +12,7 @@
       ORDER BY p.sort_order ASC
     </select>
     
-    <select id="findByRoleId" resultType="cn.exrick.xboot.entity.Permission">
+    <select id="findByRoleId" resultType="cn.exrick.xboot.modules.base.entity.Permission">
       SELECT p.id, p.name, p.title, p.path, p.icon, p.type, p.component, p.level, p.button_type, p.parent_id, p.sort_order, p.description, p.status, p.url
       FROM t_role_permission rp
       LEFT JOIN t_permission p ON p.id = rp.permission_id

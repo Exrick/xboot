@@ -1,8 +1,8 @@
 package ${entity.serviceImplPackage};
 
-import cn.exrick.xboot.dao.${entity.className}Dao;
-import cn.exrick.xboot.entity.${entity.className};
-import cn.exrick.xboot.service.${entity.className}Service;
+import ${entity.daoPackage}.${entity.className}Dao;
+import ${entity.entityPackage}.${entity.className};
+import ${entity.servicePackage}.${entity.className}Service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

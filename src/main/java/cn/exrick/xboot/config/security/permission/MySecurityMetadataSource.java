@@ -1,8 +1,8 @@
 package cn.exrick.xboot.config.security.permission;
 
 import cn.exrick.xboot.common.constant.CommonConstant;
-import cn.exrick.xboot.entity.Permission;
-import cn.exrick.xboot.service.PermissionService;
+import cn.exrick.xboot.modules.base.entity.Permission;
+import cn.exrick.xboot.modules.base.service.PermissionService;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

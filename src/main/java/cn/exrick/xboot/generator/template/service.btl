@@ -1,7 +1,7 @@
 package ${entity.servicePackage};
 
 import cn.exrick.xboot.base.XbootBaseService;
-import cn.exrick.xboot.entity.${entity.className};
+import ${entity.entityPackage}.${entity.className};
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
