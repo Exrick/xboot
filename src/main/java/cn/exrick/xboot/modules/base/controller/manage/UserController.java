@@ -180,7 +180,13 @@ public class UserController {
             redisTemplate.delete("user::"+u.getUsername());
         }
 
-        //TODO 未判断手机号邮箱唯一
+        // 若修改了手机和邮箱判断是否唯一
+        if(!old.getMobile().equals(u.getMobile())&&userService.findByMobile(u.getMobile())!=null){
+            return new ResultUtil<Object>().setErrorMsg("该手机号已绑定其他账户");
+        }
+        if(!old.getEmail().equals(u.getEmail())&&userService.findByMobile(u.getEmail())!=null){
+            return new ResultUtil<Object>().setErrorMsg("该邮箱已绑定其他账户");
+        }
 
         u.setPassword(old.getPassword());
         User user=userService.update(u);

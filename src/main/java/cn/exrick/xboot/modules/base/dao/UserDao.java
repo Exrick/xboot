@@ -12,20 +12,25 @@ import java.util.List;
 public interface UserDao extends XbootBaseDao<User,String> {
 
     /**
-     * 通过用户名和状态获取用户
+     * 通过用户名获取用户
      * @param username
-     * @param status
      * @return
      */
-    List<User> findByUsernameAndStatus(String username, Integer status);
+    List<User> findByUsername(String username);
 
     /**
-     * 通过状态和类型获取用户
-     * @param status
-     * @param type
+     * 通过手机获取用户
+     * @param mobile
      * @return
      */
-    List<User> findByStatusAndType(Integer status, Integer type);
+    List<User> findByMobile(String mobile);
+
+    /**
+     * 通过邮件获取用户
+     * @param email
+     * @return
+     */
+    List<User> findByEmail(String email);
 
     /**
      * 通过部门id获取
