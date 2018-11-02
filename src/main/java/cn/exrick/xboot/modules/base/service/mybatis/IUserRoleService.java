@@ -28,5 +28,6 @@ public interface IUserRoleService extends IService<UserRole> {
      * @param userId
      * @return
      */
+    @Cacheable(key = "'depIds:'+#userId")
     List<String> findDepIdsByUserId(String userId);
 }

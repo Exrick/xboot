@@ -38,4 +38,10 @@ public class RoleDepartmentServiceImpl implements RoleDepartmentService {
 
         roleDepartmentDao.deleteByRoleId(roleId);
     }
+
+    @Override
+    public void deleteByDepartmentId(String departmentId) {
+
+        roleDepartmentDao.deleteByDepartmentId(departmentId);
+    }
 }

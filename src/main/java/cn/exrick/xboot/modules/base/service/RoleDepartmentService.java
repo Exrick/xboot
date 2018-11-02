@@ -23,4 +23,10 @@ public interface RoleDepartmentService extends XbootBaseService<RoleDepartment,S
      * @param roleId
      */
     void deleteByRoleId(String roleId);
+
+    /**
+     * 通过角色id删除
+     * @param departmentId
+     */
+    void deleteByDepartmentId(String departmentId);
 }

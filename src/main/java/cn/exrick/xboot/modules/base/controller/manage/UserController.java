@@ -206,6 +206,7 @@ public class UserController {
         }
         //手动删除缓存
         redisTemplate.delete("userRole::"+u.getId());
+        redisTemplate.delete("userRole::depIds:"+u.getId());
         return new ResultUtil<Object>().setSuccessMsg("修改成功");
     }
 
@@ -354,6 +355,7 @@ public class UserController {
             //删除缓存
             redisTemplate.delete("user::" + u.getUsername());
             redisTemplate.delete("userRole::" + u.getId());
+            redisTemplate.delete("userRole::depIds:" + u.getId());
             redisTemplate.delete("permission::userMenuList:" + u.getId());
             userService.delete(id);
             //删除关联角色
