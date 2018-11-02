@@ -23,10 +23,4 @@ public class IPermissionServiceImpl extends ServiceImpl<PermissionMapper, Permis
 
         return permissionMapper.findByUserId(userId);
     }
-
-    @Override
-    public List<Permission> findByRoleId(String roleId) {
-
-        return permissionMapper.findByRoleId(roleId);
-    }
 }

@@ -49,6 +49,10 @@ public class User extends XbootBaseEntity {
     @ApiModelProperty(value = "0女 1男 2保密")
     private Integer sex;
 
+    @ApiModelProperty(value = "密码强度")
+    @Column(length=2)
+    private String passStrength;
+
     @ApiModelProperty(value = "用户头像")
     @Column(length=1000)
     private String avatar = CommonConstant.USER_DEFAULT_AVATAR;

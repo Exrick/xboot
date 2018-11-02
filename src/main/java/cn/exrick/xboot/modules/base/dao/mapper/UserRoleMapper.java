@@ -18,4 +18,11 @@ public interface UserRoleMapper extends BaseMapper<UserRole> {
      * @return
      */
     List<Role> findByUserId(@Param("userId") String userId);
+
+    /**
+     * 通过用户id获取用户角色关联的部门数据
+     * @param userId
+     * @return
+     */
+    List<String> findDepIdsByUserId(@Param("userId") String userId);
 }

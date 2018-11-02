@@ -2,15 +2,15 @@
 Navicat MySQL Data Transfer
 
 Source Server         : localhost_3306
-Source Server Version : 50527
+Source Server Version : 50642
 Source Host           : localhost:3306
 Source Database       : xboot
 
 Target Server Type    : MYSQL
-Target Server Version : 50527
+Target Server Version : 50642
 File Encoding         : 65001
 
-Date: 2018-10-23 17:51:28
+Date: 2018-11-02 14:53:27
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -563,15 +563,36 @@ CREATE TABLE `t_role` (
   `del_flag` int(11) DEFAULT NULL,
   `default_role` bit(1) DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
+  `data_type` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_role
 -- ----------------------------
-INSERT INTO `t_role` VALUES ('496138616573952', '', '2018-04-22 23:03:49', '', '2018-08-12 16:14:31', 'ROLE_ADMIN', '0', null, '超级管理员 拥有所有权限');
-INSERT INTO `t_role` VALUES ('496138616573953', '', '2018-05-02 21:40:03', '', '2018-08-16 13:33:15', 'ROLE_USER', '0', '', '普通注册用户 路过看看');
-INSERT INTO `t_role` VALUES ('16457350655250432', '', '2018-06-06 00:08:00', '', '2018-08-16 13:33:30', 'ROLE_TEST', '0', null, '测试权限按钮显示');
+INSERT INTO `t_role` VALUES ('496138616573952', '', '2018-04-22 23:03:49', 'admin', '2018-11-02 14:52:06', 'ROLE_ADMIN', '0', null, '超级管理员 拥有所有权限', '0');
+INSERT INTO `t_role` VALUES ('496138616573953', '', '2018-05-02 21:40:03', 'admin', '2018-11-01 22:59:48', 'ROLE_USER', '0', '', '普通注册用户 路过看看', '0');
+INSERT INTO `t_role` VALUES ('16457350655250432', '', '2018-06-06 00:08:00', '', '2018-08-16 13:33:30', 'ROLE_TEST', '0', null, '测试权限按钮显示', null);
+
+-- ----------------------------
+-- Table structure for t_role_department
+-- ----------------------------
+DROP TABLE IF EXISTS `t_role_department`;
+CREATE TABLE `t_role_department` (
+  `id` varchar(255) NOT NULL,
+  `create_by` varchar(255) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `del_flag` int(11) DEFAULT NULL,
+  `update_by` varchar(255) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `department_id` varchar(255) DEFAULT NULL,
+  `role_id` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of t_role_department
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for t_role_permission
@@ -739,10 +760,10 @@ CREATE TABLE `t_user` (
 -- ----------------------------
 -- Records of t_user
 -- ----------------------------
-INSERT INTO `t_user` VALUES ('682265633886209', '', '2018-04-30 23:28:42', '', '2018-09-26 20:07:00', '', 'https://s1.ax1x.com/2018/05/19/CcdVQP.png', '', '1012@qq.com', '18782059033', '', '$2a$10$PS04ecXfknNd3V8d.ymLTObQciapMU4xU8.GADBZZsuTZr7ymnagy', '1', '-1', '0', 'Exrick', '0', '40322777781112832', null, null);
-INSERT INTO `t_user` VALUES ('16739222421508096', '', '2018-06-06 18:48:02', '', '2018-10-08 00:04:32', '', 'https://s1.ax1x.com/2018/05/19/CcdVQP.png', '', '1012139570@qq.com', '18782059033', '', '$2a$10$PS04ecXfknNd3V8d.ymLTObQciapMU4xU8.GADBZZsuTZr7ymnagy', '1', '0', '0', 'test2', '0', '40652338142121984', '', null);
-INSERT INTO `t_user` VALUES ('4363087427670016', '', '2018-05-03 15:09:42', '', '2018-10-08 00:04:46', '[\"510000\",\"510100\",\"510114\"]', 'https://s1.ax1x.com/2018/05/19/CcdVQP.png', '', '1012139570@qq.com', '18782059033', '', '$2a$10$PS04ecXfknNd3V8d.ymLTObQciapMU4xU8.GADBZZsuTZr7ymnagy', '1', '0', '0', 'test', '0', '40652338142121984', '', null);
-INSERT INTO `t_user` VALUES ('682265633886208', '', '2018-05-01 16:13:51', '', '2018-10-13 18:04:16', '[\"510000\",\"510100\",\"510104\"]', 'http://p77xsahe9.bkt.clouddn.com/788eb3e78206429eb34fc7cd3e1e46f4.jpg', 'test', '1012139570@qq.com', '18782059033', 'Exrick', '$2a$10$bINR/VMje12C88mQOsgu9OvzLSbj6nS.3KlYgayD7WSFsDTQqI9AC', '1', '0', '1', 'admin', '0', '40322777781112832', '天府1街', '弱');
+INSERT INTO `t_user` VALUES ('682265633886209', '', '2018-04-30 23:28:42', '', '2018-09-26 20:07:00', '', 'https://s1.ax1x.com/2018/05/19/CcdVQP.png', '', '1012@qq.com', '18782059033', '', '$2a$10$PS04ecXfknNd3V8d.ymLTObQciapMU4xU8.GADBZZsuTZr7ymnagy', '1', '-1', '0', 'Exrick', '0', '40322777781112832', null, '弱');
+INSERT INTO `t_user` VALUES ('16739222421508096', '', '2018-06-06 18:48:02', '', '2018-10-08 00:04:32', '', 'https://s1.ax1x.com/2018/05/19/CcdVQP.png', '', '1012139570@qq.com', '18782059033', '', '$2a$10$PS04ecXfknNd3V8d.ymLTObQciapMU4xU8.GADBZZsuTZr7ymnagy', '1', '0', '0', 'test2', '0', '40652338142121984', '', '弱');
+INSERT INTO `t_user` VALUES ('4363087427670016', '', '2018-05-03 15:09:42', '', '2018-10-08 00:04:46', '[\"510000\",\"510100\",\"510114\"]', 'https://s1.ax1x.com/2018/05/19/CcdVQP.png', '', '1012139570@qq.com', '18782059033', '', '$2a$10$PS04ecXfknNd3V8d.ymLTObQciapMU4xU8.GADBZZsuTZr7ymnagy', '1', '0', '0', 'test', '0', '40652338142121984', '', '弱');
+INSERT INTO `t_user` VALUES ('682265633886208', '', '2018-05-01 16:13:51', 'admin', '2018-11-01 17:00:47', '[\"510000\",\"510100\",\"510104\"]', 'http://p77xsahe9.bkt.clouddn.com/788eb3e78206429eb34fc7cd3e1e46f4.jpg', 'test', '2549575805@qq.com', '18782059038', 'Exrick', '$2a$10$bINR/VMje12C88mQOsgu9OvzLSbj6nS.3KlYgayD7WSFsDTQqI9AC', '1', '0', '1', 'admin', '0', '40322777781112832', '天府1街', '弱');
 
 -- ----------------------------
 -- Table structure for t_user_role
@@ -763,29 +784,11 @@ CREATE TABLE `t_user_role` (
 -- ----------------------------
 -- Records of t_user_role
 -- ----------------------------
-INSERT INTO `t_user_role` VALUES ('56658621068480512', null, null, '0', null, null, '496138616573953', '56658620485472256');
-INSERT INTO `t_user_role` VALUES ('16056421829316608', null, '2018-06-04 21:34:50', '0', null, '2018-06-04 21:34:50', '496138616573953', '6118792149078016');
+INSERT INTO `t_user_role` VALUES ('70669807116095488', null, '2018-11-02 14:28:56', '0', null, '2018-11-02 14:28:56', '496138616573952', '682265633886208');
 INSERT INTO `t_user_role` VALUES ('40720091502874624', null, '2018-08-11 22:59:27', '0', null, '2018-08-11 22:59:27', '496138616573952', '682265633886209');
-INSERT INTO `t_user_role` VALUES ('56657505429753856', null, null, '0', null, null, '496138616573953', '56657504930631680');
-INSERT INTO `t_user_role` VALUES ('56656870651203584', null, null, '0', null, null, '496138616573953', '56656870185635840');
 INSERT INTO `t_user_role` VALUES ('61392579396112384', null, '2018-10-08 00:04:32', '0', null, '2018-10-08 00:04:32', '16457350655250432', '16739222421508096');
 INSERT INTO `t_user_role` VALUES ('61392637076180992', null, '2018-10-08 00:04:46', '0', null, '2018-10-08 00:04:46', '496138616573953', '4363087427670016');
-INSERT INTO `t_user_role` VALUES ('61392732320436225', null, '2018-10-08 00:05:09', '0', null, '2018-10-08 00:05:09', '496138616573952', '682265633886208');
 INSERT INTO `t_user_role` VALUES ('40720091490291713', null, '2018-08-11 22:59:27', '0', null, '2018-08-11 22:59:27', '496138616573953', '682265633886209');
-INSERT INTO `t_user_role` VALUES ('56659754742714369', null, null, '0', null, null, '496138616573953', '56659754142928896');
-INSERT INTO `t_user_role` VALUES ('56636805901979648', null, null, '0', null, null, '496138616573953', '56636653837488128');
-INSERT INTO `t_user_role` VALUES ('56636806413684736', null, null, '0', null, null, '496138616573953', '56636653837488129');
-INSERT INTO `t_user_role` VALUES ('56659980958306305', null, null, '0', null, null, '496138616573953', '56659980517904384');
-INSERT INTO `t_user_role` VALUES ('56660320579489793', null, null, '0', null, null, '496138616573953', '56660262198972416');
-INSERT INTO `t_user_role` VALUES ('56660723303976960', null, null, '0', null, null, '496138616573953', '56660722494476288');
-INSERT INTO `t_user_role` VALUES ('56661186489356288', null, null, '0', null, null, '496138616573953', '56661157917757440');
-INSERT INTO `t_user_role` VALUES ('56661473023234048', null, null, '0', null, null, '496138616573953', '56661381977477120');
-INSERT INTO `t_user_role` VALUES ('56661688652402689', null, null, '0', null, null, '496138616573953', '56661688086171648');
-INSERT INTO `t_user_role` VALUES ('56662150545936385', null, null, '0', null, null, '496138616573953', '56662013635465216');
-INSERT INTO `t_user_role` VALUES ('56662330548686849', null, null, '0', null, null, '496138616573953', '56662314463531008');
-INSERT INTO `t_user_role` VALUES ('56662796732993536', null, null, '0', null, null, '496138616573953', '56662795734749184');
-INSERT INTO `t_user_role` VALUES ('56663245204754433', null, null, '0', null, null, '496138616573953', '56663187927339008');
-INSERT INTO `t_user_role` VALUES ('56663863185117184', null, null, '0', null, null, '496138616573953', '56663851369762816');
 
 -- ----------------------------
 -- Table structure for t_weibo

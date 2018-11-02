@@ -33,6 +33,16 @@ public interface CommonConstant {
     Integer USER_TYPE_ADMIN = 1;
 
     /**
+     * 全部数据权限
+     */
+    Integer DATA_TYPE_ALL = 0;
+
+    /**
+     * 自定义数据权限
+     */
+    Integer DATA_TYPE_CUSTOM = 1;
+
+    /**
      * 性别男
      */
     Integer SEX_MAN = 0;

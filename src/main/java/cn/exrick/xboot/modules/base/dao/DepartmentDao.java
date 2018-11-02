@@ -19,6 +19,14 @@ public interface DepartmentDao extends XbootBaseDao<Department,String> {
     List<Department> findByParentIdOrderBySortOrder(String parentId);
 
     /**
+     * 通过父id获取 升序 数据权限
+     * @param parentId
+     * @param departmentIds
+     * @return
+     */
+    List<Department> findByParentIdAndIdInOrderBySortOrder(String parentId, List<String> departmentIds);
+
+    /**
      * 通过父id和状态获取 升序
      * @param parentId
      * @param status
@@ -32,4 +40,12 @@ public interface DepartmentDao extends XbootBaseDao<Department,String> {
      * @return
      */
     List<Department> findByTitleLikeOrderBySortOrder(String title);
+
+    /**
+     * 部门名模糊搜索 升序 数据权限
+     * @param title
+     * @param departmentIds
+     * @return
+     */
+    List<Department> findByTitleLikeAndIdInOrderBySortOrder(String title, List<String> departmentIds);
 }

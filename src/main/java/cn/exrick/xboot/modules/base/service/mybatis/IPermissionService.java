@@ -21,11 +21,4 @@ public interface IPermissionService extends IService<Permission> {
      */
     @Cacheable(key = "#userId")
     List<Permission> findByUserId(String userId);
-
-    /**
-     * 通过roleId获取
-     * @param roleId
-     * @return
-     */
-    List<Permission> findByRoleId(@Param("roleId") String roleId);
 }

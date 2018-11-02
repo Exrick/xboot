@@ -14,9 +14,10 @@ public interface DepartmentService extends XbootBaseService<Department,String> {
     /**
      * 通过父id获取 升序
      * @param parentId
+     * @param openDataFilter 是否开启数据权限
      * @return
      */
-    List<Department> findByParentIdOrderBySortOrder(String parentId);
+    List<Department> findByParentIdOrderBySortOrder(String parentId, Boolean openDataFilter);
 
     /**
      * 通过父id和状态获取
@@ -29,7 +30,8 @@ public interface DepartmentService extends XbootBaseService<Department,String> {
     /**
      * 部门名模糊搜索 升序
      * @param title
+     * @param openDataFilter 是否开启数据权限
      * @return
      */
-    List<Department> findByTitleLikeOrderBySortOrder(String title);
+    List<Department> findByTitleLikeOrderBySortOrder(String title, Boolean openDataFilter);
 }

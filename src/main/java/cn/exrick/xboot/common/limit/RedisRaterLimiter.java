@@ -21,9 +21,9 @@ public class RedisRaterLimiter {
     @Autowired
     private JedisPool jedisPool;
 
-    private static final String BUCKET = "BUCKET_";
-    private static final String BUCKET_COUNT = "BUCKET_COUNT";
-    private static final String BUCKET_MONITOR = "BUCKET_MONITOR_";
+    private static final String BUCKET = "BUCKET:";
+    private static final String BUCKET_COUNT = "BUCKET_COUNT:";
+    private static final String BUCKET_MONITOR = "BUCKET_MONITOR:";
 
     public String acquireTokenFromBucket(String point, int limit, long timeout) {
 

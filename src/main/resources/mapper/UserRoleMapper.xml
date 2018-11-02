@@ -3,10 +3,17 @@
 <mapper namespace="cn.exrick.xboot.modules.base.dao.mapper.UserRoleMapper">
 
     <select id="findByUserId" resultType="cn.exrick.xboot.modules.base.entity.Role">
-      SELECT r.id id, name
+      SELECT r.id id, name, r.data_type
       FROM t_user_role ur
       LEFT JOIN t_role r
       ON ur.role_id = r.id
       WHERE user_Id = #{userId}
+    </select>
+
+    <select id="findDepIdsByUserId" resultType="java.lang.String">
+        SELECT DISTINCT rd.department_id
+        FROM t_role_department rd
+        WHERE role_id IN
+        ( SELECT ur.role_id FROM t_user_role ur WHERE ur.user_id = #{userId} )
     </select>
 </mapper>

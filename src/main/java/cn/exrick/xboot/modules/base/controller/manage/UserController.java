@@ -352,7 +352,9 @@ public class UserController {
         for(String id:ids){
             User u = userService.get(id);
             //删除缓存
-            redisTemplate.delete("user::"+u.getUsername());
+            redisTemplate.delete("user::" + u.getUsername());
+            redisTemplate.delete("userRole::" + u.getId());
+            redisTemplate.delete("permission::userMenuList:" + u.getId());
             userService.delete(id);
             //删除关联角色
             userRoleService.deleteByUserId(id);

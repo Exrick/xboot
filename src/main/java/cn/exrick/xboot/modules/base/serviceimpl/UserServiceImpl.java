@@ -1,6 +1,7 @@
 package cn.exrick.xboot.modules.base.serviceimpl;
 
 import cn.exrick.xboot.common.constant.CommonConstant;
+import cn.exrick.xboot.common.utils.SecurityUtil;
 import cn.exrick.xboot.common.vo.SearchVo;
 import cn.exrick.xboot.modules.base.dao.DepartmentDao;
 import cn.exrick.xboot.modules.base.dao.UserDao;
@@ -47,6 +48,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private DepartmentDao departmentDao;
+
+    @Autowired
+    private SecurityUtil securityUtil;
 
     @Override
     public UserDao getRepository() {
@@ -149,6 +153,12 @@ public class UserServiceImpl implements UserService {
                     Date start = DateUtil.parse(searchVo.getStartDate());
                     Date end = DateUtil.parse(searchVo.getEndDate());
                     list.add(cb.between(createTimeField, start, DateUtil.endOfDay(end)));
+                }
+
+                //数据权限
+                List<String> depIds = securityUtil.getDeparmentIds();
+                if(depIds!=null&&depIds.size()>0){
+                    list.add(departmentIdField.in(depIds));
                 }
 
                 Predicate[] arr = new Predicate[list.size()];

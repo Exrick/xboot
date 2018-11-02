@@ -24,4 +24,10 @@ public class IUserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> 
 
         return userRoleMapper.findByUserId(userId);
     }
+
+    @Override
+    public List<String> findDepIdsByUserId(String userId) {
+
+        return userRoleMapper.findDepIdsByUserId(userId);
+    }
 }

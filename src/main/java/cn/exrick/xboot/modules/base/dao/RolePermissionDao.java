@@ -19,6 +19,12 @@ public interface RolePermissionDao extends XbootBaseDao<RolePermission,String> {
     List<RolePermission> findByPermissionId(String permissionId);
 
     /**
+     * 通过roleId获取
+     * @param roleId
+     */
+    List<RolePermission> findByRoleId(String roleId);
+
+    /**
      * 通过roleId删除
      * @param roleId
      */

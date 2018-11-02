@@ -17,11 +17,4 @@ public interface PermissionMapper extends BaseMapper<Permission> {
      * @return
      */
     List<Permission> findByUserId(@Param("userId") String userId);
-
-    /**
-     * 通过roleId获取
-     * @param roleId
-     * @return
-     */
-    List<Permission> findByRoleId(@Param("roleId") String roleId);
 }

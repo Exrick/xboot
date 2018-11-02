@@ -4,14 +4,11 @@ import cn.exrick.xboot.common.utils.PageUtil;
 import cn.exrick.xboot.common.utils.ResultUtil;
 import cn.exrick.xboot.common.vo.PageVo;
 import cn.exrick.xboot.common.vo.Result;
-import cn.exrick.xboot.modules.base.entity.Permission;
-import cn.exrick.xboot.modules.base.entity.Role;
-import cn.exrick.xboot.modules.base.entity.RolePermission;
-import cn.exrick.xboot.modules.base.entity.UserRole;
+import cn.exrick.xboot.modules.base.entity.*;
+import cn.exrick.xboot.modules.base.service.RoleDepartmentService;
 import cn.exrick.xboot.modules.base.service.RolePermissionService;
 import cn.exrick.xboot.modules.base.service.RoleService;
 import cn.exrick.xboot.modules.base.service.UserRoleService;
-import cn.exrick.xboot.modules.base.service.mybatis.IPermissionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +42,7 @@ public class RoleController {
     private RolePermissionService rolePermissionService;
 
     @Autowired
-    private IPermissionService iPermissionService;
+    private RoleDepartmentService roleDepartmentService;
 
     @Autowired
     private StringRedisTemplate redisTemplate;
@@ -64,8 +61,12 @@ public class RoleController {
 
         Page<Role> list = roleService.findAll(PageUtil.initPage(page));
         for(Role role : list.getContent()){
-            List<Permission> permissions = iPermissionService.findByRoleId(role.getId());
+            // 角色拥有权限
+            List<RolePermission> permissions = rolePermissionService.findByRoleId(role.getId());
             role.setPermissions(permissions);
+            // 角色拥有数据权限
+            List<RoleDepartment> departments = roleDepartmentService.findByRoleId(role.getId());
+            role.setDepartments(departments);
         }
         return new ResultUtil<Page<Role>>().setData(list);
     }
@@ -84,9 +85,9 @@ public class RoleController {
         return new ResultUtil<Object>().setSuccessMsg("设置成功");
     }
 
-    @RequestMapping(value = "/editRolePerm/{roleId}",method = RequestMethod.POST)
-    @ApiOperation(value = "编辑角色分配权限")
-    public Result<Object> editRolePerm(@PathVariable String roleId,
+    @RequestMapping(value = "/editRolePerm",method = RequestMethod.POST)
+    @ApiOperation(value = "编辑角色分配菜单权限")
+    public Result<Object> editRolePerm(@RequestParam String roleId,
                                        @RequestParam(required = false) String[] permIds){
 
         //删除其关联权限
@@ -107,6 +108,33 @@ public class RoleController {
         redisTemplate.delete(keysUserPerm);
         Set<String> keysUserMenu = redisTemplate.keys("permission::userMenuList:*");
         redisTemplate.delete(keysUserMenu);
+        return new ResultUtil<Object>().setData(null);
+    }
+
+    @RequestMapping(value = "/editRoleDep",method = RequestMethod.POST)
+    @ApiOperation(value = "编辑角色分配数据权限")
+    public Result<Object> editRoleDep(@RequestParam String roleId,
+                                      @RequestParam Integer dataType,
+                                      @RequestParam(required = false) String[] depIds){
+
+        Role r = roleService.get(roleId);
+        r.setDataType(dataType);
+        roleService.update(r);
+        // 删除其关联数据权限
+        roleDepartmentService.deleteByRoleId(roleId);
+        // 分配新数据权限
+        for(String depId : depIds){
+            RoleDepartment roleDepartment = new RoleDepartment();
+            roleDepartment.setRoleId(roleId);
+            roleDepartment.setDepartmentId(depId);
+            roleDepartmentService.save(roleDepartment);
+        }
+        // 手动删除相关缓存
+        Set<String> keys = redisTemplate.keys("department:" + "*");
+        redisTemplate.delete(keys);
+        Set<String> keysUserRole = redisTemplate.keys("userRole:" + "*");
+        redisTemplate.delete(keysUserRole);
+
         return new ResultUtil<Object>().setData(null);
     }
 
@@ -143,9 +171,15 @@ public class RoleController {
         }
         for(String id:ids){
             roleService.delete(id);
-            //删除关联权限
+            //删除关联菜单权限
             rolePermissionService.deleteByRoleId(id);
+            //删除关联数据权限
+            roleDepartmentService.deleteByRoleId(id);
         }
+        //手动批量删除缓存
+        Set<String> keysUser = redisTemplate.keys("user:" + "*");
+        redisTemplate.delete(keysUser);
+        Set<String> keysUserRole = redisTemplate.keys("userRole:" + "*");
         return new ResultUtil<Object>().setSuccessMsg("批量通过id删除数据成功");
     }
 

@@ -9,6 +9,7 @@ import cn.exrick.xboot.modules.base.service.DepartmentService;
 import cn.exrick.xboot.modules.base.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
@@ -44,10 +45,11 @@ public class DepartmentController {
 
     @RequestMapping(value = "/getByParentId/{parentId}",method = RequestMethod.GET)
     @ApiOperation(value = "通过id获取")
-    @Cacheable(key = "#parentId")
-    public Result<List<Department>> getByParentId(@PathVariable String parentId){
+    @Cacheable(key = "#parentId+'_'+#openDataFilter")
+    public Result<List<Department>> getByParentId(@PathVariable String parentId,
+                                                  @ApiParam("是否开始数据权限过滤") @RequestParam(required = false, defaultValue = "true") Boolean openDataFilter){
 
-        List<Department> list = departmentService.findByParentIdOrderBySortOrder(parentId);
+        List<Department> list = departmentService.findByParentIdOrderBySortOrder(parentId, openDataFilter);
         // lambda表达式
         list.forEach(item -> {
             if(!CommonConstant.PARENT_ID.equals(item.getParentId())){
@@ -114,9 +116,10 @@ public class DepartmentController {
 
     @RequestMapping(value = "/search",method = RequestMethod.GET)
     @ApiOperation(value = "部门名模糊搜索")
-    public Result<List<Department>> searchByTitle(@RequestParam String title){
+    public Result<List<Department>> searchByTitle(@RequestParam String title,
+                                                  @ApiParam("是否开始数据权限过滤") @RequestParam(required = false, defaultValue = "true") Boolean openDataFilter){
 
-        List<Department> list = departmentService.findByTitleLikeOrderBySortOrder("%"+title+"%");
+        List<Department> list = departmentService.findByTitleLikeOrderBySortOrder("%"+title+"%", openDataFilter);
         // lambda表达式
         list.forEach(item -> {
             if(!CommonConstant.PARENT_ID.equals(item.getParentId())){

@@ -11,12 +11,4 @@
       WHERE u.id = #{userId} AND p.status = 0
       ORDER BY p.sort_order ASC
     </select>
-    
-    <select id="findByRoleId" resultType="cn.exrick.xboot.modules.base.entity.Permission">
-      SELECT p.id, p.name, p.title, p.path, p.icon, p.type, p.component, p.level, p.button_type, p.parent_id, p.sort_order, p.description, p.status, p.url
-      FROM t_role_permission rp
-      LEFT JOIN t_permission p ON p.id = rp.permission_id
-      WHERE rp.role_id = #{roleId} AND p.status = 0
-      ORDER BY p.sort_order ASC
-    </select>
 </mapper>

@@ -18,6 +18,7 @@ http://xboot.exrick.cn
 - [x] JPA + Mybatis-Plus任意切换
 - [x] 操作日志记录方式任意切换Mysql或Elasticseach记录
 - [x] 极简代码生成 只需输入类名和字段 自动创建数据库表
+- [x] 动态权限管理 菜单按钮权限+数据权限配置
 - [x] 支持社交账号、短信等多方式登录 不干涉原用户数据 实现第三方账号管理
 - [x] 基于Websocket消息推送管理、基于Quartz定时任务管理
 - [x] Actuator可视化数据监控

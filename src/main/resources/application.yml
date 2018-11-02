@@ -21,7 +21,6 @@ spring:
     password: ENC(F4B0s6u9xcDw3V+P0qC4CA==)
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.jdbc.Driver
-    logSlowSql: true
     # Druid StatViewServlet配置
     druid:
       stat-view-servlet:

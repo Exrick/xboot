@@ -34,6 +34,12 @@ public class RolePermissionServiceImpl implements RolePermissionService {
     }
 
     @Override
+    public List<RolePermission> findByRoleId(String roleId) {
+
+        return rolePermissionDao.findByRoleId(roleId);
+    }
+
+    @Override
     public void deleteByRoleId(String roleId) {
 
         rolePermissionDao.deleteByRoleId(roleId);
