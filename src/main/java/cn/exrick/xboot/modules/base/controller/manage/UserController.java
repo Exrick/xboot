@@ -168,7 +168,7 @@ public class UserController {
                                @RequestParam(required = false) String[] roles){
 
         User old = userService.get(u.getId());
-        //所修改了用户名
+        //若修改了用户名
         if(!old.getUsername().equals(u.getUsername())){
             //若修改用户名删除原用户名缓存
             redisTemplate.delete("user::"+old.getUsername());

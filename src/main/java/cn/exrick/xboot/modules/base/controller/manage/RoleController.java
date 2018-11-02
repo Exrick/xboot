@@ -176,10 +176,6 @@ public class RoleController {
             //删除关联数据权限
             roleDepartmentService.deleteByRoleId(id);
         }
-        //手动批量删除缓存
-        Set<String> keysUser = redisTemplate.keys("user:" + "*");
-        redisTemplate.delete(keysUser);
-        Set<String> keysUserRole = redisTemplate.keys("userRole:" + "*");
         return new ResultUtil<Object>().setSuccessMsg("批量通过id删除数据成功");
     }
 
