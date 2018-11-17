@@ -40,28 +40,16 @@ public class LogController{
 
     @RequestMapping(value = "/getAllByPage",method = RequestMethod.GET)
     @ApiOperation(value = "分页获取全部")
-    public Result<Object> getAllByPage(@ModelAttribute PageVo pageVo){
+    public Result<Object> getAllByPage(@RequestParam(required = false) Integer type,
+                                       @RequestParam String key,
+                                       @ModelAttribute SearchVo searchVo,
+                                       @ModelAttribute PageVo pageVo){
 
         if(esRecord){
-            Page<EsLog> es = esLogService.getLogList(PageUtil.initPage(pageVo));
+            Page<EsLog> es = esLogService.findByConfition(type, key, searchVo, PageUtil.initPage(pageVo));
             return new ResultUtil<Object>().setData(es);
         }else{
-            Page<Log> log = logService.findAll(PageUtil.initPage(pageVo));
-            return new ResultUtil<Object>().setData(log);
-        }
-    }
-
-    @RequestMapping(value = "/search",method = RequestMethod.GET)
-    @ApiOperation(value = "分页搜索")
-    public Result<Object> search(@RequestParam String key,
-                                 @ModelAttribute SearchVo searchVo,
-                                 @ModelAttribute PageVo pageVo){
-
-        if(esRecord){
-            Page<EsLog> es = esLogService.searchLog(key, searchVo, PageUtil.initPage(pageVo));
-            return new ResultUtil<Object>().setData(es);
-        }else{
-            Page<Log> log = logService.searchLog(key, searchVo, PageUtil.initPage(pageVo));
+            Page<Log> log = logService.findByConfition(type, key, searchVo, PageUtil.initPage(pageVo));
             return new ResultUtil<Object>().setData(log);
         }
     }

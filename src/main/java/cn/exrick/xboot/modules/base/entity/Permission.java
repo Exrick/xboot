@@ -39,7 +39,6 @@ public class Permission extends XbootBaseEntity {
     private String title;
 
     @ApiModelProperty(value = "页面路径/资源链接url")
-    @Column(nullable = false)
     private String path;
 
     @ApiModelProperty(value = "前端组件")

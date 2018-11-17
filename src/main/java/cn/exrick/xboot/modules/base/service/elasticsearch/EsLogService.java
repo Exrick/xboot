@@ -29,18 +29,12 @@ public interface EsLogService {
     void deleteAll();
 
     /**
-     * 分页获取全部日志
-     * @param pageable
-     * @return
-     */
-    Page<EsLog> getLogList(Pageable pageable);
-
-    /**
      * 分页搜索获取日志
+     * @param type
      * @param key
      * @param searchVo
      * @param pageable
      * @return
      */
-    Page<EsLog> searchLog(String key, SearchVo searchVo, Pageable pageable);
+    Page<EsLog> findByConfition(Integer type, String key, SearchVo searchVo, Pageable pageable);
 }

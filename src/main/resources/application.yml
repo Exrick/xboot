@@ -71,6 +71,10 @@ xboot:
     timeout: 1000
     # 总限制100个请求
     limit: 100
+  # token交互方式
+  token:
+    # 默认JWT 启用Redis后设置为true后，token将存入redis，并具有单点登录功能
+    redis: true
   # token过期时间（分钟）
   tokenExpireTime: 60
   # 用户选择保存登录状态对应token过期时间（天）

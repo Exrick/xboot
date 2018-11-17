@@ -43,21 +43,6 @@ public interface CommonConstant {
     Integer DATA_TYPE_CUSTOM = 1;
 
     /**
-     * 性别男
-     */
-    Integer SEX_MAN = 0;
-
-    /**
-     * 性别女
-     */
-    Integer SEX_WOMAN = 1;
-
-    /**
-     * 性别保密
-     */
-    Integer SEX_SECRET = 2;
-
-    /**
      * 正常状态
      */
     Integer STATUS_NORMAL = 0;

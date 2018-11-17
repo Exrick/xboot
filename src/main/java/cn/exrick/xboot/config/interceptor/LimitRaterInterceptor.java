@@ -64,18 +64,22 @@ public class LimitRaterInterceptor extends HandlerInterceptorAdapter {
             }
         }
 
-        HandlerMethod handlerMethod = (HandlerMethod) handler;
-        Method method = handlerMethod.getMethod();
-        RateLimiter rateLimiter = method.getAnnotation(RateLimiter.class);
-
-        if (rateLimiter != null) {
-            int limit = rateLimiter.limit();
-            int timeout = rateLimiter.timeout();
-            String token3 = redisRaterLimiter.acquireTokenFromBucket(method.getName(), limit, timeout);
-            if (StrUtil.isBlank(token3)) {
-                throw new XbootException("当前访问人数太多啦，请稍后再试");
+        try {
+            HandlerMethod handlerMethod = (HandlerMethod) handler;
+            Method method = handlerMethod.getMethod();
+            RateLimiter rateLimiter = method.getAnnotation(RateLimiter.class);
+            if (rateLimiter != null) {
+                int limit = rateLimiter.limit();
+                int timeout = rateLimiter.timeout();
+                String token3 = redisRaterLimiter.acquireTokenFromBucket(method.getName(), limit, timeout);
+                if (StrUtil.isBlank(token3)) {
+                    throw new XbootException("当前访问人数太多啦，请稍后再试");
+                }
             }
+        }catch (Exception e){
+
         }
+
         return true;
     }
 

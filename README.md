@@ -15,12 +15,13 @@ http://xboot.exrick.cn
 ### 前台基于Vue+iView项目地址： [xboot-front](https://github.com/Exrick/xboot-front)
 ### 项目简介 
 - [x] 代码拥有详细注释 无复杂逻辑 核心使用 SpringBoot 2.0.5.RELEASE
-- [x] JPA + Mybatis-Plus任意切换
+- [x] JWT / 基于Redis单点登录Token交互 任意切换
+- [x] JPA + Mybatis-Plus 任意切换
 - [x] 操作日志记录方式任意切换Mysql或Elasticseach记录
 - [x] 极简代码生成 只需输入类名和字段 自动创建数据库表
 - [x] 动态权限管理 菜单按钮权限+数据权限配置
 - [x] 支持社交账号、短信等多方式登录 不干涉原用户数据 实现第三方账号管理
-- [x] 基于Websocket消息推送管理、基于Quartz定时任务管理
+- [x] 基于Websocket消息推送管理、基于Quartz定时任务管理、数据字典管理
 - [x] Actuator可视化数据监控
 - [x] 后台提供分布式限流、同步锁、验证码等工具类 前端提供空白Vue模版
 - [x] 可动态配置SSO、短信、邮件、Vaptcha验证码等
@@ -81,7 +82,7 @@ http://xboot.exrick.cn
 - 安装依赖并启动：[Redis](https://github.com/Exrick/xmall/blob/master/study/Redis.md)、[Elasticsearch](https://github.com/Exrick/xmall/blob/master/study/Elasticsearch.md)(当配置使用ES记录日志时需要)
 - [Maven安装和在IDEA中配置](https://github.com/Exrick/xmall/blob/master/study/Maven.md)
 - 建议使用IDEA([破解/免费注册](http://idea.lanyus.com/)) 安装 `Lombok` 插件后导入该Maven项目 若未自动下载依赖请在根目录下执行 `mvn install` 命令
-- MySQL数据库新建 `xboot` 数据库，配置文件已开启ddl自动生成表结构但无初始数据，请记得运行导入sql文件
+- MySQL数据库新建 `xboot` 数据库，配置文件已开启ddl自动生成表结构但无初始数据，请记得运行导入xboot.sql文件(当报错找不到Quartz相关表时请设置数据库忽略大小写或重新导入quartz.sql)
 - 修改配置文件 `application.yml` 相应配置，其中有详细注释，所有配置只需在这里修改
 - 编译器中启动运行 `XbootApplication.java` 或根目录下执行命令 `mvn spring-boot:run` 默认端口8888 访问接口文档 `http://localhost:8888/swagger-ui.html` 说明启动成功 管理员账密admin|123456
 - 前台页面请启动基于Vue的 [xboot-front](https://github.com/Exrick/xboot-front) 项目，并修改其接口代理配置

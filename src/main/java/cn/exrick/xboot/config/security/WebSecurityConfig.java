@@ -8,7 +8,9 @@ import cn.exrick.xboot.config.security.jwt.RestAccessDeniedHandler;
 import cn.exrick.xboot.config.security.permission.MyFilterSecurityInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,6 +30,12 @@ import org.springframework.security.web.access.intercept.FilterSecurityIntercept
 @EnableGlobalMethodSecurity(prePostEnabled=true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Value("${xboot.token.redis}")
+    private Boolean tokenRedis;
+
+    @Value("${xboot.tokenExpireTime}")
+    private Integer tokenExpireTime;
+
     @Autowired
     private IgnoredUrlsProperties ignoredUrlsProperties;
 
@@ -45,6 +53,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private MyFilterSecurityInterceptor myFilterSecurityInterceptor;
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -96,7 +107,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 //添加自定义权限过滤器
                 .addFilterBefore(myFilterSecurityInterceptor, FilterSecurityInterceptor.class)
-                //添加JWT过滤器 除/xboot/login其它请求都需经过此过滤器
-                .addFilter(new JWTAuthenticationFilter(authenticationManager()));
+                //添加JWT过滤器 除已配置的其它请求都需经过此过滤器
+                .addFilter(new JWTAuthenticationFilter(authenticationManager(), tokenRedis, tokenExpireTime, redisTemplate));
     }
 }

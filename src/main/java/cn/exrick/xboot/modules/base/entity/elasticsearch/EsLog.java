@@ -48,6 +48,9 @@ public class EsLog implements Serializable{
     @ApiModelProperty(value = "方法操作名称")
     private String name;
 
+    @ApiModelProperty(value = "日志类型 0登陆日志 1操作日志")
+    private Integer logType;
+
     @ApiModelProperty(value = "请求路径")
     private String requestUrl;
 

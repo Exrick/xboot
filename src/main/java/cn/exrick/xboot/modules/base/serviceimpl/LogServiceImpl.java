@@ -38,22 +38,29 @@ public class LogServiceImpl implements LogService {
     }
 
     @Override
-    public Page<Log> searchLog(String key, SearchVo searchVo, Pageable pageable) {
+    public Page<Log> findByConfition(Integer type, String key, SearchVo searchVo, Pageable pageable) {
 
         return logDao.findAll(new Specification<Log>() {
             @Nullable
             @Override
             public Predicate toPredicate(Root<Log> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
 
+                Path<String> nameField = root.get("name");
                 Path<String> requestUrlField = root.get("requestUrl");
                 Path<String> requestTypeField = root.get("requestType");
                 Path<String> requestParamField = root.get("requestParam");
                 Path<String> usernameField = root.get("username");
                 Path<String> ipField = root.get("ip");
                 Path<String> ipInfoField = root.get("ipInfo");
+                Path<Integer> logTypeField = root.get("logType");
                 Path<Date> createTimeField=root.get("createTime");
 
                 List<Predicate> list = new ArrayList<Predicate>();
+
+                //类型
+                if(type!=null){
+                    list.add(cb.equal(logTypeField, type));
+                }
 
                 //模糊搜素
                 if(StrUtil.isNotBlank(key)){
@@ -63,7 +70,8 @@ public class LogServiceImpl implements LogService {
                     Predicate p4 = cb.like(usernameField,'%'+key+'%');
                     Predicate p5 = cb.like(ipField,'%'+key+'%');
                     Predicate p6 = cb.like(ipInfoField,'%'+key+'%');
-                    list.add(cb.or(p1,p2,p3,p4,p5,p6));
+                    Predicate p7 = cb.like(nameField,'%'+key+'%');
+                    list.add(cb.or(p1,p2,p3,p4,p5,p6, p7));
                 }
 
                 //创建时间
