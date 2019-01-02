@@ -112,7 +112,7 @@ public class UserController {
                 UserRole ur = new UserRole();
                 ur.setUserId(user.getId());
                 ur.setRoleId(role.getId());
-                iUserRoleService.insert(ur);
+                iUserRoleService.save(ur);
             }
         }
 

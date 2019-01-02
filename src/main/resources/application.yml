@@ -15,12 +15,12 @@ server:
 spring:
   # 数据源
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/xboot?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://localhost:3306/xboot?allowPublicKeyRetrieval=true&serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: root
     # Jasypt加密 可到common-utils中找到JasyptUtil加解密工具类生成加密结果 格式为ENC(加密结果)
-    password: ENC(F4B0s6u9xcDw3V+P0qC4CA==)
+    password: root
     type: com.alibaba.druid.pool.DruidDataSource
-    driverClassName: com.mysql.jdbc.Driver
+    driverClassName: com.mysql.cj.jdbc.Driver
     # Druid StatViewServlet配置
     druid:
       stat-view-servlet:
@@ -30,7 +30,7 @@ spring:
         # 允许清空统计数据
         reset-enable: true
         login-username: root
-        login-password: ENC(F4B0s6u9xcDw3V+P0qC4CA==)
+        login-password: 38X8NTzmLhYlddyuNWc8hQ==
         # IP白名单 多个逗号分隔
         allow:
         # IP黑名单
@@ -43,8 +43,8 @@ spring:
       ddl-auto: none
   # Redis
   redis:
-    host: 127.0.0.1
-    password:
+    host: 192.168.188.12
+    password: 1314hemiao520
     # 数据库索引 默认0
     database: 0
     port: 6379
@@ -60,8 +60,8 @@ spring:
   # 文件大小上传配置
   servlet:
     multipart:
-      max-file-size: 5Mb
-      max-request-size: 5Mb
+      max-file-size: 5
+      max-request-size: 5
 
 xboot:
   # 全局限流
@@ -88,7 +88,7 @@ xboot:
     nodeClient: 127.0.0.1:9200
   # 日志记录方式 true使用Elasticsearch记录 false记录至数据库中
   logRecord:
-    es: false
+    es: true
   # 七牛云配置
   qiniu:
     accessKey: 你的accessKey

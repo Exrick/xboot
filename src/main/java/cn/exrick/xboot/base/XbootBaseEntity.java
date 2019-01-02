@@ -2,7 +2,7 @@ package cn.exrick.xboot.base;
 
 import cn.exrick.xboot.common.constant.CommonConstant;
 import cn.exrick.xboot.common.utils.SnowFlakeUtil;
-import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
