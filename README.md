@@ -14,7 +14,7 @@
 http://xboot.exrick.cn
 ### 前台基于Vue+iView项目地址： [xboot-front](https://github.com/Exrick/xboot-front)
 ### 项目简介 
-- [x] 代码拥有详细注释 无复杂逻辑 核心使用 SpringBoot 2.0.5.RELEASE
+- [x] 代码拥有详细注释 无复杂逻辑 核心使用 SpringBoot 2.1.2.RELEASE
 - [x] JWT / 基于Redis单点登录Token交互 任意切换
 - [x] JPA + Mybatis-Plus 任意切换
 - [x] 操作日志记录方式任意切换Mysql或Elasticseach记录
@@ -49,7 +49,7 @@ http://xboot.exrick.cn
 - 前台为基于Vue+iView的独立项目请跳转至 [xboot-front](https://github.com/Exrick/xboot-front) 项目仓库查看
 ### 后端所用技术
 ##### 各框架依赖版本皆使用目前最新版本
-- Spring Boot 2.0.5.RELEASE
+- Spring Boot 2.1.2.RELEASE
 - SpringMVC
 - Spring Security
 - [Spring Data JPA](https://docs.spring.io/spring-data/jpa/docs/2.0.6.RELEASE/reference/html/)
@@ -95,6 +95,7 @@ http://xboot.exrick.cn
     - [第三方社交账号登录配置](https://github.com/Exrick/x-boot/wiki/%E7%AC%AC%E4%B8%89%E6%96%B9%E7%A4%BE%E4%BA%A4%E8%B4%A6%E5%8F%B7%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE)
     - [短信登录配置](https://github.com/Exrick/x-boot/wiki/%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95%E9%85%8D%E7%BD%AE)
     - [Vaptcha人机验证码配置使用](https://github.com/Exrick/x-boot/wiki/vaptcha%E4%BA%BA%E6%9C%BA%E9%AA%8C%E8%AF%81%E7%A0%81%E9%85%8D%E7%BD%AE%E4%BD%BF%E7%94%A8)
+    - [Activiti工作流开发说明](https://github.com/Exrick/x-boot/wiki/Activiti%E5%B7%A5%E4%BD%9C%E6%B5%81%E5%BC%80%E5%8F%91%E8%AF%B4%E6%98%8E)
 
 ### [分布式扩展](https://github.com/alibaba/dubbo-spring-boot-starter/blob/master/README_zh.md)
 

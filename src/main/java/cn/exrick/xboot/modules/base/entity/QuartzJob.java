@@ -3,6 +3,7 @@ package cn.exrick.xboot.modules.base.entity;
 import cn.exrick.xboot.base.XbootBaseEntity;
 import cn.exrick.xboot.common.constant.CommonConstant;
 import com.baomidou.mybatisplus.annotations.TableName;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -16,6 +17,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "t_quartz_job")
 @TableName("t_quartz_job")
+@ApiModel(value = "定时任务")
 public class QuartzJob extends XbootBaseEntity {
 
     private static final long serialVersionUID = 1L;

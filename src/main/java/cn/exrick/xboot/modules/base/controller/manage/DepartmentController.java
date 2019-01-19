@@ -1,16 +1,20 @@
 package cn.exrick.xboot.modules.base.controller.manage;
 
 import cn.exrick.xboot.common.constant.CommonConstant;
+import cn.exrick.xboot.common.utils.HibernateProxyTypeAdapter;
 import cn.exrick.xboot.common.utils.ResultUtil;
 import cn.exrick.xboot.common.utils.SecurityUtil;
 import cn.exrick.xboot.common.vo.Result;
 import cn.exrick.xboot.modules.base.entity.Department;
+import cn.exrick.xboot.modules.base.entity.DepartmentHeader;
 import cn.exrick.xboot.modules.base.entity.User;
+import cn.exrick.xboot.modules.base.service.DepartmentHeaderService;
 import cn.exrick.xboot.modules.base.service.DepartmentService;
 import cn.exrick.xboot.modules.base.service.RoleDepartmentService;
 import cn.exrick.xboot.modules.base.service.UserService;
 import cn.hutool.core.util.StrUtil;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -48,6 +53,9 @@ public class DepartmentController {
     private RoleDepartmentService roleDepartmentService;
 
     @Autowired
+    private DepartmentHeaderService departmentHeaderService;
+
+    @Autowired
     private StringRedisTemplate redisTemplate;
 
     @Autowired
@@ -67,16 +75,9 @@ public class DepartmentController {
             return new ResultUtil<List<Department>>().setData(list);
         }
         list = departmentService.findByParentIdOrderBySortOrder(parentId, openDataFilter);
-        // lambda表达式
-        list.forEach(item -> {
-            if(!CommonConstant.PARENT_ID.equals(item.getParentId())){
-                Department parent = departmentService.get(item.getParentId());
-                item.setParentTitle(parent.getTitle());
-            }else{
-                item.setParentTitle("一级部门");
-            }
-        });
-        redisTemplate.opsForValue().set(key, new Gson().toJson(list));
+        list = setInfo(list);
+        redisTemplate.opsForValue().set(key,
+                new GsonBuilder().registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY).create().toJson(list));
         return new ResultUtil<List<Department>>().setData(list);
     }
 
@@ -105,9 +106,27 @@ public class DepartmentController {
 
     @RequestMapping(value = "/edit",method = RequestMethod.POST)
     @ApiOperation(value = "编辑")
-    public Result<Object> edit(@ModelAttribute Department department){
+    public Result<Object> edit(@ModelAttribute Department department,
+                               @RequestParam(required = false) String[] mainHeader,
+                               @RequestParam(required = false) String[] viceHeader){
 
         Department d = departmentService.update(department);
+        // 先删除原数据
+        departmentHeaderService.deleteByDepartmentId(department.getId());
+        for(String id:mainHeader){
+            DepartmentHeader dh = new DepartmentHeader();
+            dh.setUserId(id);
+            dh.setDepartmentId(d.getId());
+            dh.setType(CommonConstant.HEADER_TYPE_MAIN);
+            departmentHeaderService.save(dh);
+        }
+        for(String id:viceHeader){
+            DepartmentHeader dh = new DepartmentHeader();
+            dh.setUserId(id);
+            dh.setDepartmentId(d.getId());
+            dh.setType(CommonConstant.HEADER_TYPE_VICE);
+            departmentHeaderService.save(dh);
+        }
         // 手动删除所有部门缓存
         Set<String> keys = redisTemplate.keys("department:" + "*");
         redisTemplate.delete(keys);
@@ -131,6 +150,8 @@ public class DepartmentController {
             departmentService.delete(id);
             // 删除关联数据权限
             roleDepartmentService.deleteByDepartmentId(id);
+            // 删除关联部门负责人
+            departmentHeaderService.deleteByDepartmentId(id);
         }
         // 手动删除所有部门缓存
         Set<String> keys = redisTemplate.keys("department:" + "*");
@@ -147,6 +168,12 @@ public class DepartmentController {
                                                   @ApiParam("是否开始数据权限过滤") @RequestParam(required = false, defaultValue = "true") Boolean openDataFilter){
 
         List<Department> list = departmentService.findByTitleLikeOrderBySortOrder("%"+title+"%", openDataFilter);
+        list = setInfo(list);
+        return new ResultUtil<List<Department>>().setData(list);
+    }
+
+    public List<Department> setInfo(List<Department> list){
+
         // lambda表达式
         list.forEach(item -> {
             if(!CommonConstant.PARENT_ID.equals(item.getParentId())){
@@ -155,7 +182,10 @@ public class DepartmentController {
             }else{
                 item.setParentTitle("一级部门");
             }
+            // 设置负责人
+            item.setMainHeader(departmentHeaderService.findHeaderByDepartmentId(item.getId(), CommonConstant.HEADER_TYPE_MAIN));
+            item.setViceHeader(departmentHeaderService.findHeaderByDepartmentId(item.getId(), CommonConstant.HEADER_TYPE_VICE));
         });
-        return new ResultUtil<List<Department>>().setData(list);
+        return list;
     }
 }

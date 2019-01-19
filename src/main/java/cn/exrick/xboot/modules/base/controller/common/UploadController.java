@@ -5,7 +5,7 @@ import cn.exrick.xboot.common.utils.IpInfoUtil;
 import cn.exrick.xboot.common.utils.QiniuUtil;
 import cn.exrick.xboot.common.utils.ResultUtil;
 import cn.exrick.xboot.common.vo.Result;
-import cn.exrick.xboot.config.exception.XbootException;
+import cn.exrick.xboot.common.exception.XbootException;
 import cn.hutool.core.util.StrUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

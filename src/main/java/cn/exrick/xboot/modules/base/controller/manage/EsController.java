@@ -4,7 +4,7 @@ import cn.exrick.xboot.common.utils.ResultUtil;
 import cn.exrick.xboot.common.vo.EsCount;
 import cn.exrick.xboot.common.vo.EsInfo;
 import cn.exrick.xboot.common.vo.Result;
-import cn.exrick.xboot.config.exception.XbootException;
+import cn.exrick.xboot.common.exception.XbootException;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 import com.google.gson.Gson;

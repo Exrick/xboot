@@ -3,6 +3,7 @@ package cn.exrick.xboot.modules.base.entity;
 import cn.exrick.xboot.base.XbootBaseEntity;
 import cn.exrick.xboot.common.utils.ObjectUtil;
 import com.baomidou.mybatisplus.annotations.TableName;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -17,6 +18,7 @@ import java.util.Map;
 @Entity
 @Table(name = "t_log")
 @TableName("t_log")
+@ApiModel(value = "日志")
 public class Log extends XbootBaseEntity {
 
     private static final long serialVersionUID = 1L;

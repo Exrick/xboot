@@ -264,6 +264,19 @@ public class UserController {
         return new ResultUtil<Page<User>>().setData(page);
     }
 
+
+    @RequestMapping(value = "/getByDepartmentId/{departmentId}",method = RequestMethod.GET)
+    @ApiOperation(value = "多条件分页获取用户列表")
+    public Result<List<User>> getByCondition(@PathVariable String departmentId){
+
+        List<User> list = userService.findByDepartmentId(departmentId);
+        entityManager.clear();
+        list.forEach(u -> {
+            u.setPassword(null);
+        });
+        return new ResultUtil<List<User>>().setData(list);
+    }
+
     @RequestMapping(value = "/getAll",method = RequestMethod.GET)
     @ApiOperation(value = "获取全部用户数据")
     public Result<List<User>> getByCondition(){

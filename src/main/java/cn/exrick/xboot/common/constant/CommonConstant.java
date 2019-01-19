@@ -91,4 +91,14 @@ public interface CommonConstant {
      * 3级菜单
      */
     Integer LEVEL_THREE = 3;
+
+    /**
+     * 部门负责人类型 主负责人
+     */
+    Integer HEADER_TYPE_MAIN = 0;
+
+    /**
+     * 部门负责人类型 副负责人
+     */
+    Integer HEADER_TYPE_VICE = 1;
 }

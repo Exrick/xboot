@@ -3,6 +3,7 @@ package cn.exrick.xboot.modules.base.entity;
 import cn.exrick.xboot.base.XbootBaseEntity;
 import cn.exrick.xboot.common.constant.CommonConstant;
 import com.baomidou.mybatisplus.annotations.TableName;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -18,6 +19,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "t_dict_data")
 @TableName("t_dict_data")
+@ApiModel(value = "字典数据")
 public class DictData extends XbootBaseEntity {
 
     private static final long serialVersionUID = 1L;

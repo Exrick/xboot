@@ -3,6 +3,7 @@ package cn.exrick.xboot.modules.base.entity;
 import cn.exrick.xboot.base.XbootBaseEntity;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableName;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -17,6 +18,7 @@ import javax.persistence.Transient;
 @Entity
 @Table(name = "t_user_role")
 @TableName("t_user_role")
+@ApiModel(value = "用户角色")
 public class UserRole extends XbootBaseEntity {
 
     private static final long serialVersionUID = 1L;

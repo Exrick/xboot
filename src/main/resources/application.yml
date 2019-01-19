@@ -15,7 +15,7 @@ server:
 spring:
   # 数据源
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/xboot?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://127.0.0.1:3306/xboot-opensource?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: root
     # Jasypt加密 可到common-utils中找到JasyptUtil加解密工具类生成加密结果 格式为ENC(加密结果)
     password: ENC(F4B0s6u9xcDw3V+P0qC4CA==)
@@ -48,7 +48,8 @@ spring:
     # 数据库索引 默认0
     database: 0
     port: 6379
-    timeout: 3000
+    # 超时时间 Duration类型 3秒
+    timeout: 3S
   # Elasticsearch
   data:
     elasticsearch:
@@ -57,11 +58,16 @@ spring:
   quartz:
     # 任务信息存储至数据库
     job-store-type: jdbc
+    properties:
+      org:
+        quartz:
+          jobStore:
+            misfireThreshold: 100
   # 文件大小上传配置
   servlet:
     multipart:
-      max-file-size: 5Mb
-      max-request-size: 5Mb
+      max-file-size: 5MB
+      max-request-size: 5MB
 
 xboot:
   # 全局限流
@@ -104,6 +110,7 @@ xboot:
 # 忽略鉴权url
 ignored:
   urls:
+    - /xboot/dictData/getByType/**
     - /xboot/user/regist
     - /xboot/common/**
     - /druid/**
@@ -132,9 +139,6 @@ swagger:
 mybatis-plus:
   # 放在resource目录 classpath:/mapper/*Mapper.xml
   mapper-locations: classpath:/mapper/*Mapper.xml
-  # 实体扫描，多个package用逗号或者分号分隔
-  typeAliasesPackage: cn.exrick.xboot.*.*.entity
-  typeEnumsPackage: cn.exrick.xboot.*.*.entity
   global-config:
     # 主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
     id-type: 2
@@ -144,16 +148,14 @@ mybatis-plus:
     db-column-underline: true
     # 刷新mapper 调试神器
     refresh-mapper: true
-    # 数据库大写下划线转换
-    #capital-mode: true
-    # 逻辑删除配置（下面3个配置）
-    logic-delete-value: 0
-    logic-not-delete-value: 1
     # SQL 解析缓存，开启后多租户 @SqlParser 注解生效
     sql-parser-cache: true
   configuration:
     map-underscore-to-camel-case: true
     cache-enabled: false
+    # 配置JdbcTypeForNull, oracle数据库必须配置
+    jdbc-type-for-null: 'null'
+
 
 # 日志
 logging:

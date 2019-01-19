@@ -53,31 +53,31 @@ public class XbootGenerator {
      * 实体类对应包
      * (文件自动生成至该包下)
      */
-    private static final String entityPackage = "cn.exrick.xboot.modules.base.entity";
+    private static final String entityPackage = "cn.exrick.xboot.modules.your.entity";
 
     /**
      * dao对应包
      * (文件自动生成至该包下)
      */
-    private static final String daoPackage = "cn.exrick.xboot.modules.base.dao";
+    private static final String daoPackage = "cn.exrick.xboot.modules.your.dao";
 
     /**
      * service对应包
      * (文件自动生成至该包下)
      */
-    private static final String servicePackage = "cn.exrick.xboot.modules.base.service";
+    private static final String servicePackage = "cn.exrick.xboot.modules.your.service";
 
     /**
      * serviceImpl对应包
      * (文件自动生成至该包下)
      */
-    private static final String serviceImplPackage = "cn.exrick.xboot.modules.base.serviceimpl";
+    private static final String serviceImplPackage = "cn.exrick.xboot.modules.your.serviceimpl";
 
     /**
      * controller对应包
      * (文件自动生成至该包下)
      */
-    private static final String controllerPackage = "cn.exrick.xboot.modules.base.controller";
+    private static final String controllerPackage = "cn.exrick.xboot.modules.your.controller";
 
     /**
      * 运行该主函数即可生成代码
@@ -134,6 +134,10 @@ public class XbootGenerator {
         //创建文件
         String entityFileUrl = System.getProperty("user.dir")+"/src/main/java/"+ dotToLine(entityPackage) + "/" + className + ".java";
         File entityFile = new File(entityFileUrl);
+        File entityDir = entityFile.getParentFile();
+        if (!entityDir.exists()) {
+            entityDir.mkdirs();
+        }
         if(!entityFile.exists()){
             //实体类若存在则不重新生成
             entityFile.createNewFile();
@@ -148,6 +152,10 @@ public class XbootGenerator {
         //创建文件
         String daoFileUrl = System.getProperty("user.dir")+"/src/main/java/"+ dotToLine(daoPackage) + "/" +className + "Dao.java";
         File daoFile = new File(daoFileUrl);
+        File daoDir = daoFile.getParentFile();
+        if (!daoDir.exists()) {
+            daoDir.mkdirs();
+        }
         daoFile.createNewFile();
         out = new FileOutputStream(daoFile);
         daoTemplate.renderTo(out);
@@ -159,6 +167,10 @@ public class XbootGenerator {
         //创建文件
         String serviceFileUrl = System.getProperty("user.dir")+"/src/main/java/"+ dotToLine(servicePackage) + "/" + className + "Service.java";
         File serviceFile = new File(serviceFileUrl);
+        File serviceDir = serviceFile.getParentFile();
+        if (!serviceDir.exists()) {
+            serviceDir.mkdirs();
+        }
         serviceFile.createNewFile();
         out = new FileOutputStream(serviceFile);
         serviceTemplate.renderTo(out);
@@ -170,6 +182,10 @@ public class XbootGenerator {
         //创建文件
         String serviceImplFileUrl = System.getProperty("user.dir")+"/src/main/java/"+ dotToLine(serviceImplPackage) + "/" + className + "ServiceImpl.java";
         File serviceImplFile = new File(serviceImplFileUrl);
+        File serviceImplDir = serviceImplFile.getParentFile();
+        if (!serviceImplDir.exists()) {
+            serviceImplDir.mkdirs();
+        }
         serviceImplFile.createNewFile();
         out = new FileOutputStream(serviceImplFile);
         serviceImplTemplate.renderTo(out);
@@ -181,6 +197,10 @@ public class XbootGenerator {
         //创建文件
         String controllerFileUrl = System.getProperty("user.dir")+"/src/main/java/"+ dotToLine(controllerPackage) + "/" + className + "Controller.java";
         File controllerFile = new File(controllerFileUrl);
+        File controllerDir = controllerFile.getParentFile();
+        if (!controllerDir.exists()) {
+            controllerDir.mkdirs();
+        }
         controllerFile.createNewFile();
         out = new FileOutputStream(controllerFile);
         controllerTemplate.renderTo(out);

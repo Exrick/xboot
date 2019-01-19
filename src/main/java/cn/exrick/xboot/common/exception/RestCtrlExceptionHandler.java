@@ -1,4 +1,4 @@
-package cn.exrick.xboot.config.exception;
+package cn.exrick.xboot.common.exception;
 
 import cn.exrick.xboot.common.utils.ResultUtil;
 import cn.exrick.xboot.common.vo.Result;

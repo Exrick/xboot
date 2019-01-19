@@ -63,16 +63,17 @@ CREATE TABLE `t_dict` (
   `description` varchar(255) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `type` varchar(255) DEFAULT NULL,
+  `sort_order` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_dict
 -- ----------------------------
-INSERT INTO `t_dict` VALUES ('75135930788220928', 'admin', '2018-11-14 22:15:43', '0', 'admin', '2018-11-14 23:34:01', '', '性别', 'sex');
-INSERT INTO `t_dict` VALUES ('75383353938808832', 'admin', '2018-11-15 14:38:53', '0', 'admin', '2018-11-15 17:49:24', '', '消息类型', 'message_type');
-INSERT INTO `t_dict` VALUES ('75388696739713024', 'admin', '2018-11-15 15:00:07', '0', 'admin', '2018-11-15 15:00:07', '', '按钮权限类型', 'permission_type');
-INSERT INTO `t_dict` VALUES ('75392985935646720', 'admin', '2018-11-15 15:17:10', '0', 'admin', '2018-11-15 15:17:10', '', '腾讯云对象存储区域', 'tencent_bucket_region');
+INSERT INTO `t_dict` VALUES ('75135930788220928', 'admin', '2018-11-14 22:15:43', '0', 'admin', '2018-11-27 01:39:06', '', '性别', 'sex', '0.00');
+INSERT INTO `t_dict` VALUES ('75383353938808832', 'admin', '2018-11-15 14:38:53', '0', 'admin', '2018-11-27 01:39:15', '', '消息类型', 'message_type', '1.00');
+INSERT INTO `t_dict` VALUES ('75388696739713024', 'admin', '2018-11-15 15:00:07', '0', 'admin', '2018-11-27 01:39:22', '', '按钮权限类型', 'permission_type', '3.00');
+INSERT INTO `t_dict` VALUES ('75392985935646720', 'admin', '2018-11-15 15:17:10', '0', 'admin', '2018-11-27 01:39:29', '', '腾讯云对象存储区域', 'tencent_bucket_region', '4.00');
 
 -- ----------------------------
 -- Table structure for t_dict_data
@@ -186,123 +187,6 @@ CREATE TABLE `t_log` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for t_permission
--- ----------------------------
-DROP TABLE IF EXISTS `t_permission`;
-CREATE TABLE `t_permission` (
-  `id` varchar(255) NOT NULL,
-  `create_by` varchar(255) DEFAULT NULL,
-  `create_time` datetime DEFAULT NULL,
-  `del_flag` int(11) DEFAULT NULL,
-  `update_by` varchar(255) DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `parent_id` varchar(255) DEFAULT NULL,
-  `type` int(11) DEFAULT NULL,
-  `sort_order` decimal(10,2) DEFAULT NULL,
-  `component` varchar(255) DEFAULT NULL,
-  `path` varchar(255) DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
-  `icon` varchar(255) DEFAULT NULL,
-  `level` int(11) DEFAULT NULL,
-  `button_type` varchar(255) DEFAULT NULL,
-  `status` int(11) DEFAULT NULL,
-  `url` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of t_permission
--- ----------------------------
-INSERT INTO `t_permission` VALUES ('5129710648430592', '', '2018-06-04 19:02:29', '0', '', '2018-09-29 23:11:56', '', 'sys', '', '0', '1.00', 'Main', '/sys', '系统管理', 'ios-settings', '1', '', '0', '');
-INSERT INTO `t_permission` VALUES ('5129710648430593', '', '2018-06-04 19:02:32', '0', '', '2018-08-13 15:15:33', '', 'user-manage', '5129710648430592', '0', '1.10', 'sys/user-manage/userManage', 'user-manage', '用户管理', 'md-person', '2', '', '0', '');
-INSERT INTO `t_permission` VALUES ('5129710648430594', '', '2018-06-04 19:02:35', '0', '', '2018-10-13 13:51:36', '', 'role-manage', '5129710648430592', '0', '1.60', 'sys/role-manage/roleManage', 'role-manage', '角色权限管理', 'md-contacts', '2', '', '0', '');
-INSERT INTO `t_permission` VALUES ('5129710648430595', '', '2018-06-04 19:02:37', '0', '', '2018-09-23 23:32:02', '', 'menu-manage', '5129710648430592', '0', '1.70', 'sys/menu-manage/menuManage', 'menu-manage', '菜单权限管理', 'md-menu', '2', '', '0', '');
-INSERT INTO `t_permission` VALUES ('41375330996326400', '', '2018-08-13 18:23:08', '0', 'admin', '2018-10-20 22:47:07', '', 'simple-table', '41373430515240960', '0', '3.10', 'xboot-vue-template/simple-table/simpleTable', 'simple-table', '简单表格', 'ios-grid-outline', '2', '', '0', '');
-INSERT INTO `t_permission` VALUES ('15701400130424832', '', '2018-06-03 22:04:06', '0', '', '2018-09-19 22:16:44', '', '', '5129710648430593', '1', '1.11', '', '/xboot/user/admin/add*', '添加用户', '', '3', 'add', '0', '');
-INSERT INTO `t_permission` VALUES ('15701915807518720', '', '2018-06-03 22:06:09', '0', '', '2018-06-06 14:46:51', '', '', '5129710648430593', '1', '1.13', '', '/xboot/user/admin/disable/**', '禁用用户', '', '3', 'disable', '0', null);
-INSERT INTO `t_permission` VALUES ('15708892205944832', '', '2018-06-03 22:33:52', '0', '', '2018-06-28 16:44:48', '', '', '5129710648430593', '1', '1.14', '', '/xboot/user/admin/enable/**', '启用用户', '', '3', 'enable', '0', null);
-INSERT INTO `t_permission` VALUES ('16392452747300864', '', '2018-06-05 19:50:06', '0', 'admin', '2018-10-23 12:34:21', '', 'access', '', '0', '5.00', 'Main', '/access', '权限按钮测试页', 'md-lock', '1', '', '0', '');
-INSERT INTO `t_permission` VALUES ('16392767785668608', '', '2018-06-05 19:51:21', '0', 'admin', '2018-10-23 12:34:38', '', 'access_index', '16392452747300864', '0', '5.10', 'access/access', 'index', '权限按钮测试页', 'md-lock', '2', '', '0', '');
-INSERT INTO `t_permission` VALUES ('16438800255291392', '', '2018-06-05 22:54:18', '0', 'admin', '2018-10-23 12:34:51', '', '', '16392767785668608', '1', '5.11', '', 'test-add', '添加按钮测试', '', '3', 'add', '0', '');
-INSERT INTO `t_permission` VALUES ('16438962738434048', '', '2018-06-05 22:54:55', '0', 'admin', '2018-10-23 12:35:05', '', '', '16392767785668608', '1', '5.12', '', 'test-edit', '编辑按钮测试', '', '3', 'edit', '0', '');
-INSERT INTO `t_permission` VALUES ('16439068543946752', '', '2018-06-05 22:55:20', '0', 'admin', '2018-10-23 12:34:54', '', '', '16392767785668608', '1', '5.13', '', 'test-delete', '删除按钮测试', '', '3', 'delete', '0', '');
-INSERT INTO `t_permission` VALUES ('16678126574637056', '', '2018-06-06 14:45:16', '0', '', '2018-09-19 22:16:48', '', '', '5129710648430593', '1', '1.12', '', '/xboot/user/admin/edit*', '编辑用户', '', '3', 'edit', '0', '');
-INSERT INTO `t_permission` VALUES ('16678447719911424', '', '2018-06-06 14:46:32', '0', '', '2018-08-10 21:41:16', '', '', '5129710648430593', '1', '1.15', '', '/xboot/user/delByIds/**', '删除用户', '', '3', 'delete', '0', '');
-INSERT INTO `t_permission` VALUES ('16687383932047360', '', '2018-06-06 15:22:03', '0', '', '2018-09-19 22:07:34', '', '', '5129710648430594', '1', '1.21', '', '/xboot/role/save*', '添加角色', '', '3', 'add', '0', '');
-INSERT INTO `t_permission` VALUES ('16689632049631232', '', '2018-06-06 15:30:59', '0', '', '2018-09-19 22:07:37', '', '', '5129710648430594', '1', '1.22', '', '/xboot/role/edit*', '编辑角色', '', '3', 'edit', '0', '');
-INSERT INTO `t_permission` VALUES ('16689745006432256', '', '2018-06-06 15:31:26', '0', '', '2018-08-10 21:41:23', '', '', '5129710648430594', '1', '1.23', '', '/xboot/role/delAllByIds/**', '删除角色', '', '3', 'delete', '0', '');
-INSERT INTO `t_permission` VALUES ('16689883993083904', null, '2018-06-06 15:31:59', '0', null, '2018-06-06 15:31:59', null, null, '5129710648430594', '1', '1.24', null, '/xboot/role/editRolePerm/**', '分配权限', null, '3', 'editPerm', '0', null);
-INSERT INTO `t_permission` VALUES ('16690313745666048', '', '2018-06-06 15:33:41', '0', '', '2018-09-19 22:07:46', '', '', '5129710648430594', '1', '1.25', '', '/xboot/role/setDefault*', '设为默认角色', '', '3', 'setDefault', '0', '');
-INSERT INTO `t_permission` VALUES ('16694861252005888', '', '2018-06-06 15:51:46', '0', '', '2018-09-19 22:07:52', '', '', '5129710648430595', '1', '1.31', '', '/xboot/permission/add*', '添加菜单', '', '3', 'add', '0', '');
-INSERT INTO `t_permission` VALUES ('16695107491205120', '', '2018-06-06 15:52:44', '0', '', '2018-09-19 22:07:57', '', '', '5129710648430595', '1', '1.32', '', '/xboot/permission/edit*', '编辑菜单', '', '3', 'edit', '0', '');
-INSERT INTO `t_permission` VALUES ('16695243126607872', '', '2018-06-06 15:53:17', '0', '', '2018-08-10 21:41:33', '', '', '5129710648430595', '1', '1.33', '', '/xboot/permission/delByIds/**', '删除菜单', '', '3', 'delete', '0', '');
-INSERT INTO `t_permission` VALUES ('41371711400054784', '', '2018-08-13 18:08:45', '0', '', '2018-08-14 12:31:15', '', 'actuator', '39915540965232640', '0', '2.30', 'sys/actuator/actuator', 'actuator', 'Actuator监控[付费]', 'logo-angular', '2', '', '0', '');
-INSERT INTO `t_permission` VALUES ('41370251991977984', null, '2018-08-13 18:02:57', '0', null, '2018-08-13 18:02:57', null, 'quartz-job', '39915540965232640', '0', '2.10', 'sys/quartz-manage/quartzManage', 'quartz-job', '定时任务', 'md-time', '2', '', '0', null);
-INSERT INTO `t_permission` VALUES ('25014528525733888', '', '2018-06-29 14:51:09', '0', '', '2018-10-08 11:13:27', '', '', '5129710648430593', '1', '1.16', '', '无', '上传图片', '', '3', 'upload', '0', '');
-INSERT INTO `t_permission` VALUES ('39915540965232640', null, '2018-08-09 17:42:28', '0', null, '2018-08-09 17:42:28', null, 'monitor', null, '0', '2.00', 'Main', '/monitor', '系统监控', 'ios-analytics', '1', null, '0', null);
-INSERT INTO `t_permission` VALUES ('39916171171991552', '', '2018-08-09 17:44:57', '0', '', '2018-08-25 12:13:11', '', 'druid', '39915540965232640', '0', '2.40', 'sys/monitor/monitor', 'druid', 'SQL监控', 'md-analytics', '2', '', '0', 'http://xboot.exrick.cn/druid/login.html');
-INSERT INTO `t_permission` VALUES ('39918482854252544', '', '2018-08-09 17:54:08', '0', '', '2018-08-25 12:13:27', '', 'swagger', '39915540965232640', '0', '2.50', 'sys/monitor/monitor', 'swagger', '接口文档', 'md-document', '2', '', '0', 'http://xboot.exrick.cn/swagger-ui.html');
-INSERT INTO `t_permission` VALUES ('40238597734928384', null, '2018-08-10 15:06:10', '0', null, '2018-08-10 15:06:10', null, 'department-manage', '5129710648430592', '0', '1.20', 'sys/department-manage/departmentManage', 'department-manage', '部门管理', 'md-git-branch', '2', '', '0', null);
-INSERT INTO `t_permission` VALUES ('42082442672082944', '', '2018-08-15 17:12:57', '0', 'admin', '2018-10-20 22:47:22', '', 'new-window', '41373430515240960', '0', '3.30', 'xboot-vue-template/new-window/newWindow', 'new-window', '新窗口操作[付费]', 'ios-browsers', '2', '', '0', '');
-INSERT INTO `t_permission` VALUES ('41373430515240960', '', '2018-08-13 18:15:35', '0', 'admin', '2018-11-17 11:41:44', '', 'vue-template', '', '0', '3.00', 'Main', '/vue-template', '后台Vue模版', 'ios-albums', '1', '', '0', '');
-INSERT INTO `t_permission` VALUES ('41363147411427328', '', '2018-08-13 17:34:43', '0', '', '2018-08-20 20:05:21', '', 'log-manage', '39915540965232640', '0', '2.20', 'sys/log-manage/logManage', 'log-manage', '操作日志管理', 'md-list-box', '2', '', '0', '');
-INSERT INTO `t_permission` VALUES ('41363537456533504', '', '2018-08-13 17:36:16', '0', '', '2018-08-13 17:56:11', '', '', '41363147411427328', '1', '2.11', '', '/xboot/log/delByIds/**', '删除日志', '', '3', 'delete', '0', '');
-INSERT INTO `t_permission` VALUES ('41364927394353152', '', '2018-08-13 17:41:48', '0', '', '2018-09-19 22:08:57', '', '', '41363147411427328', '1', '2.12', '', '/xboot/log/delAll*', '清空日志', '', '3', 'undefined', '0', '');
-INSERT INTO `t_permission` VALUES ('41376192166629376', '', '2018-08-13 18:26:33', '0', 'admin', '2018-10-20 22:47:26', '', 'search-table', '41373430515240960', '0', '3.40', 'xboot-vue-template/search-table/searchTable', 'search-table', '搜索表格[付费]', 'md-grid', '2', '', '0', '');
-INSERT INTO `t_permission` VALUES ('41377034236071936', '', '2018-08-13 18:29:54', '0', 'admin', '2018-10-20 22:47:33', '', 'complex-table', '41373430515240960', '0', '3.50', 'xboot-vue-template/complex-table/complexTable', 'complex-table', '复杂表格[付费]', 'ios-grid', '2', '', '0', '');
-INSERT INTO `t_permission` VALUES ('41378916912336896', '', '2018-08-13 18:37:23', '0', 'admin', '2018-10-20 22:47:39', '', 'tree', '41373430515240960', '0', '3.70', 'xboot-vue-template/tree/tree', 'tree', '树形结构[付费]', 'ios-git-network', '2', '', '0', '');
-INSERT INTO `t_permission` VALUES ('41469219249852416', null, '2018-08-14 00:36:13', '0', null, '2018-08-14 00:36:13', null, '', '41371711400054784', '1', '2.31', '', '无', '查看数据', '', '3', 'view', '0', null);
-INSERT INTO `t_permission` VALUES ('42087054753927168', '', '2018-08-15 17:31:16', '0', 'admin', '2018-10-22 21:33:53', '', 'html-edit', '41373430515240960', '0', '3.92', 'xboot-vue-template/html-edit/htmlEdit', 'html-edit', '富文本编辑[付费]', 'ios-create', '2', '', '0', '');
-INSERT INTO `t_permission` VALUES ('43117268627886080', '', '2018-08-18 13:44:58', '0', '', '2018-08-18 20:55:04', '', 'message-manage', '5129710648430592', '0', '1.30', 'sys/message-manage/messageManage', 'message-manage', '消息管理[付费]', 'md-mail', '2', '', '0', '');
-INSERT INTO `t_permission` VALUES ('44986029924421632', '', '2018-08-23 17:30:46', '0', '', '2018-09-23 23:26:53', '', 'social-manage', '5129710648430592', '0', '1.50', 'sys/social-manage/socialManage', 'social-manage', '社交账号绑定[付费]', 'md-share', '2', '', '0', '');
-INSERT INTO `t_permission` VALUES ('45069342940860416', '', '2018-08-23 23:01:49', '0', '', '2018-08-24 10:01:09', '', '', '44986029924421632', '1', '1.42', '', '无', '查看社交账号数据', '', '3', 'view', '0', '');
-INSERT INTO `t_permission` VALUES ('45235228800716800', '', '2018-08-24 10:01:00', '0', '', '2018-09-19 22:07:23', '', '', '44986029924421632', '1', '1.41', '', '/xboot/relate/delByIds*', '删除解绑', '', '3', 'delete', '0', '');
-INSERT INTO `t_permission` VALUES ('45235621697949696', '', '2018-08-24 10:02:33', '0', '', '2018-09-19 22:06:57', '', '', '40238597734928384', '1', '1.21', '', '/xboot/department/add*', '添加部门', '', '3', 'add', '0', '');
-INSERT INTO `t_permission` VALUES ('45235787867885568', '', '2018-08-24 10:03:13', '0', '', '2018-09-19 22:07:02', '', '', '40238597734928384', '1', '1.22', '', '/xboot/department/edit*', '编辑部门', '', '3', 'edit', '0', '');
-INSERT INTO `t_permission` VALUES ('45235939278065664', null, '2018-08-24 10:03:49', '0', null, '2018-08-24 10:03:49', null, '', '40238597734928384', '1', '1.23', '', '/xboot/department/delByIds/*', '删除部门', '', '3', 'delete', '0', null);
-INSERT INTO `t_permission` VALUES ('45236734832676864', '', '2018-08-24 10:06:59', '0', '', '2018-09-19 22:07:07', '', '', '43117268627886080', '1', '1.31', '', '/xboot/message/add*', '添加消息', '', '3', 'add', '0', '');
-INSERT INTO `t_permission` VALUES ('45237010692050944', '', '2018-08-24 10:08:04', '0', '', '2018-09-19 22:07:12', '', '', '43117268627886080', '1', '1.32', '', '/xboot/message/edit*', '编辑消息', '', '3', 'edit', '0', '');
-INSERT INTO `t_permission` VALUES ('45237170029465600', null, '2018-08-24 10:08:42', '0', null, '2018-08-24 10:08:42', null, '', '43117268627886080', '1', '1.33', '', '/xboot/message/delByIds/*', '删除消息', '', '3', 'delete', '0', null);
-INSERT INTO `t_permission` VALUES ('45264987354042368', '', '2018-08-24 11:59:14', '0', '', '2018-09-19 22:08:11', '', '', '41370251991977984', '1', '2.11', '', '/xboot/quartzJob/add*', '添加定时任务', '', '3', 'add', '0', '');
-INSERT INTO `t_permission` VALUES ('45265487029866496', '', '2018-08-24 12:01:14', '0', '', '2018-09-19 22:08:17', '', '', '41370251991977984', '1', '2.12', '', '/xboot/quartzJob/edit*', '编辑定时任务', '', '3', 'edit', '0', '');
-INSERT INTO `t_permission` VALUES ('45265762415284224', '', '2018-08-24 12:02:19', '0', '', '2018-09-19 22:08:24', '', '', '41370251991977984', '1', '2.13', '', '/xboot/quartzJob/pause*', '暂停定时任务', '', '3', 'disable', '0', '');
-INSERT INTO `t_permission` VALUES ('45265886315024384', '', '2018-08-24 12:02:49', '0', '', '2018-09-19 22:09:13', '', '', '41370251991977984', '1', '2.14', '', '/xboot/quartzJob/resume*', '恢复定时任务', '', '3', 'enable', '0', '');
-INSERT INTO `t_permission` VALUES ('45266070000373760', null, '2018-08-24 12:03:33', '0', null, '2018-08-24 12:03:33', null, '', '41370251991977984', '1', '2.15', '', '/xboot/quartzJob/delByIds/*', '删除定时任务', '', '3', 'delete', '0', null);
-INSERT INTO `t_permission` VALUES ('56309618086776832', '', '2018-09-23 23:26:40', '0', 'admin', '2018-11-15 15:17:43', '', 'oss-manage', '5129710648430592', '0', '1.40', 'sys/oss-manage/ossManage', 'oss-manage', '文件对象存储[付费]', 'ios-folder', '2', '', '0', '');
-INSERT INTO `t_permission` VALUES ('56898976661639168', '', '2018-09-25 14:28:34', '0', '', '2018-09-25 15:12:46', '', '', '5129710648430593', '1', '1.17', '', '/xboot/user/importData*', '导入用户', '', '3', 'input', '0', '');
-INSERT INTO `t_permission` VALUES ('56911328312299520', '', '2018-09-25 15:17:39', '0', 'admin', '2018-10-20 22:47:36', '', 'excel', '41373430515240960', '0', '3.60', 'xboot-vue-template/excel/excel', 'excel', 'Excel导入导出[付费]', 'md-exit', '2', '', '0', '');
-INSERT INTO `t_permission` VALUES ('57009544286441472', null, '2018-09-25 21:47:55', '0', null, '2018-09-25 21:47:55', null, '', '43117268627886080', '1', '1.40', '', '/xboot/messageSend/save*', '添加已发送消息', '', '3', 'add', '0', null);
-INSERT INTO `t_permission` VALUES ('57009744761589760', null, '2018-09-25 21:48:43', '0', null, '2018-09-25 21:48:43', null, '', '43117268627886080', '1', '1.50', '', '/xboot/messageSend/update*', '编辑已发送消息', '', '3', 'edit', '0', null);
-INSERT INTO `t_permission` VALUES ('57009981228060672', null, '2018-09-25 21:49:39', '0', null, '2018-09-25 21:49:39', null, '', '43117268627886080', '1', '1.60', '', '/xboot/messageSend/delByIds/*', '删除已发送消息', '', '3', 'delete', '0', null);
-INSERT INTO `t_permission` VALUES ('57212882168844288', '', '2018-09-26 11:15:55', '0', '', '2018-10-08 11:10:05', '', '', '56309618086776832', '1', '1.41', '', '无', '上传文件', '', '3', 'upload', '0', '');
-INSERT INTO `t_permission` VALUES ('58480609315524608', '', '2018-09-29 23:13:24', '0', 'admin', '2018-11-14 13:24:26', '', 'setting', '5129710648430592', '0', '1.90', 'sys/setting-manage/settingManage', 'setting', '系统配置[付费]', 'ios-settings-outline', '2', '', '0', '');
-INSERT INTO `t_permission` VALUES ('61394706252173312', null, '2018-10-08 00:12:59', '0', null, '2018-10-08 00:12:59', null, '', '58480609315524608', '1', '1.81', '', '/xboot/setting/seeSecret/**', '查看私密配置', '', '3', 'view', '0', null);
-INSERT INTO `t_permission` VALUES ('61417744146370560', '', '2018-10-08 01:44:32', '0', '', '2018-10-08 01:50:03', '', '', '58480609315524608', '1', '1.82', '', '/xboot/setting/*/set*', '编辑配置', '', '3', 'edit', '0', '');
-INSERT INTO `t_permission` VALUES ('61560480518377472', null, '2018-10-08 11:11:43', '0', null, '2018-10-08 11:11:43', null, '', '56309618086776832', '1', '1.44', '', '/xboot/file/delete/*', '删除文件', '', '3', 'delete', '0', null);
-INSERT INTO `t_permission` VALUES ('61560275261722624', null, '2018-10-08 11:10:54', '0', null, '2018-10-08 11:10:54', null, '', '56309618086776832', '1', '1.43', '', '/xboot/file/copy*', '复制文件', '', '3', 'edit', '0', null);
-INSERT INTO `t_permission` VALUES ('61560041605435392', null, '2018-10-08 11:09:58', '0', null, '2018-10-08 11:09:58', null, '', '56309618086776832', '1', '1.42', '', '/xboot/file/rename*', '重命名文件', '', '3', 'edit', '0', null);
-INSERT INTO `t_permission` VALUES ('63482475359244288', '', '2018-10-13 18:29:02', '0', 'admin', '2018-10-20 22:47:45', '', 'custom-tree', '41373430515240960', '0', '3.80', 'xboot-vue-template/custom-tree/customTree', 'custom-tree', '自定义树[付费]', 'md-git-network', '2', '', '0', '');
-INSERT INTO `t_permission` VALUES ('63741744973352960', '', '2018-10-14 11:39:17', '0', 'admin', '2018-10-20 22:47:18', '', 'render', '41373430515240960', '0', '3.20', 'xboot-vue-template/render/render', 'render', 'Render函数示例[付费]', 'md-aperture', '2', '', '0', '');
-INSERT INTO `t_permission` VALUES ('64290663792906240', '', '2018-10-16 00:00:29', '0', 'admin', '2018-10-20 22:47:49', '', 'tree&table', '41373430515240960', '0', '3.90', 'xboot-vue-template/tree&table/tree&table', 'tree&table', '树+表格[付费]', 'md-list', '2', '', '0', '');
-INSERT INTO `t_permission` VALUES ('66790433014943744', 'admin', '2018-10-22 21:33:42', '0', 'admin', '2018-10-22 21:37:12', '', 'card-list', '41373430515240960', '0', '3.91', 'xboot-vue-template/card-list/cardList', 'card-list', '卡片列表[付费]', 'md-card', '2', '', '0', '');
-INSERT INTO `t_permission` VALUES ('67027909637836800', 'admin', '2018-10-23 13:17:19', '0', 'admin', '2018-10-23 14:57:46', '', 'banner', '67027338952445952', '0', '4.10', 'product-template/banner/Banner', 'banner', '轮播组件[付费]', 'md-book', '2', '', '0', '');
-INSERT INTO `t_permission` VALUES ('67027338952445952', 'admin', '2018-10-23 13:15:03', '0', 'admin', '2018-10-23 14:57:38', '', 'product-template', '', '0', '4.00', 'Main', '/product-template', '前台产品级组件', 'md-ribbon', '1', '', '0', '');
-INSERT INTO `t_permission` VALUES ('67042515441684480', 'admin', '2018-10-23 14:15:22', '0', 'admin', '2018-10-23 14:57:51', '', 'product', '67027338952445952', '0', '4.20', 'product-template/product/Product', 'product', '产品组件[付费]', 'md-pricetags', '2', '', '0', '');
-INSERT INTO `t_permission` VALUES ('67082402312228864', 'admin', '2018-10-23 16:53:53', '0', 'admin', '2018-10-23 16:53:53', null, 'category', '67027338952445952', '0', '4.30', 'product-template/category/Category', 'category', '分类栏组件[付费]', 'md-apps', '2', '', '0', null);
-INSERT INTO `t_permission` VALUES ('75002207560273920', 'admin', '2018-11-14 13:24:21', '0', 'admin', '2018-11-20 20:06:22', '', 'dict', '5129710648430592', '0', '1.80', 'sys/dict-manage/dictManage', 'dict', '数据字典管理', 'md-bookmarks', '2', '', '0', '');
-INSERT INTO `t_permission` VALUES ('76606430504816640', 'admin', '2018-11-18 23:38:57', '0', 'admin', '2018-11-18 23:39:12', '', 'activiti', '', '0', '1.10', 'Main', '/activiti', '工作流程', 'md-git-compare', '1', '', '0', '');
-INSERT INTO `t_permission` VALUES ('76607201262702592', 'admin', '2018-11-18 23:42:01', '0', 'admin', '2018-11-20 19:41:58', '', 'model-manage', '76606430504816640', '0', '1.00', 'activiti/model-manage/modelManage', 'model-manage', '模型管理[付费]', 'md-cube', '2', '', '0', '');
-INSERT INTO `t_permission` VALUES ('76914082455752704', 'admin', '2018-11-19 20:01:28', '0', 'admin', '2018-11-20 19:41:50', '', 'process-manage', '76606430504816640', '0', '0.90', 'activiti/process-manage/processManage', 'process-manage', '流程管理[付费]', 'md-calendar', '2', '', '0', '');
-INSERT INTO `t_permission` VALUES ('76215889006956544', 'admin', '2018-11-17 21:47:05', '0', 'admin', '2018-11-17 21:47:53', '', '', '75002207560273920', '1', '1.81', '', '/xboot/dict/add*', '添加字典', '', '3', 'add', '0', '');
-INSERT INTO `t_permission` VALUES ('76216071333351424', 'admin', '2018-11-17 21:47:48', '0', 'admin', '2018-11-17 21:47:48', null, '', '75002207560273920', '1', '1.82', '', '/xboot/dict/edit*', '编辑字典', '', '3', 'edit', '0', null);
-INSERT INTO `t_permission` VALUES ('76216264070008832', 'admin', '2018-11-17 21:48:34', '0', 'admin', '2018-11-17 21:48:34', null, '', '75002207560273920', '1', '1.83', '', '/xboot/dict/delByIds/**', '删除字典', '', '3', 'delete', '0', null);
-INSERT INTO `t_permission` VALUES ('76216459709124608', 'admin', '2018-11-17 21:49:21', '0', 'admin', '2018-11-17 21:49:21', null, '', '75002207560273920', '1', '1.84', '', '/xboot/dictData/add*', '添加字典数据', '', '3', 'add', '0', null);
-INSERT INTO `t_permission` VALUES ('76216594207870976', 'admin', '2018-11-17 21:49:53', '0', 'admin', '2018-11-17 21:49:53', null, '', '75002207560273920', '1', '1.85', '', '/xboot/dictData/edit*', '编辑字典数据', '', '3', 'edit', '0', null);
-INSERT INTO `t_permission` VALUES ('76216702639017984', 'admin', '2018-11-17 21:50:18', '0', 'admin', '2018-11-17 21:50:18', null, '', '75002207560273920', '1', '1.86', '', '/xboot/dictData/delByIds/**', '删除字典数据', '', '3', 'delete', '0', null);
-
--- ----------------------------
 -- Table structure for t_quartz_job
 -- ----------------------------
 DROP TABLE IF EXISTS `t_quartz_job`;
@@ -376,6 +260,148 @@ INSERT INTO `t_role_department` VALUES ('70763874265075712', 'admin', '2018-11-0
 INSERT INTO `t_role_department` VALUES ('70763874277658624', 'admin', '2018-11-02 20:42:43', '0', 'admin', '2018-11-02 20:42:43', '40322852833988608', '16457350655250432');
 
 -- ----------------------------
+-- Table structure for t_permission
+-- ----------------------------
+DROP TABLE IF EXISTS `t_permission`;
+CREATE TABLE `t_permission` (
+  `id` varchar(255) NOT NULL,
+  `create_by` varchar(255) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `del_flag` int(11) DEFAULT NULL,
+  `update_by` varchar(255) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `parent_id` varchar(255) DEFAULT NULL,
+  `type` int(11) DEFAULT NULL,
+  `sort_order` decimal(10,2) DEFAULT NULL,
+  `component` varchar(255) DEFAULT NULL,
+  `path` varchar(255) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `icon` varchar(255) DEFAULT NULL,
+  `level` int(11) DEFAULT NULL,
+  `button_type` varchar(255) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `url` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of t_permission
+-- ----------------------------
+INSERT INTO `t_permission` VALUES ('5129710648430592', '', '2018-06-04 19:02:29', 0, '', '2018-09-29 23:11:56', '', 'sys', '', 0, 1.00, 'Main', '/sys', '系统管理', 'ios-settings', 1, '', 0, '');
+INSERT INTO `t_permission` VALUES ('5129710648430593', '', '2018-06-04 19:02:32', 0, '', '2018-08-13 15:15:33', '', 'user-manage', '5129710648430592', 0, 1.10, 'sys/user-manage/userManage', 'user-manage', '用户管理', 'md-person', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('5129710648430594', '', '2018-06-04 19:02:35', 0, '', '2018-10-13 13:51:36', '', 'role-manage', '5129710648430592', 0, 1.60, 'sys/role-manage/roleManage', 'role-manage', '角色权限管理', 'md-contacts', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('5129710648430595', '', '2018-06-04 19:02:37', 0, '', '2018-09-23 23:32:02', '', 'menu-manage', '5129710648430592', 0, 1.70, 'sys/menu-manage/menuManage', 'menu-manage', '菜单权限管理', 'md-menu', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('41375330996326400', '', '2018-08-13 18:23:08', 0, 'admin', '2018-10-20 22:47:07', '', 'simple-table', '41373430515240960', 0, 3.10, 'xboot-vue-template/simple-table/simpleTable', 'simple-table', '简单表格', 'ios-grid-outline', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('15701400130424832', '', '2018-06-03 22:04:06', 0, '', '2018-09-19 22:16:44', '', '', '5129710648430593', 1, 1.11, '', '/xboot/user/admin/add*', '添加用户', '', 3, 'add', 0, '');
+INSERT INTO `t_permission` VALUES ('15701915807518720', '', '2018-06-03 22:06:09', 0, '', '2018-06-06 14:46:51', '', '', '5129710648430593', 1, 1.13, '', '/xboot/user/admin/disable/**', '禁用用户', '', 3, 'disable', 0, NULL);
+INSERT INTO `t_permission` VALUES ('15708892205944832', '', '2018-06-03 22:33:52', 0, '', '2018-06-28 16:44:48', '', '', '5129710648430593', 1, 1.14, '', '/xboot/user/admin/enable/**', '启用用户', '', 3, 'enable', 0, NULL);
+INSERT INTO `t_permission` VALUES ('16392452747300864', '', '2018-06-05 19:50:06', 0, 'admin', '2018-10-23 12:34:21', '', 'access', '', 0, 5.00, 'Main', '/access', '权限按钮测试页', 'md-lock', 1, '', 0, '');
+INSERT INTO `t_permission` VALUES ('16392767785668608', '', '2018-06-05 19:51:21', 0, 'admin', '2018-10-23 12:34:38', '', 'access_index', '16392452747300864', 0, 5.10, 'access/access', 'index', '权限按钮测试页', 'md-lock', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('16438800255291392', '', '2018-06-05 22:54:18', 0, 'admin', '2018-10-23 12:34:51', '', '', '16392767785668608', 1, 5.11, '', 'test-add', '添加按钮测试', '', 3, 'add', 0, '');
+INSERT INTO `t_permission` VALUES ('16438962738434048', '', '2018-06-05 22:54:55', 0, 'admin', '2018-10-23 12:35:05', '', '', '16392767785668608', 1, 5.12, '', 'test-edit', '编辑按钮测试', '', 3, 'edit', 0, '');
+INSERT INTO `t_permission` VALUES ('16439068543946752', '', '2018-06-05 22:55:20', 0, 'admin', '2018-10-23 12:34:54', '', '', '16392767785668608', 1, 5.13, '', 'test-delete', '删除按钮测试', '', 3, 'delete', 0, '');
+INSERT INTO `t_permission` VALUES ('16678126574637056', '', '2018-06-06 14:45:16', 0, '', '2018-09-19 22:16:48', '', '', '5129710648430593', 1, 1.12, '', '/xboot/user/admin/edit*', '编辑用户', '', 3, 'edit', 0, '');
+INSERT INTO `t_permission` VALUES ('16678447719911424', '', '2018-06-06 14:46:32', 0, '', '2018-08-10 21:41:16', '', '', '5129710648430593', 1, 1.15, '', '/xboot/user/delByIds/**', '删除用户', '', 3, 'delete', 0, '');
+INSERT INTO `t_permission` VALUES ('16687383932047360', '', '2018-06-06 15:22:03', 0, '', '2018-09-19 22:07:34', '', '', '5129710648430594', 1, 1.21, '', '/xboot/role/save*', '添加角色', '', 3, 'add', 0, '');
+INSERT INTO `t_permission` VALUES ('16689632049631232', '', '2018-06-06 15:30:59', 0, '', '2018-09-19 22:07:37', '', '', '5129710648430594', 1, 1.22, '', '/xboot/role/edit*', '编辑角色', '', 3, 'edit', 0, '');
+INSERT INTO `t_permission` VALUES ('16689745006432256', '', '2018-06-06 15:31:26', 0, '', '2018-08-10 21:41:23', '', '', '5129710648430594', 1, 1.23, '', '/xboot/role/delAllByIds/**', '删除角色', '', 3, 'delete', 0, '');
+INSERT INTO `t_permission` VALUES ('16689883993083904', NULL, '2018-06-06 15:31:59', 0, NULL, '2018-06-06 15:31:59', NULL, NULL, '5129710648430594', 1, 1.24, NULL, '/xboot/role/editRolePerm**', '分配权限', NULL, 3, 'editPerm', 0, NULL);
+INSERT INTO `t_permission` VALUES ('16690313745666048', '', '2018-06-06 15:33:41', 0, '', '2018-09-19 22:07:46', '', '', '5129710648430594', 1, 1.25, '', '/xboot/role/setDefault*', '设为默认角色', '', 3, 'setDefault', 0, '');
+INSERT INTO `t_permission` VALUES ('16694861252005888', '', '2018-06-06 15:51:46', 0, '', '2018-09-19 22:07:52', '', '', '5129710648430595', 1, 1.31, '', '/xboot/permission/add*', '添加菜单', '', 3, 'add', 0, '');
+INSERT INTO `t_permission` VALUES ('16695107491205120', '', '2018-06-06 15:52:44', 0, '', '2018-09-19 22:07:57', '', '', '5129710648430595', 1, 1.32, '', '/xboot/permission/edit*', '编辑菜单', '', 3, 'edit', 0, '');
+INSERT INTO `t_permission` VALUES ('16695243126607872', '', '2018-06-06 15:53:17', 0, '', '2018-08-10 21:41:33', '', '', '5129710648430595', 1, 1.33, '', '/xboot/permission/delByIds/**', '删除菜单', '', 3, 'delete', 0, '');
+INSERT INTO `t_permission` VALUES ('41371711400054784', '', '2018-08-13 18:08:45', 0, '', '2018-08-14 12:31:15', '', 'actuator', '39915540965232640', 0, 2.30, 'sys/actuator/actuator', 'actuator', 'Actuator监控[付费]', 'logo-angular', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('41370251991977984', NULL, '2018-08-13 18:02:57', 0, NULL, '2018-08-13 18:02:57', NULL, 'quartz-job', '39915540965232640', 0, 2.10, 'sys/quartz-manage/quartzManage', 'quartz-job', '定时任务', 'md-time', 2, '', 0, NULL);
+INSERT INTO `t_permission` VALUES ('25014528525733888', '', '2018-06-29 14:51:09', 0, '', '2018-10-08 11:13:27', '', '', '5129710648430593', 1, 1.16, '', '无', '上传图片', '', 3, 'upload', 0, '');
+INSERT INTO `t_permission` VALUES ('39915540965232640', NULL, '2018-08-09 17:42:28', 0, NULL, '2018-08-09 17:42:28', NULL, 'monitor', NULL, 0, 2.00, 'Main', '/monitor', '系统监控', 'ios-analytics', 1, NULL, 0, NULL);
+INSERT INTO `t_permission` VALUES ('39916171171991552', '', '2018-08-09 17:44:57', 0, '', '2018-08-25 12:13:11', '', 'druid', '39915540965232640', 0, 2.40, 'sys/monitor/monitor', 'druid', 'SQL监控', 'md-analytics', 2, '', 0, 'http://xboot.exrick.cn/druid/login.html');
+INSERT INTO `t_permission` VALUES ('39918482854252544', '', '2018-08-09 17:54:08', 0, '', '2018-08-25 12:13:27', '', 'swagger', '39915540965232640', 0, 2.50, 'sys/monitor/monitor', 'swagger', '接口文档', 'md-document', 2, '', 0, 'http://xboot.exrick.cn/swagger-ui.html');
+INSERT INTO `t_permission` VALUES ('40238597734928384', NULL, '2018-08-10 15:06:10', 0, NULL, '2018-08-10 15:06:10', NULL, 'department-manage', '5129710648430592', 0, 1.20, 'sys/department-manage/departmentManage', 'department-manage', '部门管理', 'md-git-branch', 2, '', 0, NULL);
+INSERT INTO `t_permission` VALUES ('42082442672082944', '', '2018-08-15 17:12:57', 0, 'admin', '2018-10-20 22:47:22', '', 'new-window', '41373430515240960', 0, 3.30, 'xboot-vue-template/new-window/newWindow', 'new-window', '新窗口操作[付费]', 'ios-browsers', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('41373430515240960', '', '2018-08-13 18:15:35', 0, 'admin', '2018-11-17 11:41:44', '', 'vue-template', '', 0, 3.00, 'Main', '/vue-template', '后台Vue模版', 'ios-albums', 1, '', 0, '');
+INSERT INTO `t_permission` VALUES ('41363147411427328', '', '2018-08-13 17:34:43', 0, '', '2018-08-20 20:05:21', '', 'log-manage', '39915540965232640', 0, 2.20, 'sys/log-manage/logManage', 'log-manage', '操作日志管理', 'md-list-box', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('41363537456533504', '', '2018-08-13 17:36:16', 0, '', '2018-08-13 17:56:11', '', '', '41363147411427328', 1, 2.11, '', '/xboot/log/delByIds/**', '删除日志', '', 3, 'delete', 0, '');
+INSERT INTO `t_permission` VALUES ('41364927394353152', '', '2018-08-13 17:41:48', 0, '', '2018-09-19 22:08:57', '', '', '41363147411427328', 1, 2.12, '', '/xboot/log/delAll*', '清空日志', '', 3, 'undefined', 0, '');
+INSERT INTO `t_permission` VALUES ('41376192166629376', '', '2018-08-13 18:26:33', 0, 'admin', '2018-10-20 22:47:26', '', 'search-table', '41373430515240960', 0, 3.40, 'xboot-vue-template/search-table/searchTable', 'search-table', '搜索表格[付费]', 'md-grid', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('41377034236071936', '', '2018-08-13 18:29:54', 0, 'admin', '2018-10-20 22:47:33', '', 'complex-table', '41373430515240960', 0, 3.50, 'xboot-vue-template/complex-table/complexTable', 'complex-table', '复杂表格[付费]', 'ios-grid', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('41378916912336896', '', '2018-08-13 18:37:23', 0, 'admin', '2018-10-20 22:47:39', '', 'tree', '41373430515240960', 0, 3.70, 'xboot-vue-template/tree/tree', 'tree', '树形结构[付费]', 'ios-git-network', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('41469219249852416', NULL, '2018-08-14 00:36:13', 0, NULL, '2018-08-14 00:36:13', NULL, '', '41371711400054784', 1, 2.31, '', '无', '查看数据', '', 3, 'view', 0, NULL);
+INSERT INTO `t_permission` VALUES ('42087054753927168', '', '2018-08-15 17:31:16', 0, 'admin', '2018-10-22 21:33:53', '', 'html-edit', '41373430515240960', 0, 3.92, 'xboot-vue-template/html-edit/htmlEdit', 'html-edit', '富文本编辑[付费]', 'ios-create', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('43117268627886080', '', '2018-08-18 13:44:58', 0, '', '2018-08-18 20:55:04', '', 'message-manage', '5129710648430592', 0, 1.30, 'sys/message-manage/messageManage', 'message-manage', '消息管理[付费]', 'md-mail', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('44986029924421632', '', '2018-08-23 17:30:46', 0, '', '2018-09-23 23:26:53', '', 'social-manage', '5129710648430592', 0, 1.50, 'sys/social-manage/socialManage', 'social-manage', '社交账号绑定[付费]', 'md-share', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('45069342940860416', '', '2018-08-23 23:01:49', 0, '', '2018-08-24 10:01:09', '', '', '44986029924421632', 1, 1.42, '', '无', '查看社交账号数据', '', 3, 'view', 0, '');
+INSERT INTO `t_permission` VALUES ('45235228800716800', '', '2018-08-24 10:01:00', 0, '', '2018-09-19 22:07:23', '', '', '44986029924421632', 1, 1.41, '', '/xboot/relate/delByIds*', '删除解绑', '', 3, 'delete', 0, '');
+INSERT INTO `t_permission` VALUES ('45235621697949696', '', '2018-08-24 10:02:33', 0, '', '2018-09-19 22:06:57', '', '', '40238597734928384', 1, 1.21, '', '/xboot/department/add*', '添加部门', '', 3, 'add', 0, '');
+INSERT INTO `t_permission` VALUES ('45235787867885568', '', '2018-08-24 10:03:13', 0, '', '2018-09-19 22:07:02', '', '', '40238597734928384', 1, 1.22, '', '/xboot/department/edit*', '编辑部门', '', 3, 'edit', 0, '');
+INSERT INTO `t_permission` VALUES ('45235939278065664', NULL, '2018-08-24 10:03:49', 0, NULL, '2018-08-24 10:03:49', NULL, '', '40238597734928384', 1, 1.23, '', '/xboot/department/delByIds/*', '删除部门', '', 3, 'delete', 0, NULL);
+INSERT INTO `t_permission` VALUES ('45236734832676864', '', '2018-08-24 10:06:59', 0, '', '2018-09-19 22:07:07', '', '', '43117268627886080', 1, 1.31, '', '/xboot/message/add*', '添加消息', '', 3, 'add', 0, '');
+INSERT INTO `t_permission` VALUES ('45237010692050944', '', '2018-08-24 10:08:04', 0, '', '2018-09-19 22:07:12', '', '', '43117268627886080', 1, 1.32, '', '/xboot/message/edit*', '编辑消息', '', 3, 'edit', 0, '');
+INSERT INTO `t_permission` VALUES ('45237170029465600', NULL, '2018-08-24 10:08:42', 0, NULL, '2018-08-24 10:08:42', NULL, '', '43117268627886080', 1, 1.33, '', '/xboot/message/delByIds/*', '删除消息', '', 3, 'delete', 0, NULL);
+INSERT INTO `t_permission` VALUES ('45264987354042368', '', '2018-08-24 11:59:14', 0, '', '2018-09-19 22:08:11', '', '', '41370251991977984', 1, 2.11, '', '/xboot/quartzJob/add*', '添加定时任务', '', 3, 'add', 0, '');
+INSERT INTO `t_permission` VALUES ('45265487029866496', '', '2018-08-24 12:01:14', 0, '', '2018-09-19 22:08:17', '', '', '41370251991977984', 1, 2.12, '', '/xboot/quartzJob/edit*', '编辑定时任务', '', 3, 'edit', 0, '');
+INSERT INTO `t_permission` VALUES ('45265762415284224', '', '2018-08-24 12:02:19', 0, '', '2018-09-19 22:08:24', '', '', '41370251991977984', 1, 2.13, '', '/xboot/quartzJob/pause*', '暂停定时任务', '', 3, 'disable', 0, '');
+INSERT INTO `t_permission` VALUES ('45265886315024384', '', '2018-08-24 12:02:49', 0, '', '2018-09-19 22:09:13', '', '', '41370251991977984', 1, 2.14, '', '/xboot/quartzJob/resume*', '恢复定时任务', '', 3, 'enable', 0, '');
+INSERT INTO `t_permission` VALUES ('45266070000373760', NULL, '2018-08-24 12:03:33', 0, NULL, '2018-08-24 12:03:33', NULL, '', '41370251991977984', 1, 2.15, '', '/xboot/quartzJob/delByIds/*', '删除定时任务', '', 3, 'delete', 0, NULL);
+INSERT INTO `t_permission` VALUES ('56309618086776832', '', '2018-09-23 23:26:40', 0, 'admin', '2018-11-15 15:17:43', '', 'oss-manage', '5129710648430592', 0, 1.40, 'sys/oss-manage/ossManage', 'oss-manage', '文件对象存储[付费]', 'ios-folder', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('56898976661639168', '', '2018-09-25 14:28:34', 0, '', '2018-09-25 15:12:46', '', '', '5129710648430593', 1, 1.17, '', '/xboot/user/importData*', '导入用户', '', 3, 'input', 0, '');
+INSERT INTO `t_permission` VALUES ('56911328312299520', '', '2018-09-25 15:17:39', 0, 'admin', '2018-10-20 22:47:36', '', 'excel', '41373430515240960', 0, 3.60, 'xboot-vue-template/excel/excel', 'excel', 'Excel导入导出[付费]', 'md-exit', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('57009544286441472', NULL, '2018-09-25 21:47:55', 0, NULL, '2018-09-25 21:47:55', NULL, '', '43117268627886080', 1, 1.40, '', '/xboot/messageSend/save*', '添加已发送消息', '', 3, 'add', 0, NULL);
+INSERT INTO `t_permission` VALUES ('57009744761589760', NULL, '2018-09-25 21:48:43', 0, NULL, '2018-09-25 21:48:43', NULL, '', '43117268627886080', 1, 1.50, '', '/xboot/messageSend/update*', '编辑已发送消息', '', 3, 'edit', 0, NULL);
+INSERT INTO `t_permission` VALUES ('57009981228060672', NULL, '2018-09-25 21:49:39', 0, NULL, '2018-09-25 21:49:39', NULL, '', '43117268627886080', 1, 1.60, '', '/xboot/messageSend/delByIds/*', '删除已发送消息', '', 3, 'delete', 0, NULL);
+INSERT INTO `t_permission` VALUES ('57212882168844288', '', '2018-09-26 11:15:55', 0, '', '2018-10-08 11:10:05', '', '', '56309618086776832', 1, 1.41, '', '无', '上传文件', '', 3, 'upload', 0, '');
+INSERT INTO `t_permission` VALUES ('58480609315524608', '', '2018-09-29 23:13:24', 0, 'admin', '2018-11-14 13:24:26', '', 'setting', '5129710648430592', 0, 1.90, 'sys/setting-manage/settingManage', 'setting', '系统配置[付费]', 'ios-settings-outline', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('61394706252173312', NULL, '2018-10-08 00:12:59', 0, NULL, '2018-10-08 00:12:59', NULL, '', '58480609315524608', 1, 1.81, '', '/xboot/setting/seeSecret/**', '查看私密配置', '', 3, 'view', 0, NULL);
+INSERT INTO `t_permission` VALUES ('61417744146370560', '', '2018-10-08 01:44:32', 0, '', '2018-10-08 01:50:03', '', '', '58480609315524608', 1, 1.82, '', '/xboot/setting/*/set*', '编辑配置', '', 3, 'edit', 0, '');
+INSERT INTO `t_permission` VALUES ('61560480518377472', NULL, '2018-10-08 11:11:43', 0, NULL, '2018-10-08 11:11:43', NULL, '', '56309618086776832', 1, 1.44, '', '/xboot/file/delete/*', '删除文件', '', 3, 'delete', 0, NULL);
+INSERT INTO `t_permission` VALUES ('61560275261722624', NULL, '2018-10-08 11:10:54', 0, NULL, '2018-10-08 11:10:54', NULL, '', '56309618086776832', 1, 1.43, '', '/xboot/file/copy*', '复制文件', '', 3, 'edit', 0, NULL);
+INSERT INTO `t_permission` VALUES ('61560041605435392', NULL, '2018-10-08 11:09:58', 0, NULL, '2018-10-08 11:09:58', NULL, '', '56309618086776832', 1, 1.42, '', '/xboot/file/rename*', '重命名文件', '', 3, 'edit', 0, NULL);
+INSERT INTO `t_permission` VALUES ('63482475359244288', '', '2018-10-13 18:29:02', 0, 'admin', '2018-10-20 22:47:45', '', 'custom-tree', '41373430515240960', 0, 3.80, 'xboot-vue-template/custom-tree/customTree', 'custom-tree', '自定义树[付费]', 'md-git-network', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('63741744973352960', '', '2018-10-14 11:39:17', 0, 'admin', '2018-10-20 22:47:18', '', 'render', '41373430515240960', 0, 3.20, 'xboot-vue-template/render/render', 'render', 'Render函数示例[付费]', 'md-aperture', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('64290663792906240', '', '2018-10-16 00:00:29', 0, 'admin', '2018-10-20 22:47:49', '', 'tree&table', '41373430515240960', 0, 3.90, 'xboot-vue-template/tree&table/tree&table', 'tree&table', '树+表格[付费]', 'md-list', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('66790433014943744', 'admin', '2018-10-22 21:33:42', 0, 'admin', '2018-10-22 21:37:12', '', 'card-list', '41373430515240960', 0, 3.91, 'xboot-vue-template/card-list/cardList', 'card-list', '卡片列表[付费]', 'md-card', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('67027909637836800', 'admin', '2018-10-23 13:17:19', 0, 'admin', '2018-10-23 14:57:46', '', 'banner', '67027338952445952', 0, 4.10, 'product-template/banner/Banner', 'banner', '轮播组件[付费]', 'md-book', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('67027338952445952', 'admin', '2018-10-23 13:15:03', 0, 'admin', '2018-10-23 14:57:38', '', 'product-template', '', 0, 4.00, 'Main', '/product-template', '前台产品级组件', 'md-ribbon', 1, '', 0, '');
+INSERT INTO `t_permission` VALUES ('67042515441684480', 'admin', '2018-10-23 14:15:22', 0, 'admin', '2018-10-23 14:57:51', '', 'product', '67027338952445952', 0, 4.20, 'product-template/product/Product', 'product', '产品组件[付费]', 'md-pricetags', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('67082402312228864', 'admin', '2018-10-23 16:53:53', 0, 'admin', '2018-10-23 16:53:53', NULL, 'category', '67027338952445952', 0, 4.30, 'product-template/category/Category', 'category', '分类栏组件[付费]', 'md-apps', 2, '', 0, NULL);
+INSERT INTO `t_permission` VALUES ('75002207560273920', 'admin', '2018-11-14 13:24:21', 0, 'admin', '2018-11-20 20:06:22', '', 'dict', '5129710648430592', 0, 1.80, 'sys/dict-manage/dictManage', 'dict', '数据字典管理', 'md-bookmarks', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('76606430504816640', 'admin', '2018-11-18 23:38:57', 0, 'admin', '2018-11-18 23:39:12', '', 'activiti', '', 0, 1.10, 'Main', '/activiti', '工作流程', 'md-git-compare', 1, '', 0, '');
+INSERT INTO `t_permission` VALUES ('76607201262702592', 'admin', '2018-11-18 23:42:01', 0, 'admin', '2018-11-20 19:41:58', '', 'model-manage', '76606430504816640', 0, 1.00, 'activiti/model-manage/modelManage', 'model-manage', '模型管理[付费]', 'md-cube', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('76914082455752704', 'admin', '2018-11-19 20:01:28', 0, 'admin', '2018-11-20 19:41:50', '', 'process-manage', '76606430504816640', 0, 0.90, 'activiti/process-manage/processManage', 'process-manage', '流程管理[付费]', 'md-calendar', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('76215889006956544', 'admin', '2018-11-17 21:47:05', 0, 'admin', '2018-11-17 21:47:53', '', '', '75002207560273920', 1, 1.81, '', '/xboot/dict/add*', '添加字典', '', 3, 'add', 0, '');
+INSERT INTO `t_permission` VALUES ('76216071333351424', 'admin', '2018-11-17 21:47:48', 0, 'admin', '2018-11-17 21:47:48', NULL, '', '75002207560273920', 1, 1.82, '', '/xboot/dict/edit*', '编辑字典', '', 3, 'edit', 0, NULL);
+INSERT INTO `t_permission` VALUES ('76216264070008832', 'admin', '2018-11-17 21:48:34', 0, 'admin', '2018-11-17 21:48:34', NULL, '', '75002207560273920', 1, 1.83, '', '/xboot/dict/delByIds/**', '删除字典', '', 3, 'delete', 0, NULL);
+INSERT INTO `t_permission` VALUES ('76216459709124608', 'admin', '2018-11-17 21:49:21', 0, 'admin', '2018-11-17 21:49:21', NULL, '', '75002207560273920', 1, 1.84, '', '/xboot/dictData/add*', '添加字典数据', '', 3, 'add', 0, NULL);
+INSERT INTO `t_permission` VALUES ('76216594207870976', 'admin', '2018-11-17 21:49:53', 0, 'admin', '2018-11-17 21:49:53', NULL, '', '75002207560273920', 1, 1.85, '', '/xboot/dictData/edit*', '编辑字典数据', '', 3, 'edit', 0, NULL);
+INSERT INTO `t_permission` VALUES ('76216702639017984', 'admin', '2018-11-17 21:50:18', 0, 'admin', '2018-11-17 21:50:18', NULL, '', '75002207560273920', 1, 1.86, '', '/xboot/dictData/delByIds/**', '删除字典数据', '', 3, 'delete', 0, NULL);
+INSERT INTO `t_permission` VALUES ('80539147005071360', 'admin', '2018-11-29 20:06:10', 0, 'admin', '2018-12-04 14:14:41', '', 'category-manage', '76606430504816640', 0, 2.00, 'activiti/category-manage/categoryManage', 'category-manage', '流程分类管理[付费]', 'md-bookmark', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('81319435670917120', 'admin', '2018-12-01 23:46:45', 0, 'admin', '2018-12-02 15:37:03', '', 'process-ins-manage', '76606430504816640', 0, 0.70, 'activiti/process-ins-manage/processInsManage', 'process-ins-manage', '运行中的流程[付费]', 'md-fastforward', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('81558529864896512', 'admin', '2018-12-02 15:36:50', 0, 'admin', '2018-12-08 14:50:38', '', 'apply-manage', '76606430504816640', 0, 0.00, 'activiti/apply-manage/applyManage', 'apply-manage', '我的申请[付费]', 'md-clipboard', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('81716172680073216', 'admin', '2018-12-03 02:03:15', 0, 'admin', '2018-12-03 02:03:15', NULL, 'todo-manage', '76606430504816640', 0, 0.10, 'activiti/todo-manage/todoManage', 'todo-manage', '我的待办[付费]', 'ios-pricetag', 2, '', 0, NULL);
+INSERT INTO `t_permission` VALUES ('82269650301227008', 'admin', '2018-12-04 14:42:34', 0, 'admin', '2018-12-04 14:42:34', NULL, 'done-manage', '76606430504816640', 0, 0.20, 'activiti/done-manage/doneManage', 'done-manage', '我的已办[付费]', 'ios-pricetag-outline', 2, '', 0, NULL);
+INSERT INTO `t_permission` VALUES ('97428860643053568', 'admin', '2019-01-15 10:39:52', 0, 'admin', '2019-01-17 00:39:41', '', 'components', '41373430515240960', 0, 0.00, 'xboot-vue-template/components/components', 'components', 'XBoot业务组件', 'md-cube', 2, '', 0, '');
+INSERT INTO `t_permission` VALUES ('84082369492946944', 'admin', '2018-12-09 14:45:40', 0, 'admin', '2018-12-09 14:46:59', '', '', '81558529864896512', 1, 0.00, '', '/xboot/leave/add*', '添加请假申请', '', 3, 'add', 0, '');
+INSERT INTO `t_permission` VALUES ('84082920431554560', 'admin', '2018-12-09 14:47:51', 0, 'admin', '2018-12-09 14:47:51', NULL, '', '81558529864896512', 1, 1.00, '', '/xboot/actBusiness/delByIds/**', '删除草稿申请', '', 3, 'delete', 0, NULL);
+INSERT INTO `t_permission` VALUES ('84083562503999488', 'admin', '2018-12-09 14:50:25', 0, 'admin', '2018-12-09 14:50:25', NULL, '', '81716172680073216', 1, 0.00, '', '/xboot/actTask/pass**', '审批通过', '', 3, 'enable', 0, NULL);
+INSERT INTO `t_permission` VALUES ('84083641302388736', 'admin', '2018-12-09 14:50:43', 0, 'admin', '2018-12-09 14:50:43', NULL, '', '81716172680073216', 1, 1.00, '', '/xboot/actTask/back**', '审批驳回', '', 3, 'disable', 0, NULL);
+INSERT INTO `t_permission` VALUES ('84084404707659776', 'admin', '2018-12-09 14:53:45', 0, 'admin', '2018-12-09 14:53:45', NULL, '', '81716172680073216', 1, 3.00, '', '/xboot/actTask/delegate**', '委托代办', '', 3, 'other', 0, NULL);
+INSERT INTO `t_permission` VALUES ('84084724590448640', 'admin', '2018-12-09 14:55:02', 0, 'admin', '2018-12-09 14:55:02', NULL, '', '82269650301227008', 1, 0.00, '', '/xboot/actTask/deleteHistoric/**', '删除已办任务', '', 3, 'delete', 0, NULL);
+INSERT INTO `t_permission` VALUES ('84084965817454592', 'admin', '2018-12-09 14:55:59', 0, 'admin', '2018-12-09 14:55:59', NULL, '', '81319435670917120', 1, 0.00, '', '/xboot/actProcess/delInsByIds/**', '删除运行流程', '', 3, 'delete', 0, NULL);
+INSERT INTO `t_permission` VALUES ('84085542324539392', 'admin', '2018-12-09 14:58:17', 0, 'admin', '2018-12-09 14:58:17', NULL, '', '76914082455752704', 1, 0.00, '', '/xboot/actProcess/updateInfo/**', '编辑流程信息', '', 3, 'edit', 0, NULL);
+INSERT INTO `t_permission` VALUES ('84085810797744128', 'admin', '2018-12-09 14:59:21', 0, 'admin', '2018-12-09 14:59:21', NULL, '', '76914082455752704', 1, 1.00, '', '/xboot/actProcess/editNodeUser**', '流程节点设置', '', 3, 'edit', 0, NULL);
+INSERT INTO `t_permission` VALUES ('84085980943880192', 'admin', '2018-12-09 15:00:01', 0, 'admin', '2018-12-09 15:00:01', NULL, '', '76914082455752704', 1, 2.00, '', '/xboot/actProcess/convertToModel/**', '流程转模型', '', 3, 'other', 0, NULL);
+INSERT INTO `t_permission` VALUES ('84086163001839616', 'admin', '2018-12-09 15:00:45', 0, 'admin', '2018-12-09 15:01:37', '', '', '76914082455752704', 1, 3.00, '', '/xboot/actProcess/delByIds/**', '删除流程定义', '', 3, 'delete', 0, '');
+INSERT INTO `t_permission` VALUES ('84086362248056832', 'admin', '2018-12-09 15:01:32', 0, 'admin', '2018-12-09 15:01:32', NULL, '', '76914082455752704', 1, 4.00, '', '/xboot/actModel/deployByFile**', '文件部署流程', '', 3, 'other', 0, NULL);
+INSERT INTO `t_permission` VALUES ('84086882907983872', 'admin', '2018-12-09 15:03:36', 0, 'admin', '2018-12-09 15:03:36', NULL, '', '76607201262702592', 1, 0.00, '', '/xboot/actModel/add**', '添加模型', '', 3, 'add', 0, NULL);
+INSERT INTO `t_permission` VALUES ('84087009940869120', 'admin', '2018-12-09 15:04:06', 0, 'admin', '2018-12-09 15:04:06', NULL, '', '76607201262702592', 1, 1.00, '', '/xboot/actModel/delByIds/**', '删除模型', '', 3, 'delete', 0, NULL);
+INSERT INTO `t_permission` VALUES ('84087154040377344', 'admin', '2018-12-09 15:04:41', 0, 'admin', '2018-12-09 15:04:41', NULL, '', '76607201262702592', 1, 2.00, '', '/xboot/actModel/deploy/**', '部署模型', '', 3, 'other', 0, NULL);
+INSERT INTO `t_permission` VALUES ('84087344352727040', 'admin', '2018-12-09 15:05:26', 0, 'admin', '2018-12-09 15:05:33', '', '', '80539147005071360', 1, 0.00, '', '/xboot/actCategory/add**', '添加流程分类', '', 3, 'add', 0, '');
+INSERT INTO `t_permission` VALUES ('84087480852156416', 'admin', '2018-12-09 15:05:59', 0, 'admin', '2018-12-09 15:05:59', NULL, '', '80539147005071360', 1, 1.00, '', '/xboot/actCategory/edit**', '编辑流程分类', '', 3, 'edit', 0, NULL);
+INSERT INTO `t_permission` VALUES ('84087593041399808', 'admin', '2018-12-09 15:06:25', 0, 'admin', '2018-12-09 15:06:25', NULL, '', '80539147005071360', 1, 2.00, '', '/xboot/actCategory/delByIds/**', '删除流程分类', '', 3, 'delete', 0, NULL);
+COMMIT;
+
+-- ----------------------------
 -- Table structure for t_role_permission
 -- ----------------------------
 DROP TABLE IF EXISTS `t_role_permission`;
@@ -394,140 +420,170 @@ CREATE TABLE `t_role_permission` (
 -- ----------------------------
 -- Records of t_role_permission
 -- ----------------------------
-INSERT INTO `t_role_permission` VALUES ('77277780806471680', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '67027909637836800', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780798083072', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '67027338952445952', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780789694464', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '42087054753927168', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780785500160', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '66790433014943744', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780772917249', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '64290663792906240', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780768722944', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '63482475359244288', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780764528640', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '41378916912336896', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780756140032', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '56911328312299520', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780747751424', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '41377034236071936', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780739362816', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '41376192166629376', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780730974208', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '42082442672082944', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780722585600', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '63741744973352960', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780718391296', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '41375330996326400', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780630310912', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '41373430515240960', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780621922304', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '39918482854252544', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780613533696', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '39916171171991552', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780605145088', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '41469219249852416', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780596756480', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '41371711400054784', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780588367872', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '41364927394353152', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780579979264', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '41363537456533504', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780571590656', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '41363147411427328', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780567396352', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '45266070000373760', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780559007744', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '45265886315024384', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780554813440', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '45265762415284224', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780546424832', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '45265487029866496', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780538036224', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '45264987354042368', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780525453312', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '41370251991977984', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780517064704', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '39915540965232640', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780508676097', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '76607201262702592', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780504481792', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '76914082455752704', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780496093184', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '76606430504816640', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780491898880', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '61417744146370560', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780483510272', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '61394706252173312', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780475121664', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '58480609315524608', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780466733056', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '76216702639017984', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('75002588625375232', 'admin', '2018-11-14 13:25:52', '0', 'admin', '2018-11-14 13:25:52', '57009744761589760', '16457350655250432');
-INSERT INTO `t_role_permission` VALUES ('75002588633763840', 'admin', '2018-11-14 13:25:52', '0', 'admin', '2018-11-14 13:25:52', '16392452747300864', '16457350655250432');
-INSERT INTO `t_role_permission` VALUES ('75002588637958144', 'admin', '2018-11-14 13:25:52', '0', 'admin', '2018-11-14 13:25:52', '16392767785668608', '16457350655250432');
-INSERT INTO `t_role_permission` VALUES ('75002588650541056', 'admin', '2018-11-14 13:25:52', '0', 'admin', '2018-11-14 13:25:52', '16439068543946752', '16457350655250432');
-INSERT INTO `t_role_permission` VALUES ('77277780458344448', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '76216594207870976', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780449955840', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '76216459709124608', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780441567232', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '76216264070008832', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780433178624', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '76216071333351424', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780428984320', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '76215889006956544', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780420595712', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '75002207560273920', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780412207104', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '16695243126607872', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780403818496', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '16695107491205120', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780395429888', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '16694861252005888', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780387041280', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '5129710648430595', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780374458369', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '16690313745666048', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780370264064', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '16689883993083904', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780366069760', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '16689745006432256', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780357681152', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '16689632049631232', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780349292544', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '16687383932047360', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780340903937', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '5129710648430594', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780332515328', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '45069342940860416', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780324126720', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '45235228800716800', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780265406464', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '44986029924421632', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780257017856', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '61560480518377472', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780244434944', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '61560275261722624', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780236046336', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '61560041605435392', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780227657728', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '57212882168844288', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780219269120', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '56309618086776832', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780215074816', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '57009981228060672', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780206686208', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '57009744761589760', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780198297600', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '57009544286441472', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780189908992', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '45237170029465600', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780181520384', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '45237010692050944', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780168937472', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '45236734832676864', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780164743168', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '43117268627886080', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780156354560', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '45235939278065664', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780147965952', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '45235787867885568', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780139577344', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '45235621697949696', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780135383040', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '40238597734928384', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('75002588612792320', 'admin', '2018-11-14 13:25:52', '0', 'admin', '2018-11-14 13:25:52', '40238597734928384', '16457350655250432');
-INSERT INTO `t_role_permission` VALUES ('75002588604403712', 'admin', '2018-11-14 13:25:52', '0', 'admin', '2018-11-14 13:25:52', '5129710648430593', '16457350655250432');
-INSERT INTO `t_role_permission` VALUES ('75002588591820806', 'admin', '2018-11-14 13:25:52', '0', 'admin', '2018-11-14 13:25:52', '5129710648430592', '16457350655250432');
-INSERT INTO `t_role_permission` VALUES ('77277780097634304', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '56898976661639168', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780089245696', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '25014528525733888', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277860389195776', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '16439068543946752', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860385001472', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '16438962738434048', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860376612865', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '16438800255291392', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860372418560', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '16392767785668608', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860368224256', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '16392452747300864', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860364029952', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '67082402312228864', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860359835648', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '67042515441684480', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860351447041', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '67027909637836800', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860347252736', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '67027338952445952', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860343058432', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '42087054753927168', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860334669824', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '66790433014943744', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860326281216', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '64290663792906240', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860322086912', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '63482475359244288', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860313698304', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '41378916912336896', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860271755264', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '56911328312299520', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860263366656', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '41377034236071936', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860254978048', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '41376192166629376', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860250783744', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '42082442672082944', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860242395136', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '63741744973352960', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860234006528', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '41375330996326400', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860225617920', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '41373430515240960', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860221423616', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '39918482854252544', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860213035009', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '39916171171991552', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860208840704', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '41371711400054784', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860204646400', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '41363147411427328', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860196257792', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '41370251991977984', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860187869184', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '39915540965232640', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860179480576', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '76607201262702592', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860171091968', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '76914082455752704', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860162703360', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '76606430504816640', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860158509056', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '58480609315524608', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860150120448', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '75002207560273920', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860141731840', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '5129710648430595', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860129148928', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '5129710648430594', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860120760320', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '44986029924421632', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860112371712', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '56309618086776832', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860099788800', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '57009744761589760', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860091400192', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '43117268627886080', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277780085051392', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '16678447719911424', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780076662784', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '15708892205944832', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780072468480', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '15701915807518720', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780064079872', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '16678126574637056', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780055691264', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '15701400130424832', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277779875336192', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '5129710648430592', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780043108352', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '5129710648430593', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277860078817280', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '40238597734928384', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860070428672', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '5129710648430593', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277860062040064', 'admin', '2018-11-20 20:06:59', '0', 'admin', '2018-11-20 20:06:59', '5129710648430592', '496138616573953');
-INSERT INTO `t_role_permission` VALUES ('77277780810665985', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '67042515441684480', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780823248896', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '67082402312228864', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780827443200', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '16392452747300864', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780835831808', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '16392767785668608', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780840026112', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '16438800255291392', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780844220417', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '16438962738434048', '496138616573952');
-INSERT INTO `t_role_permission` VALUES ('77277780852609024', 'admin', '2018-11-20 20:06:40', '0', 'admin', '2018-11-20 20:06:40', '16439068543946752', '496138616573952');
+BEGIN;
+INSERT INTO `t_role_permission` VALUES ('97428921489821696', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '16439068543946752', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921481433088', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '16438962738434048', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921468850176', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '16438800255291392', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921456267264', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '16392767785668608', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921447878656', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '16392452747300864', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921439490048', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '67082402312228864', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921431101440', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '67042515441684480', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921422712832', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '67027909637836800', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921410129920', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '67027338952445952', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921397547008', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '97428860643053568', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921389158400', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '42087054753927168', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921380769792', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '66790433014943744', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921372381184', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '64290663792906240', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921363992576', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '63482475359244288', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921355603968', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '41378916912336896', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921343021056', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '56911328312299520', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921334632448', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '41377034236071936', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921313660928', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '41376192166629376', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921305272320', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '42082442672082944', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921296883712', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '63741744973352960', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921288495104', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '41375330996326400', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921275912192', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '41373430515240960', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921267523584', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '39918482854252544', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921250746368', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '39916171171991552', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921242357760', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '41469219249852416', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921233969152', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '41371711400054784', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921225580544', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '41364927394353152', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921217191936', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '41363537456533504', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921204609024', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '41363147411427328', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921196220416', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '45266070000373760', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921179443200', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '45265886315024384', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921171054592', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '45265762415284224', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921145888768', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '45265487029866496', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921133305856', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '45264987354042368', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('75002588625375232', 'admin', '2018-11-14 13:25:52', 0, 'admin', '2018-11-14 13:25:52', '57009744761589760', '16457350655250432');
+INSERT INTO `t_role_permission` VALUES ('75002588633763840', 'admin', '2018-11-14 13:25:52', 0, 'admin', '2018-11-14 13:25:52', '16392452747300864', '16457350655250432');
+INSERT INTO `t_role_permission` VALUES ('75002588637958144', 'admin', '2018-11-14 13:25:52', 0, 'admin', '2018-11-14 13:25:52', '16392767785668608', '16457350655250432');
+INSERT INTO `t_role_permission` VALUES ('75002588650541056', 'admin', '2018-11-14 13:25:52', 0, 'admin', '2018-11-14 13:25:52', '16439068543946752', '16457350655250432');
+INSERT INTO `t_role_permission` VALUES ('75002588612792320', 'admin', '2018-11-14 13:25:52', 0, 'admin', '2018-11-14 13:25:52', '40238597734928384', '16457350655250432');
+INSERT INTO `t_role_permission` VALUES ('75002588604403712', 'admin', '2018-11-14 13:25:52', 0, 'admin', '2018-11-14 13:25:52', '5129710648430593', '16457350655250432');
+INSERT INTO `t_role_permission` VALUES ('75002588591820806', 'admin', '2018-11-14 13:25:52', 0, 'admin', '2018-11-14 13:25:52', '5129710648430592', '16457350655250432');
+INSERT INTO `t_role_permission` VALUES ('97428921124917248', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '41370251991977984', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921108140032', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '39915540965232640', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921099751424', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '84087593041399808', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921091362816', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '84087480852156416', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921082974208', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '84087344352727040', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921070391296', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '80539147005071360', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921062002688', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '84087154040377344', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921049419776', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '84087009940869120', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921036836864', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '84086882907983872', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921024253952', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '76607201262702592', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921015865344', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '84086362248056832', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428921007476736', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '84086163001839616', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920999088128', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '84085980943880192', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920986505216', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '84085810797744128', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920973922304', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '84085542324539392', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920965533696', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '76914082455752704', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920957145088', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '84084965817454592', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920948756480', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '81319435670917120', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920940367872', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '84084724590448640', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920927784960', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '82269650301227008', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920919396352', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '84084404707659776', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920902619136', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '84083641302388736', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920890036224', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '84083562503999488', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920877453312', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '81716172680073216', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920869064704', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '84082920431554560', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920856481792', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '84082369492946944', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920848093184', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '81558529864896512', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920835510272', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '76606430504816640', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920827121664', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '61417744146370560', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920818733056', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '61394706252173312', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920810344448', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '58480609315524608', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920801955840', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '76216702639017984', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920793567232', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '76216594207870976', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920780984320', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '76216459709124608', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920772595712', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '76216264070008832', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920760012800', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '76216071333351424', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920751624192', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '76215889006956544', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920743235584', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '75002207560273920', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920734846976', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '16695243126607872', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920726458368', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '16695107491205120', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920713875456', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '16694861252005888', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920705486848', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '5129710648430595', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('84089851397279744', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '16439068543946752', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851388891136', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '16438962738434048', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851380502528', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '16438800255291392', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851367919616', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '16392767785668608', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851359531008', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '16392452747300864', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851355336704', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '67082402312228864', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851351142400', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '67042515441684480', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851342753792', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '67027909637836800', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851338559488', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '67027338952445952', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851330170880', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '42087054753927168', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851317587969', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '66790433014943744', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851313393664', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '64290663792906240', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851296616449', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '63482475359244288', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851292422144', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '41378916912336896', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851288227840', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '56911328312299520', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851284033536', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '41377034236071936', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851279839232', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '41376192166629376', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851271450625', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '42082442672082944', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851267256321', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '63741744973352960', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851263062016', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '41375330996326400', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851254673408', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '41373430515240960', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851246284801', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '39918482854252544', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851242090496', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '39916171171991552', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851229507584', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '41371711400054784', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851221118977', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '41363147411427328', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851216924672', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '41370251991977984', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851212730368', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '39915540965232640', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851204341760', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '80539147005071360', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851195953152', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '76607201262702592', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851187564544', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '76914082455752704', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851179175936', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '81319435670917120', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851158204416', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '82269650301227008', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851149815809', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '81716172680073216', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851145621505', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '81558529864896512', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851141427200', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '76606430504816640', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851137232896', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '58480609315524608', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851120455680', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '5129710648430595', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('97428920692903936', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '16690313745666048', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920684515328', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '16689883993083904', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920671932416', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '16689745006432256', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920663543808', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '16689632049631232', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920655155200', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '16687383932047360', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920646766592', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '5129710648430594', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920634183680', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '45069342940860416', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920621600768', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '45235228800716800', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920613212160', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '44986029924421632', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920609017856', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '61560480518377472', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920600629248', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '61560275261722624', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('84089851128844288', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '75002207560273920', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851112067072', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '5129710648430594', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851091095552', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '44986029924421632', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('97428920588046336', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '61560041605435392', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('84089851074318336', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '56309618086776832', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851070124032', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '57009744761589760', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('97428920579657728', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '57212882168844288', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920571269120', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '56309618086776832', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('84089851057541121', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '43117268627886080', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851053346816', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '40238597734928384', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('84089851044958209', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '5129710648430593', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('97428920554491904', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '57009981228060672', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920546103296', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '57009744761589760', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('84089851040763904', 'admin', '2018-12-09 15:15:24', 0, 'admin', '2018-12-09 15:15:24', '5129710648430592', '496138616573953');
+INSERT INTO `t_role_permission` VALUES ('97428920537714688', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '57009544286441472', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920529326080', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '45237170029465600', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920516743168', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '45237010692050944', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920499965952', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '45236734832676864', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920487383040', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '43117268627886080', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920470605824', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '45235939278065664', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920458022912', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '45235787867885568', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920449634304', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '45235621697949696', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920437051392', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '40238597734928384', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920428662784', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '56898976661639168', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920407691264', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '25014528525733888', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920399302656', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '16678447719911424', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920390914048', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '15708892205944832', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920378331136', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '15701915807518720', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920365748224', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '16678126574637056', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920344776704', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '15701400130424832', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920332193792', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '5129710648430593', '496138616573952');
+INSERT INTO `t_role_permission` VALUES ('97428920248307712', 'admin', '2019-01-15 10:40:06', 0, 'admin', '2019-01-15 10:40:06', '5129710648430592', '496138616573952');
 
 -- ----------------------------
 -- Table structure for t_user
@@ -563,7 +619,7 @@ CREATE TABLE `t_user` (
 INSERT INTO `t_user` VALUES ('682265633886209', '', '2018-04-30 23:28:42', 'admin', '2018-11-20 09:55:49', '', 'https://s1.ax1x.com/2018/05/19/CcdVQP.png', '', '1012@qq.com', '18782059033', '', '$2a$10$PS04ecXfknNd3V8d.ymLTObQciapMU4xU8.GADBZZsuTZr7ymnagy', '0', '-1', '0', 'Exrick', '0', '40322777781112832', '', '弱');
 INSERT INTO `t_user` VALUES ('16739222421508096', '', '2018-06-06 18:48:02', '', '2018-10-08 00:04:32', '', 'https://s1.ax1x.com/2018/05/19/CcdVQP.png', '', '1012139570@qq.com', '18782059033', '', '$2a$10$PS04ecXfknNd3V8d.ymLTObQciapMU4xU8.GADBZZsuTZr7ymnagy', '1', '0', '0', 'test2', '0', '40652338142121984', '', '弱');
 INSERT INTO `t_user` VALUES ('4363087427670016', '', '2018-05-03 15:09:42', '', '2018-10-08 00:04:46', '[\"510000\",\"510100\",\"510114\"]', 'https://s1.ax1x.com/2018/05/19/CcdVQP.png', '', '1012139570@qq.com', '18782059033', '', '$2a$10$PS04ecXfknNd3V8d.ymLTObQciapMU4xU8.GADBZZsuTZr7ymnagy', '1', '0', '0', 'test', '0', '40652338142121984', '', '弱');
-INSERT INTO `t_user` VALUES ('682265633886208', '', '2018-05-01 16:13:51', 'admin', '2018-11-14 21:52:20', '[\"510000\",\"510100\",\"510104\"]', 'http://p77xsahe9.bkt.clouddn.com/788eb3e78206429eb34fc7cd3e1e46f4.jpg', 'test', '2549575805@qq.com', '18782059038', 'Exrick', '$2a$10$PS04ecXfknNd3V8d.ymLTObQciapMU4xU8.GADBZZsuTZr7ymnagy', '1', '0', '1', 'admin', '0', '40322777781112832', '天府1街', '弱');
+INSERT INTO `t_user` VALUES ('682265633886208', '', '2018-05-01 16:13:51', 'admin', '2018-11-14 21:52:20', '[\"510000\",\"510100\",\"510104\"]', 'https://s1.ax1x.com/2018/05/19/CcdVQP.png', 'test', '2549575805@qq.com', '18782059038', 'Exrick', '$2a$10$PS04ecXfknNd3V8d.ymLTObQciapMU4xU8.GADBZZsuTZr7ymnagy', '1', '0', '1', 'admin', '0', '40322777781112832', '天府1街', '弱');
 
 -- ----------------------------
 -- Table structure for t_user_role
@@ -807,3 +863,22 @@ CREATE TABLE `QRTZ_TRIGGERS` (
 -- ----------------------------
 -- Records of QRTZ_TRIGGERS
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for t_department_header
+-- ----------------------------
+DROP TABLE IF EXISTS `t_department_header`;
+CREATE TABLE `t_department_header` (
+  `id` varchar(255) NOT NULL,
+  `create_by` varchar(255) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `del_flag` int(11) DEFAULT NULL,
+  `update_by` varchar(255) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `department_id` varchar(255) DEFAULT NULL,
+  `type` int(11) DEFAULT NULL,
+  `user_id` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+SET FOREIGN_KEY_CHECKS = 1;

@@ -39,7 +39,7 @@ public class DictController{
     @ApiOperation(value = "获取全部数据")
     public Result<List<Dict>> getAll(){
 
-        List<Dict> list = dictService.getAll();
+        List<Dict> list = dictService.findAllOrderBySortOrder();
         return new ResultUtil<List<Dict>>().setData(list);
     }
 
