@@ -24,4 +24,10 @@ public interface DepartmentHeaderService extends XbootBaseService<DepartmentHead
      * @param departmentId
      */
     void deleteByDepartmentId(String departmentId);
+
+    /**
+     * 通过userId删除
+     * @param userId
+     */
+    void deleteByUserId(String userId);
 }

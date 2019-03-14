@@ -24,4 +24,10 @@ public interface DepartmentHeaderDao extends XbootBaseDao<DepartmentHeader,Strin
      * @param departmentId
      */
     void deleteByDepartmentId(String departmentId);
+
+    /**
+     * 通过userId删除
+     * @param userId
+     */
+    void deleteByUserId(String userId);
 }

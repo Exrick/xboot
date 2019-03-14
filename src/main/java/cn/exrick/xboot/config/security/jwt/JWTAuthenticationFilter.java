@@ -91,9 +91,9 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
             for(String ga : user.getPermissions()){
                 authorities.add(new SimpleGrantedAuthority(ga));
             }
-            if(tokenRedis && !user.getSaveLogin()){
+            if(!user.getSaveLogin()){
                 // 若未保存登录状态重新设置失效时间
-                redisTemplate.opsForValue().set(SecurityConstant.USER_TOKEN + username, v, tokenExpireTime, TimeUnit.MINUTES);
+                redisTemplate.opsForValue().set(SecurityConstant.USER_TOKEN + username, header, tokenExpireTime, TimeUnit.MINUTES);
                 redisTemplate.opsForValue().set(SecurityConstant.TOKEN_PRE + header, v, tokenExpireTime, TimeUnit.MINUTES);
             }
         }else{

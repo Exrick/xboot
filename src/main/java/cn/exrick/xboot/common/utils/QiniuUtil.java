@@ -18,8 +18,8 @@ import okhttp3.RequestBody;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.UUID;
 
 /**
@@ -101,7 +101,7 @@ public class QiniuUtil {
      * @param key  文件名
      * @return
      */
-    public String qiniuInputStreamUpload(FileInputStream file, String key) {
+    public String qiniuInputStreamUpload(InputStream file, String key) {
 
         Auth auth = Auth.create(accessKey, secretKey);
         String upToken = auth.uploadToken(bucket);

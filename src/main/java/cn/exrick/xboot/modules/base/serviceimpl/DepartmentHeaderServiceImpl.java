@@ -45,4 +45,10 @@ public class DepartmentHeaderServiceImpl implements DepartmentHeaderService {
 
         departmentHeaderDao.deleteByDepartmentId(departmentId);
     }
+
+    @Override
+    public void deleteByUserId(String userId) {
+
+        departmentHeaderDao.deleteByUserId(userId);
+    }
 }
