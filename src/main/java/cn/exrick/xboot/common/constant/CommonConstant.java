@@ -10,7 +10,7 @@ public interface CommonConstant {
     /**
      * 用户默认头像
      */
-    String USER_DEFAULT_AVATAR = "https://s1.ax1x.com/2018/05/19/CcdVQP.png";
+    String USER_DEFAULT_AVATAR = "https://i.loli.net/2019/04/28/5cc5a71a6e3b6.png";
 
     /**
      * 用户正常状态
@@ -63,6 +63,11 @@ public interface CommonConstant {
     String LIMIT_ALL = "XBOOT_LIMIT_ALL";
 
     /**
+     * 顶部菜单类型权限
+     */
+    Integer PERMISSION_NAV = -1;
+
+    /**
      * 页面类型权限
      */
     Integer PERMISSION_PAGE = 0;
@@ -73,9 +78,14 @@ public interface CommonConstant {
     Integer PERMISSION_OPERATION = 1;
 
     /**
-     * 1级菜单
+     * 1级菜单父id
      */
     String PARENT_ID = "0";
+
+    /**
+     * 0级菜单
+     */
+    Integer LEVEL_ZERO = 0;
 
     /**
      * 1级菜单

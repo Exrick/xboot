@@ -11,8 +11,8 @@ import cn.exrick.xboot.modules.base.entity.Department;
 import cn.exrick.xboot.modules.base.entity.Role;
 import cn.exrick.xboot.modules.base.entity.User;
 import cn.exrick.xboot.modules.base.entity.UserRole;
-import cn.exrick.xboot.modules.base.service.*;
 import cn.exrick.xboot.modules.base.service.mybatis.IUserRoleService;
+import cn.exrick.xboot.modules.base.service.*;
 import cn.hutool.core.util.StrUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -113,7 +113,7 @@ public class UserController {
                 UserRole ur = new UserRole();
                 ur.setUserId(user.getId());
                 ur.setRoleId(role.getId());
-                iUserRoleService.insert(ur);
+                iUserRoleService.save(ur);
             }
         }
 

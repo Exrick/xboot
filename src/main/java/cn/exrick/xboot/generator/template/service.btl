@@ -4,6 +4,7 @@ import cn.exrick.xboot.base.XbootBaseService;
 import ${entity.entityPackage}.${entity.className};
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import cn.exrick.xboot.common.vo.SearchVo;
 
 import java.util.List;
 
@@ -13,4 +14,12 @@ import java.util.List;
  */
 public interface ${entity.className}Service extends XbootBaseService<${entity.className},${entity.primaryKeyType}> {
 
+    /**
+    * 多条件分页获取
+    * @param ${entity.classNameLowerCase}
+    * @param searchVo
+    * @param pageable
+    * @return
+    */
+    Page<${entity.className}> findByCondition(${entity.className} ${entity.classNameLowerCase}, SearchVo searchVo, Pageable pageable);
 }

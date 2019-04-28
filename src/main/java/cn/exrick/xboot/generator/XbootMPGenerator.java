@@ -1,7 +1,6 @@
 package cn.exrick.xboot.generator;
 
 import cn.exrick.xboot.generator.bean.Entity;
-import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
@@ -13,12 +12,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import static cn.exrick.xboot.generator.XbootGenerator.*;
+
 /**
- * 代码生成器
+ * 代码生成器 Mybatis-Plus
  * @author Exrickx
  */
 @Slf4j
-public class XbootGenerator {
+public class XbootMPGenerator {
 
     /**
      * 实体类名
@@ -59,7 +60,7 @@ public class XbootGenerator {
      * dao对应包
      * (文件自动生成至该包下)
      */
-    private static final String daoPackage = "cn.exrick.xboot.modules.your.dao";
+    private static final String daoPackage = "cn.exrick.xboot.modules.your.dao.mapper";
 
     /**
      * service对应包
@@ -91,7 +92,6 @@ public class XbootGenerator {
         FileResourceLoader resourceLoader = new FileResourceLoader(root,"utf-8");
         Configuration cfg = Configuration.defaultConfiguration();
         GroupTemplate gt = new GroupTemplate(resourceLoader, cfg);
-
         //生成代码
         generateCode(gt);
 
@@ -107,10 +107,11 @@ public class XbootGenerator {
     private static void generateCode(GroupTemplate gt) throws IOException{
 
         Template entityTemplate = gt.getTemplate("entity.btl");
-        Template daoTemplate = gt.getTemplate("dao.btl");
-        Template serviceTemplate = gt.getTemplate("service.btl");
-        Template serviceImplTemplate = gt.getTemplate("serviceImpl.btl");
-        Template controllerTemplate = gt.getTemplate("controller.btl");
+        Template daoTemplate = gt.getTemplate("mapper.btl");
+        Template serviceTemplate = gt.getTemplate("mpService.btl");
+        Template serviceImplTemplate = gt.getTemplate("mpServiceImpl.btl");
+        Template controllerTemplate = gt.getTemplate("mpController.btl");
+        Template mapperXmlTemplate = gt.getTemplate("mapperXml.btl");
 
         Entity entity = new Entity();
         entity.setEntityPackage(entityPackage);
@@ -128,7 +129,7 @@ public class XbootGenerator {
         OutputStream out = null;
 
         //生成实体类代码
-        entityTemplate.binding("entity",entity);
+        entityTemplate.binding("entity", entity);
         String entityResult = entityTemplate.render();
         log.info(entityResult);
         //创建文件
@@ -139,7 +140,7 @@ public class XbootGenerator {
             entityDir.mkdirs();
         }
         if(!entityFile.exists()){
-            //实体类若存在则不重新生成
+            // 若文件存在则不重新生成
             entityFile.createNewFile();
             out = new FileOutputStream(entityFile);
             entityTemplate.renderTo(out);
@@ -150,45 +151,54 @@ public class XbootGenerator {
         String daoResult = daoTemplate.render();
         log.info(daoResult);
         //创建文件
-        String daoFileUrl = System.getProperty("user.dir")+"/src/main/java/"+ dotToLine(daoPackage) + "/" +className + "Dao.java";
+        String daoFileUrl = System.getProperty("user.dir")+"/src/main/java/"+ dotToLine(daoPackage) + "/" +className + "Mapper.java";
         File daoFile = new File(daoFileUrl);
         File daoDir = daoFile.getParentFile();
         if (!daoDir.exists()) {
             daoDir.mkdirs();
         }
-        daoFile.createNewFile();
-        out = new FileOutputStream(daoFile);
-        daoTemplate.renderTo(out);
+        if(!daoFile.exists()) {
+            // 若文件存在则不重新生成
+            daoFile.createNewFile();
+            out = new FileOutputStream(daoFile);
+            daoTemplate.renderTo(out);
+        }
 
         //生成service代码
         serviceTemplate.binding("entity",entity);
         String serviceResult = serviceTemplate.render();
         log.info(serviceResult);
         //创建文件
-        String serviceFileUrl = System.getProperty("user.dir")+"/src/main/java/"+ dotToLine(servicePackage) + "/" + className + "Service.java";
+        String serviceFileUrl = System.getProperty("user.dir")+"/src/main/java/"+ dotToLine(servicePackage) + "/I" + className + "Service.java";
         File serviceFile = new File(serviceFileUrl);
         File serviceDir = serviceFile.getParentFile();
         if (!serviceDir.exists()) {
             serviceDir.mkdirs();
         }
-        serviceFile.createNewFile();
-        out = new FileOutputStream(serviceFile);
-        serviceTemplate.renderTo(out);
+        if(!serviceFile.exists()) {
+            // 若文件存在则不重新生成
+            serviceFile.createNewFile();
+            out = new FileOutputStream(serviceFile);
+            serviceTemplate.renderTo(out);
+        }
 
         //生成serviceImpl代码
         serviceImplTemplate.binding("entity",entity);
         String serviceImplResult = serviceImplTemplate.render();
         log.info(serviceImplResult);
         //创建文件
-        String serviceImplFileUrl = System.getProperty("user.dir")+"/src/main/java/"+ dotToLine(serviceImplPackage) + "/" + className + "ServiceImpl.java";
+        String serviceImplFileUrl = System.getProperty("user.dir")+"/src/main/java/"+ dotToLine(serviceImplPackage) + "/I" + className + "ServiceImpl.java";
         File serviceImplFile = new File(serviceImplFileUrl);
         File serviceImplDir = serviceImplFile.getParentFile();
         if (!serviceImplDir.exists()) {
             serviceImplDir.mkdirs();
         }
-        serviceImplFile.createNewFile();
-        out = new FileOutputStream(serviceImplFile);
-        serviceImplTemplate.renderTo(out);
+        if(!serviceImplFile.exists()) {
+            // 若文件存在则不重新生成
+            serviceImplFile.createNewFile();
+            out = new FileOutputStream(serviceImplFile);
+            serviceImplTemplate.renderTo(out);
+        }
 
         //生成controller代码
         controllerTemplate.binding("entity",entity);
@@ -201,11 +211,34 @@ public class XbootGenerator {
         if (!controllerDir.exists()) {
             controllerDir.mkdirs();
         }
-        controllerFile.createNewFile();
-        out = new FileOutputStream(controllerFile);
-        controllerTemplate.renderTo(out);
+        if(!controllerFile.exists()) {
+            // 若文件存在则不重新生成
+            controllerFile.createNewFile();
+            out = new FileOutputStream(controllerFile);
+            controllerTemplate.renderTo(out);
+        }
 
-        out.close();
+        //生成mapperXml代码
+        mapperXmlTemplate.binding("entity",entity);
+        String mapperXmlResult = mapperXmlTemplate.render();
+        log.info(mapperXmlResult);
+        //创建文件
+        String mapperXmlFileUrl = System.getProperty("user.dir")+"/src/main/resources/mapper/" + className + "Mapper.xml";
+        File mapperXmlFile = new File(mapperXmlFileUrl);
+        File mapperXmlDir = mapperXmlFile.getParentFile();
+        if (!mapperXmlDir.exists()) {
+            mapperXmlDir.mkdirs();
+        }
+        if(!mapperXmlFile.exists()) {
+            // 若文件存在则不重新生成
+            mapperXmlFile.createNewFile();
+            out = new FileOutputStream(mapperXmlFile);
+            mapperXmlTemplate.renderTo(out);
+        }
+
+        if(out!=null){
+            out.close();
+        }
         log.info("生成代码成功！");
     }
 
@@ -221,19 +254,19 @@ public class XbootGenerator {
         if(entityFile.exists()){
             entityFile.delete();
         }
-        String daoFileUrl = System.getProperty("user.dir")+"/src/main/java/"+ dotToLine(daoPackage) + "/" +className+"Dao.java";
+        String daoFileUrl = System.getProperty("user.dir")+"/src/main/java/"+ dotToLine(daoPackage) + "/" +className+"Mapper.java";
         File daoFile = new File(daoFileUrl);
         if(daoFile.exists()){
             daoFile.delete();
         }
 
-        String serviceFileUrl = System.getProperty("user.dir")+"/src/main/java/"+ dotToLine(servicePackage) + "/" +className+"Service.java";
+        String serviceFileUrl = System.getProperty("user.dir")+"/src/main/java/"+ dotToLine(servicePackage) + "/I" +className+"Service.java";
         File serviceFile = new File(serviceFileUrl);
         if(serviceFile.exists()){
             serviceFile.delete();
         }
 
-        String serviceImplFileUrl = System.getProperty("user.dir")+"/src/main/java/"+ dotToLine(serviceImplPackage) + "/" +className+"ServiceImpl.java";
+        String serviceImplFileUrl = System.getProperty("user.dir")+"/src/main/java/"+ dotToLine(serviceImplPackage) + "/I" +className+"ServiceImpl.java";
         File serviceImplFile = new File(serviceImplFileUrl);
         if(serviceImplFile.exists()){
             serviceImplFile.delete();
@@ -245,52 +278,12 @@ public class XbootGenerator {
             controllerFile.delete();
         }
 
+        String mapperXmlFileUrl = System.getProperty("user.dir")+"/src/main/resources/mapper/" + className + "Mapper.xml";
+        File mapperXmlFile = new File(mapperXmlFileUrl);
+        if(mapperXmlFile.exists()){
+            mapperXmlFile.delete();
+        }
+
         log.info("删除代码完毕！");
-    }
-
-    /**
-     * 点转斜线
-     * @param str
-     * @return
-     */
-    public static String dotToLine(String str){
-        return str.replace(".", "/");
-    }
-
-    /**
-     * 驼峰法转下划线
-     */
-    public static String camel2Underline(String str) {
-        if (StrUtil.isBlank(str)) {
-            return "";
-        }
-        if(str.length()==1){
-            return str.toLowerCase();
-        }
-        StringBuffer sb = new StringBuffer();
-        for(int i=1;i<str.length();i++){
-            if(Character.isUpperCase(str.charAt(i))){
-                sb.append("_"+Character.toLowerCase(str.charAt(i)));
-            }else{
-                sb.append(str.charAt(i));
-            }
-        }
-        return (str.charAt(0)+sb.toString()).toLowerCase();
-    }
-
-    /**
-     * 首字母小写
-     */
-    public static String first2LowerCase(String str) {
-        if (StrUtil.isBlank(str)) {
-            return "";
-        }
-        if(str.length()==1){
-            return str.toLowerCase();
-        }
-        StringBuffer sb = new StringBuffer();
-        sb.append(Character.toLowerCase(str.charAt(0)));
-        sb.append(str.substring(1,str.length()));
-        return sb.toString();
     }
 }

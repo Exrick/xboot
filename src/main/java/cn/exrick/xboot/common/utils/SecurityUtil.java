@@ -1,12 +1,15 @@
 package cn.exrick.xboot.common.utils;
 
 import cn.exrick.xboot.common.constant.CommonConstant;
+import cn.exrick.xboot.modules.base.entity.Permission;
 import cn.exrick.xboot.modules.base.entity.Role;
 import cn.exrick.xboot.modules.base.entity.User;
 import cn.exrick.xboot.modules.base.service.UserService;
 import cn.exrick.xboot.modules.base.service.mybatis.IUserRoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -59,5 +62,18 @@ public class SecurityUtil {
         }
         // 查找自定义
         return iUserRoleService.findDepIdsByUserId(u.getId());
+    }
+
+    /**
+     * 通过用户名获取用户拥有权限
+     * @param username
+     */
+    public List<GrantedAuthority> getCurrUserPerms(String username){
+
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        for(Permission p : userService.findByUsername(username).getPermissions()){
+            authorities.add(new SimpleGrantedAuthority(p.getTitle()));
+        }
+        return authorities;
     }
 }

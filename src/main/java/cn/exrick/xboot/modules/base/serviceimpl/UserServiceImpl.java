@@ -1,6 +1,5 @@
 package cn.exrick.xboot.modules.base.serviceimpl;
 
-import cn.exrick.xboot.common.constant.CommonConstant;
 import cn.exrick.xboot.common.utils.SecurityUtil;
 import cn.exrick.xboot.common.vo.SearchVo;
 import cn.exrick.xboot.modules.base.dao.DepartmentDao;
@@ -113,7 +112,7 @@ public class UserServiceImpl implements UserService {
                 Path<String> mobileField = root.get("mobile");
                 Path<String> emailField = root.get("email");
                 Path<String> departmentIdField = root.get("departmentId");
-                Path<Integer> sexField=root.get("sex");
+                Path<String> sexField=root.get("sex");
                 Path<Integer> typeField=root.get("type");
                 Path<Integer> statusField=root.get("status");
                 Path<Date> createTimeField=root.get("createTime");
@@ -137,7 +136,7 @@ public class UserServiceImpl implements UserService {
                 }
 
                 //性别
-                if(user.getSex()!=null){
+                if(StrUtil.isNotBlank(user.getSex())){
                     list.add(cb.equal(sexField, user.getSex()));
                 }
                 //类型

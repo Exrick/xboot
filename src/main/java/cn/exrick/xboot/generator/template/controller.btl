@@ -5,6 +5,7 @@ import cn.exrick.xboot.common.utils.PageUtil;
 import cn.exrick.xboot.common.utils.ResultUtil;
 import cn.exrick.xboot.common.vo.PageVo;
 import cn.exrick.xboot.common.vo.Result;
+import cn.exrick.xboot.common.vo.SearchVo;
 import ${entity.entityPackage}.${entity.className};
 import ${entity.servicePackage}.${entity.className}Service;
 import io.swagger.annotations.Api;
@@ -15,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.transaction.annotation.Transactional;
 
-
 /**
  * @author ${entity.author}
  */
@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Api(description = "${entity.description}管理接口")
 @RequestMapping("/xboot/${entity.classNameLowerCase}")
 @Transactional
-public class ${entity.className}Controller extends XbootBaseController<${entity.className}, ${entity.primaryKeyType}>{
+public class ${entity.className}Controller extends XbootBaseController<${entity.className}, ${entity.primaryKeyType}> {
 
     @Autowired
     private ${entity.className}Service ${entity.classNameLowerCase}Service;
@@ -34,4 +34,13 @@ public class ${entity.className}Controller extends XbootBaseController<${entity.
         return ${entity.classNameLowerCase}Service;
     }
 
+    @RequestMapping(value = "/getByCondition", method = RequestMethod.GET)
+    @ApiOperation(value = "多条件分页获取")
+    public Result<Page<${entity.className}>> getByCondition(@ModelAttribute ${entity.className} ${entity.classNameLowerCase},
+                                                            @ModelAttribute SearchVo searchVo,
+                                                            @ModelAttribute PageVo pageVo){
+
+        Page<${entity.className}> page = ${entity.classNameLowerCase}Service.findByCondition(${entity.classNameLowerCase}, searchVo, PageUtil.initPage(pageVo));
+        return new ResultUtil<Page<${entity.className}>>().setData(page);
+    }
 }

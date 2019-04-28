@@ -1,7 +1,7 @@
 package cn.exrick.xboot.modules.base.entity;
 
 import cn.exrick.xboot.base.XbootBaseEntity;
-import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
