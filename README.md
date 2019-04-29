@@ -131,6 +131,10 @@ https://www.kancloud.cn/exrick/xboot/content
 
 5.XBoot后端集群部署
 
+### 商用授权
+- 个人学习使用遵循GPL开源协议
+- 商用需联系作者授权
+
 ### 作者其他项目推荐
 - [XPay个人免签收款支付系统](https://github.com/Exrick/xpay)
 
