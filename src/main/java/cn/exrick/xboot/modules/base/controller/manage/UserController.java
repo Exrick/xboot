@@ -11,11 +11,8 @@ import cn.exrick.xboot.modules.base.entity.Department;
 import cn.exrick.xboot.modules.base.entity.Role;
 import cn.exrick.xboot.modules.base.entity.User;
 import cn.exrick.xboot.modules.base.entity.UserRole;
-import cn.exrick.xboot.modules.base.service.DepartmentService;
-import cn.exrick.xboot.modules.base.service.RoleService;
-import cn.exrick.xboot.modules.base.service.UserRoleService;
-import cn.exrick.xboot.modules.base.service.UserService;
 import cn.exrick.xboot.modules.base.service.mybatis.IUserRoleService;
+import cn.exrick.xboot.modules.base.service.*;
 import cn.hutool.core.util.StrUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -60,6 +58,9 @@ public class UserController {
 
     @Autowired
     private UserRoleService userRoleService;
+
+    @Autowired
+    private DepartmentHeaderService departmentHeaderService;
 
     @Autowired
     private StringRedisTemplate redisTemplate;
@@ -112,7 +113,7 @@ public class UserController {
                 UserRole ur = new UserRole();
                 ur.setUserId(user.getId());
                 ur.setRoleId(role.getId());
-                iUserRoleService.insert(ur);
+                iUserRoleService.save(ur);
             }
         }
 
@@ -222,10 +223,6 @@ public class UserController {
                                      @ApiParam("新密码") @RequestParam String newPass){
 
         User user = securityUtil.getCurrUser();
-        //在线DEMO所需
-        if("test".equals(user.getUsername())||"test2".equals(user.getUsername())){
-            return new ResultUtil<Object>().setErrorMsg("演示账号不支持修改密码");
-        }
 
         if(!new BCryptPasswordEncoder().matches(password, user.getPassword())){
             return new ResultUtil<Object>().setErrorMsg("旧密码不正确");
@@ -262,6 +259,19 @@ public class UserController {
             u.setPassword(null);
         }
         return new ResultUtil<Page<User>>().setData(page);
+    }
+
+
+    @RequestMapping(value = "/getByDepartmentId/{departmentId}",method = RequestMethod.GET)
+    @ApiOperation(value = "多条件分页获取用户列表")
+    public Result<List<User>> getByCondition(@PathVariable String departmentId){
+
+        List<User> list = userService.findByDepartmentId(departmentId);
+        entityManager.clear();
+        list.forEach(u -> {
+            u.setPassword(null);
+        });
+        return new ResultUtil<List<User>>().setData(list);
     }
 
     @RequestMapping(value = "/getAll",method = RequestMethod.GET)
@@ -357,9 +367,13 @@ public class UserController {
             redisTemplate.delete("userRole::" + u.getId());
             redisTemplate.delete("userRole::depIds:" + u.getId());
             redisTemplate.delete("permission::userMenuList:" + u.getId());
+            Set<String> keys = redisTemplate.keys("department::*");
+            redisTemplate.delete(keys);
             userService.delete(id);
             //删除关联角色
             userRoleService.deleteByUserId(id);
+            //删除关联部门负责人
+            departmentHeaderService.deleteByUserId(id);
         }
         return new ResultUtil<Object>().setSuccessMsg("批量通过id删除数据成功");
     }

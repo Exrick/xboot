@@ -17,7 +17,7 @@ spring:
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/xboot?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: root
-    # Jasypt加密 可到common-utils中找到JasyptUtil加解密工具类生成加密结果 格式为ENC(加密结果)
+    # Jasypt加密 可到common-utils中找到JasyptUtil加解密工具类生成加密结果 格式为ENC(加密结果) 以下解密结果为123456
     password: ENC(F4B0s6u9xcDw3V+P0qC4CA==)
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.jdbc.Driver
@@ -48,7 +48,8 @@ spring:
     # 数据库索引 默认0
     database: 0
     port: 6379
-    timeout: 3000
+    # 超时时间 Duration类型 3秒
+    timeout: 3S
   # Elasticsearch
   data:
     elasticsearch:
@@ -57,11 +58,18 @@ spring:
   quartz:
     # 任务信息存储至数据库
     job-store-type: jdbc
+    properties:
+      org:
+        quartz:
+          jobStore:
+            misfireThreshold: 100
   # 文件大小上传配置
   servlet:
     multipart:
-      max-file-size: 5Mb
-      max-request-size: 5Mb
+      max-file-size: 5MB
+      max-request-size: 5MB
+  jackson:
+    time-zone: GMT+8
 
 xboot:
   # 全局限流
@@ -73,8 +81,10 @@ xboot:
     limit: 100
   # token交互方式
   token:
-    # 默认JWT 启用Redis后设置为true后，token将存入redis，并具有单点登录功能
+    # 默认redis 设置为true后，token将存入redis，并具有单点登录功能 设为false将使用JWT交互
     redis: true
+    # token中存储用户权限数据 设为true开启后可避免每次请求再获取用户权限，但有可能导致编辑权限菜单后无法读取到最新权限数据（需用户重新登录）
+    storePerms: true
   # token过期时间（分钟）
   tokenExpireTime: 60
   # 用户选择保存登录状态对应token过期时间（天）
@@ -104,6 +114,7 @@ xboot:
 # 忽略鉴权url
 ignored:
   urls:
+    - /xboot/dictData/getByType/**
     - /xboot/user/regist
     - /xboot/common/**
     - /druid/**
@@ -130,30 +141,7 @@ swagger:
 
 # Mybatis-plus
 mybatis-plus:
-  # 放在resource目录 classpath:/mapper/*Mapper.xml
-  mapper-locations: classpath:/mapper/*Mapper.xml
-  # 实体扫描，多个package用逗号或者分号分隔
-  typeAliasesPackage: cn.exrick.xboot.*.*.entity
-  typeEnumsPackage: cn.exrick.xboot.*.*.entity
-  global-config:
-    # 主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
-    id-type: 2
-    # 字段策略 0:"忽略判断",1:"非 NULL 判断",2:"非空判断"
-    field-strategy: 2
-    # 驼峰下划线转换
-    db-column-underline: true
-    # 刷新mapper 调试神器
-    refresh-mapper: true
-    # 数据库大写下划线转换
-    #capital-mode: true
-    # 逻辑删除配置（下面3个配置）
-    logic-delete-value: 0
-    logic-not-delete-value: 1
-    # SQL 解析缓存，开启后多租户 @SqlParser 注解生效
-    sql-parser-cache: true
-  configuration:
-    map-underscore-to-camel-case: true
-    cache-enabled: false
+  mapper-locations: classpath*:mapper/*.xml
 
 # 日志
 logging:

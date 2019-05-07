@@ -94,7 +94,8 @@ public class DictDataController{
     public Result<Object> delByIds(@PathVariable String[] ids){
 
         for(String id : ids){
-            Dict dict = dictService.get(id);
+            DictData dictData = dictDataService.get(id);
+            Dict dict = dictService.get(dictData.getDictId());
             dictDataService.delete(id);
             // 删除缓存
             redisTemplate.delete("dictData::"+dict.getType());

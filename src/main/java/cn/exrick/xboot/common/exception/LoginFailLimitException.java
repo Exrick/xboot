@@ -1,4 +1,4 @@
-package cn.exrick.xboot.config.exception;
+package cn.exrick.xboot.common.exception;
 
 import lombok.Data;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;

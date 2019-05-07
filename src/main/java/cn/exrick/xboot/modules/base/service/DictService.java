@@ -12,6 +12,12 @@ import java.util.List;
 public interface DictService extends XbootBaseService<Dict,String> {
 
     /**
+     * 排序获取全部
+     * @return
+     */
+    List<Dict> findAllOrderBySortOrder();
+
+    /**
      * 通过type获取
      * @param type
      * @return

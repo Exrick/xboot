@@ -2,8 +2,9 @@ package cn.exrick.xboot.modules.base.entity;
 
 import cn.exrick.xboot.base.XbootBaseEntity;
 import cn.exrick.xboot.common.constant.CommonConstant;
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -20,6 +21,7 @@ import java.util.List;
 @Entity
 @Table(name = "t_user")
 @TableName("t_user")
+@ApiModel(value = "用户")
 public class User extends XbootBaseEntity {
 
     private static final long serialVersionUID = 1L;
@@ -46,15 +48,15 @@ public class User extends XbootBaseEntity {
     @ApiModelProperty(value = "街道地址")
     private String street;
 
-    @ApiModelProperty(value = "0女 1男 2保密")
-    private Integer sex;
+    @ApiModelProperty(value = "性别")
+    private String sex;
 
     @ApiModelProperty(value = "密码强度")
-    @Column(length=2)
+    @Column(length = 2)
     private String passStrength;
 
     @ApiModelProperty(value = "用户头像")
-    @Column(length=1000)
+    @Column(length = 1000)
     private String avatar = CommonConstant.USER_DEFAULT_AVATAR;
 
     @ApiModelProperty(value = "用户类型 0普通用户 1管理员")

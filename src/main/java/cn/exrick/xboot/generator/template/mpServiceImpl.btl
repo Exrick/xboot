@@ -1,0 +1,26 @@
+package ${entity.serviceImplPackage};
+
+import ${entity.daoPackage}.${entity.className}Mapper;
+import ${entity.entityPackage}.${entity.className};
+import ${entity.servicePackage}.I${entity.className}Service;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * ${entity.description}接口实现
+ * @author ${entity.author}
+ */
+@Slf4j
+@Service
+@Transactional
+public class I${entity.className}ServiceImpl extends ServiceImpl<${entity.className}Mapper, ${entity.className}> implements I${entity.className}Service {
+
+    @Autowired
+    private ${entity.className}Mapper ${entity.classNameLowerCase}Mapper;
+}

@@ -4,7 +4,7 @@ import cn.exrick.xboot.common.annotation.RateLimiter;
 import cn.exrick.xboot.common.constant.CommonConstant;
 import cn.exrick.xboot.common.limit.RedisRaterLimiter;
 import cn.exrick.xboot.common.utils.IpInfoUtil;
-import cn.exrick.xboot.config.exception.XbootException;
+import cn.exrick.xboot.common.exception.XbootException;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

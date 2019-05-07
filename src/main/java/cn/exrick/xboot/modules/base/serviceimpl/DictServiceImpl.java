@@ -28,6 +28,12 @@ public class DictServiceImpl implements DictService {
     }
 
     @Override
+    public List<Dict> findAllOrderBySortOrder() {
+
+        return dictDao.findAllOrderBySortOrder();
+    }
+
+    @Override
     public Dict findByType(String type) {
 
         List<Dict> list = dictDao.findByType(type);

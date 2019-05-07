@@ -6,7 +6,7 @@ import lombok.Data;
  * @author Exrickx
  */
 @Data
-public class EntityOfEntity {
+public class Entity {
 
     private String entityPackage;
 

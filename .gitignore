@@ -9,3 +9,5 @@ xboot-logs/
 *.iml
 
 *.bak
+
+rebel.xml

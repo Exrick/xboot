@@ -2,8 +2,9 @@ package cn.exrick.xboot.modules.base.entity;
 
 import cn.exrick.xboot.base.XbootBaseEntity;
 import cn.exrick.xboot.common.constant.CommonConstant;
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -12,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author Exrick
@@ -20,6 +22,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "t_department")
 @TableName("t_department")
+@ApiModel(value = "部门")
 public class Department extends XbootBaseEntity {
 
     private static final long serialVersionUID = 1L;
@@ -44,4 +47,14 @@ public class Department extends XbootBaseEntity {
     @TableField(exist=false)
     @ApiModelProperty(value = "父节点名称")
     private String parentTitle;
+
+    @Transient
+    @TableField(exist=false)
+    @ApiModelProperty(value = "主负责人")
+    private List<String> mainHeader;
+
+    @Transient
+    @TableField(exist=false)
+    @ApiModelProperty(value = "副负责人")
+    private List<String> viceHeader;
 }

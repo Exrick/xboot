@@ -1,7 +1,7 @@
 package cn.exrick.xboot.config.security;
 
 import cn.exrick.xboot.modules.base.entity.User;
-import cn.exrick.xboot.config.exception.LoginFailLimitException;
+import cn.exrick.xboot.common.exception.LoginFailLimitException;
 import cn.exrick.xboot.modules.base.service.UserService;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;

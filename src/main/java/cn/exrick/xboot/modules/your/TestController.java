@@ -1,4 +1,4 @@
-package cn.exrick.xboot.modules.base.controller;
+package cn.exrick.xboot.modules.your;
 
 import cn.exrick.xboot.common.annotation.RateLimiter;
 import cn.exrick.xboot.common.lock.Callback;

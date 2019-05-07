@@ -6,7 +6,7 @@ import cn.exrick.xboot.common.utils.ResultUtil;
 import cn.exrick.xboot.common.vo.PageVo;
 import cn.exrick.xboot.common.vo.Result;
 import cn.exrick.xboot.modules.base.entity.QuartzJob;
-import cn.exrick.xboot.config.exception.XbootException;
+import cn.exrick.xboot.common.exception.XbootException;
 import cn.exrick.xboot.modules.base.service.QuartzJobService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 
 /**
  * @author Exrick
@@ -126,8 +125,8 @@ public class QuartzJobController {
                     .usingJobData("parameter",parameter)
                     .build();
 
-            //表达式调度构建器(即任务执行的时间)
-            CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
+            //表达式调度构建器(即任务执行的时间) 使用withMisfireHandlingInstructionDoNothing() 忽略掉调度暂停过程中没有执行的调度
+            CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression).withMisfireHandlingInstructionDoNothing();
 
             //按新的cronExpression表达式构建一个新的trigger
             CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(jobClassName)

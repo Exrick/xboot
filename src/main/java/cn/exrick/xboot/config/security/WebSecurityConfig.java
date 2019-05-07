@@ -1,5 +1,6 @@
 package cn.exrick.xboot.config.security;
 
+import cn.exrick.xboot.common.utils.SecurityUtil;
 import cn.exrick.xboot.config.IgnoredUrlsProperties;
 import cn.exrick.xboot.config.security.jwt.AuthenticationFailHandler;
 import cn.exrick.xboot.config.security.jwt.AuthenticationSuccessHandler;
@@ -36,6 +37,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${xboot.tokenExpireTime}")
     private Integer tokenExpireTime;
 
+    @Value("${xboot.token.storePerms}")
+    private Boolean storePerms;
+
     @Autowired
     private IgnoredUrlsProperties ignoredUrlsProperties;
 
@@ -56,6 +60,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private StringRedisTemplate redisTemplate;
+
+    @Autowired
+    private SecurityUtil securityUtil;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -108,6 +115,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //添加自定义权限过滤器
                 .addFilterBefore(myFilterSecurityInterceptor, FilterSecurityInterceptor.class)
                 //添加JWT过滤器 除已配置的其它请求都需经过此过滤器
-                .addFilter(new JWTAuthenticationFilter(authenticationManager(), tokenRedis, tokenExpireTime, redisTemplate));
+                .addFilter(new JWTAuthenticationFilter(authenticationManager(), tokenRedis, tokenExpireTime, storePerms,
+                        redisTemplate, securityUtil));
     }
 }

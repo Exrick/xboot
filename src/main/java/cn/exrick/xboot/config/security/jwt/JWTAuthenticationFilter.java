@@ -2,8 +2,8 @@ package cn.exrick.xboot.config.security.jwt;
 
 import cn.exrick.xboot.common.constant.SecurityConstant;
 import cn.exrick.xboot.common.utils.ResponseUtil;
+import cn.exrick.xboot.common.utils.SecurityUtil;
 import cn.exrick.xboot.common.vo.TokenUser;
-import cn.exrick.xboot.config.exception.XbootException;
 import cn.hutool.core.util.StrUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -38,13 +38,20 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
 
     private Integer tokenExpireTime;
 
+    private Boolean storePerms;
+
     private StringRedisTemplate redisTemplate;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, Boolean tokenRedis, Integer tokenExpireTime, StringRedisTemplate redisTemplate) {
+    private SecurityUtil securityUtil;
+
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, Boolean tokenRedis, Integer tokenExpireTime,
+                                   Boolean storePerms, StringRedisTemplate redisTemplate, SecurityUtil securityUtil) {
         super(authenticationManager);
         this.tokenRedis = tokenRedis;
         this.tokenExpireTime = tokenExpireTime;
+        this.storePerms = storePerms;
         this.redisTemplate = redisTemplate;
+        this.securityUtil = securityUtil;
     }
 
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationEntryPoint authenticationEntryPoint) {
@@ -89,12 +96,18 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
             }
             TokenUser user = new Gson().fromJson(v, TokenUser.class);
             username = user.getUsername();
-            for(String ga : user.getPermissions()){
-                authorities.add(new SimpleGrantedAuthority(ga));
+            if(storePerms){
+                // 缓存了权限
+                for(String ga : user.getPermissions()){
+                    authorities.add(new SimpleGrantedAuthority(ga));
+                }
+            }else{
+                // 未缓存 读取权限数据
+                authorities = securityUtil.getCurrUserPerms(username);
             }
-            if(tokenRedis && !user.getSaveLogin()){
+            if(!user.getSaveLogin()){
                 // 若未保存登录状态重新设置失效时间
-                redisTemplate.opsForValue().set(SecurityConstant.USER_TOKEN + username, v, tokenExpireTime, TimeUnit.MINUTES);
+                redisTemplate.opsForValue().set(SecurityConstant.USER_TOKEN + username, header, tokenExpireTime, TimeUnit.MINUTES);
                 redisTemplate.opsForValue().set(SecurityConstant.TOKEN_PRE + header, v, tokenExpireTime, TimeUnit.MINUTES);
             }
         }else{
@@ -106,16 +119,21 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
                         .parseClaimsJws(header.replace(SecurityConstant.TOKEN_SPLIT, ""))
                         .getBody();
 
-                //获取用户名
+                // 获取用户名
                 username = claims.getSubject();
-                //获取权限
-                String authority = claims.get(SecurityConstant.AUTHORITIES).toString();
-
-                if(StrUtil.isNotBlank(authority)){
-                    List<String> list = new Gson().fromJson(authority, new TypeToken<List<String>>(){}.getType());
-                    for(String ga : list){
-                        authorities.add(new SimpleGrantedAuthority(ga));
+                // 获取权限
+                if(storePerms) {
+                    // 缓存了权限
+                    String authority = claims.get(SecurityConstant.AUTHORITIES).toString();
+                    if(StrUtil.isNotBlank(authority)){
+                        List<String> list = new Gson().fromJson(authority, new TypeToken<List<String>>(){}.getType());
+                        for(String ga : list){
+                            authorities.add(new SimpleGrantedAuthority(ga));
+                        }
                     }
+                }else{
+                    // 未缓存 读取权限数据
+                    authorities = securityUtil.getCurrUserPerms(username);
                 }
             } catch (ExpiredJwtException e) {
                 ResponseUtil.out(response, ResponseUtil.resultMap(false,401,"登录已失效，请重新登录"));

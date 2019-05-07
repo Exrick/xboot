@@ -11,6 +11,8 @@ import cn.exrick.xboot.modules.base.entity.User;
 import cn.exrick.xboot.modules.base.service.PermissionService;
 import cn.exrick.xboot.modules.base.service.RolePermissionService;
 import cn.exrick.xboot.modules.base.service.mybatis.IPermissionService;
+import cn.exrick.xboot.modules.base.utils.DtoUtil;
+import cn.exrick.xboot.modules.base.vo.MenuVo;
 import cn.hutool.core.util.StrUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -28,7 +30,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
 
 /**
  * @author Exrick
@@ -59,92 +60,113 @@ public class PermissionController {
     @Autowired
     private MySecurityMetadataSource mySecurityMetadataSource;
 
-    @RequestMapping(value = "/getMenuList",method = RequestMethod.GET)
+    @RequestMapping(value = "/getMenuList", method = RequestMethod.GET)
     @ApiOperation(value = "获取用户页面菜单数据")
-    public Result<List<Permission>> getAllMenuList(){
+    public Result<List<MenuVo>> getAllMenuList(){
 
-        List<Permission> list = new ArrayList<>();
+        List<MenuVo> menuList = new ArrayList<>();
         // 读取缓存
         User u = securityUtil.getCurrUser();
         String key = "permission::userMenuList:" + u.getId();
         String v = redisTemplate.opsForValue().get(key);
         if(StrUtil.isNotBlank(v)){
-            list = new Gson().fromJson(v, new TypeToken<List<Permission>>(){}.getType());
-            return new ResultUtil<List<Permission>>().setData(list);
+            menuList = new Gson().fromJson(v, new TypeToken<List<Permission>>(){}.getType());
+            return new ResultUtil<List<MenuVo>>().setData(menuList);
         }
 
         // 用户所有权限 已排序去重
-        list = iPermissionService.findByUserId(u.getId());
+        List<Permission> list = iPermissionService.findByUserId(u.getId());
 
-        List<Permission> menuList = new ArrayList<>();
-        //筛选一级页面
+        // 筛选0级页面
+        for(Permission p : list){
+            if(CommonConstant.PERMISSION_NAV.equals(p.getType())&&CommonConstant.LEVEL_ZERO.equals(p.getLevel())){
+                menuList.add(DtoUtil.permissionToMenuVo(p));
+            }
+        }
+        // 筛选一级页面
+        List<MenuVo> firstMenuList = new ArrayList<>();
         for(Permission p : list){
             if(CommonConstant.PERMISSION_PAGE.equals(p.getType())&&CommonConstant.LEVEL_ONE.equals(p.getLevel())){
-                menuList.add(p);
+                firstMenuList.add(DtoUtil.permissionToMenuVo(p));
             }
         }
-        //筛选二级页面
-        List<Permission> secondMenuList = new ArrayList<>();
+        // 筛选二级页面
+        List<MenuVo> secondMenuList = new ArrayList<>();
         for(Permission p : list){
             if(CommonConstant.PERMISSION_PAGE.equals(p.getType())&&CommonConstant.LEVEL_TWO.equals(p.getLevel())){
-                secondMenuList.add(p);
+                secondMenuList.add(DtoUtil.permissionToMenuVo(p));
             }
         }
-        //筛选二级页面拥有的按钮权限
-        List<Permission> buttonPermissions = new ArrayList<>();
+        // 筛选二级页面拥有的按钮权限
+        List<MenuVo> buttonPermissions = new ArrayList<>();
         for(Permission p : list){
             if(CommonConstant.PERMISSION_OPERATION.equals(p.getType())&&CommonConstant.LEVEL_THREE.equals(p.getLevel())){
-                buttonPermissions.add(p);
+                buttonPermissions.add(DtoUtil.permissionToMenuVo(p));
             }
         }
 
-        //匹配二级页面拥有权限
-        for(Permission p : secondMenuList){
+        // 匹配二级页面拥有权限
+        for(MenuVo m : secondMenuList){
             List<String> permTypes = new ArrayList<>();
-            for(Permission pe : buttonPermissions){
-                if(p.getId().equals(pe.getParentId())){
-                    permTypes.add(pe.getButtonType());
+            for(MenuVo me : buttonPermissions){
+                if(m.getId().equals(me.getParentId())){
+                    permTypes.add(me.getButtonType());
                 }
             }
-            p.setPermTypes(permTypes);
+            m.setPermTypes(permTypes);
         }
-        //匹配一级页面拥有二级页面
-        for(Permission p : menuList){
-            List<Permission> secondMenu = new ArrayList<>();
-            for(Permission pe : secondMenuList){
-                if(p.getId().equals(pe.getParentId())){
-                    secondMenu.add(pe);
+        // 匹配一级页面拥有二级页面
+        for(MenuVo m : firstMenuList){
+            List<MenuVo> secondMenu = new ArrayList<>();
+            for(MenuVo me : secondMenuList){
+                if(m.getId().equals(me.getParentId())){
+                    secondMenu.add(me);
                 }
             }
-            p.setChildren(secondMenu);
+            m.setChildren(secondMenu);
+        }
+        // 匹配0级页面拥有一级页面
+        for(MenuVo m : menuList){
+            List<MenuVo> firstMenu = new ArrayList<>();
+            for(MenuVo me : firstMenuList){
+                if(m.getId().equals(me.getParentId())){
+                    firstMenu.add(me);
+                }
+            }
+            m.setChildren(firstMenu);
         }
 
         // 缓存
         redisTemplate.opsForValue().set(key, new Gson().toJson(menuList));
-        return new ResultUtil<List<Permission>>().setData(menuList);
+        return new ResultUtil<List<MenuVo>>().setData(menuList);
     }
 
-    @RequestMapping(value = "/getAllList",method = RequestMethod.GET)
+    @RequestMapping(value = "/getAllList", method = RequestMethod.GET)
     @ApiOperation(value = "获取权限菜单树")
     @Cacheable(key = "'allList'")
     public Result<List<Permission>> getAllList(){
 
-        //一级
-        List<Permission> list = permissionService.findByLevelOrderBySortOrder(CommonConstant.LEVEL_ONE);
-        //二级
-        for(Permission p1 : list){
-            List<Permission> children1 = permissionService.findByParentIdOrderBySortOrder(p1.getId());
-            p1.setChildren(children1);
-            //三级
-            for(Permission p2 : children1){
-                List<Permission> children2 = permissionService.findByParentIdOrderBySortOrder(p2.getId());
-                p2.setChildren(children2);
+        // 0级
+        List<Permission> list0 = permissionService.findByLevelOrderBySortOrder(CommonConstant.LEVEL_ZERO);
+        for(Permission p0 : list0){
+            // 一级
+            List<Permission> list1 = permissionService.findByParentIdOrderBySortOrder(p0.getId());
+            p0.setChildren(list1);
+            // 二级
+            for(Permission p1 : list1){
+                List<Permission> children1 = permissionService.findByParentIdOrderBySortOrder(p1.getId());
+                p1.setChildren(children1);
+                // 三级
+                for(Permission p2 : children1){
+                    List<Permission> children2 = permissionService.findByParentIdOrderBySortOrder(p2.getId());
+                    p2.setChildren(children2);
+                }
             }
         }
-        return new ResultUtil<List<Permission>>().setData(list);
+        return new ResultUtil<List<Permission>>().setData(list0);
     }
 
-    @RequestMapping(value = "/add",method = RequestMethod.POST)
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ApiOperation(value = "添加")
     @CacheEvict(key = "'menuList'")
     public Result<Permission> add(@ModelAttribute Permission permission){
@@ -164,7 +186,7 @@ public class PermissionController {
         return new ResultUtil<Permission>().setData(u);
     }
 
-    @RequestMapping(value = "/edit",method = RequestMethod.POST)
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @ApiOperation(value = "编辑")
     public Result<Permission> edit(@ModelAttribute Permission permission){
 
@@ -193,7 +215,7 @@ public class PermissionController {
         return new ResultUtil<Permission>().setData(u);
     }
 
-    @RequestMapping(value = "/delByIds/{ids}",method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delByIds/{ids}", method = RequestMethod.DELETE)
     @ApiOperation(value = "批量通过id删除")
     @CacheEvict(key = "'menuList'")
     public Result<Object> delByIds(@PathVariable String[] ids){
@@ -214,7 +236,7 @@ public class PermissionController {
         return new ResultUtil<Object>().setSuccessMsg("批量通过id删除数据成功");
     }
 
-    @RequestMapping(value = "/search",method = RequestMethod.GET)
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
     @ApiOperation(value = "搜索菜单")
     public Result<List<Permission>> searchPermissionList(@RequestParam String title){
 

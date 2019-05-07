@@ -82,7 +82,7 @@ public class SystemLogAspect {
     public void after(JoinPoint joinPoint){
         try {
             UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            String username= user.getUsername();
+            String username = user.getUsername();
 
             if (StrUtil.isNotBlank(username)) {
 

@@ -47,6 +47,9 @@ public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticatio
     @Value("${xboot.saveLoginTime}")
     private Integer saveLoginTime;
 
+    @Value("${xboot.token.storePerms}")
+    private Boolean storePerms;
+
     @Autowired
     private IpInfoUtil ipInfoUtil;
 
@@ -79,6 +82,10 @@ public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticatio
             // redis
             token = UUID.randomUUID().toString().replace("-", "");
             TokenUser user = new TokenUser(username, list, saved);
+            // 不缓存权限
+            if(!storePerms){
+                user.setPermissions(null);
+            }
             // 单点登录 之前的token失效
             String oldToken = redisTemplate.opsForValue().get(SecurityConstant.USER_TOKEN + username);
             if(StrUtil.isNotBlank(oldToken)){
@@ -92,6 +99,10 @@ public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticatio
                 redisTemplate.opsForValue().set(SecurityConstant.TOKEN_PRE + token, new Gson().toJson(user), tokenExpireTime, TimeUnit.MINUTES);
             }
         }else{
+            // 不缓存权限
+            if(!storePerms){
+                list = null;
+            }
             // jwt
             token = SecurityConstant.TOKEN_SPLIT + Jwts.builder()
                     //主题 放入用户名

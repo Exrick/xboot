@@ -2,8 +2,9 @@ package cn.exrick.xboot.modules.base.entity;
 
 import cn.exrick.xboot.base.XbootBaseEntity;
 import cn.exrick.xboot.common.constant.CommonConstant;
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -19,6 +20,7 @@ import java.util.List;
 @Entity
 @Table(name = "t_role")
 @TableName("t_role")
+@ApiModel(value = "角色")
 public class Role extends XbootBaseEntity {
 
     private static final long serialVersionUID = 1L;
