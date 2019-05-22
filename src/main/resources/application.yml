@@ -111,6 +111,13 @@ xboot:
   mob:
     appKey: 你的appKey
 
+# Actuator
+management:
+  health:
+    # 暂未用到ES 关闭其健康检查
+    elasticsearch:
+      enabled: false
+
 # 忽略鉴权url
 ignored:
   urls:

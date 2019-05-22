@@ -13,15 +13,15 @@
 - 官网源码：https://github.com/Exrick/xboot-show
 ### 在线Demo
 http://xboot.exrick.cn
-### 新在线开发文档
+### 最新最全面在线文档
 https://www.kancloud.cn/exrick/xboot/content
 ### 前台基于Vue+iView项目地址： [xboot-front](https://github.com/Exrick/xboot-front)
 ### 项目简介 
-- [x] 代码拥有详细注释 无复杂逻辑 核心使用 SpringBoot 2.1.4.RELEASE
+- [x] 代码拥有详细注释 无复杂逻辑 核心使用 SpringBoot 2.1.5.RELEASE
 - [x] JWT / 基于Redis单点登录Token交互 任意切换
 - [x] JPA + Mybatis-Plus 任意切换
 - [x] 操作日志记录方式任意切换Mysql或Elasticseach记录
-- [x] 极简代码生成 只需输入类名和字段 自动创建数据库表
+- [x] 极简极速代码生成 只需输入类名和字段 自动创建数据库表
 - [x] 动态权限管理 菜单按钮权限+数据权限配置
 - [x] 支持社交账号、短信等多方式登录 不干涉原用户数据 实现第三方账号管理
 - [x] 基于Websocket消息推送管理、基于Quartz定时任务管理、数据字典管理
@@ -30,6 +30,8 @@ https://www.kancloud.cn/exrick/xboot/content
 - [x] 可动态配置SSO、短信、邮件、Vaptcha验证码等
 - [x] 为什么要前后端分离
     - 都什么时代了还在用JQuery？ 
+
+![](https://i.loli.net/2019/04/29/5cc70cac4b7a4.png)
 
 ### 截图预览
 
@@ -43,6 +45,10 @@ https://www.kancloud.cn/exrick/xboot/content
 
 
 ### [完整版截图细节展示](https://github.com/Exrick/x-boot/wiki/%E5%AE%8C%E6%95%B4%E7%89%88%E6%88%AA%E5%9B%BE%E7%BB%86%E8%8A%82%E5%B1%95%E7%A4%BA)
+
+### 系统架构
+
+<img src="https://i.loli.net/2019/05/01/5cc87695f109d.png" width="600px"/>
 
 ### 前端所用技术
 - Vue 2.5.x、Vue Cli 3.x、iView、iview-admin、iview-area、Vuex、Vue Router、ES6、webpack、axios、echarts、cookie等
