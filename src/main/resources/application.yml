@@ -54,6 +54,9 @@ spring:
   data:
     elasticsearch:
       cluster-nodes: 127.0.0.1:9300
+      # 未使用到ES 关闭存储
+      repositories:
+        enabled: false
   # 定时任务
   quartz:
     # 任务信息存储至数据库
@@ -104,7 +107,7 @@ xboot:
     accessKey: 你的accessKey
     secretKey: 你的secretKey
     bucket: 你的空间名
-    domain: 你的测试域名，如http://p77xsahe9.bkt.clouddn.com
+    domain: 你的域名，如http://p77xsahe9.bkt.clouddn.com
     # 存储区域 -1自动判断 0华东 1华北 2华南 3北美 4东南亚
     zone: -1
   # mob api配置 mob官网注册申请即可

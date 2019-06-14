@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class EsLogServiceImpl implements EsLogService {
 
-    @Autowired
+    @Autowired(required = false)
     private EsLogDao logDao;
 
     @Override
