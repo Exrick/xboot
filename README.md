@@ -55,14 +55,14 @@ https://www.kancloud.cn/exrick/xboot/content
 - 前台为基于Vue+iView的独立项目请跳转至 [xboot-front](https://github.com/Exrick/xboot-front) 项目仓库查看
 ### 后端所用技术
 ##### 各框架依赖版本皆使用目前最新版本
-- Spring Boot 2.1.4.RELEASE
+- Spring Boot 2.1.5.RELEASE
 - SpringMVC
 - Spring Security
 - [Spring Data JPA](https://docs.spring.io/spring-data/jpa/docs/2.0.6.RELEASE/reference/html/)
 - [MyBatis-Plus](http://mp.baomidou.com)：已更新至3.x版本
 - [Redis](https://github.com/Exrick/xmall/blob/master/study/Redis.md)
 - [Elasticsearch](https://github.com/Exrick/xmall/blob/master/study/Elasticsearch.md)：基于Lucene分布式搜索引擎
-- [Druid](http://druid.io/)：阿里高性能数据库连接池 [Druid配置官方中文文档](https://github.com/alibaba/druid/tree/master/druid-spring-boot-starter)
+- [Druid](http://druid.io/)：阿里高性能数据库连接池（偏监控 注重性能可使用默认HikariCP） [Druid配置官方中文文档](https://github.com/alibaba/druid/tree/master/druid-spring-boot-starter)
 - [Json Web Token(JWT)](https://jwt.io/)
 - [Quartz](http://www.quartz-scheduler.org)：定时任务
 - [Beetl](http://ibeetl.com/guide/#beetl)：模版引擎 代码生成使用

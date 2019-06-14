@@ -208,6 +208,7 @@ public class UserController {
         //手动删除缓存
         redisTemplate.delete("userRole::"+u.getId());
         redisTemplate.delete("userRole::depIds:"+u.getId());
+        redisTemplate.delete("permission::userMenuList:"+u.getId());
         return new ResultUtil<Object>().setSuccessMsg("修改成功");
     }
 

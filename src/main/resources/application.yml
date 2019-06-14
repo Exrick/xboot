@@ -1,4 +1,4 @@
-# 配置文件加密key
+# 配置文件加密key 生产环境中可通过环境变量、命令行等形式进行设置
 jasypt:
   encryptor:
     password: xboot
@@ -40,7 +40,7 @@ spring:
     # 自动生成表结构
     generate-ddl: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
   # Redis
   redis:
     host: 127.0.0.1
@@ -152,4 +152,13 @@ mybatis-plus:
 
 # 日志
 logging:
-  file: xboot-logs/xboot.log
+  # 输出级别
+  level:
+    root: info
+  # 指定路径
+  path: xboot-logs
+  file:
+    # 最大保存天数
+    max-history: 7
+    # 每个文件最大大小
+    max-size: 5MB
