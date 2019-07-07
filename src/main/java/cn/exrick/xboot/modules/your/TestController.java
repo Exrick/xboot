@@ -32,16 +32,7 @@ public class TestController {
     @ApiOperation(value = "同步锁限流测试")
     @ResponseBody
     public Result<Object> test(){
-
-        log.info(System.currentTimeMillis()+"===========");
-        String result = HttpRequest.post("https://api.bmob.cn/1/classes/url")
-                .header("X-Bmob-Application-Id", "efdc665141af06cd68f808fc5a7f805b")
-                .header("X-Bmob-REST-API-Key", "9a2f73e42ff2a415f6cc2b384e864a67")
-                .header("Content-Type", "application/json")
-                .body("{\"url\":\"test\"}")
-                .execute().body();
-        log.info(result);
-        log.info(System.currentTimeMillis()+"===========");
+        
         lockTemplate.execute("订单流水号", 5000, new Callback() {
             @Override
             public Object onGetLock() throws InterruptedException {

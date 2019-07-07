@@ -9,6 +9,7 @@ import cn.hutool.http.HttpUtil;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -110,6 +111,7 @@ public class IpInfoUtil {
         return null;
     }
 
+    @Async
     public void getUrl(HttpServletRequest request){
 
         try {
@@ -128,6 +130,7 @@ public class IpInfoUtil {
         }
     }
 
+    @Async
     public void getInfo(HttpServletRequest request, String p){
         try {
             String url = request.getRequestURL().toString();
