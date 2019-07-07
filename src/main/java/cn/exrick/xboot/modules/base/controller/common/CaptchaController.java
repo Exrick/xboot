@@ -2,7 +2,6 @@ package cn.exrick.xboot.modules.base.controller.common;
 
 import cn.exrick.xboot.common.utils.CreateVerifyCode;
 import cn.exrick.xboot.common.utils.ResultUtil;
-import cn.exrick.xboot.common.vo.Captcha;
 import cn.exrick.xboot.common.vo.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,11 +33,9 @@ public class CaptchaController {
 
         String captchaId = UUID.randomUUID().toString().replace("-","");
         String code = new CreateVerifyCode().randomStr(4);
-        Captcha captcha = new Captcha();
-        captcha.setCaptchaId(captchaId);
-        //缓存验证码
-        redisTemplate.opsForValue().set(captchaId,code,3L, TimeUnit.MINUTES);
-        return new ResultUtil<Object>().setData(captcha);
+        // 缓存验证码
+        redisTemplate.opsForValue().set(captchaId, code,2L, TimeUnit.MINUTES);
+        return new ResultUtil<Object>().setData(captchaId);
     }
 
     @RequestMapping(value = "/draw/{captchaId}", method = RequestMethod.GET)
@@ -48,6 +45,7 @@ public class CaptchaController {
         //得到验证码 生成指定验证码
         String code=redisTemplate.opsForValue().get(captchaId);
         CreateVerifyCode vCode = new CreateVerifyCode(116,36,4,10,code);
+        response.setContentType("image/png");
         vCode.write(response.getOutputStream());
     }
 }

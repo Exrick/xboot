@@ -25,7 +25,7 @@ public interface DictDao extends XbootBaseDao<Dict,String> {
      * @param type
      * @return
      */
-    List<Dict> findByType(String type);
+    Dict findByType(String type);
 
     /**
      * 模糊搜索

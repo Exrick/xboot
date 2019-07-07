@@ -1,5 +1,6 @@
 package cn.exrick.xboot;
 
+import de.codecentric.boot.admin.server.config.EnableAdminServer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -19,6 +20,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableAsync
 //启用自带定时任务
 @EnableScheduling
+// 启用Admin监控
+@EnableAdminServer
 public class XbootApplication {
 
     public static void main(String[] args) {

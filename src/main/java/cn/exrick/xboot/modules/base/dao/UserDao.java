@@ -16,21 +16,21 @@ public interface UserDao extends XbootBaseDao<User,String> {
      * @param username
      * @return
      */
-    List<User> findByUsername(String username);
+    User findByUsername(String username);
 
     /**
      * 通过手机获取用户
      * @param mobile
      * @return
      */
-    List<User> findByMobile(String mobile);
+    User findByMobile(String mobile);
 
     /**
      * 通过邮件获取用户
      * @param email
      * @return
      */
-    List<User> findByEmail(String email);
+    User findByEmail(String email);
 
     /**
      * 通过部门id获取

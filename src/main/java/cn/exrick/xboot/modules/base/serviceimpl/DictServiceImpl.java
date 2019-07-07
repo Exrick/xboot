@@ -36,11 +36,7 @@ public class DictServiceImpl implements DictService {
     @Override
     public Dict findByType(String type) {
 
-        List<Dict> list = dictDao.findByType(type);
-        if(list!=null&&list.size()>0){
-            return list.get(0);
-        }
-        return null;
+        return dictDao.findByType(type);
     }
 
     @Override

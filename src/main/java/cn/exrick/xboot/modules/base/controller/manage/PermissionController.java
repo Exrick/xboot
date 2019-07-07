@@ -11,7 +11,7 @@ import cn.exrick.xboot.modules.base.entity.User;
 import cn.exrick.xboot.modules.base.service.PermissionService;
 import cn.exrick.xboot.modules.base.service.RolePermissionService;
 import cn.exrick.xboot.modules.base.service.mybatis.IPermissionService;
-import cn.exrick.xboot.modules.base.utils.DtoUtil;
+import cn.exrick.xboot.modules.base.utils.VoUtil;
 import cn.exrick.xboot.modules.base.vo.MenuVo;
 import cn.hutool.core.util.StrUtil;
 import com.google.gson.Gson;
@@ -70,7 +70,7 @@ public class PermissionController {
         String key = "permission::userMenuList:" + u.getId();
         String v = redisTemplate.opsForValue().get(key);
         if(StrUtil.isNotBlank(v)){
-            menuList = new Gson().fromJson(v, new TypeToken<List<Permission>>(){}.getType());
+            menuList = new Gson().fromJson(v, new TypeToken<List<MenuVo>>(){}.getType());
             return new ResultUtil<List<MenuVo>>().setData(menuList);
         }
 
@@ -80,28 +80,28 @@ public class PermissionController {
         // 筛选0级页面
         for(Permission p : list){
             if(CommonConstant.PERMISSION_NAV.equals(p.getType())&&CommonConstant.LEVEL_ZERO.equals(p.getLevel())){
-                menuList.add(DtoUtil.permissionToMenuVo(p));
+                menuList.add(VoUtil.permissionToMenuVo(p));
             }
         }
         // 筛选一级页面
         List<MenuVo> firstMenuList = new ArrayList<>();
         for(Permission p : list){
             if(CommonConstant.PERMISSION_PAGE.equals(p.getType())&&CommonConstant.LEVEL_ONE.equals(p.getLevel())){
-                firstMenuList.add(DtoUtil.permissionToMenuVo(p));
+                firstMenuList.add(VoUtil.permissionToMenuVo(p));
             }
         }
         // 筛选二级页面
         List<MenuVo> secondMenuList = new ArrayList<>();
         for(Permission p : list){
             if(CommonConstant.PERMISSION_PAGE.equals(p.getType())&&CommonConstant.LEVEL_TWO.equals(p.getLevel())){
-                secondMenuList.add(DtoUtil.permissionToMenuVo(p));
+                secondMenuList.add(VoUtil.permissionToMenuVo(p));
             }
         }
         // 筛选二级页面拥有的按钮权限
         List<MenuVo> buttonPermissions = new ArrayList<>();
         for(Permission p : list){
             if(CommonConstant.PERMISSION_OPERATION.equals(p.getType())&&CommonConstant.LEVEL_THREE.equals(p.getLevel())){
-                buttonPermissions.add(DtoUtil.permissionToMenuVo(p));
+                buttonPermissions.add(VoUtil.permissionToMenuVo(p));
             }
         }
 

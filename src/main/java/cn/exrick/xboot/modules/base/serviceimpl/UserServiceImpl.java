@@ -58,46 +58,37 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByUsername(String username) {
-        
-        List<User> list=userDao.findByUsername(username);
-        if(list!=null&&list.size()>0){
-            User user = list.get(0);
-            // 关联部门
-            if(StrUtil.isNotBlank(user.getDepartmentId())){
-                Department department = departmentDao.getOne(user.getDepartmentId());
+
+        User user = userDao.findByUsername(username);
+        if(user==null){
+            return null;
+        }
+        // 关联部门
+        if(StrUtil.isNotBlank(user.getDepartmentId())){
+            Department department = departmentDao.findById(user.getDepartmentId()).orElse(null);
+            if(department!=null){
                 user.setDepartmentTitle(department.getTitle());
             }
-            // 关联角色
-            List<Role> roleList = userRoleMapper.findByUserId(user.getId());
-            user.setRoles(roleList);
-            // 关联权限菜单
-            List<Permission> permissionList = permissionMapper.findByUserId(user.getId());
-            user.setPermissions(permissionList);
-            return user;
         }
-        return null;
+        // 关联角色
+        List<Role> roleList = userRoleMapper.findByUserId(user.getId());
+        user.setRoles(roleList);
+        // 关联权限菜单
+        List<Permission> permissionList = permissionMapper.findByUserId(user.getId());
+        user.setPermissions(permissionList);
+        return user;
     }
 
     @Override
     public User findByMobile(String mobile) {
 
-        List<User> list = userDao.findByMobile(mobile);
-        if(list!=null&&list.size()>0) {
-            User user = list.get(0);
-            return user;
-        }
-        return null;
+        return userDao.findByMobile(mobile);
     }
 
     @Override
     public User findByEmail(String email) {
 
-        List<User> list = userDao.findByEmail(email);
-        if(list!=null&&list.size()>0) {
-            User user = list.get(0);
-            return user;
-        }
-        return null;
+        return userDao.findByEmail(email);
     }
 
     @Override

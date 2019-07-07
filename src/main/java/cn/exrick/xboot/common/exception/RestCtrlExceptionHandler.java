@@ -21,8 +21,8 @@ public class RestCtrlExceptionHandler {
 
         String errorMsg="Xboot exception";
         if (e!=null){
-            errorMsg=e.getMsg();
-            log.error(e.toString());
+            errorMsg = e.getMsg();
+            log.error(e.toString(), e);
         }
         return new ResultUtil<>().setErrorMsg(500, errorMsg);
     }
@@ -33,8 +33,8 @@ public class RestCtrlExceptionHandler {
 
         String errorMsg="Exception";
         if (e!=null){
-            errorMsg=e.getMessage();
-            log.error(e.toString());
+            errorMsg = e.getMessage();
+            log.error(e.toString(), e);
         }
         return new ResultUtil<>().setErrorMsg(500, errorMsg);
     }

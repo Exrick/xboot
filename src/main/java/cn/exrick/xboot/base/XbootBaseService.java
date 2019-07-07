@@ -23,7 +23,7 @@ public interface XbootBaseService<E, ID extends Serializable> {
      * @return
      */
     public default E get(ID id) {
-        return getRepository().getOne(id);
+        return getRepository().findById(id).orElse(null);
     }
 
     /**

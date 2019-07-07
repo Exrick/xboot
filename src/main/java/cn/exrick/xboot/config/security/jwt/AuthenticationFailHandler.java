@@ -2,10 +2,10 @@ package cn.exrick.xboot.config.security.jwt;
 
 import cn.exrick.xboot.common.utils.ResponseUtil;
 import cn.exrick.xboot.common.exception.LoginFailLimitException;
+import cn.exrick.xboot.config.properties.XbootTokenProperties;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -27,11 +27,8 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class AuthenticationFailHandler extends SimpleUrlAuthenticationFailureHandler {
 
-    @Value("${xboot.loginTimeLimit}")
-    private Integer loginTimeLimit;
-
-    @Value("${xboot.loginAfterTime}")
-    private Integer loginAfterTime;
+    @Autowired
+    private XbootTokenProperties tokenProperties;
 
     @Autowired
     private StringRedisTemplate redisTemplate;
@@ -49,12 +46,12 @@ public class AuthenticationFailHandler extends SimpleUrlAuthenticationFailureHan
             }
             //获取已登录错误次数
             int loginFailTime = Integer.parseInt(value);
-            int restLoginTime = loginTimeLimit - loginFailTime;
+            int restLoginTime = tokenProperties.getLoginTimeLimit() - loginFailTime;
             log.info("用户"+username+"登录失败，还有"+restLoginTime+"次机会");
             if(restLoginTime<=3&&restLoginTime>0){
                 ResponseUtil.out(response, ResponseUtil.resultMap(false,500,"用户名或密码错误，还有"+restLoginTime+"次尝试机会"));
             } else if(restLoginTime<=0) {
-                ResponseUtil.out(response, ResponseUtil.resultMap(false,500,"登录错误次数超过限制，请"+loginAfterTime+"分钟后再试"));
+                ResponseUtil.out(response, ResponseUtil.resultMap(false,500,"登录错误次数超过限制，请"+tokenProperties.getLoginAfterTime()+"分钟后再试"));
             } else {
                 ResponseUtil.out(response, ResponseUtil.resultMap(false,500,"用户名或密码错误"));
             }
@@ -80,10 +77,9 @@ public class AuthenticationFailHandler extends SimpleUrlAuthenticationFailureHan
         }
         //获取已登录错误次数
         int loginFailTime = Integer.parseInt(value) + 1;
-        redisTemplate.opsForValue().set(key, String.valueOf(loginFailTime), loginAfterTime, TimeUnit.MINUTES);
-        if(loginFailTime>=loginTimeLimit){
-
-            redisTemplate.opsForValue().set(flagKey, "fail", loginAfterTime, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(key, String.valueOf(loginFailTime), tokenProperties.getLoginAfterTime(), TimeUnit.MINUTES);
+        if(loginFailTime>=tokenProperties.getLoginTimeLimit()){
+            redisTemplate.opsForValue().set(flagKey, "fail", tokenProperties.getLoginAfterTime(), TimeUnit.MINUTES);
             return false;
         }
         return true;

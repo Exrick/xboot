@@ -54,7 +54,7 @@ spring:
   data:
     elasticsearch:
       cluster-nodes: 127.0.0.1:9300
-      # 未使用到ES 关闭存储
+      # 未使用到ES 关闭其持久化存储
       repositories:
         enabled: false
   # 定时任务
@@ -73,32 +73,46 @@ spring:
       max-request-size: 5MB
   jackson:
     time-zone: GMT+8
+    serialization:
+      fail-on-empty-beans: false
+  boot:
+    admin:
+      # 修改上下文路径
+      context-path: /xboot/admin
+      client:
+        url: http://127.0.0.1:${server.port}/xboot/admin
 
 xboot:
   # 全局限流
-  rateLimit:
+  ratelimit:
     enable: true
     # 每1秒内
     timeout: 1000
     # 总限制100个请求
     limit: 100
+  # IP限流
+  iplimit:
+    enable: true
+    # 每1秒内
+    timeout: 1000
+    # 每个ip限制15个请求
+    limit: 15
   # token交互方式
   token:
-    # 默认redis 设置为true后，token将存入redis，并具有单点登录功能 设为false将使用JWT交互
+    # 设置为true后，token将存入redis，并具有单点登录功能 默认false使用JWT交互
     redis: true
+    # 是否开启单设备登陆 仅当token交互方式为redis时生效
+    sdl: true
     # token中存储用户权限数据 设为true开启后可避免每次请求再获取用户权限，但有可能导致编辑权限菜单后无法读取到最新权限数据（需用户重新登录）
     storePerms: true
-  # token过期时间（分钟）
-  tokenExpireTime: 60
-  # 用户选择保存登录状态对应token过期时间（天）
-  saveLoginTime: 7
-  # 限制用户登陆错误次数（次）
-  loginTimeLimit: 10
-  # 错误超过次数后多少分钟后才能继续登录（分钟）
-  loginAfterTime: 10
-  # ES
-  elasticsearch:
-    nodeClient: 127.0.0.1:9200
+    # token过期时间（分钟）
+    tokenExpireTime: 60
+    # 用户选择保存登录状态对应token过期时间（天）
+    saveLoginTime: 7
+    # 限制用户登陆错误次数（次）
+    loginTimeLimit: 10
+    # 错误超过次数后多少分钟后才能继续登录（分钟）
+    loginAfterTime: 10
   # 日志记录方式 true使用Elasticsearch记录 false记录至数据库中
   logRecord:
     es: false
@@ -114,16 +128,17 @@ xboot:
   mob:
     appKey: 你的appKey
 
-# Actuator
-management:
-  health:
-    # 暂未用到ES 关闭其健康检查
-    elasticsearch:
-      enabled: false
+# 需要验证码校验的接口路径 支持通配符 自动过滤拦截校验 无需开发人员再次校验
+captcha:
+  # 图片验证码验证
+  image:
+    - /xboot/login # 登录接口
 
 # 忽略鉴权url
 ignored:
   urls:
+    - /xboot/actuator/**
+    - /xboot/admin/**
     - /xboot/dictData/getByType/**
     - /xboot/user/regist
     - /xboot/common/**
@@ -136,7 +151,28 @@ ignored:
     - /**/*.css
     - /**/*.png
     - /**/*.ico
-    - /test/**
+    - /xboot/test/**
+
+# Actuator
+management:
+  health:
+    status:
+      http-mapping:
+        DOWN: 200
+        OUT_OF_SERVICE: 200
+        FATAL: 200
+        UNKNOWN: 200
+    # 暂未用到ES 关闭其健康检查
+    elasticsearch:
+      enabled: false
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      base-path: /xboot/actuator/
+      exposure:
+        include: '*'
 
 # Swagger界面内容配置
 swagger:

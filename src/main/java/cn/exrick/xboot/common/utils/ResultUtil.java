@@ -51,4 +51,24 @@ public class ResultUtil<T> {
         this.result.setCode(code);
         return this.result;
     }
+
+    public static <T> Result<T> data(T t){
+        return new ResultUtil<T>().setData(t);
+    }
+
+    public static <T> Result<T> data(T t, String msg){
+        return new ResultUtil<T>().setData(t, msg);
+    }
+
+    public static <T> Result<T> success(String msg){
+        return new ResultUtil<T>().setSuccessMsg(msg);
+    }
+
+    public static <T> Result<T> error(String msg){
+        return new ResultUtil<T>().setErrorMsg(msg);
+    }
+
+    public static <T> Result<T> error(Integer code, String msg){
+        return new ResultUtil<T>().setErrorMsg(code, msg);
+    }
 }

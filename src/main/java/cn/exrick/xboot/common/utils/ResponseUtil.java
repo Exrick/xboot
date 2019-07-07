@@ -44,12 +44,7 @@ public class ResponseUtil {
 
     public static Map<String, Object> resultMap(boolean flag, Integer code, String msg){
 
-        Map<String, Object> resultMap = new HashMap<String, Object>(16);
-        resultMap.put("success", flag);
-        resultMap.put("message", msg);
-        resultMap.put("code", code);
-        resultMap.put("timestamp", System.currentTimeMillis());
-        return resultMap;
+        return resultMap(flag, code, msg, null);
     }
 
     public static Map<String, Object> resultMap(boolean flag, Integer code, String msg, Object data){
@@ -59,7 +54,9 @@ public class ResponseUtil {
         resultMap.put("message", msg);
         resultMap.put("code", code);
         resultMap.put("timestamp", System.currentTimeMillis());
-        resultMap.put("result", data);
+        if(data!=null){
+            resultMap.put("result", data);
+        }
         return resultMap;
     }
 }

@@ -4,6 +4,7 @@ import cn.exrick.xboot.common.constant.SecurityConstant;
 import cn.exrick.xboot.common.utils.ResponseUtil;
 import cn.exrick.xboot.common.utils.SecurityUtil;
 import cn.exrick.xboot.common.vo.TokenUser;
+import cn.exrick.xboot.config.properties.XbootTokenProperties;
 import cn.hutool.core.util.StrUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -34,22 +35,15 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
 
-    private Boolean tokenRedis;
-
-    private Integer tokenExpireTime;
-
-    private Boolean storePerms;
+    private XbootTokenProperties tokenProperties;
 
     private StringRedisTemplate redisTemplate;
 
     private SecurityUtil securityUtil;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, Boolean tokenRedis, Integer tokenExpireTime,
-                                   Boolean storePerms, StringRedisTemplate redisTemplate, SecurityUtil securityUtil) {
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, XbootTokenProperties tokenProperties, StringRedisTemplate redisTemplate, SecurityUtil securityUtil) {
         super(authenticationManager);
-        this.tokenRedis = tokenRedis;
-        this.tokenExpireTime = tokenExpireTime;
-        this.storePerms = storePerms;
+        this.tokenProperties = tokenProperties;
         this.redisTemplate = redisTemplate;
         this.securityUtil = securityUtil;
     }
@@ -65,7 +59,7 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
         if(StrUtil.isBlank(header)){
             header = request.getParameter(SecurityConstant.HEADER);
         }
-        Boolean notValid = StrUtil.isBlank(header) || (!tokenRedis && !header.startsWith(SecurityConstant.TOKEN_SPLIT));
+        Boolean notValid = StrUtil.isBlank(header) || (!tokenProperties.getRedis() && !header.startsWith(SecurityConstant.TOKEN_SPLIT));
         if (notValid) {
             chain.doFilter(request, response);
             return;
@@ -87,7 +81,7 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
         // 权限
         List<GrantedAuthority> authorities = new ArrayList<>();
 
-        if(tokenRedis){
+        if(tokenProperties.getRedis()){
             // redis
             String v = redisTemplate.opsForValue().get(SecurityConstant.TOKEN_PRE + header);
             if(StrUtil.isBlank(v)){
@@ -96,7 +90,7 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
             }
             TokenUser user = new Gson().fromJson(v, TokenUser.class);
             username = user.getUsername();
-            if(storePerms){
+            if(tokenProperties.getStorePerms()){
                 // 缓存了权限
                 for(String ga : user.getPermissions()){
                     authorities.add(new SimpleGrantedAuthority(ga));
@@ -107,8 +101,8 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
             }
             if(!user.getSaveLogin()){
                 // 若未保存登录状态重新设置失效时间
-                redisTemplate.opsForValue().set(SecurityConstant.USER_TOKEN + username, header, tokenExpireTime, TimeUnit.MINUTES);
-                redisTemplate.opsForValue().set(SecurityConstant.TOKEN_PRE + header, v, tokenExpireTime, TimeUnit.MINUTES);
+                redisTemplate.opsForValue().set(SecurityConstant.USER_TOKEN + username, header, tokenProperties.getTokenExpireTime(), TimeUnit.MINUTES);
+                redisTemplate.opsForValue().set(SecurityConstant.TOKEN_PRE + header, v, tokenProperties.getTokenExpireTime(), TimeUnit.MINUTES);
             }
         }else{
             // JWT
@@ -122,7 +116,7 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
                 // 获取用户名
                 username = claims.getSubject();
                 // 获取权限
-                if(storePerms) {
+                if(tokenProperties.getStorePerms()) {
                     // 缓存了权限
                     String authority = claims.get(SecurityConstant.AUTHORITIES).toString();
                     if(StrUtil.isNotBlank(authority)){

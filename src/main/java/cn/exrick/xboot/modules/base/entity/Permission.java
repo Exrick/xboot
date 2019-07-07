@@ -31,6 +31,9 @@ public class Permission extends XbootBaseEntity {
     @ApiModelProperty(value = "菜单/权限名称")
     private String name;
 
+    @ApiModelProperty(value = "始终显示 默认是")
+    private Boolean showAlways = true;
+
     @ApiModelProperty(value = "层级")
     private Integer level;
 

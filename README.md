@@ -17,17 +17,16 @@ http://xboot.exrick.cn
 https://www.kancloud.cn/exrick/xboot/content
 ### 前台基于Vue+iView项目地址： [xboot-front](https://github.com/Exrick/xboot-front)
 ### 项目简介 
-- [x] 代码拥有详细注释 无复杂逻辑 核心使用 SpringBoot 2.1.5.RELEASE
-- [x] JWT / 基于Redis单点登录Token交互 任意切换
+- [x] 代码拥有详细注释 无复杂逻辑 核心使用 SpringBoot 2.1.6.RELEASE
+- [x] JWT / 基于Redis可配置单设备登录Token交互 任意切换
 - [x] JPA + Mybatis-Plus 任意切换
 - [x] 操作日志记录方式任意切换Mysql或Elasticseach记录
-- [x] 极简极速代码生成 只需输入类名和字段 自动创建数据库表
-- [x] 动态权限管理 菜单按钮权限+数据权限配置
+- [x] Java、Vue、SQL代码生成效率翻四倍
+- [x] 动态权限管理、多维度轻松控制权限按钮显示、数据权限管理
 - [x] 支持社交账号、短信等多方式登录 不干涉原用户数据 实现第三方账号管理
 - [x] 基于Websocket消息推送管理、基于Quartz定时任务管理、数据字典管理
-- [x] Actuator可视化数据监控
-- [x] 后台提供分布式限流、同步锁、验证码等工具类 前端提供空白Vue模版
-- [x] 可动态配置SSO、短信、邮件、Vaptcha验证码等
+- [x] 后台提供分布式限流、同步锁、验证码等工具类 前端提供丰富Vue模版
+- [x] 可动态配置短信、邮件、Vaptcha验证码等
 - [x] 为什么要前后端分离
     - 都什么时代了还在用JQuery？ 
 
@@ -55,7 +54,7 @@ https://www.kancloud.cn/exrick/xboot/content
 - 前台为基于Vue+iView的独立项目请跳转至 [xboot-front](https://github.com/Exrick/xboot-front) 项目仓库查看
 ### 后端所用技术
 ##### 各框架依赖版本皆使用目前最新版本
-- Spring Boot 2.1.5.RELEASE
+- Spring Boot 2.1.6.RELEASE
 - SpringMVC
 - Spring Security
 - [Spring Data JPA](https://docs.spring.io/spring-data/jpa/docs/2.0.6.RELEASE/reference/html/)

@@ -5,10 +5,11 @@ import cn.exrick.xboot.common.constant.CommonConstant;
 import cn.exrick.xboot.common.limit.RedisRaterLimiter;
 import cn.exrick.xboot.common.utils.IpInfoUtil;
 import cn.exrick.xboot.common.exception.XbootException;
+import cn.exrick.xboot.config.properties.XbootIpLimitProperties;
+import cn.exrick.xboot.config.properties.XbootLimitProperties;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -26,14 +27,11 @@ import java.lang.reflect.Method;
 @Component
 public class LimitRaterInterceptor extends HandlerInterceptorAdapter {
 
-    @Value("${xboot.rateLimit.enable}")
-    private boolean rateLimitEnable;
+    @Autowired
+    private XbootLimitProperties limitProperties;
 
-    @Value("${xboot.rateLimit.limit}")
-    private Integer limit;
-
-    @Value("${xboot.rateLimit.timeout}")
-    private Integer timeout;
+    @Autowired
+    private XbootIpLimitProperties ipLimitProperties;
 
     @Autowired
     private RedisRaterLimiter redisRaterLimiter;
@@ -51,14 +49,19 @@ public class LimitRaterInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
                              Object handler) throws Exception {
 
-        // IP限流 在线Demo所需 一秒限10个请求
-        String token1 = redisRaterLimiter.acquireTokenFromBucket(ipInfoUtil.getIpAddr(request), 10, 1000);
-        if (StrUtil.isBlank(token1)) {
-            throw new XbootException("你手速怎么这么快，请点慢一点");
+        String ip = ipInfoUtil.getIpAddr(request);
+
+        if(ipLimitProperties.getEnable()) {
+            String token1 = redisRaterLimiter.acquireTokenFromBucket(ip,
+                    ipLimitProperties.getLimit(), ipLimitProperties.getTimeout());
+            if (StrUtil.isBlank(token1)) {
+                throw new XbootException("你手速怎么这么快，请点慢一点");
+            }
         }
 
-        if(rateLimitEnable){
-            String token2 = redisRaterLimiter.acquireTokenFromBucket(CommonConstant.LIMIT_ALL, limit, timeout);
+        if(limitProperties.getEnable()){
+            String token2 = redisRaterLimiter.acquireTokenFromBucket(CommonConstant.LIMIT_ALL,
+                    limitProperties.getLimit(), limitProperties.getTimeout());
             if (StrUtil.isBlank(token2)) {
                 throw new XbootException("当前访问总人数太多啦，请稍后再试");
             }

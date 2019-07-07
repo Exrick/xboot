@@ -1,6 +1,8 @@
 package cn.exrick.xboot.modules.base.controller.manage;
 
 import cn.exrick.xboot.common.constant.CommonConstant;
+import cn.exrick.xboot.common.exception.XbootException;
+import cn.exrick.xboot.common.utils.CommonUtil;
 import cn.exrick.xboot.common.utils.HibernateProxyTypeAdapter;
 import cn.exrick.xboot.common.utils.ResultUtil;
 import cn.exrick.xboot.common.utils.SecurityUtil;
@@ -139,18 +141,8 @@ public class DepartmentController {
     @ApiOperation(value = "批量通过id删除")
     public Result<Object> delByIds(@PathVariable String[] ids){
 
-        for(String id:ids){
-            List<User> list = userService.findByDepartmentId(id);
-            if(list!=null&&list.size()>0){
-                return new ResultUtil<Object>().setErrorMsg("删除失败，包含正被用户使用关联的部门");
-            }
-        }
-        for(String id:ids){
-            departmentService.delete(id);
-            // 删除关联数据权限
-            roleDepartmentService.deleteByDepartmentId(id);
-            // 删除关联部门负责人
-            departmentHeaderService.deleteByDepartmentId(id);
+        for(String id : ids){
+            deleteRecursion(id, ids);
         }
         // 手动删除所有部门缓存
         Set<String> keys = redisTemplate.keys("department:" + "*");
@@ -159,6 +151,40 @@ public class DepartmentController {
         Set<String> keysUserRoleData = redisTemplate.keys("userRole::depIds:" + "*");
         redisTemplate.delete(keysUserRoleData);
         return new ResultUtil<Object>().setSuccessMsg("批量通过id删除数据成功");
+    }
+
+    public void deleteRecursion(String id, String[] ids){
+
+        List<User> list = userService.findByDepartmentId(id);
+        if(list!=null&&list.size()>0){
+            throw new XbootException("删除失败，包含正被用户使用关联的部门");
+        }
+        // 获得其父节点
+        Department dep = departmentService.get(id);
+        Department parent = null;
+        if(dep!=null&&StrUtil.isNotBlank(dep.getParentId())){
+            parent = departmentService.get(dep.getParentId());
+        }
+        departmentService.delete(id);
+        // 删除关联数据权限
+        roleDepartmentService.deleteByDepartmentId(id);
+        // 删除关联部门负责人
+        departmentHeaderService.deleteByDepartmentId(id);
+        // 判断父节点是否还有子节点
+        if(parent!=null){
+            List<Department> childrenDeps = departmentService.findByParentIdOrderBySortOrder(parent.getId(), false);
+            if(childrenDeps==null||childrenDeps.size()==0){
+                parent.setIsParent(false);
+                departmentService.update(parent);
+            }
+        }
+        // 递归删除
+        List<Department> departments = departmentService.findByParentIdOrderBySortOrder(id, false);
+        for(Department d : departments){
+            if(!CommonUtil.judgeIds(d.getId(), ids)){
+                deleteRecursion(d.getId(), ids);
+            }
+        }
     }
 
     @RequestMapping(value = "/search",method = RequestMethod.GET)

@@ -5,6 +5,7 @@ import cn.exrick.xboot.common.lock.Callback;
 import cn.exrick.xboot.common.lock.RedisDistributedLockTemplate;
 import cn.exrick.xboot.common.utils.ResultUtil;
 import cn.exrick.xboot.common.vo.Result;
+import cn.hutool.http.HttpRequest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @Api(description = "测试接口 无需登录验证")
 @Transactional
-@RequestMapping("/test")
+@RequestMapping("/xboot/test")
 public class TestController {
 
     @Autowired
@@ -32,6 +33,15 @@ public class TestController {
     @ResponseBody
     public Result<Object> test(){
 
+        log.info(System.currentTimeMillis()+"===========");
+        String result = HttpRequest.post("https://api.bmob.cn/1/classes/url")
+                .header("X-Bmob-Application-Id", "efdc665141af06cd68f808fc5a7f805b")
+                .header("X-Bmob-REST-API-Key", "9a2f73e42ff2a415f6cc2b384e864a67")
+                .header("Content-Type", "application/json")
+                .body("{\"url\":\"test\"}")
+                .execute().body();
+        log.info(result);
+        log.info(System.currentTimeMillis()+"===========");
         lockTemplate.execute("订单流水号", 5000, new Callback() {
             @Override
             public Object onGetLock() throws InterruptedException {

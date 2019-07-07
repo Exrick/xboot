@@ -6,13 +6,13 @@ import cn.exrick.xboot.common.enums.LogType;
 import cn.exrick.xboot.common.utils.IpInfoUtil;
 import cn.exrick.xboot.common.utils.ResponseUtil;
 import cn.exrick.xboot.common.vo.TokenUser;
+import cn.exrick.xboot.config.properties.XbootTokenProperties;
 import cn.hutool.core.util.StrUtil;
 import com.google.gson.Gson;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -38,17 +38,8 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
-    @Value("${xboot.token.redis}")
-    private Boolean tokenRedis;
-
-    @Value("${xboot.tokenExpireTime}")
-    private Integer tokenExpireTime;
-
-    @Value("${xboot.saveLoginTime}")
-    private Integer saveLoginTime;
-
-    @Value("${xboot.token.storePerms}")
-    private Boolean storePerms;
+    @Autowired
+    private XbootTokenProperties tokenProperties;
 
     @Autowired
     private IpInfoUtil ipInfoUtil;
@@ -65,8 +56,8 @@ public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticatio
         Boolean saved = false;
         if(StrUtil.isNotBlank(saveLogin) && Boolean.valueOf(saveLogin)){
             saved = true;
-            if(!tokenRedis){
-                tokenExpireTime = saveLoginTime * 60 * 24;
+            if(!tokenProperties.getRedis()){
+                tokenProperties.setTokenExpireTime(tokenProperties.getSaveLoginTime() * 60 * 24);
             }
         }
         String username = ((UserDetails)authentication.getPrincipal()).getUsername();
@@ -78,29 +69,31 @@ public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticatio
         ipInfoUtil.getUrl(request);
         // 登陆成功生成token
         String token;
-        if(tokenRedis){
+        if(tokenProperties.getRedis()){
             // redis
             token = UUID.randomUUID().toString().replace("-", "");
             TokenUser user = new TokenUser(username, list, saved);
             // 不缓存权限
-            if(!storePerms){
+            if(!tokenProperties.getStorePerms()){
                 user.setPermissions(null);
             }
-            // 单点登录 之前的token失效
-            String oldToken = redisTemplate.opsForValue().get(SecurityConstant.USER_TOKEN + username);
-            if(StrUtil.isNotBlank(oldToken)){
-                redisTemplate.delete(SecurityConstant.TOKEN_PRE + oldToken);
+            // 单设备登录 之前的token失效
+            if(tokenProperties.getSdl()){
+                String oldToken = redisTemplate.opsForValue().get(SecurityConstant.USER_TOKEN + username);
+                if(StrUtil.isNotBlank(oldToken)){
+                    redisTemplate.delete(SecurityConstant.TOKEN_PRE + oldToken);
+                }
             }
             if(saved){
-                redisTemplate.opsForValue().set(SecurityConstant.USER_TOKEN + username, token, saveLoginTime, TimeUnit.DAYS);
-                redisTemplate.opsForValue().set(SecurityConstant.TOKEN_PRE + token, new Gson().toJson(user), saveLoginTime, TimeUnit.DAYS);
+                redisTemplate.opsForValue().set(SecurityConstant.USER_TOKEN + username, token, tokenProperties.getSaveLoginTime(), TimeUnit.DAYS);
+                redisTemplate.opsForValue().set(SecurityConstant.TOKEN_PRE + token, new Gson().toJson(user), tokenProperties.getSaveLoginTime(), TimeUnit.DAYS);
             }else{
-                redisTemplate.opsForValue().set(SecurityConstant.USER_TOKEN + username, token, tokenExpireTime, TimeUnit.MINUTES);
-                redisTemplate.opsForValue().set(SecurityConstant.TOKEN_PRE + token, new Gson().toJson(user), tokenExpireTime, TimeUnit.MINUTES);
+                redisTemplate.opsForValue().set(SecurityConstant.USER_TOKEN + username, token, tokenProperties.getTokenExpireTime(), TimeUnit.MINUTES);
+                redisTemplate.opsForValue().set(SecurityConstant.TOKEN_PRE + token, new Gson().toJson(user), tokenProperties.getTokenExpireTime(), TimeUnit.MINUTES);
             }
         }else{
             // 不缓存权限
-            if(!storePerms){
+            if(!tokenProperties.getStorePerms()){
                 list = null;
             }
             // jwt
@@ -110,7 +103,7 @@ public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticatio
                     //自定义属性 放入用户拥有请求权限
                     .claim(SecurityConstant.AUTHORITIES, new Gson().toJson(list))
                     //失效时间
-                    .setExpiration(new Date(System.currentTimeMillis() + tokenExpireTime * 60 * 1000))
+                    .setExpiration(new Date(System.currentTimeMillis() + tokenProperties.getTokenExpireTime() * 60 * 1000))
                     //签名算法和密钥
                     .signWith(SignatureAlgorithm.HS512, SecurityConstant.JWT_SIGN_KEY)
                     .compact();

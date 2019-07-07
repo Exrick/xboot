@@ -96,8 +96,6 @@ public class UserController {
         if(userService.findByUsername(u.getUsername())!=null){
             return new ResultUtil<Object>().setErrorMsg("该用户名已被注册");
         }
-        //删除缓存
-        redisTemplate.delete("user::"+u.getUsername());
 
         String encryptPass = new BCryptPasswordEncoder().encode(u.getPassword());
         u.setPassword(encryptPass);
@@ -142,6 +140,19 @@ public class UserController {
         return new ResultUtil<Object>().setData(null);
     }
 
+    @RequestMapping(value = "/resetPass", method = RequestMethod.POST)
+    @ApiOperation(value = "重置密码")
+    public Result<Object> resetPass(@RequestParam String[] ids){
+
+        for(String id:ids){
+            User u = userService.get(id);
+            u.setPassword(new BCryptPasswordEncoder().encode("123456"));
+            userService.update(u);
+            redisTemplate.delete("user::"+u.getUsername());
+        }
+        return ResultUtil.success("操作成功");
+    }
+
     @RequestMapping(value = "/edit",method = RequestMethod.POST)
     @ApiOperation(value = "修改用户自己资料",notes = "用户名密码不会修改 需要username更新缓存")
     @CacheEvict(key = "#u.username")
@@ -177,8 +188,6 @@ public class UserController {
             if(userService.findByUsername(u.getUsername())!=null){
                 return new ResultUtil<Object>().setErrorMsg("该用户名已被存在");
             }
-            //删除缓存
-            redisTemplate.delete("user::"+u.getUsername());
         }
 
         // 若修改了手机和邮箱判断是否唯一
@@ -305,8 +314,6 @@ public class UserController {
         if(userService.findByUsername(u.getUsername())!=null){
             return new ResultUtil<Object>().setErrorMsg("该用户名已被注册");
         }
-        //删除缓存
-        redisTemplate.delete("user::"+u.getUsername());
 
         String encryptPass = new BCryptPasswordEncoder().encode(u.getPassword());
         u.setPassword(encryptPass);

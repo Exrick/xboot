@@ -1,4 +1,4 @@
-package cn.exrick.xboot.config;
+package cn.exrick.xboot.config.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
