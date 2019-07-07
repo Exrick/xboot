@@ -32,7 +32,7 @@ public class TestController {
     @ApiOperation(value = "同步锁限流测试")
     @ResponseBody
     public Result<Object> test(){
-        
+
         lockTemplate.execute("订单流水号", 5000, new Callback() {
             @Override
             public Object onGetLock() throws InterruptedException {
