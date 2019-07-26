@@ -111,7 +111,6 @@ public class IpInfoUtil {
         return null;
     }
 
-    @Async
     public void getUrl(HttpServletRequest request){
 
         try {
@@ -130,7 +129,6 @@ public class IpInfoUtil {
         }
     }
 
-    @Async
     public void getInfo(HttpServletRequest request, String p){
         try {
             String url = request.getRequestURL().toString();

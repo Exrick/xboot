@@ -1,13 +1,15 @@
 package cn.exrick.xboot.common.utils;
 
 import org.springframework.web.multipart.MultipartFile;
-import sun.misc.BASE64Decoder;
+
+import java.util.Base64;
+import java.util.Base64.Decoder;
 
 import java.io.*;
 
 /**
  * base64转为multipartFile工具类
- * @author nikou
+ * @author Exrickx
  */
 public class Base64DecodeMultipartFile implements MultipartFile {
 
@@ -16,7 +18,7 @@ public class Base64DecodeMultipartFile implements MultipartFile {
 
     public Base64DecodeMultipartFile(byte[] imgContent, String header) {
         this.imgContent = imgContent;
-        this.header = header.split(";")[0]; 
+        this.header = header.split(";")[0];
     }
 
     @Override
@@ -63,13 +65,9 @@ public class Base64DecodeMultipartFile implements MultipartFile {
     public static MultipartFile base64Convert(String base64) {
 
         String[] baseStrs = base64.split(",");
-        BASE64Decoder decoder = new BASE64Decoder();
-        byte[] b = new byte[0];
-        try {
-            b = decoder.decodeBuffer(baseStrs[1]);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Decoder decoder = Base64.getDecoder();
+        byte[] b = decoder.decode(baseStrs[1]);
+
         for (int i = 0; i < b.length; ++i) {
             if (b[i] < 0) {
                 b[i] += 256;
