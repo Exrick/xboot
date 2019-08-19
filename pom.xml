@@ -11,7 +11,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.6.RELEASE</version>
+        <version>2.1.7.RELEASE</version>
     </parent>
 
     <properties>
@@ -82,7 +82,7 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.1.1</version>
+            <version>3.1.2</version>
         </dependency>
         <!-- Redis-->
         <dependency>
@@ -132,7 +132,7 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>4.5.16</version>
+            <version>4.6.2</version>
         </dependency>
         <!-- Lombok -->
         <dependency>

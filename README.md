@@ -1,5 +1,5 @@
 # X-Boot
-[![AUR](https://img.shields.io/aur/license/yaourt.svg)](https://github.com/Exrick/xmall/blob/master/License)
+[![AUR](https://img.shields.io/badge/GPL-v3-red)](https://github.com/Exrick/xmall/blob/master/License)
 [![](https://img.shields.io/badge/Author-Exrick-orange.svg)](http://blog.exrick.cn)
 [![](https://img.shields.io/badge/version-1.2-brightgreen.svg)](https://github.com/Exrick/x-boot)
 [![GitHub stars](https://img.shields.io/github/stars/Exrick/x-boot.svg?style=social&label=Stars)](https://github.com/Exrick/x-boot)
@@ -12,13 +12,14 @@
 - 官网地址：http://xb.exrick.cn
 - 官网源码：https://github.com/Exrick/xboot-show
 ### 在线Demo
-http://xboot.exrick.cn
+- 在线Demo：http://xboot.exrick.cn
+- 单点登录测试页：http://sso.exrick.cn
 ### 最新最全面在线文档
 https://www.kancloud.cn/exrick/xboot/content
 ### 前台基于Vue+iView项目地址： [xboot-front](https://github.com/Exrick/xboot-front)
 ### 项目简介 
-- [x] 代码拥有详细注释 无复杂逻辑 核心使用 SpringBoot 2.1.6.RELEASE
-- [x] JWT / 基于Redis可配置单设备登录Token交互 任意切换
+- [x] 代码拥有详细注释 无复杂逻辑 核心使用 SpringBoot 2.1.7.RELEASE
+- [x] JWT / 基于Redis可配置单设备登录Token交互 任意切换 支持点单登录
 - [x] JPA + Mybatis-Plus 任意切换
 - [x] 操作日志记录方式任意切换Mysql或Elasticseach记录
 - [x] Java、Vue、SQL代码生成效率翻四倍
@@ -54,7 +55,7 @@ https://www.kancloud.cn/exrick/xboot/content
 - 前台为基于Vue+iView的独立项目请跳转至 [xboot-front](https://github.com/Exrick/xboot-front) 项目仓库查看
 ### 后端所用技术
 ##### 各框架依赖版本皆使用目前最新版本
-- Spring Boot 2.1.6.RELEASE
+- Spring Boot 2.1.7.RELEASE
 - SpringMVC
 - Spring Security
 - [Spring Data JPA](https://docs.spring.io/spring-data/jpa/docs/2.0.6.RELEASE/reference/html/)
