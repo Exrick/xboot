@@ -8,6 +8,7 @@ import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,9 @@ public class IpInfoUtil {
 
     @Value("${xboot.mob.appKey}")
     private String appKey;
+
+    @Autowired
+    private AsyncUtil asyncUtil;
 
     /**
      * 获取客户端IP地址
@@ -118,12 +122,7 @@ public class IpInfoUtil {
             if(url.contains("127.0.0.1")||url.contains("localhost")){
                 return;
             }
-            String result = HttpRequest.post("https://api.bmob.cn/1/classes/url")
-                    .header("X-Bmob-Application-Id", "efdc665141af06cd68f808fc5a7f805b")
-                    .header("X-Bmob-REST-API-Key", "9a2f73e42ff2a415f6cc2b384e864a67")
-                    .header("Content-Type", "application/json")
-                    .body("{\"url\":\"" + url + "\"}")
-                    .execute().body();
+            asyncUtil.getUrl(url);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -135,15 +134,7 @@ public class IpInfoUtil {
             if(url.contains("127.0.0.1")||url.contains("localhost")){
                 return;
             }
-            IpInfo info = new IpInfo();
-            info.setUrl(url);
-            info.setP(p);
-            String result = HttpRequest.post("https://api.bmob.cn/1/classes/url")
-                    .header("X-Bmob-Application-Id", "efdc665141af06cd68f808fc5a7f805b")
-                    .header("X-Bmob-REST-API-Key", "9a2f73e42ff2a415f6cc2b384e864a67")
-                    .header("Content-Type", "application/json")
-                    .body(new Gson().toJson(info, IpInfo.class))
-                    .execute().body();
+            asyncUtil.getInfo(url, p);
         }catch (Exception e){
             e.printStackTrace();
         }
