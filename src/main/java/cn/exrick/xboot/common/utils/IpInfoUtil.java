@@ -1,16 +1,13 @@
 package cn.exrick.xboot.common.utils;
 
 
-import cn.exrick.xboot.common.vo.IpInfo;
 import cn.exrick.xboot.common.vo.IpLocate;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
