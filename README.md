@@ -18,7 +18,7 @@
 https://www.kancloud.cn/exrick/xboot/content
 ### 前台基于Vue+iView项目地址： [xboot-front](https://github.com/Exrick/xboot-front)
 ### 项目简介 
-- [x] 代码拥有详细注释 无复杂逻辑 核心使用 SpringBoot 2.1.7.RELEASE
+- [x] 代码拥有详细注释 无复杂逻辑 核心使用 SpringBoot 2.1.9.RELEASE
 - [x] JWT / 基于Redis可配置单设备登录Token交互 任意切换 支持点单登录
 - [x] JPA + Mybatis-Plus 任意切换
 - [x] 操作日志记录方式任意切换Mysql或Elasticseach记录
@@ -55,7 +55,7 @@ https://www.kancloud.cn/exrick/xboot/content
 - 前台为基于Vue+iView的独立项目请跳转至 [xboot-front](https://github.com/Exrick/xboot-front) 项目仓库查看
 ### 后端所用技术
 ##### 各框架依赖版本皆使用目前最新版本
-- Spring Boot 2.1.7.RELEASE
+- Spring Boot 2.1.9.RELEASE
 - SpringMVC
 - Spring Security
 - [Spring Data JPA](https://docs.spring.io/spring-data/jpa/docs/2.0.6.RELEASE/reference/html/)
@@ -142,11 +142,15 @@ https://www.kancloud.cn/exrick/xboot/content
 - 商用需联系作者授权
 
 ### 作者其他项目推荐
-- [XPay个人免签收款支付系统](https://github.com/Exrick/xpay)
+- [XMall微信小程序APP前端 现已开源！](https://github.com/Exrick/xmall-weapp)
+    
+    [![WX20190924-234416@2x.png](https://s2.ax1x.com/2019/10/06/ucEsBD.md.png)](https://www.bilibili.com/video/av70226175)
 
 - [XMall：基于SOA架构的分布式电商购物商城](https://github.com/Exrick/xmall)
 
     ![](https://i.loli.net/2018/07/22/5b54615b95788.jpg)
+    
+- [XPay个人免签收款支付系统](https://github.com/Exrick/xpay)
 
 - 机器学习笔记
     - [Machine-Learning](https://github.com/Exrick/Machine-Learning)

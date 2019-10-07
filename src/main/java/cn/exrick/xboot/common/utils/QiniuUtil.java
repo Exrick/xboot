@@ -3,9 +3,9 @@ package cn.exrick.xboot.common.utils;
 import cn.exrick.xboot.common.exception.XbootException;
 import com.google.gson.Gson;
 import com.qiniu.common.QiniuException;
-import com.qiniu.common.Zone;
 import com.qiniu.http.Response;
 import com.qiniu.storage.Configuration;
+import com.qiniu.storage.Region;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
@@ -48,23 +48,23 @@ public class QiniuUtil {
     private Integer zone;
 
     /**
-     * 构造一个带指定Zone对象的配置类 zone2华南
+     * 构造一个带指定Zone对象的配置类
      */
     public Configuration getConfiguration(){
 
         Configuration cfg = null;
         if(zone.equals(0)){
-            cfg = new Configuration(Zone.zone0());
+            cfg = new Configuration(Region.region0());
         }else if(zone.equals(1)){
-            cfg = new Configuration(Zone.zone1());
+            cfg = new Configuration(Region.region1());
         }else if(zone.equals(2)){
-            cfg = new Configuration(Zone.zone2());
+            cfg = new Configuration(Region.region2());
         }else if(zone.equals(3)){
-            cfg = new Configuration(Zone.zoneNa0());
+            cfg = new Configuration(Region.regionNa0());
         }else if(zone.equals(4)){
-            cfg = new Configuration(Zone.zoneAs0());
+            cfg = new Configuration(Region.regionAs0());
         }else {
-            cfg = new Configuration(Zone.autoZone());
+            cfg = new Configuration(Region.autoRegion());
         }
         return cfg;
     }
