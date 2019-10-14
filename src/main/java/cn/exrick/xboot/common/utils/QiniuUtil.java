@@ -9,16 +9,10 @@ import com.qiniu.storage.Region;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
-import com.qiniu.util.StringMap;
-import com.qiniu.util.UrlSafeBase64;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
@@ -113,46 +107,6 @@ public class QiniuUtil {
             Response r = ex.response;
             throw new XbootException("上传文件出错，请检查七牛云配置，" + r.toString());
         }
-    }
-
-    /**
-     * Base64上传
-     * @param data64
-     * @return
-     */
-    public String qiniuBase64Upload(String data64) {
-
-        String key = renamePic("");
-        // 服务端http://up-z2.qiniup.com 此处存储区域需自行修改
-        String url = "http://up-z2.qiniup.com/putb64/-1/key/" + UrlSafeBase64.encodeToString(key);
-        RequestBody rb = RequestBody.create(null, data64);
-        Request request = new Request.Builder().
-                url(url).
-                addHeader("Content-Type", "application/octet-stream")
-                .addHeader("Authorization", "UpToken " + getUpToken())
-                .post(rb).build();
-        OkHttpClient client = new OkHttpClient();
-        okhttp3.Response response = null;
-        try {
-            response = client.newCall(request).execute();
-        } catch (IOException e) {
-            throw new XbootException("上传文件出错，请检查七牛云配置，" + e.toString());
-        }
-        return domain + "/" + key;
-    }
-
-    public String getUpToken() {
-        Auth auth = Auth.create(accessKey, secretKey);
-        return auth.uploadToken(bucket, null, 3600, new StringMap().put("insertOnly", 1));
-    }
-
-    public String base64Data(String data) {
-
-        if (data == null || data.isEmpty()) {
-            return "";
-        }
-        String base64 = data.substring(data.lastIndexOf(",") + 1);
-        return base64;
     }
 
     /**
