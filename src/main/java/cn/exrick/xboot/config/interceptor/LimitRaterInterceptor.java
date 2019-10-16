@@ -79,6 +79,8 @@ public class LimitRaterInterceptor extends HandlerInterceptorAdapter {
                     throw new XbootException("当前访问人数太多啦，请稍后再试");
                 }
             }
+        }catch (XbootException e){
+            throw new XbootException(e.getMsg());
         }catch (Exception e){
 
         }
