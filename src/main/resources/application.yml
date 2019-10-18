@@ -88,8 +88,8 @@ xboot:
     enable: true
     # 每1秒内
     timeout: 1000
-    # 总限制150个请求
-    limit: 150
+    # 总限制100个请求
+    limit: 100
   # IP限流
   iplimit:
     enable: true
