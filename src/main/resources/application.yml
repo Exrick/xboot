@@ -88,15 +88,15 @@ xboot:
     enable: true
     # 每1秒内
     timeout: 1000
-    # 总限制100个请求
-    limit: 100
+    # 总限制150个请求
+    limit: 150
   # IP限流
   iplimit:
     enable: true
     # 每1秒内
     timeout: 1000
-    # 每个ip限制15个请求
-    limit: 15
+    # 每个ip限制20个请求
+    limit: 20
   # token交互方式
   token:
     # 设置为true后，token将存入redis，并具有单点登录功能 默认false使用JWT交互

@@ -27,6 +27,6 @@ public class InterceptorConfiguration implements WebMvcConfigurer {
         // 配置拦截的路径
         ir.addPathPatterns("/**");
         // 配置不拦截的路径
-        // ir.excludePathPatterns(ignoredUrlsProperties.getUrls());
+        ir.excludePathPatterns(ignoredUrlsProperties.getUrls());
     }
 }
