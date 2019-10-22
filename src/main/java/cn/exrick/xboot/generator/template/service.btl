@@ -2,9 +2,15 @@ package ${entity.servicePackage};
 
 import cn.exrick.xboot.base.XbootBaseService;
 import ${entity.entityPackage}.${entity.className};
+<%
+if(!entity.isTree){
+%>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import cn.exrick.xboot.common.vo.SearchVo;
+<%
+}
+%>
 
 import java.util.List;
 
@@ -14,6 +20,9 @@ import java.util.List;
  */
 public interface ${entity.className}Service extends XbootBaseService<${entity.className},${entity.primaryKeyType}> {
 
+    <%
+    if(!entity.isTree){
+    %>
     /**
     * 多条件分页获取
     * @param ${entity.classNameLowerCase}
@@ -22,4 +31,27 @@ public interface ${entity.className}Service extends XbootBaseService<${entity.cl
     * @return
     */
     Page<${entity.className}> findByCondition(${entity.className} ${entity.classNameLowerCase}, SearchVo searchVo, Pageable pageable);
+    <%
+    }
+    %>
+
+    <%
+    if(entity.isTree){
+    %>
+    /**
+     * 通过父id获取
+     * @param parentId
+     * @return
+     */
+    List<${entity.className}> findByParentIdOrderBySortOrder(String parentId);
+
+    /**
+     * 通过名称模糊搜索
+     * @param title
+     * @return
+     */
+    List<${entity.className}> findByTitleLikeOrderBySortOrder(String title);
+    <%
+    }
+    %>
 }

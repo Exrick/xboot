@@ -39,6 +39,12 @@ public class XbootGenerator {
     private static final String author = "Exrick";
 
     /**
+     * 是否生成树形结构相关接口
+     * 建议仅需修改
+     */
+    private static final Boolean isTree = false;
+
+    /**
      * 数据库表名前缀
      * 下方请根据需要修改
      */
@@ -111,6 +117,9 @@ public class XbootGenerator {
         Template serviceTemplate = gt.getTemplate("service.btl");
         Template serviceImplTemplate = gt.getTemplate("serviceImpl.btl");
         Template controllerTemplate = gt.getTemplate("controller.btl");
+        if(isTree){
+            controllerTemplate = gt.getTemplate("treeController.btl");
+        }
 
         Entity entity = new Entity();
         entity.setEntityPackage(entityPackage);
@@ -124,6 +133,7 @@ public class XbootGenerator {
         entity.setClassNameLowerCase(first2LowerCase(className));
         entity.setDescription(description);
         entity.setPrimaryKeyType(primaryKeyType);
+        entity.setIsTree(isTree);
 
         OutputStream out = null;
 

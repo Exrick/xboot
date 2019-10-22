@@ -30,4 +30,5 @@ public class Entity {
 
     private String primaryKeyType;
 
+    private Boolean isTree;
 }

@@ -2,6 +2,7 @@ package cn.exrick.xboot.common.utils;
 
 import cn.exrick.xboot.common.vo.PageVo;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -10,41 +11,40 @@ import org.springframework.data.domain.Sort;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * @author Exrickx
  */
 public class PageUtil {
 
     /**
-     * JPA分页
+     * JPA分页封装
      * @param page
      * @return
      */
     public static Pageable initPage(PageVo page){
 
-        Pageable pageable=null;
-        int pageNumber=page.getPageNumber();
-        int pageSize=page.getPageSize();
-        String sort=page.getSort();
-        String order=page.getOrder();
+        Pageable pageable = null;
+        int pageNumber = page.getPageNumber();
+        int pageSize = page.getPageSize();
+        String sort = page.getSort();
+        String order = page.getOrder();
 
         if(pageNumber<1){
-            pageNumber=1;
+            pageNumber = 1;
         }
         if(pageSize<1){
-            pageSize=10;
+            pageSize = 10;
         }
         if(StrUtil.isNotBlank(sort)) {
             Sort.Direction d;
             if(StrUtil.isBlank(order)) {
                 d = Sort.Direction.DESC;
-            }else {
+            } else {
                 d = Sort.Direction.valueOf(order.toUpperCase());
             }
-            Sort s = new Sort(d,sort);
-            pageable = PageRequest.of(pageNumber-1, pageSize,s);
-        }else {
+            Sort s = Sort.by(d, sort);
+            pageable = PageRequest.of(pageNumber-1, pageSize, s);
+        } else {
             pageable = PageRequest.of(pageNumber-1, pageSize);
         }
         return pageable;
@@ -82,10 +82,11 @@ public class PageUtil {
             }
             p = new Page(pageNumber, pageSize);
             if(isAsc){
-                p.setAsc(sort);
+                p.addOrder(OrderItem.asc(sort));
             } else {
-                p.setDesc(sort);
+                p.addOrder(OrderItem.desc(sort));
             }
+
         } else {
             p = new Page(pageNumber, pageSize);
         }
@@ -93,7 +94,7 @@ public class PageUtil {
     }
 
     /**
-     * List 分页
+     * List 手动分页
      * @param page
      * @param list
      * @return

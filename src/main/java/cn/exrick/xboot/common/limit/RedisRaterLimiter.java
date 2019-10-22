@@ -1,79 +1,58 @@
 package cn.exrick.xboot.common.limit;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.Transaction;
-import redis.clients.jedis.ZParams;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
- * @author wangiegie@gmail.com https://gitee.com/boding1/pig-cloud
+ * 令牌桶算法限流
+ * @author Exrick
  */
-@Component
 @Slf4j
+@Component
 public class RedisRaterLimiter {
 
     @Autowired
-    private JedisPool jedisPool;
-
-    private static final String BUCKET = "BUCKET:";
-    private static final String BUCKET_COUNT = "BUCKET_COUNT:";
-    private static final String BUCKET_MONITOR = "BUCKET_MONITOR:";
+    private StringRedisTemplate redisTemplate;
 
     public String acquireTokenFromBucket(String point, int limit, long timeout) {
 
-        Jedis jedis = jedisPool.getResource();
-        try{
-            //UUID令牌
-            String token = UUID.randomUUID().toString();
-            long now = System.currentTimeMillis();
-            //开启事务
-            Transaction transaction = jedis.multi();
+        String maxCountKey = "BUCKET:MAX_COUNT:" + point;
 
-            //删除信号量 移除有序集中指定区间(score)内的所有成员 ZREMRANGEBYSCORE key min max
-            transaction.zremrangeByScore((BUCKET_MONITOR + point).getBytes(), "-inf".getBytes(), String.valueOf(now - timeout).getBytes());
-            //为每个有序集分别指定一个乘法因子(默认设置为 1) 每个成员的score值在传递给聚合函数之前都要先乘以该因子
-            ZParams params = new ZParams();
-            params.weightsByDouble(1.0, 0.0);
-            //计算给定的一个或多个有序集的交集
-            transaction.zinterstore(BUCKET + point, params, BUCKET + point, BUCKET_MONITOR + point);
+        String currCountKey = "BUCKET:CURR_COUNT:" + point;
 
-            //计数器自增
-            transaction.incr(BUCKET_COUNT);
-            List<Object> results = transaction.exec();
-            long counter = (Long) results.get(results.size() - 1);
-
-            transaction = jedis.multi();
-            //Zadd 将一个或多个成员元素及其分数值(score)加入到有序集当中
-            transaction.zadd(BUCKET_MONITOR + point, now, token);
-            transaction.zadd(BUCKET + point, counter, token);
-            transaction.zrank(BUCKET + point, token);
-            results = transaction.exec();
-            //获取排名，判断请求是否取得了信号量
-            long rank = (Long) results.get(results.size() - 1);
-            if (rank < limit) {
+        try {
+            // 令牌值
+            String token = "T";
+            // 无效的限流值 返回token
+            if(limit<1){
+                return token;
+            }
+            String valueMaxCount = redisTemplate.opsForValue().get(maxCountKey);
+            // 初始
+            if(StrUtil.isBlank(valueMaxCount)){
+                // 计数加1
+                redisTemplate.opsForValue().increment(currCountKey);
+                redisTemplate.expire(currCountKey, timeout, TimeUnit.MILLISECONDS);
+                // 总数
+                redisTemplate.opsForValue().set(maxCountKey, String.valueOf(limit), timeout, TimeUnit.MILLISECONDS);
                 return token;
             } else {
-                //没有获取到信号量，清理之前放入redis中垃圾数据
-                transaction = jedis.multi();
-                //Zrem移除有序集中的一个或多个成员
-                transaction.zrem(BUCKET_MONITOR + point, token);
-                transaction.zrem(BUCKET + point, token);
-                transaction.exec();
+                // 判断是否超过限制
+                String currCount = redisTemplate.opsForValue().get(currCountKey);
+                if(StrUtil.isNotBlank(currCount)&&Integer.valueOf(currCount)<Integer.valueOf(valueMaxCount)){
+                    // 计数加1
+                    redisTemplate.opsForValue().increment(currCountKey);
+                    return token;
+                }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("限流出错，请检查Redis运行状态\n"+e.toString());
-        }finally {
-            if(jedis!=null){
-                jedis.close();
-            }
         }
         return null;
     }
 }
-

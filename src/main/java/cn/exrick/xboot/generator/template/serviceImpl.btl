@@ -3,23 +3,35 @@ package ${entity.serviceImplPackage};
 import ${entity.daoPackage}.${entity.className}Dao;
 import ${entity.entityPackage}.${entity.className};
 import ${entity.servicePackage}.${entity.className}Service;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+<%
+if(!entity.isTree){
+%>
 import cn.exrick.xboot.common.vo.SearchVo;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+<%
+}
+%>
 
+import java.util.List;
+<%
+if(!entity.isTree){
+%>
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.lang.reflect.Field;
+<%
+}
+%>
 
 /**
  * ${entity.description}接口实现
@@ -38,6 +50,9 @@ public class ${entity.className}ServiceImpl implements ${entity.className}Servic
         return ${entity.classNameLowerCase}Dao;
     }
 
+    <%
+    if(!entity.isTree){
+    %>
     @Override
     public Page<${entity.className}> findByCondition(${entity.className} ${entity.classNameLowerCase}, SearchVo searchVo, Pageable pageable) {
 
@@ -47,7 +62,7 @@ public class ${entity.className}ServiceImpl implements ${entity.className}Servic
             public Predicate toPredicate(Root<${entity.className}> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
 
                 // TODO 可添加你的其他搜索过滤条件 默认已有创建时间过滤
-                Path<Date> createTimeField=root.get("createTime");
+                Path<Date> createTimeField = root.get("createTime");
 
                 List<Predicate> list = new ArrayList<Predicate>();
 
@@ -64,4 +79,25 @@ public class ${entity.className}ServiceImpl implements ${entity.className}Servic
             }
         }, pageable);
     }
+    <%
+    }
+    %>
+
+    <%
+    if(entity.isTree){
+    %>
+    @Override
+    public List<${entity.className}> findByParentIdOrderBySortOrder(String parentId) {
+
+        return ${entity.classNameLowerCase}Dao.findByParentIdOrderBySortOrder(parentId);
+    }
+
+    @Override
+    public List<${entity.className}> findByTitleLikeOrderBySortOrder(String title) {
+
+        return ${entity.classNameLowerCase}Dao.findByTitleLikeOrderBySortOrder(title);
+    }
+    <%
+    }
+    %>
 }

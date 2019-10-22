@@ -18,8 +18,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 
 import java.util.*;
 
@@ -33,9 +31,6 @@ import java.util.*;
 @RequestMapping("/xboot/redis")
 @Transactional
 public class RedisController {
-
-    @Autowired
-    private JedisPool jedisPool;
 
     @Autowired
     private StringRedisTemplate redisTemplate;
@@ -113,12 +108,8 @@ public class RedisController {
     public Result<Object> getKeySize(){
 
         Map<String, Object> map = new HashMap<>(16);
-        Jedis jedis = jedisPool.getResource();
-        map.put("keySize", jedis.dbSize());
+        map.put("keySize", redisTemplate.getConnectionFactory().getConnection().dbSize());
         map.put("time", DateUtil.format(new Date(), "HH:mm:ss"));
-        if(jedis!=null){
-            jedis.close();
-        }
         return new ResultUtil<Object>().setData(map);
     }
 
@@ -127,19 +118,9 @@ public class RedisController {
     public Result<Object> getMemory(){
 
         Map<String, Object> map = new HashMap<>(16);
-        Jedis jedis = jedisPool.getResource();
-        String[] strs = jedis.info().split("\n");
-        for (String s : strs) {
-            String[] detail = s.split(":");
-            if ("used_memory".equals(detail[0])) {
-                map.put("memory", detail[1].substring(0, detail[1].length() - 1));
-                break;
-            }
-        }
+        Properties memory = redisTemplate.getConnectionFactory().getConnection().info("memory");
+        map.put("memory", memory.get("used_memory"));
         map.put("time", DateUtil.format(new Date(), "HH:mm:ss"));
-        if(jedis!=null){
-            jedis.close();
-        }
         return new ResultUtil<Object>().setData(map);
     }
 
@@ -148,22 +129,16 @@ public class RedisController {
     public Result<Object> info(){
 
         List<RedisInfo> infoList = new ArrayList<>();
-        Map<String, Object> map = new HashMap<>(16);
-        Jedis jedis = jedisPool.getResource();
-        String[] strs =jedis.info().split("\n");
-        for (String str1 : strs) {
+        Properties properties = redisTemplate.getConnectionFactory().getConnection().info();
+        Iterator<Map.Entry<Object, Object>> it = properties.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<Object, Object> entry = it.next();
+            String key = entry.getKey().toString();
+            String value = entry.getValue().toString();
             RedisInfo redisInfo = new RedisInfo();
-            String[] str = str1.split(":");
-            if (str.length > 1) {
-                String key = str[0];
-                String value = str[1];
-                redisInfo.setKey(key);
-                redisInfo.setValue(value);
-                infoList.add(redisInfo);
-            }
-        }
-        if(jedis!=null){
-            jedis.close();
+            redisInfo.setKey(key);
+            redisInfo.setValue(value);
+            infoList.add(redisInfo);
         }
         return new ResultUtil<Object>().setData(infoList);
     }

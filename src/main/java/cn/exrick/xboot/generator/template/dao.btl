@@ -1,4 +1,4 @@
-package ${entity.daoPackage};
+ package ${entity.daoPackage};
 
 import cn.exrick.xboot.base.XbootBaseDao;
 import ${entity.entityPackage}.${entity.className};
@@ -11,4 +11,23 @@ import java.util.List;
  */
 public interface ${entity.className}Dao extends XbootBaseDao<${entity.className},${entity.primaryKeyType}> {
 
+    <%
+    if(entity.isTree){
+    %>
+    /**
+     * 通过父id获取
+     * @param parentId
+     * @return
+     */
+    List<${entity.className}> findByParentIdOrderBySortOrder(String parentId);
+
+    /**
+     * 通过名称模糊搜索
+     * @param title
+     * @return
+     */
+    List<${entity.className}> findByTitleLikeOrderBySortOrder(String title);
+    <%
+    }
+    %>
 }
