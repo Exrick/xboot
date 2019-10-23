@@ -130,13 +130,11 @@ public class RedisController {
 
         List<RedisInfo> infoList = new ArrayList<>();
         Properties properties = redisTemplate.getConnectionFactory().getConnection().info();
-        Iterator<Map.Entry<Object, Object>> it = properties.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<Object, Object> entry = it.next();
-            String key = entry.getKey().toString();
-            String value = entry.getValue().toString();
+        Set<Object> keys = properties.keySet();
+        for(Object key : keys){
+            String value = properties.get(key).toString();
             RedisInfo redisInfo = new RedisInfo();
-            redisInfo.setKey(key);
+            redisInfo.setKey(key.toString());
             redisInfo.setValue(value);
             infoList.add(redisInfo);
         }
