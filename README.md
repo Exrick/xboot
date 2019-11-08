@@ -75,7 +75,7 @@ https://www.kancloud.cn/exrick/xboot/content
 - [Maven](https://github.com/Exrick/xmall/blob/master/study/Maven.md)
 - 第三方SDK或服务
     - [七牛云文件存储服务](https://developer.qiniu.com/kodo/sdk/1239/java)
-    - [Mob全国天气预报接口](http://api.mob.com/#/apiwiki/weather)：需注册账号创建应用后申请填入AppKey后免费使用
+    - [腾讯位置服务](https://lbs.qq.com/webservice_v1/guide-ip.html)：需申请填入key后免费使用
     - 完整版
         - [Vaptcha人机验证码](https://www.vaptcha.com/)
         - [阿里云短信服务](https://dysms.console.aliyun.com)
