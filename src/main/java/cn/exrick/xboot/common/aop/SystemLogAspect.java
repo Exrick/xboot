@@ -98,14 +98,14 @@ public class SystemLogAspect {
                     //请求方式
                     esLog.setRequestType(request.getMethod());
                     //请求参数
-                    Map<String,String[]> logParams=request.getParameterMap();
+                    Map<String,String[]> logParams = request.getParameterMap();
                     esLog.setMapToParams(logParams);
                     //请求用户
                     esLog.setUsername(username);
                     //请求IP
                     esLog.setIp(ipInfoUtil.getIpAddr(request));
                     //IP地址
-                    esLog.setIpInfo(ipInfoUtil.getIpCity(ipInfoUtil.getIpAddr(request)));
+                    esLog.setIpInfo(ipInfoUtil.getIpCity(request));
                     //请求开始时间
                     Date logStartTime = beginTimeThreadLocal.get();
 
@@ -130,14 +130,14 @@ public class SystemLogAspect {
                     //请求方式
                     log.setRequestType(request.getMethod());
                     //请求参数
-                    Map<String,String[]> logParams=request.getParameterMap();
+                    Map<String,String[]> logParams = request.getParameterMap();
                     log.setMapToParams(logParams);
                     //请求用户
                     log.setUsername(username);
                     //请求IP
                     log.setIp(ipInfoUtil.getIpAddr(request));
                     //IP地址
-                    log.setIpInfo(ipInfoUtil.getIpCity(ipInfoUtil.getIpAddr(request)));
+                    log.setIpInfo(ipInfoUtil.getIpCity(request));
                     //请求开始时间
                     Date logStartTime = beginTimeThreadLocal.get();
 

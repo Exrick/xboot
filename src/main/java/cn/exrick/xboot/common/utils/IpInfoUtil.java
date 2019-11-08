@@ -1,10 +1,10 @@
 package cn.exrick.xboot.common.utils;
 
 
-import cn.exrick.xboot.common.vo.IpLocate;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
-import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,8 +22,8 @@ import java.net.UnknownHostException;
 @Component
 public class IpInfoUtil {
 
-    @Value("${xboot.mob.appKey}")
-    private String appKey;
+    @Value("${xboot.qqlbs.key}")
+    private String key;
 
     @Autowired
     private AsyncUtil asyncUtil;
@@ -68,48 +68,40 @@ public class IpInfoUtil {
     }
 
     /**
-     * 获取IP返回地理天气信息
-     * @param ip ip地址
-     * @return
-     */
-    public String getIpWeatherInfo(String ip){
-
-        String GET_IP_WEATHER = "http://apicloud.mob.com/v1/weather/ip?key="+ appKey +"&ip=";
-        if(StrUtil.isNotBlank(ip)){
-            String url = GET_IP_WEATHER + ip;
-            String result = HttpUtil.get(url);
-            return result;
-        }
-        return null;
-    }
-
-    /**
      * 获取IP返回地理信息
-     * @param ip ip地址
+     * @param
      * @return
      */
-    public String getIpCity(String ip){
+    public String getIpCity(HttpServletRequest request){
 
-        String GET_IP_LOCATE = "http://apicloud.mob.com/ip/query?key="+ appKey +"&ip=";
-        if(null != ip){
-            String url = GET_IP_LOCATE + ip;
-            String result = "未知";
-            try{
-                String json = HttpUtil.get(url, 3000);
-                IpLocate locate = new Gson().fromJson(json, IpLocate.class);
-                if(("200").equals(locate.getRetCode())){
-                    if(StrUtil.isNotBlank(locate.getResult().getProvince())){
-                        result = locate.getResult().getProvince()+" "+locate.getResult().getCity();
-                    }else{
-                        result = locate.getResult().getCountry();
+        String url = "https://apis.map.qq.com/ws/location/v1/ip?key="+ key +"&ip=" + getIpAddr(request);
+        String result = "未知";
+        try {
+            String json = HttpUtil.get(url, 3000);
+            JsonObject jsonObject = JsonParser.parseString(json).getAsJsonObject();
+            String status = jsonObject.get("status").getAsString();
+            if("0".equals(status)){
+                JsonObject adInfo = jsonObject.get("result").getAsJsonObject().get("ad_info").getAsJsonObject();
+                String nation = adInfo.get("nation").getAsString();
+                String province = adInfo.get("province").getAsString();
+                String city = adInfo.get("city").getAsString();
+                String district = adInfo.get("district").getAsString();
+                if(StrUtil.isNotBlank(nation)&&StrUtil.isBlank(province)){
+                    result = nation;
+                } else {
+                    result = province;
+                    if(StrUtil.isNotBlank(city)){
+                        result += " " + city;
+                    }
+                    if(StrUtil.isNotBlank(district)){
+                        result += " " + district;
                     }
                 }
-            }catch (Exception e){
-                log.info("获取IP信息失败");
             }
-            return result;
+        } catch (Exception e) {
+            log.info("获取IP地理信息失败");
         }
-        return null;
+        return result;
     }
 
     public void getUrl(HttpServletRequest request){

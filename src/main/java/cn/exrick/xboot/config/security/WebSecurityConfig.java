@@ -118,6 +118,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 图形验证码过滤器
                 .addFilterBefore(imageValidateFilter, UsernamePasswordAuthenticationFilter.class)
                 // 添加JWT过滤器 除已配置的其它请求都需经过此过滤器
-                .addFilter(new JWTAuthenticationFilter(authenticationManager(), tokenProperties, redisTemplate, securityUtil));
+                .addFilter(new JWTAuthenticationFilter(authenticationManager(), ignoredUrlsProperties, tokenProperties, redisTemplate, securityUtil));
     }
 }

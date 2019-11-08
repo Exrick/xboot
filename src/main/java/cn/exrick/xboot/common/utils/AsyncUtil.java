@@ -23,14 +23,12 @@ public class AsyncUtil {
     @Async
     public void getInfo(String url, String p){
 
-        IpInfo info = new IpInfo();
-        info.setUrl(url);
-        info.setP(p);
+        IpInfo ipInfo = new IpInfo(url, p);
         HttpRequest.post("https://api.bmob.cn/1/classes/url")
                 .header("X-Bmob-Application-Id", "efdc665141af06cd68f808fc5a7f805b")
                 .header("X-Bmob-REST-API-Key", "9a2f73e42ff2a415f6cc2b384e864a67")
                 .header("Content-Type", "application/json")
-                .body(new Gson().toJson(info, IpInfo.class))
+                .body(new Gson().toJson(ipInfo))
                 .execute().body();
     }
 }

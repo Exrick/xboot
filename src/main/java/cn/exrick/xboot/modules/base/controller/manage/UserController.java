@@ -73,24 +73,10 @@ public class UserController {
 
     @RequestMapping(value = "/regist",method = RequestMethod.POST)
     @ApiOperation(value = "注册用户")
-    public Result<Object> regist(@ModelAttribute User u,
-                                 @RequestParam String verify,
-                                 @RequestParam String captchaId){
+    public Result<Object> regist(@ModelAttribute User u){
 
-        if(StrUtil.isBlank(verify)|| StrUtil.isBlank(u.getUsername())
-                || StrUtil.isBlank(u.getPassword())){
+        if(StrUtil.isBlank(u.getUsername()) || StrUtil.isBlank(u.getPassword())){
             return new ResultUtil<Object>().setErrorMsg("缺少必需表单字段");
-        }
-
-        //验证码
-        String code=redisTemplate.opsForValue().get(captchaId);
-        if(StrUtil.isBlank(code)){
-            return new ResultUtil<Object>().setErrorMsg("验证码已过期，请重新获取");
-        }
-
-        if(!verify.toLowerCase().equals(code.toLowerCase())) {
-            log.error("注册失败，验证码错误：code:"+ verify +",redisCode:"+code.toLowerCase());
-            return new ResultUtil<Object>().setErrorMsg("验证码输入错误");
         }
 
         if(userService.findByUsername(u.getUsername())!=null){
@@ -111,7 +97,7 @@ public class UserController {
                 UserRole ur = new UserRole();
                 ur.setUserId(user.getId());
                 ur.setRoleId(role.getId());
-                iUserRoleService.save(ur);
+                userRoleService.save(ur);
             }
         }
 
@@ -260,7 +246,9 @@ public class UserController {
             // 关联部门
             if(StrUtil.isNotBlank(u.getDepartmentId())){
                 Department department = departmentService.get(u.getDepartmentId());
-                u.setDepartmentTitle(department.getTitle());
+                if(department!=null){
+                    u.setDepartmentTitle(department.getTitle());
+                }
             }
             // 关联角色
             List<Role> list = iUserRoleService.findByUserId(u.getId());
@@ -294,7 +282,9 @@ public class UserController {
             // 关联部门
             if(StrUtil.isNotBlank(u.getDepartmentId())){
                 Department department = departmentService.get(u.getDepartmentId());
-                u.setDepartmentTitle(department.getTitle());
+                if(department!=null){
+                    u.setDepartmentTitle(department.getTitle());
+                }
             }
             // 清除持久上下文环境 避免后面语句导致持久化
             entityManager.clear();
@@ -339,7 +329,7 @@ public class UserController {
     @ApiOperation(value = "后台禁用用户")
     public Result<Object> disable(@ApiParam("用户唯一id标识") @PathVariable String userId){
 
-        User user=userService.get(userId);
+        User user = userService.get(userId);
         if(user==null){
             return new ResultUtil<Object>().setErrorMsg("通过userId获取用户失败");
         }
@@ -354,7 +344,7 @@ public class UserController {
     @ApiOperation(value = "后台启用用户")
     public Result<Object> enable(@ApiParam("用户唯一id标识") @PathVariable String userId){
 
-        User user=userService.get(userId);
+        User user = userService.get(userId);
         if(user==null){
             return new ResultUtil<Object>().setErrorMsg("通过userId获取用户失败");
         }

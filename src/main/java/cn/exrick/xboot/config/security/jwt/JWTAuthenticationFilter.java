@@ -4,6 +4,7 @@ import cn.exrick.xboot.common.constant.SecurityConstant;
 import cn.exrick.xboot.common.utils.ResponseUtil;
 import cn.exrick.xboot.common.utils.SecurityUtil;
 import cn.exrick.xboot.common.vo.TokenUser;
+import cn.exrick.xboot.config.properties.IgnoredUrlsProperties;
 import cn.exrick.xboot.config.properties.XbootTokenProperties;
 import cn.hutool.core.util.StrUtil;
 import com.google.gson.Gson;
@@ -19,6 +20,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.util.PathMatcher;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -35,14 +38,19 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
 
+    private IgnoredUrlsProperties ignoredUrlsProperties;
+
     private XbootTokenProperties tokenProperties;
 
     private StringRedisTemplate redisTemplate;
 
     private SecurityUtil securityUtil;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, XbootTokenProperties tokenProperties, StringRedisTemplate redisTemplate, SecurityUtil securityUtil) {
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, IgnoredUrlsProperties ignoredUrlsProperties,
+                                   XbootTokenProperties tokenProperties,
+                                   StringRedisTemplate redisTemplate, SecurityUtil securityUtil) {
         super(authenticationManager);
+        this.ignoredUrlsProperties = ignoredUrlsProperties;
         this.tokenProperties = tokenProperties;
         this.redisTemplate = redisTemplate;
         this.securityUtil = securityUtil;
@@ -54,6 +62,21 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+
+        // 判断URL是否无需验证
+        Boolean flag = false;
+        String requestUrl = request.getRequestURI();
+        PathMatcher pathMatcher = new AntPathMatcher();
+        for(String url : ignoredUrlsProperties.getUrls()){
+            if(pathMatcher.match(url, requestUrl)){
+                flag = true;
+                break;
+            }
+        }
+        if(flag){
+            chain.doFilter(request, response);
+            return;
+        }
 
         String header = request.getHeader(SecurityConstant.HEADER);
         if(StrUtil.isBlank(header)){
