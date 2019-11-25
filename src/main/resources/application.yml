@@ -95,8 +95,8 @@ xboot:
     enable: true
     # 每1秒内
     timeout: 1000
-    # 每个ip限制30个请求
-    limit: 30
+    # 每个ip限制20个请求
+    limit: 20
   # token交互方式
   token:
     # 设置为true后，token将存入redis，并具有单点登录功能 默认false使用JWT交互

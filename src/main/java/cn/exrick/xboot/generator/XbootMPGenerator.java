@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
 import org.beetl.core.Template;
-import org.beetl.core.resource.FileResourceLoader;
+import org.beetl.core.resource.ClasspathResourceLoader;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -57,10 +57,10 @@ public class XbootMPGenerator {
     private static final String entityPackage = "cn.exrick.xboot.modules.your.entity";
 
     /**
-     * dao对应包
+     * dao对应包 【注意修改后需到cn.exrick.xboot.config.mybatisplus.MybatisPlusConfig配置你的mapper路径扫描】
      * (文件自动生成至该包下)
      */
-    private static final String daoPackage = "cn.exrick.xboot.modules.your.dao.mapper";
+    private static final String daoPackage = "cn.exrick.xboot.modules.your.mapper";
 
     /**
      * service对应包
@@ -87,16 +87,15 @@ public class XbootMPGenerator {
      */
     public static void main(String[] args) throws IOException {
 
-        //模板路径
-        String root = System.getProperty("user.dir")+"/src/main/java/cn/exrick/xboot/generator/template";
-        FileResourceLoader resourceLoader = new FileResourceLoader(root,"utf-8");
+        // 模板路径
+        ClasspathResourceLoader resourceLoader = new ClasspathResourceLoader("/btl/");
         Configuration cfg = Configuration.defaultConfiguration();
         GroupTemplate gt = new GroupTemplate(resourceLoader, cfg);
-        //生成代码
+        // 生成代码
         generateCode(gt);
 
-        //根据类名删除生成的代码
-        //deleteCode(className);
+        // 根据类名删除生成的代码
+        // deleteCode(className);
     }
 
     /**
@@ -125,6 +124,7 @@ public class XbootMPGenerator {
         entity.setClassNameLowerCase(first2LowerCase(className));
         entity.setDescription(description);
         entity.setPrimaryKeyType(primaryKeyType);
+        entity.setIsTree(false);
 
         OutputStream out = null;
 

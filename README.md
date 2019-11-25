@@ -19,7 +19,7 @@ https://www.kancloud.cn/exrick/xboot/content
 ### 前台基于Vue+iView项目地址： [xboot-front](https://github.com/Exrick/xboot-front)
 ### 项目简介 
 - [x] 代码拥有详细注释 无复杂逻辑 核心使用 SpringBoot 2.1.9.RELEASE
-- [x] JWT / 基于Redis可配置单设备登录Token交互 任意切换 支持点单登录
+- [x] JWT / 基于Redis可配置单设备登录Token交互 任意切换 支持点单登录 提供开放平台
 - [x] JPA + Mybatis-Plus 任意切换
 - [x] 操作日志记录方式任意切换Mysql或Elasticseach记录
 - [x] Java、Vue、SQL代码生成效率翻四倍
@@ -35,13 +35,21 @@ https://www.kancloud.cn/exrick/xboot/content
 
 ### 截图预览
 
+- PC
+
 ![QQ截图20180826163917.png](https://i.loli.net/2018/08/26/5b826868e2359.png)
 
 ![QQ截图20180826164058.png](https://i.loli.net/2018/08/26/5b8268d63d156.png)
 
-![QQ截图20180826164129.png](https://i.loli.net/2018/08/26/5b8268dec28ee.png)
-
 ![QQ截图20180826164144.png](https://i.loli.net/2018/08/26/5b8268e6a091f.png)
+
+- iPad Mini 5
+
+<img src=https://i.loli.net/2019/11/25/2tiloPbTcqfnRDQ.jpg width=600/>
+
+- iPhone X
+
+<img src=https://i.loli.net/2019/11/25/EaLfVxmli2Tg8PY.jpg width=300/>
 
 
 ### [完整版截图细节展示](https://github.com/Exrick/x-boot/wiki/%E5%AE%8C%E6%95%B4%E7%89%88%E6%88%AA%E5%9B%BE%E7%BB%86%E8%8A%82%E5%B1%95%E7%A4%BA)
@@ -51,9 +59,12 @@ https://www.kancloud.cn/exrick/xboot/content
 <img src="https://i.loli.net/2019/05/01/5cc87695f109d.png" width="600px"/>
 
 ### 前端所用技术
-- Vue 2.5.x、Vue Cli 3.x、iView、iview-admin、iview-area、Vuex、Vue Router、ES6、webpack、axios、echarts、cookie等
+- Vue 2.5.x、Vue Cli 4.x、iView、iview-admin、iview-area、Vuex、Vue Router、ES6、webpack、axios、echarts、cookie等
 - 前台为基于Vue+iView的独立项目请跳转至 [xboot-front](https://github.com/Exrick/xboot-front) 项目仓库查看
 ### 后端所用技术
+
+<img src=https://i.loli.net/2019/11/25/gUiynavBAHd6hY8.jpg width=600/>
+
 ##### 各框架依赖版本皆使用目前最新版本
 - Spring Boot 2.1.9.RELEASE
 - SpringMVC

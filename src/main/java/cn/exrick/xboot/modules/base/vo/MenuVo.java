@@ -23,6 +23,9 @@ public class MenuVo {
     @ApiModelProperty(value = "始终显示")
     private Boolean showAlways;
 
+    @ApiModelProperty(value = "层级")
+    private Integer level;
+
     @ApiModelProperty(value = "类型 -1顶部菜单 0页面 1具体操作")
     private Integer type;
 

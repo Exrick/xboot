@@ -3,6 +3,9 @@ package cn.exrick.xboot.common.limit;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.core.RedisOperations;
+import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -29,26 +32,41 @@ public class RedisRaterLimiter {
             // 令牌值
             String token = "T";
             // 无效的限流值 返回token
-            if(limit<1){
+            if(limit<=0||timeout<=0){
                 return token;
             }
             String valueMaxCount = redisTemplate.opsForValue().get(maxCountKey);
+            String currCount = redisTemplate.opsForValue().get(currCountKey);
             // 初始
-            if(StrUtil.isBlank(valueMaxCount)){
-                // 计数加1
-                redisTemplate.opsForValue().increment(currCountKey);
-                redisTemplate.expire(currCountKey, timeout, TimeUnit.MILLISECONDS);
-                // 总数
-                redisTemplate.opsForValue().set(maxCountKey, String.valueOf(limit), timeout, TimeUnit.MILLISECONDS);
+            if(StrUtil.isBlank(valueMaxCount)&&StrUtil.isBlank(currCount)){
+                // 事务
+                SessionCallback sessionCallback = new SessionCallback() {
+                    @Override
+                    public Object execute(RedisOperations redisOperations) throws DataAccessException {
+
+                        redisOperations.multi();
+
+                        // 计数加1
+                        redisTemplate.opsForValue().increment(currCountKey);
+                        redisTemplate.expire(currCountKey, timeout, TimeUnit.MILLISECONDS);
+                        // 总数
+                        redisTemplate.opsForValue().set(maxCountKey, String.valueOf(limit), timeout, TimeUnit.MILLISECONDS);
+
+                        return redisOperations.exec();
+                    }
+                };
+                redisTemplate.execute(sessionCallback);
+
                 return token;
-            } else {
+            } else if (StrUtil.isNotBlank(valueMaxCount)&&StrUtil.isNotBlank(currCount)){
                 // 判断是否超过限制
-                String currCount = redisTemplate.opsForValue().get(currCountKey);
                 if(StrUtil.isNotBlank(currCount)&&Integer.valueOf(currCount)<Integer.valueOf(valueMaxCount)){
                     // 计数加1
                     redisTemplate.opsForValue().increment(currCountKey);
                     return token;
                 }
+            } else {
+                return token;
             }
         } catch (Exception e) {
             log.error("限流出错，请检查Redis运行状态\n"+e.toString());
@@ -56,3 +74,4 @@ public class RedisRaterLimiter {
         return null;
     }
 }
+

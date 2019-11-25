@@ -43,6 +43,16 @@ public interface CommonConstant {
     Integer DATA_TYPE_CUSTOM = 1;
 
     /**
+     * 本部门及以下
+     */
+    Integer DATA_TYPE_UNDER = 2;
+
+    /**
+     * 本部门
+     */
+    Integer DATA_TYPE_SAME = 3;
+
+    /**
      * 正常状态
      */
     Integer STATUS_NORMAL = 0;
