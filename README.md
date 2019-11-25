@@ -63,7 +63,7 @@ https://www.kancloud.cn/exrick/xboot/content
 - 前台为基于Vue+iView的独立项目请跳转至 [xboot-front](https://github.com/Exrick/xboot-front) 项目仓库查看
 ### 后端所用技术
 
-<img src=https://i.loli.net/2019/11/25/gUiynavBAHd6hY8.jpg width=600/>
+<img src=https://i.loli.net/2019/11/25/gUiynavBAHd6hY8.jpg width=800/>
 
 ##### 各框架依赖版本皆使用目前最新版本
 - Spring Boot 2.1.9.RELEASE
