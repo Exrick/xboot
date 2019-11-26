@@ -133,10 +133,12 @@ captcha:
   # 图片验证码验证
   image:
     - /xboot/login # 登录接口
+    - /xboot/oauth2/authorize # 认证接口
 
 # 忽略鉴权url
 ignored:
   urls:
+    - /xboot/oauth2/**
     - /xboot/actuator/**
     - /xboot/admin/**
     - /xboot/dictData/getByType/**
