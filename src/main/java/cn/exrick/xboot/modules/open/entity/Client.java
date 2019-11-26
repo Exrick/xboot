@@ -2,10 +2,9 @@ package cn.exrick.xboot.modules.open.entity;
 
 import cn.exrick.xboot.base.XbootBaseEntity;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
-
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -25,7 +24,7 @@ public class Client extends XbootBaseEntity {
     private String name;
 
     @ApiModelProperty(value = "秘钥")
-    private String secretKey;
+    private String clientSecret;
 
     @ApiModelProperty(value = "网站主页")
     private String homeUri;

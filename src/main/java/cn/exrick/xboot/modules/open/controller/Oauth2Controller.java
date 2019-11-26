@@ -93,7 +93,7 @@ public class Oauth2Controller {
             return ResultUtil.error("客户端client_id不存在");
         }
         // 判断clientSecret
-        if(!client.getSecretKey().equals(client_secret)){
+        if(!client.getClientSecret().equals(client_secret)){
             return ResultUtil.error("client_secret不正确");
         }
         Oauth2TokenInfo tokenInfo = null;
@@ -174,7 +174,7 @@ public class Oauth2Controller {
     }
 
     @RequestMapping(value = "/authorized", method = RequestMethod.GET)
-    @ApiOperation(value = "已认证过获取原token")
+    @ApiOperation(value = "已认证过获取code")
     public Result<Object> authorized(@ApiParam("用户名") @RequestParam String username,
                                      @ApiParam("客户端id") @RequestParam String client_id,
                                      @ApiParam("成功授权后回调地址") @RequestParam String redirect_uri,
