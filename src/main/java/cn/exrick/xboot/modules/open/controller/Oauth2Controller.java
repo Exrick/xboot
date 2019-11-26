@@ -26,6 +26,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author Exrick
+ */
 @Slf4j
 @RestController
 @Api(description = "OAuth2认证接口")
@@ -167,6 +170,39 @@ public class Oauth2Controller {
         map.put("access_token", token);
         map.put("expires_in", expiresIn);
         map.put("refresh_token", refreshToken);
+        return ResultUtil.data(map);
+    }
+
+    @RequestMapping(value = "/authorized", method = RequestMethod.GET)
+    @ApiOperation(value = "已认证过获取原token")
+    public Result<Object> authorized(@ApiParam("用户名") @RequestParam String username,
+                                     @ApiParam("客户端id") @RequestParam String client_id,
+                                     @ApiParam("成功授权后回调地址") @RequestParam String redirect_uri,
+                                     @ApiParam("客户端状态值") @RequestParam String state){
+
+        Client client = clientService.get(client_id);
+        if(client==null){
+            return ResultUtil.error("客户端client_id不存在");
+        }
+        // 判断回调地址
+        if(!client.getRedirectUri().equals(redirect_uri)){
+            return ResultUtil.error("回调地址redirect_uri不正确");
+        }
+        // 判断原token是否失效
+        String tokenKey = "oauthToken:"+client_id+":"+username, refreshKey = "oauthRefreshToken:"+client_id+":"+username;
+        String oldToken = redisTemplate.opsForValue().get(tokenKey);
+        String oldRefreshToken = redisTemplate.opsForValue().get(refreshKey);
+        if(StrUtil.isBlank(oldToken)||StrUtil.isBlank(oldRefreshToken)){
+            return ResultUtil.error("原认证信息已失效，请重新认证");
+        }
+        // 生成code 5分钟内有效
+        String code = UUID.randomUUID().toString().replace("-", "");
+        // 存入用户及clientId信息
+        redisTemplate.opsForValue().set("oauthCode:"+code, new Gson().toJson(new Oauth2TokenInfo(client_id, username)));
+        Map<String, Object> map = new HashMap<>(16);
+        map.put("code", code);
+        map.put("redirect_uri", redirect_uri);
+        map.put("state", state);
         return ResultUtil.data(map);
     }
 
