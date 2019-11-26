@@ -38,19 +38,16 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
 
-    private IgnoredUrlsProperties ignoredUrlsProperties;
-
     private XbootTokenProperties tokenProperties;
 
     private StringRedisTemplate redisTemplate;
 
     private SecurityUtil securityUtil;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, IgnoredUrlsProperties ignoredUrlsProperties,
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager,
                                    XbootTokenProperties tokenProperties,
                                    StringRedisTemplate redisTemplate, SecurityUtil securityUtil) {
         super(authenticationManager);
-        this.ignoredUrlsProperties = ignoredUrlsProperties;
         this.tokenProperties = tokenProperties;
         this.redisTemplate = redisTemplate;
         this.securityUtil = securityUtil;
@@ -62,21 +59,6 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-
-        // 判断URL是否无需验证
-        Boolean flag = false;
-        String requestUrl = request.getRequestURI();
-        PathMatcher pathMatcher = new AntPathMatcher();
-        for(String url : ignoredUrlsProperties.getUrls()){
-            if(pathMatcher.match(url, requestUrl)){
-                flag = true;
-                break;
-            }
-        }
-        if(flag){
-            chain.doFilter(request, response);
-            return;
-        }
 
         String header = request.getHeader(SecurityConstant.HEADER);
         if(StrUtil.isBlank(header)){
