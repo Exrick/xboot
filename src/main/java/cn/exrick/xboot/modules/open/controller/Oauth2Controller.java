@@ -71,7 +71,7 @@ public class Oauth2Controller {
         // 生成code 5分钟内有效
         String code = UUID.randomUUID().toString().replace("-", "");
         // 存入用户及clientId信息
-        redisTemplate.opsForValue().set("oauthCode:"+code, new Gson().toJson(new Oauth2TokenInfo(client_id, username)));
+        redisTemplate.opsForValue().set("oauthCode:"+code, new Gson().toJson(new Oauth2TokenInfo(client_id, username)), 5L, TimeUnit.MINUTES);
         Map<String, Object> map = new HashMap<>(16);
         map.put("code", code);
         map.put("redirect_uri", redirect_uri);
@@ -198,7 +198,7 @@ public class Oauth2Controller {
         // 生成code 5分钟内有效
         String code = UUID.randomUUID().toString().replace("-", "");
         // 存入用户及clientId信息
-        redisTemplate.opsForValue().set("oauthCode:"+code, new Gson().toJson(new Oauth2TokenInfo(client_id, username)));
+        redisTemplate.opsForValue().set("oauthCode:"+code, new Gson().toJson(new Oauth2TokenInfo(client_id, username)),5L, TimeUnit.MINUTES);
         Map<String, Object> map = new HashMap<>(16);
         map.put("code", code);
         map.put("redirect_uri", redirect_uri);
