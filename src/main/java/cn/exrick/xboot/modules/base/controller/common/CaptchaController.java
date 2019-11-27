@@ -35,7 +35,7 @@ public class CaptchaController {
         String code = new CreateVerifyCode().randomStr(4);
         // 缓存验证码
         redisTemplate.opsForValue().set(captchaId, code,2L, TimeUnit.MINUTES);
-        return new ResultUtil<Object>().setData(captchaId);
+        return ResultUtil.data(captchaId);
     }
 
     @RequestMapping(value = "/draw/{captchaId}", method = RequestMethod.GET)

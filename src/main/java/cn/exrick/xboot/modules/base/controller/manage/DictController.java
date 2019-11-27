@@ -48,10 +48,10 @@ public class DictController{
     public Result<Object> add(@ModelAttribute Dict dict){
 
         if(dictService.findByType(dict.getType())!=null){
-            return new ResultUtil<Object>().setErrorMsg("字典类型Type已存在");
+            return ResultUtil.error("字典类型Type已存在");
         }
         dictService.save(dict);
-        return new ResultUtil<Object>().setSuccessMsg("添加成功");
+        return ResultUtil.success("添加成功");
     }
 
     @RequestMapping(value = "/edit",method = RequestMethod.POST)
@@ -61,10 +61,10 @@ public class DictController{
         Dict old = dictService.get(dict.getId());
         // 若type修改判断唯一
         if(!old.getType().equals(dict.getType())&&dictService.findByType(dict.getType())!=null){
-            return new ResultUtil<Object>().setErrorMsg("字典类型Type已存在");
+            return ResultUtil.error("字典类型Type已存在");
         }
         dictService.update(dict);
-        return new ResultUtil<Object>().setSuccessMsg("编辑成功");
+        return ResultUtil.success("编辑成功");
     }
 
     @RequestMapping(value = "/delByIds/{id}",method = RequestMethod.DELETE)
@@ -77,7 +77,7 @@ public class DictController{
         dictDataService.deleteByDictId(id);
         // 删除缓存
         redisTemplate.delete("dictData::"+dict.getType());
-        return new ResultUtil<Object>().setSuccessMsg("删除成功");
+        return ResultUtil.success("删除成功");
     }
 
     @RequestMapping(value = "/search",method = RequestMethod.GET)

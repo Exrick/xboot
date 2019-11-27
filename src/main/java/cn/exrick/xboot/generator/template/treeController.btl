@@ -62,7 +62,7 @@ public class ${entity.className}Controller {
         // 更新缓存
         Set<String> keys = redisTemplate.keys("${entity.classNameLowerCase}::*");
         redisTemplate.delete(keys);
-        return new ResultUtil<Object>().setSuccessMsg("添加成功");
+        return ResultUtil.success("添加成功");
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
@@ -73,7 +73,7 @@ public class ${entity.className}Controller {
         // 手动删除所有分类缓存
         Set<String> keys = redisTemplate.keys("${entity.classNameLowerCase}:" + "*");
         redisTemplate.delete(keys);
-        return new ResultUtil<Object>().setSuccessMsg("编辑成功");
+        return ResultUtil.success("编辑成功");
     }
 
     @RequestMapping(value = "/delByIds/{ids}", method = RequestMethod.DELETE)
@@ -86,7 +86,7 @@ public class ${entity.className}Controller {
         // 手动删除所有缓存
         Set<String> keys = redisTemplate.keys("${entity.classNameLowerCase}:" + "*");
         redisTemplate.delete(keys);
-        return new ResultUtil<Object>().setSuccessMsg("批量通过id删除数据成功");
+        return ResultUtil.success("批量通过id删除数据成功");
     }
 
     public void deleteRecursion(String id, String[] ids){

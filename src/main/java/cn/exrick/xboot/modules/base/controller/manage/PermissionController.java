@@ -223,7 +223,7 @@ public class PermissionController {
         for(String id:ids){
             List<RolePermission> list = rolePermissionService.findByPermissionId(id);
             if(list!=null&&list.size()>0){
-                return new ResultUtil<Object>().setErrorMsg("删除失败，包含正被角色使用关联的菜单或权限");
+                return ResultUtil.error("删除失败，包含正被角色使用关联的菜单或权限");
             }
         }
         for(String id:ids){
@@ -233,7 +233,7 @@ public class PermissionController {
         mySecurityMetadataSource.loadResourceDefine();
         //手动删除缓存
         redisTemplate.delete("permission::allList");
-        return new ResultUtil<Object>().setSuccessMsg("批量通过id删除数据成功");
+        return ResultUtil.success("批量通过id删除数据成功");
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)

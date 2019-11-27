@@ -58,10 +58,10 @@ public class DictDataController{
 
         Dict dict = dictService.findByType(type);
         if (dict == null) {
-            return new ResultUtil<Object>().setErrorMsg("字典类型Type不存在");
+            return ResultUtil.error("字典类型Type不存在");
         }
         List<DictData> list = dictDataService.findByDictId(dict.getId());
-        return new ResultUtil<Object>().setData(list);
+        return ResultUtil.data(list);
     }
 
     @RequestMapping(value = "/add",method = RequestMethod.POST)
@@ -70,12 +70,12 @@ public class DictDataController{
 
         Dict dict = dictService.get(dictData.getDictId());
         if (dict == null) {
-            return new ResultUtil<Object>().setErrorMsg("字典类型id不存在");
+            return ResultUtil.error("字典类型id不存在");
         }
         dictDataService.save(dictData);
         // 删除缓存
         redisTemplate.delete("dictData::"+dict.getType());
-        return new ResultUtil<Object>().setSuccessMsg("添加成功");
+        return ResultUtil.success("添加成功");
     }
 
     @RequestMapping(value = "/edit",method = RequestMethod.POST)
@@ -86,7 +86,7 @@ public class DictDataController{
         // 删除缓存
         Dict dict = dictService.get(dictData.getDictId());
         redisTemplate.delete("dictData::"+dict.getType());
-        return new ResultUtil<Object>().setSuccessMsg("编辑成功");
+        return ResultUtil.success("编辑成功");
     }
 
     @RequestMapping(value = "/delByIds/{ids}",method = RequestMethod.DELETE)
@@ -100,6 +100,6 @@ public class DictDataController{
             // 删除缓存
             redisTemplate.delete("dictData::"+dict.getType());
         }
-        return new ResultUtil<Object>().setSuccessMsg("批量通过id删除数据成功");
+        return ResultUtil.success("批量通过id删除数据成功");
     }
 }

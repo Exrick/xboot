@@ -102,7 +102,7 @@ public class DepartmentController {
                 redisTemplate.delete(keysParent);
             }
         }
-        return new ResultUtil<Object>().setSuccessMsg("添加成功");
+        return ResultUtil.success("添加成功");
     }
 
     @RequestMapping(value = "/edit",method = RequestMethod.POST)
@@ -134,7 +134,7 @@ public class DepartmentController {
         // 删除所有用户缓存
         Set<String> keysUser = redisTemplate.keys("user:" + "*");
         redisTemplate.delete(keysUser);
-        return new ResultUtil<Object>().setSuccessMsg("编辑成功");
+        return ResultUtil.success("编辑成功");
     }
 
     @RequestMapping(value = "/delByIds/{ids}",method = RequestMethod.DELETE)
@@ -150,7 +150,7 @@ public class DepartmentController {
         // 删除数据权限缓存
         Set<String> keysUserRoleData = redisTemplate.keys("userRole::depIds:" + "*");
         redisTemplate.delete(keysUserRoleData);
-        return new ResultUtil<Object>().setSuccessMsg("批量通过id删除数据成功");
+        return ResultUtil.success("批量通过id删除数据成功");
     }
 
     public void deleteRecursion(String id, String[] ids){

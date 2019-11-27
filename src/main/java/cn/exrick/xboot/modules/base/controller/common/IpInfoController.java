@@ -32,6 +32,6 @@ public class IpInfoController {
     public Result<Object> upload(HttpServletRequest request) {
 
         String result= ipInfoUtil.getIpCity(request);
-        return new ResultUtil<Object>().setData(result);
+        return ResultUtil.data(result);
     }
 }

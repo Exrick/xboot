@@ -47,9 +47,9 @@ public class UploadController {
             result = qiniuUtil.qiniuInputStreamUpload(inputStream,fileName);
         } catch (Exception e) {
             log.error(e.toString());
-            return new ResultUtil<Object>().setErrorMsg(e.toString());
+            return ResultUtil.error(e.toString());
         }
 
-        return new ResultUtil<Object>().setData(result);
+        return ResultUtil.data(result);
     }
 }

@@ -71,6 +71,6 @@ public class ${entity.className}Controller {
         for(${entity.primaryKeyType} id : ids){
             i${entity.className}Service.removeById(id);
         }
-        return new ResultUtil<Object>().setSuccessMsg("批量通过id删除数据成功");
+        return ResultUtil.success("批量通过id删除数据成功");
     }
 }

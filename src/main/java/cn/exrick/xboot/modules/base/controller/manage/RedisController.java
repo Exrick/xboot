@@ -73,7 +73,7 @@ public class RedisController {
     public Result<Object> getByKey(@PathVariable String key){
 
         String value = redisTemplate.opsForValue().get(key);
-        return new ResultUtil<Object>().setData(value);
+        return ResultUtil.data(value);
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
@@ -82,7 +82,7 @@ public class RedisController {
                                @RequestParam String value){
 
         redisTemplate.opsForValue().set(key ,value);
-        return new ResultUtil<Object>().setSuccessMsg("删除成功");
+        return ResultUtil.success("删除成功");
     }
 
     @RequestMapping(value = "/delByKeys", method = RequestMethod.DELETE)
@@ -92,7 +92,7 @@ public class RedisController {
         for(String key : keys){
             redisTemplate.delete(key);
         }
-        return new ResultUtil<Object>().setSuccessMsg("删除成功");
+        return ResultUtil.success("删除成功");
     }
 
     @RequestMapping(value = "/delAll", method = RequestMethod.DELETE)
@@ -100,7 +100,7 @@ public class RedisController {
     public Result<Object> delAll(){
 
         redisTemplate.delete(redisTemplate.keys("*"));
-        return new ResultUtil<Object>().setSuccessMsg("删除成功");
+        return ResultUtil.success("删除成功");
     }
 
     @RequestMapping(value = "/getKeySize", method = RequestMethod.GET)
@@ -110,7 +110,7 @@ public class RedisController {
         Map<String, Object> map = new HashMap<>(16);
         map.put("keySize", redisTemplate.getConnectionFactory().getConnection().dbSize());
         map.put("time", DateUtil.format(new Date(), "HH:mm:ss"));
-        return new ResultUtil<Object>().setData(map);
+        return ResultUtil.data(map);
     }
 
     @RequestMapping(value = "/getMemory", method = RequestMethod.GET)
@@ -121,7 +121,7 @@ public class RedisController {
         Properties memory = redisTemplate.getConnectionFactory().getConnection().info("memory");
         map.put("memory", memory.get("used_memory"));
         map.put("time", DateUtil.format(new Date(), "HH:mm:ss"));
-        return new ResultUtil<Object>().setData(map);
+        return ResultUtil.data(map);
     }
 
     @RequestMapping(value = "/info", method = RequestMethod.GET)
@@ -138,6 +138,6 @@ public class RedisController {
             redisInfo.setValue(value);
             infoList.add(redisInfo);
         }
-        return new ResultUtil<Object>().setData(infoList);
+        return ResultUtil.data(infoList);
     }
 }

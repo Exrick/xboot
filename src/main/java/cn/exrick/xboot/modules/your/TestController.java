@@ -47,7 +47,7 @@ public class TestController {
                 return null;
             }
         });
-        return new ResultUtil<Object>().setData(null);
+        return ResultUtil.data(null);
     }
 
 }

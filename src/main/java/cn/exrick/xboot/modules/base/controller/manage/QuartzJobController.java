@@ -49,11 +49,11 @@ public class QuartzJobController {
 
         List<QuartzJob> list = quartzJobService.findByJobClassName(job.getJobClassName());
         if(list!=null&&list.size()>0){
-            return new ResultUtil<Object>().setErrorMsg("该定时任务类名已存在");
+            return ResultUtil.error("该定时任务类名已存在");
         }
         add(job.getJobClassName(),job.getCronExpression(),job.getParameter());
         quartzJobService.save(job);
-        return new ResultUtil<Object>().setSuccessMsg("创建定时任务成功");
+        return ResultUtil.success("创建定时任务成功");
     }
 
     @RequestMapping(value = "/edit",method = RequestMethod.POST)
@@ -64,7 +64,7 @@ public class QuartzJobController {
         add(job.getJobClassName(),job.getCronExpression(),job.getParameter());
         job.setStatus(CommonConstant.STATUS_NORMAL);
         quartzJobService.update(job);
-        return new ResultUtil<Object>().setSuccessMsg("更新定时任务成功");
+        return ResultUtil.success("更新定时任务成功");
     }
 
     @RequestMapping(value = "/pause",method = RequestMethod.POST)
@@ -78,7 +78,7 @@ public class QuartzJobController {
         }
         job.setStatus(CommonConstant.STATUS_DISABLE);
         quartzJobService.update(job);
-        return new ResultUtil<Object>().setSuccessMsg("暂停定时任务成功");
+        return ResultUtil.success("暂停定时任务成功");
     }
 
     @RequestMapping(value = "/resume",method = RequestMethod.POST)
@@ -92,7 +92,7 @@ public class QuartzJobController {
         }
         job.setStatus(CommonConstant.STATUS_NORMAL);
         quartzJobService.update(job);
-        return new ResultUtil<Object>().setSuccessMsg("恢复定时任务成功");
+        return ResultUtil.success("恢复定时任务成功");
     }
 
     @RequestMapping(value = "/delByIds/{ids}",method = RequestMethod.DELETE)
@@ -104,7 +104,7 @@ public class QuartzJobController {
             delete(job.getJobClassName());
             quartzJobService.delete(job);
         }
-        return new ResultUtil<Object>().setSuccessMsg("删除定时任务成功");
+        return ResultUtil.success("删除定时任务成功");
     }
 
     /**

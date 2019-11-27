@@ -30,7 +30,7 @@ public class SecurityController {
     @ApiOperation(value = "没有登录")
     public Result<Object> needLogin(){
 
-        return new ResultUtil<Object>().setErrorMsg(401, "您还未登录");
+        return ResultUtil.error(401, "您还未登录");
     }
 
     @RequestMapping(value = "/swagger/login", method = RequestMethod.GET)
@@ -50,6 +50,6 @@ public class SecurityController {
         params.put("code", code);
         params.put("saveLogin", saveLogin);
         String result = HttpUtil.post(loginUrl, params);
-        return new ResultUtil<Object>().setData(result);
+        return ResultUtil.data(result);
     }
 }

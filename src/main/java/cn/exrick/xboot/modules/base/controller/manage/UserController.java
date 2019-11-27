@@ -76,11 +76,11 @@ public class UserController {
     public Result<Object> regist(@ModelAttribute User u){
 
         if(StrUtil.isBlank(u.getUsername()) || StrUtil.isBlank(u.getPassword())){
-            return new ResultUtil<Object>().setErrorMsg("缺少必需表单字段");
+            return ResultUtil.error("缺少必需表单字段");
         }
 
         if(userService.findByUsername(u.getUsername())!=null){
-            return new ResultUtil<Object>().setErrorMsg("该用户名已被注册");
+            return ResultUtil.error("该用户名已被注册");
         }
 
         String encryptPass = new BCryptPasswordEncoder().encode(u.getPassword());
@@ -88,7 +88,7 @@ public class UserController {
         u.setType(CommonConstant.USER_TYPE_NORMAL);
         User user=userService.save(u);
         if(user==null){
-            return new ResultUtil<Object>().setErrorMsg("注册失败");
+            return ResultUtil.error("注册失败");
         }
         // 默认角色
         List<Role> roleList = roleService.findByDefaultRole(true);
@@ -101,7 +101,7 @@ public class UserController {
             }
         }
 
-        return new ResultUtil<Object>().setData(user);
+        return ResultUtil.data(user);
     }
 
     @RequestMapping(value = "/info",method = RequestMethod.GET)
@@ -121,9 +121,9 @@ public class UserController {
 
         User u = securityUtil.getCurrUser();
         if(!new BCryptPasswordEncoder().matches(password, u.getPassword())){
-            return new ResultUtil<Object>().setErrorMsg("密码不正确");
+            return ResultUtil.error("密码不正确");
         }
-        return new ResultUtil<Object>().setData(null);
+        return ResultUtil.data(null);
     }
 
     @RequestMapping(value = "/resetPass", method = RequestMethod.POST)
@@ -149,9 +149,9 @@ public class UserController {
         u.setPassword(old.getPassword());
         User user = userService.update(u);
         if(user==null){
-            return new ResultUtil<Object>().setErrorMsg("修改失败");
+            return ResultUtil.error("修改失败");
         }
-        return new ResultUtil<Object>().setSuccessMsg("修改成功");
+        return ResultUtil.success("修改成功");
     }
 
     /**
@@ -172,22 +172,22 @@ public class UserController {
             redisTemplate.delete("user::"+old.getUsername());
             //判断新用户名是否存在
             if(userService.findByUsername(u.getUsername())!=null){
-                return new ResultUtil<Object>().setErrorMsg("该用户名已被存在");
+                return ResultUtil.error("该用户名已被存在");
             }
         }
 
         // 若修改了手机和邮箱判断是否唯一
         if(!old.getMobile().equals(u.getMobile())&&userService.findByMobile(u.getMobile())!=null){
-            return new ResultUtil<Object>().setErrorMsg("该手机号已绑定其他账户");
+            return ResultUtil.error("该手机号已绑定其他账户");
         }
         if(!old.getEmail().equals(u.getEmail())&&userService.findByMobile(u.getEmail())!=null){
-            return new ResultUtil<Object>().setErrorMsg("该邮箱已绑定其他账户");
+            return ResultUtil.error("该邮箱已绑定其他账户");
         }
 
         u.setPassword(old.getPassword());
         User user=userService.update(u);
         if(user==null){
-            return new ResultUtil<Object>().setErrorMsg("修改失败");
+            return ResultUtil.error("修改失败");
         }
         //删除该用户角色
         userRoleService.deleteByUserId(u.getId());
@@ -205,7 +205,7 @@ public class UserController {
         redisTemplate.delete("userRole::depIds:"+u.getId());
         redisTemplate.delete("userPermission::"+u.getId());
         redisTemplate.delete("permission::userMenuList:"+u.getId());
-        return new ResultUtil<Object>().setSuccessMsg("修改成功");
+        return ResultUtil.success("修改成功");
     }
 
     /**
@@ -222,7 +222,7 @@ public class UserController {
         User user = securityUtil.getCurrUser();
 
         if(!new BCryptPasswordEncoder().matches(password, user.getPassword())){
-            return new ResultUtil<Object>().setErrorMsg("旧密码不正确");
+            return ResultUtil.error("旧密码不正确");
         }
 
         String newEncryptPass= new BCryptPasswordEncoder().encode(newPass);
@@ -232,7 +232,7 @@ public class UserController {
         //手动更新缓存
         redisTemplate.delete("user::"+user.getUsername());
 
-        return new ResultUtil<Object>().setSuccessMsg("修改密码成功");
+        return ResultUtil.success("修改密码成功");
     }
 
     @RequestMapping(value = "/getByCondition",method = RequestMethod.GET)
@@ -299,18 +299,18 @@ public class UserController {
                                  @RequestParam(required = false) String[] roles){
 
         if(StrUtil.isBlank(u.getUsername()) || StrUtil.isBlank(u.getPassword())){
-            return new ResultUtil<Object>().setErrorMsg("缺少必需表单字段");
+            return ResultUtil.error("缺少必需表单字段");
         }
 
         if(userService.findByUsername(u.getUsername())!=null){
-            return new ResultUtil<Object>().setErrorMsg("该用户名已被注册");
+            return ResultUtil.error("该用户名已被注册");
         }
 
         String encryptPass = new BCryptPasswordEncoder().encode(u.getPassword());
         u.setPassword(encryptPass);
         User user=userService.save(u);
         if(user==null){
-            return new ResultUtil<Object>().setErrorMsg("添加失败");
+            return ResultUtil.error("添加失败");
         }
         if(roles!=null&&roles.length>0){
             //添加角色
@@ -322,7 +322,7 @@ public class UserController {
             }
         }
 
-        return new ResultUtil<Object>().setData(user);
+        return ResultUtil.data(user);
     }
 
     @RequestMapping(value = "/admin/disable/{userId}",method = RequestMethod.POST)
@@ -331,13 +331,13 @@ public class UserController {
 
         User user = userService.get(userId);
         if(user==null){
-            return new ResultUtil<Object>().setErrorMsg("通过userId获取用户失败");
+            return ResultUtil.error("通过userId获取用户失败");
         }
         user.setStatus(CommonConstant.USER_STATUS_LOCK);
         userService.update(user);
         //手动更新缓存
         redisTemplate.delete("user::"+user.getUsername());
-        return new ResultUtil<Object>().setData(null);
+        return ResultUtil.data(null);
     }
 
     @RequestMapping(value = "/admin/enable/{userId}",method = RequestMethod.POST)
@@ -346,13 +346,13 @@ public class UserController {
 
         User user = userService.get(userId);
         if(user==null){
-            return new ResultUtil<Object>().setErrorMsg("通过userId获取用户失败");
+            return ResultUtil.error("通过userId获取用户失败");
         }
         user.setStatus(CommonConstant.USER_STATUS_NORMAL);
         userService.update(user);
         //手动更新缓存
         redisTemplate.delete("user::"+user.getUsername());
-        return new ResultUtil<Object>().setData(null);
+        return ResultUtil.data(null);
     }
 
     @RequestMapping(value = "/delByIds/{ids}",method = RequestMethod.DELETE)
@@ -374,7 +374,7 @@ public class UserController {
             //删除关联部门负责人
             departmentHeaderService.deleteByUserId(id);
         }
-        return new ResultUtil<Object>().setSuccessMsg("批量通过id删除数据成功");
+        return ResultUtil.success("批量通过id删除数据成功");
     }
 
 }

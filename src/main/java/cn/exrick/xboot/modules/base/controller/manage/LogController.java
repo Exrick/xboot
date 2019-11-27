@@ -47,10 +47,10 @@ public class LogController{
 
         if(esRecord){
             Page<EsLog> es = esLogService.findByConfition(type, key, searchVo, PageUtil.initPage(pageVo));
-            return new ResultUtil<Object>().setData(es);
+            return ResultUtil.data(es);
         }else{
             Page<Log> log = logService.findByConfition(type, key, searchVo, PageUtil.initPage(pageVo));
-            return new ResultUtil<Object>().setData(log);
+            return ResultUtil.data(log);
         }
     }
 
@@ -65,7 +65,7 @@ public class LogController{
                 logService.delete(id);
             }
         }
-        return new ResultUtil<Object>().setSuccessMsg("删除成功");
+        return ResultUtil.success("删除成功");
     }
 
     @RequestMapping(value = "/delAll",method = RequestMethod.DELETE)
@@ -77,6 +77,6 @@ public class LogController{
         }else{
             logService.deleteAll();
         }
-        return new ResultUtil<Object>().setSuccessMsg("删除成功");
+        return ResultUtil.success("删除成功");
     }
 }

@@ -55,7 +55,7 @@ public class RoleController {
     public Result<Object> roleGetAll(){
 
         List<Role> list = roleService.getAll();
-        return new ResultUtil<Object>().setData(list);
+        return ResultUtil.data(list);
     }
 
     @RequestMapping(value = "/getAllByPage",method = RequestMethod.GET)
@@ -81,11 +81,11 @@ public class RoleController {
 
         Role role = roleService.get(id);
         if(role==null){
-            return new ResultUtil<Object>().setErrorMsg("角色不存在");
+            return ResultUtil.error("角色不存在");
         }
         role.setDefaultRole(isDefault);
         roleService.update(role);
-        return new ResultUtil<Object>().setSuccessMsg("设置成功");
+        return ResultUtil.success("设置成功");
     }
 
     @RequestMapping(value = "/editRolePerm",method = RequestMethod.POST)
@@ -111,7 +111,7 @@ public class RoleController {
         redisTemplate.delete(keysUserPerm);
         Set<String> keysUserMenu = redisTemplate.keys("permission::userMenuList:*");
         redisTemplate.delete(keysUserMenu);
-        return new ResultUtil<Object>().setData(null);
+        return ResultUtil.data(null);
     }
 
     @RequestMapping(value = "/editRoleDep",method = RequestMethod.POST)
@@ -138,7 +138,7 @@ public class RoleController {
         Set<String> keysUserRole = redisTemplate.keys("userRole:" + "*");
         redisTemplate.delete(keysUserRole);
 
-        return new ResultUtil<Object>().setData(null);
+        return ResultUtil.data(null);
     }
 
     @RequestMapping(value = "/save",method = RequestMethod.POST)
@@ -169,7 +169,7 @@ public class RoleController {
         for(String id:ids){
             List<UserRole> list = userRoleService.findByRoleId(id);
             if(list!=null&&list.size()>0){
-                return new ResultUtil<Object>().setErrorMsg("删除失败，包含正被用户使用关联的角色");
+                return ResultUtil.error("删除失败，包含正被用户使用关联的角色");
             }
         }
         for(String id:ids){
@@ -179,7 +179,7 @@ public class RoleController {
             //删除关联数据权限
             roleDepartmentService.deleteByRoleId(id);
         }
-        return new ResultUtil<Object>().setSuccessMsg("批量通过id删除数据成功");
+        return ResultUtil.success("批量通过id删除数据成功");
     }
 
 }

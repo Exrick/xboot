@@ -78,6 +78,6 @@ public abstract class XbootBaseController<E, ID extends Serializable> {
         for(ID id:ids){
             getService().delete(id);
         }
-        return new ResultUtil<Object>().setSuccessMsg("批量通过id删除数据成功");
+        return ResultUtil.success("批量通过id删除数据成功");
     }
 }
