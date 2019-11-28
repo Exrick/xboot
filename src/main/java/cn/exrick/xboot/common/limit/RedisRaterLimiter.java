@@ -63,6 +63,10 @@ public class RedisRaterLimiter {
                 if(StrUtil.isNotBlank(currCount)&&Integer.valueOf(currCount)<Integer.valueOf(valueMaxCount)){
                     // 计数加1
                     redisTemplate.opsForValue().increment(currCountKey);
+                    // 避免key失效 上述语句未设置失效时间
+                    if(redisTemplate.getExpire(currCountKey)==-1){
+                        redisTemplate.delete(currCountKey);
+                    }
                     return token;
                 }
             } else {
