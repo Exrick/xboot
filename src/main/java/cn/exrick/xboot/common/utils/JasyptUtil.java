@@ -41,11 +41,12 @@ public class JasyptUtil {
     public static SimpleStringPBEConfig cryptor(String password){
         SimpleStringPBEConfig config = new SimpleStringPBEConfig();
         config.setPassword(password);
-        config.setAlgorithm("PBEWithMD5AndDES");
+        config.setAlgorithm("PBEWITHHMACSHA512ANDAES_256");
         config.setKeyObtentionIterations("1000");
-        config.setPoolSize("1");
+        config.setPoolSize(1);
         config.setProviderName("SunJCE");
         config.setSaltGeneratorClassName("org.jasypt.salt.RandomSaltGenerator");
+        config.setIvGeneratorClassName("org.jasypt.iv.RandomIvGenerator");
         config.setStringOutputType("base64");
         return config;
     }
@@ -55,6 +56,6 @@ public class JasyptUtil {
         //加密
         System.out.println(encyptPwd("xboot","123456"));
         //解密
-        System.out.println(decyptPwd("xboot","F4B0s6u9xcDw3V+P0qC4CA=="));
+        System.out.println(decyptPwd("xboot","uOtmALFgsfxgYzEg1uLXl3O/tg6X1Dy25I3SdAeqqETOyZbDwmaW0/EZEusIh6hK"));
     }
 }

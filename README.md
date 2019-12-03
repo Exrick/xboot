@@ -19,7 +19,7 @@
 https://www.kancloud.cn/exrick/xboot/content
 ### 前台基于Vue+iView项目地址： [xboot-front](https://github.com/Exrick/xboot-front)
 ### 项目简介 
-- [x] 代码拥有详细注释 无复杂逻辑 核心使用 SpringBoot 2.1.9.RELEASE
+- [x] 代码拥有详细注释 无复杂逻辑 核心使用 SpringBoot 2.2.1.RELEASE
 - [x] JWT / 基于Redis可配置单设备登录Token交互 任意切换 支持点单登录 提供开放平台
 - [x] JPA + Mybatis-Plus 任意切换
 - [x] 操作日志记录方式任意切换Mysql或Elasticseach记录
@@ -67,7 +67,7 @@ https://www.kancloud.cn/exrick/xboot/content
 <img src=https://i.loli.net/2019/11/25/gUiynavBAHd6hY8.jpg width=1000/>
 
 ##### 各框架依赖版本皆使用目前最新版本
-- Spring Boot 2.1.9.RELEASE
+- Spring Boot 2.2.1.RELEASE
 - SpringMVC
 - Spring Security
 - [Spring Data JPA](https://docs.spring.io/spring-data/jpa/docs/2.0.6.RELEASE/reference/html/)

@@ -22,7 +22,7 @@ public class RedisRaterLimiter {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
-    public String acquireTokenFromBucket(String point, int limit, long timeout) {
+    public String acquireToken(String point, int limit, long timeout) {
 
         String maxCountKey = "BUCKET:MAX_COUNT:" + point;
 

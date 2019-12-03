@@ -18,7 +18,7 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/xboot?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: root
     # Jasypt加密 可到common-utils中找到JasyptUtil加解密工具类生成加密结果 格式为ENC(加密结果) 以下解密结果为123456
-    password: ENC(F4B0s6u9xcDw3V+P0qC4CA==)
+    password: ENC(uOtmALFgsfxgYzEg1uLXl3O/tg6X1Dy25I3SdAeqqETOyZbDwmaW0/EZEusIh6hK)
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
     # Druid StatViewServlet配置
@@ -30,7 +30,7 @@ spring:
         # 允许清空统计数据
         reset-enable: true
         login-username: root
-        login-password: ENC(F4B0s6u9xcDw3V+P0qC4CA==)
+        login-password: ENC(uOtmALFgsfxgYzEg1uLXl3O/tg6X1Dy25I3SdAeqqETOyZbDwmaW0/EZEusIh6hK)
         # IP白名单 多个逗号分隔
         allow:
         # IP黑名单
@@ -53,7 +53,10 @@ spring:
   # Elasticsearch
   data:
     elasticsearch:
-      cluster-nodes: 127.0.0.1:9300
+      client:
+        reactive:
+          # 要连接的ES客户端 多个逗号分隔
+          endpoints: 127.0.0.1:9300
       # 未使用到ES 关闭其持久化存储
       repositories:
         enabled: false
@@ -158,18 +161,18 @@ ignored:
 # Actuator
 management:
   health:
-    status:
-      http-mapping:
-        DOWN: 200
-        OUT_OF_SERVICE: 200
-        FATAL: 200
-        UNKNOWN: 200
     # 暂未用到ES 关闭其健康检查
     elasticsearch:
       enabled: false
   endpoint:
     health:
       show-details: always
+      status:
+        http-mapping:
+          DOWN: 200
+          OUT_OF_SERVICE: 200
+          FATAL: 200
+          UNKNOWN: 200
   endpoints:
     web:
       base-path: /xboot/actuator/
@@ -196,9 +199,9 @@ logging:
   # 输出级别
   level:
     root: info
-  # 指定路径
-  path: xboot-logs
   file:
+    # 指定路径
+    path: xboot-logs
     # 最大保存天数
     max-history: 7
     # 每个文件最大大小
