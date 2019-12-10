@@ -18,7 +18,7 @@ import java.util.List;
  * ${entity.description}接口
  * @author ${entity.author}
  */
-public interface ${entity.className}Service extends XbootBaseService<${entity.className},${entity.primaryKeyType}> {
+public interface ${entity.className}Service extends XbootBaseService<${entity.className}, ${entity.primaryKeyType}> {
 
     <%
     if(!entity.isTree){

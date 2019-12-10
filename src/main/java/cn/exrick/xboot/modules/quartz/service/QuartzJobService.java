@@ -1,7 +1,7 @@
-package cn.exrick.xboot.modules.base.service;
+package cn.exrick.xboot.modules.quartz.service;
 
 import cn.exrick.xboot.base.XbootBaseService;
-import cn.exrick.xboot.modules.base.entity.QuartzJob;
+import cn.exrick.xboot.modules.quartz.entity.QuartzJob;
 
 import java.util.List;
 

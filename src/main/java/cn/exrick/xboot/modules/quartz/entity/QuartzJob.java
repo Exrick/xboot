@@ -1,4 +1,4 @@
-package cn.exrick.xboot.modules.base.entity;
+package cn.exrick.xboot.modules.quartz.entity;
 
 import cn.exrick.xboot.base.XbootBaseEntity;
 import cn.exrick.xboot.common.constant.CommonConstant;

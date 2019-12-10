@@ -1,4 +1,4 @@
-package cn.exrick.xboot.quartz.jobs;
+package cn.exrick.xboot.modules.quartz.jobs;
 
 import cn.hutool.core.date.DateUtil;
 import lombok.extern.slf4j.Slf4j;

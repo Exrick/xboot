@@ -1,8 +1,8 @@
-package cn.exrick.xboot.modules.base.serviceimpl;
+package cn.exrick.xboot.modules.quartz.serviceimpl;
 
-import cn.exrick.xboot.modules.base.dao.QuartzJobDao;
-import cn.exrick.xboot.modules.base.entity.QuartzJob;
-import cn.exrick.xboot.modules.base.service.QuartzJobService;
+import cn.exrick.xboot.modules.quartz.dao.QuartzJobDao;
+import cn.exrick.xboot.modules.quartz.entity.QuartzJob;
+import cn.exrick.xboot.modules.quartz.service.QuartzJobService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

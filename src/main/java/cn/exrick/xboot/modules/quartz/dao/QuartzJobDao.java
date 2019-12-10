@@ -1,7 +1,7 @@
-package cn.exrick.xboot.modules.base.dao;
+package cn.exrick.xboot.modules.quartz.dao;
 
 import cn.exrick.xboot.base.XbootBaseDao;
-import cn.exrick.xboot.modules.base.entity.QuartzJob;
+import cn.exrick.xboot.modules.quartz.entity.QuartzJob;
 
 import java.util.List;
 

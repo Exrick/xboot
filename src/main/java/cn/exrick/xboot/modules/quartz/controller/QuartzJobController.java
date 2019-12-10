@@ -1,13 +1,13 @@
-package cn.exrick.xboot.modules.base.controller.manage;
+package cn.exrick.xboot.modules.quartz.controller;
 
 import cn.exrick.xboot.common.constant.CommonConstant;
 import cn.exrick.xboot.common.utils.PageUtil;
 import cn.exrick.xboot.common.utils.ResultUtil;
 import cn.exrick.xboot.common.vo.PageVo;
 import cn.exrick.xboot.common.vo.Result;
-import cn.exrick.xboot.modules.base.entity.QuartzJob;
+import cn.exrick.xboot.modules.quartz.entity.QuartzJob;
 import cn.exrick.xboot.common.exception.XbootException;
-import cn.exrick.xboot.modules.base.service.QuartzJobService;
+import cn.exrick.xboot.modules.quartz.service.QuartzJobService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

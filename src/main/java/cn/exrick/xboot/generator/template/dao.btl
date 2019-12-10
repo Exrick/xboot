@@ -9,7 +9,7 @@ import java.util.List;
  * ${entity.description}数据处理层
  * @author ${entity.author}
  */
-public interface ${entity.className}Dao extends XbootBaseDao<${entity.className},${entity.primaryKeyType}> {
+public interface ${entity.className}Dao extends XbootBaseDao<${entity.className}, ${entity.primaryKeyType}> {
 
     <%
     if(entity.isTree){
