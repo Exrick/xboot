@@ -1,0 +1,57 @@
+package ${entity.entityPackage};
+
+import cn.exrick.xboot.core.base.XbootBaseEntity;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiModel;
+import lombok.Data;
+<%
+if(entity.isTree){
+%>
+import org.springframework.data.annotation.Transient;
+import com.baomidou.mybatisplus.annotation.TableField;
+
+import javax.persistence.Column;
+import java.math.BigDecimal;
+<%
+}
+%>
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+/**
+ * @author ${entity.author}
+ */
+@Data
+@Entity
+@Table(name = "${entity.tableName}")
+@TableName("${entity.tableName}")
+@ApiModel(value = "${entity.description}")
+public class ${entity.className} extends XbootBaseEntity {
+
+    private static final long serialVersionUID = 1L;
+
+    <%
+    if(entity.isTree){
+    %>
+    @ApiModelProperty(value = "分类名称")
+    private String title;
+
+    @ApiModelProperty(value = "父id")
+    private String parentId;
+
+    @ApiModelProperty(value = "是否为父节点(含子节点) 默认false")
+    private Boolean isParent = false;
+
+    @ApiModelProperty(value = "排序值")
+    @Column(precision = 10, scale = 2)
+    private BigDecimal sortOrder;
+
+    @Transient
+    @TableField(exist=false)
+    @ApiModelProperty(value = "父节点名称")
+    private String parentTitle;
+    <%
+    }
+    %>
+}

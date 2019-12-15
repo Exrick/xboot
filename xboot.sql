@@ -211,10 +211,6 @@ CREATE TABLE `t_quartz_job` (
 -- ----------------------------
 -- Records of t_quartz_job
 -- ----------------------------
-BEGIN;
-INSERT INTO `t_quartz_job` VALUES ('41060689401352192', '', '2018-08-12 20:32:52', 0, 'admin', '2018-11-20 09:51:38', '0/1 * * * * ? ', '无参测试 后台将每隔1秒执行输出日志', 'cn.exrick.xboot.quartz.jobs.SampleJob', '', -1);
-INSERT INTO `t_quartz_job` VALUES ('41065738420621312', '', '2018-08-12 21:52:56', 0, '', '2018-09-23 23:19:39', '0/1 * * * * ? ', '带参测试 后台将每隔1秒执行输出日志', 'cn.exrick.xboot.quartz.jobs.SampleParamJob', 'World', -1);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for t_role

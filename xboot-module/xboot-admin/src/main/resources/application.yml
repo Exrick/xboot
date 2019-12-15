@@ -1,0 +1,208 @@
+# 配置文件加密key 生产环境中可通过环境变量、命令行等形式进行设置
+jasypt:
+  encryptor:
+    password: xboot
+
+server:
+  port: 8888
+  servlet:
+    context-path: /
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 1000
+    min-spare-threads: 30
+
+spring:
+  # 数据源
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/xboot?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    # Jasypt加密 可到common-utils中找到JasyptUtil加解密工具类生成加密结果 格式为ENC(加密结果) 以下解密结果为123456
+    password: ENC(uOtmALFgsfxgYzEg1uLXl3O/tg6X1Dy25I3SdAeqqETOyZbDwmaW0/EZEusIh6hK)
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    # Druid StatViewServlet配置
+    druid:
+      stat-view-servlet:
+        # 默认true 内置监控页面首页/druid/index.html
+        enabled: true
+        url-pattern: /druid/*
+        # 允许清空统计数据
+        reset-enable: true
+        login-username: root
+        login-password: ENC(uOtmALFgsfxgYzEg1uLXl3O/tg6X1Dy25I3SdAeqqETOyZbDwmaW0/EZEusIh6hK)
+        # IP白名单 多个逗号分隔
+        allow:
+        # IP黑名单
+        deny:
+  jpa:
+    show-sql: true
+    # 自动生成表结构
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+  # Redis
+  redis:
+    host: 127.0.0.1
+    password:
+    # 数据库索引 默认0
+    database: 1
+    port: 6379
+    # 超时时间 Duration类型 3秒
+    timeout: 3S
+  # Elasticsearch
+  data:
+    elasticsearch:
+      client:
+        reactive:
+          # 要连接的ES客户端 多个逗号分隔
+          endpoints: 127.0.0.1:9300
+      # 未使用到ES 关闭其持久化存储
+      repositories:
+        enabled: false
+  # 定时任务
+  quartz:
+    # 任务信息存储至数据库
+    job-store-type: jdbc
+    properties:
+      org:
+        quartz:
+          jobStore:
+            misfireThreshold: 100
+  # 文件大小上传配置
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+  jackson:
+    time-zone: GMT+8
+    serialization:
+      fail-on-empty-beans: false
+  boot:
+    admin:
+      # 修改上下文路径
+      context-path: /xboot/admin
+      client:
+        url: http://127.0.0.1:${server.port}/xboot/admin
+
+xboot:
+  # 全局限流
+  ratelimit:
+    enable: true
+    # 每1秒内
+    timeout: 1000
+    # 总限制200个请求
+    limit: 200
+  # IP限流
+  iplimit:
+    enable: true
+    # 每1秒内
+    timeout: 1000
+    # 每个ip限制20个请求
+    limit: 20
+  # token交互方式
+  token:
+    # 设置为true后，token将存入redis，并具有单点登录功能 默认false使用JWT交互
+    redis: true
+    # 是否开启单设备登陆 仅当token交互方式为redis时生效
+    sdl: true
+    # token中存储用户权限数据 设为true开启后可避免每次请求再获取用户权限，但有可能导致编辑权限菜单后无法读取到最新权限数据（需用户重新登录）
+    storePerms: true
+    # token过期时间（分钟）
+    tokenExpireTime: 60
+    # 用户选择保存登录状态对应token过期时间（天）
+    saveLoginTime: 7
+    # 限制用户登陆错误次数（次）
+    loginTimeLimit: 10
+    # 错误超过次数后多少分钟后才能继续登录（分钟）
+    loginAfterTime: 10
+  # 日志记录方式 true使用Elasticsearch记录 false记录至数据库中
+  logRecord:
+    es: false
+  # 七牛云配置
+  qiniu:
+    accessKey: 你的accessKey
+    secretKey: 你的secretKey
+    bucket: 你的空间名
+    domain: 你的域名，如http://p77xsahe9.bkt.clouddn.com
+    # 存储区域 -1自动判断 0华东 1华北 2华南 3北美 4东南亚
+    zone: -1
+  # 腾讯位置服务key配置 腾讯位置服务官网注册添加key ip定位所需
+  qqlbs:
+    key: 你的腾讯位置服务key
+
+# 需要验证码校验的接口路径 支持通配符 自动过滤拦截校验 无需开发人员再次校验
+captcha:
+  # 图片验证码验证
+  image:
+    - /xboot/login # 登录接口
+    - /xboot/oauth2/authorize # 认证接口
+
+# 忽略鉴权url
+ignored:
+  urls:
+    - /xboot/oauth2/**
+    - /xboot/actuator/**
+    - /xboot/admin/**
+    - /xboot/dictData/getByType/**
+    - /xboot/user/regist
+    - /xboot/common/**
+    - /druid/**
+    - /swagger-ui.html
+    - /swagger-resources/**
+    - /swagger/**
+    - /**/v2/api-docs
+    - /**/*.js
+    - /**/*.css
+    - /**/*.png
+    - /**/*.ico
+    - /xboot/test/**
+
+# Actuator
+management:
+  health:
+    # 暂未用到ES 关闭其健康检查
+    elasticsearch:
+      enabled: false
+  endpoint:
+    health:
+      show-details: always
+      status:
+        http-mapping:
+          DOWN: 200
+          OUT_OF_SERVICE: 200
+          FATAL: 200
+          UNKNOWN: 200
+  endpoints:
+    web:
+      base-path: /xboot/actuator/
+      exposure:
+        include: '*'
+
+# Swagger界面内容配置
+swagger:
+  title: XBoot API接口文档
+  description: XBoot Api Documentation
+  version: 1.0.0
+  termsOfServiceUrl: http://blog.exrick.cn
+  contact:
+    name: Exrick
+    url: http://blog.exrick.cn
+    email: 1012139570@qq.com
+
+# Mybatis-plus
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml
+
+# 日志
+logging:
+  # 输出级别
+  level:
+    root: info
+  file:
+    # 指定路径
+    path: xboot-logs
+    # 最大保存天数
+    max-history: 7
+    # 每个文件最大大小
+    max-size: 5MB

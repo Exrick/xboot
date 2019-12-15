@@ -1,4 +1,4 @@
-# X-Boot
+# XBoot
 [![AUR](https://img.shields.io/badge/GPL-v3-red)](https://github.com/Exrick/xmall/blob/master/License)
 [![](https://img.shields.io/badge/Author-Exrick-orange.svg)](http://blog.exrick.cn)
 [![](https://img.shields.io/badge/version-1.2-brightgreen.svg)](https://github.com/Exrick/x-boot)
@@ -18,6 +18,9 @@
 ### 最新最全面在线文档
 https://www.kancloud.cn/exrick/xboot/content
 ### 前台基于Vue+iView项目地址： [xboot-front](https://github.com/Exrick/xboot-front)
+### 版本说明
+- xboot-fast：单应用版本
+- xboot-module：多模块版本
 ### 项目简介 
 - [x] 代码拥有详细注释 无复杂逻辑 核心使用 SpringBoot 2.2.1.RELEASE
 - [x] JWT / 基于Redis可配置单设备登录Token交互 任意切换 支持点单登录 提供开放平台
