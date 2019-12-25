@@ -47,9 +47,9 @@ public class ClientController extends XbootBaseController<Client, String> {
 
     @RequestMapping(value = "/getByCondition", method = RequestMethod.GET)
     @ApiOperation(value = "多条件分页获取")
-    public Result<Page<Client>> getByCondition(@ModelAttribute Client client,
-                                               @ModelAttribute SearchVo searchVo,
-                                               @ModelAttribute PageVo pageVo){
+    public Result<Page<Client>> getByCondition(Client client,
+                                               SearchVo searchVo,
+                                               PageVo pageVo){
 
         Page<Client> page = clientService.findByCondition(client, searchVo, PageUtil.initPage(pageVo));
         return new ResultUtil<Page<Client>>().setData(page);

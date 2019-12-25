@@ -169,7 +169,7 @@ public class PermissionController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ApiOperation(value = "添加")
     @CacheEvict(key = "'menuList'")
-    public Result<Permission> add(@ModelAttribute Permission permission){
+    public Result<Permission> add(Permission permission){
 
         // 判断拦截请求的操作权限按钮名是否已存在
         if(CommonConstant.PERMISSION_OPERATION.equals(permission.getType())){
@@ -188,7 +188,7 @@ public class PermissionController {
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @ApiOperation(value = "编辑")
-    public Result<Permission> edit(@ModelAttribute Permission permission){
+    public Result<Permission> edit(Permission permission){
 
         // 判断拦截请求的操作权限按钮名是否已存在
         if(CommonConstant.PERMISSION_OPERATION.equals(permission.getType())){

@@ -22,7 +22,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <encoding>UTF-8</encoding>
         <!-- 依赖包版本 -->
-        <spring.boot.version>2.2.1.RELEASE</spring.boot.version>
+        <spring.boot.version>2.2.2.RELEASE</spring.boot.version>
         <spring.boot.admin.version>2.2.0</spring.boot.admin.version>
         <druid.version>1.1.20</druid.version>
         <jjwt.version>0.9.1</jjwt.version>

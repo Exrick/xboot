@@ -60,7 +60,7 @@ public class RoleController {
 
     @RequestMapping(value = "/getAllByPage",method = RequestMethod.GET)
     @ApiOperation(value = "分页获取角色")
-    public Result<Page<Role>> getRoleByPage(@ModelAttribute PageVo page){
+    public Result<Page<Role>> getRoleByPage(PageVo page){
 
         Page<Role> list = roleService.findAll(PageUtil.initPage(page));
         for(Role role : list.getContent()){
@@ -143,7 +143,7 @@ public class RoleController {
 
     @RequestMapping(value = "/save",method = RequestMethod.POST)
     @ApiOperation(value = "保存数据")
-    public Result<Role> save(@ModelAttribute Role role){
+    public Result<Role> save(Role role){
 
         Role r = roleService.save(role);
         return new ResultUtil<Role>().setData(r);
@@ -151,7 +151,7 @@ public class RoleController {
 
     @RequestMapping(value = "/edit",method = RequestMethod.POST)
     @ApiOperation(value = "更新数据")
-    public Result<Role> edit(@ModelAttribute Role entity){
+    public Result<Role> edit(Role entity){
 
         Role r = roleService.update(entity);
         //手动批量删除缓存

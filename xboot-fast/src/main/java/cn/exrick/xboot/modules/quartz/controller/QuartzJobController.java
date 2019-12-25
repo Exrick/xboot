@@ -37,7 +37,7 @@ public class QuartzJobController {
 
     @RequestMapping(value = "/getAllByPage",method = RequestMethod.GET)
     @ApiOperation(value = "获取所有定时任务")
-    public Result<Page<QuartzJob>> getAll(@ModelAttribute PageVo page){
+    public Result<Page<QuartzJob>> getAll(PageVo page){
 
         Page<QuartzJob> data = quartzJobService.findAll(PageUtil.initPage(page));
         return new ResultUtil<Page<QuartzJob>>().setData(data);
@@ -45,7 +45,7 @@ public class QuartzJobController {
 
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     @ApiOperation(value = "添加定时任务")
-    public Result<Object> addJob(@ModelAttribute QuartzJob job){
+    public Result<Object> addJob(QuartzJob job){
 
         List<QuartzJob> list = quartzJobService.findByJobClassName(job.getJobClassName());
         if(list!=null&&list.size()>0){
@@ -58,7 +58,7 @@ public class QuartzJobController {
 
     @RequestMapping(value = "/edit",method = RequestMethod.POST)
     @ApiOperation(value = "更新定时任务")
-    public Result<Object> editJob(@ModelAttribute QuartzJob job){
+    public Result<Object> editJob(QuartzJob job){
 
         delete(job.getJobClassName());
         add(job.getJobClassName(),job.getCronExpression(),job.getParameter());
@@ -69,7 +69,7 @@ public class QuartzJobController {
 
     @RequestMapping(value = "/pause",method = RequestMethod.POST)
     @ApiOperation(value = "暂停定时任务")
-    public Result<Object> pauseJob(@ModelAttribute QuartzJob job){
+    public Result<Object> pauseJob(QuartzJob job){
 
         try {
             scheduler.pauseJob(JobKey.jobKey(job.getJobClassName()));
@@ -83,7 +83,7 @@ public class QuartzJobController {
 
     @RequestMapping(value = "/resume",method = RequestMethod.POST)
     @ApiOperation(value = "恢复定时任务")
-    public Result<Object> resumeJob(@ModelAttribute QuartzJob job){
+    public Result<Object> resumeJob(QuartzJob job){
 
         try {
             scheduler.resumeJob(JobKey.jobKey(job.getJobClassName()));

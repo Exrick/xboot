@@ -45,7 +45,7 @@ public abstract class XbootBaseController<E, ID extends Serializable> {
     @RequestMapping(value = "/getByPage", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(value = "分页获取")
-    public Result<Page<E>> getByPage(@ModelAttribute PageVo page){
+    public Result<Page<E>> getByPage(PageVo page){
 
         Page<E> data = getService().findAll(PageUtil.initPage(page));
         return new ResultUtil<Page<E>>().setData(data);
@@ -54,7 +54,7 @@ public abstract class XbootBaseController<E, ID extends Serializable> {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "保存数据")
-    public Result<E> save(@ModelAttribute E entity){
+    public Result<E> save(E entity){
 
         E e = getService().save(entity);
         return new ResultUtil<E>().setData(e);
@@ -63,7 +63,7 @@ public abstract class XbootBaseController<E, ID extends Serializable> {
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
     @ResponseBody
     @ApiOperation(value = "更新数据")
-    public Result<E> update(@ModelAttribute E entity){
+    public Result<E> update(E entity){
 
         E e = getService().update(entity);
         return new ResultUtil<E>().setData(e);

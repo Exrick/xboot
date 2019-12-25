@@ -36,9 +36,9 @@ public class ${entity.className}Controller extends XbootBaseController<${entity.
 
     @RequestMapping(value = "/getByCondition", method = RequestMethod.GET)
     @ApiOperation(value = "多条件分页获取")
-    public Result<Page<${entity.className}>> getByCondition(@ModelAttribute ${entity.className} ${entity.classNameLowerCase},
-                                                            @ModelAttribute SearchVo searchVo,
-                                                            @ModelAttribute PageVo pageVo){
+    public Result<Page<${entity.className}>> getByCondition(${entity.className} ${entity.classNameLowerCase},
+                                                            SearchVo searchVo,
+                                                            PageVo pageVo){
 
         Page<${entity.className}> page = ${entity.classNameLowerCase}Service.findByCondition(${entity.classNameLowerCase}, searchVo, PageUtil.initPage(pageVo));
         return new ResultUtil<Page<${entity.className}>>().setData(page);

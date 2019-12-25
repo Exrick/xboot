@@ -84,7 +84,7 @@ public class DepartmentController {
 
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     @ApiOperation(value = "添加")
-    public Result<Object> add(@ModelAttribute Department department){
+    public Result<Object> add(Department department){
 
         Department d = departmentService.save(department);
         // 同步该节点缓存
@@ -107,7 +107,7 @@ public class DepartmentController {
 
     @RequestMapping(value = "/edit",method = RequestMethod.POST)
     @ApiOperation(value = "编辑")
-    public Result<Object> edit(@ModelAttribute Department department,
+    public Result<Object> edit(Department department,
                                @RequestParam(required = false) String[] mainHeader,
                                @RequestParam(required = false) String[] viceHeader){
 

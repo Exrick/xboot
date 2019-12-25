@@ -48,7 +48,7 @@ public class ${entity.className}Controller {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ApiOperation(value = "添加")
-    public Result<Object> add(@ModelAttribute ${entity.className} ${entity.classNameLowerCase}){
+    public Result<Object> add(${entity.className} ${entity.classNameLowerCase}){
 
         ${entity.classNameLowerCase}Service.save(${entity.classNameLowerCase});
         // 如果不是添加的一级 判断设置上级为父节点标识
@@ -67,7 +67,7 @@ public class ${entity.className}Controller {
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @ApiOperation(value = "编辑")
-    public Result<Object> edit(@ModelAttribute ${entity.className} ${entity.classNameLowerCase}){
+    public Result<Object> edit(${entity.className} ${entity.classNameLowerCase}){
 
         ${entity.classNameLowerCase}Service.update(${entity.classNameLowerCase});
         // 手动删除所有分类缓存

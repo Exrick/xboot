@@ -45,7 +45,7 @@ public class DictController{
 
     @RequestMapping(value = "/add",method = RequestMethod.POST)
     @ApiOperation(value = "添加")
-    public Result<Object> add(@ModelAttribute Dict dict){
+    public Result<Object> add(Dict dict){
 
         if(dictService.findByType(dict.getType())!=null){
             return ResultUtil.error("字典类型Type已存在");
@@ -56,7 +56,7 @@ public class DictController{
 
     @RequestMapping(value = "/edit",method = RequestMethod.POST)
     @ApiOperation(value = "编辑")
-    public Result<Object> edit(@ModelAttribute Dict dict){
+    public Result<Object> edit(Dict dict){
 
         Dict old = dictService.get(dict.getId());
         // 若type修改判断唯一

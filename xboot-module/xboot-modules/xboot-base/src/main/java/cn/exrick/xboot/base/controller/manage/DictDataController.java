@@ -44,8 +44,8 @@ public class DictDataController{
 
     @RequestMapping(value = "/getByCondition", method = RequestMethod.GET)
     @ApiOperation(value = "多条件分页获取用户列表")
-    public Result<Page<DictData>> getByCondition(@ModelAttribute DictData dictData,
-                                                 @ModelAttribute PageVo pageVo){
+    public Result<Page<DictData>> getByCondition(DictData dictData,
+                                                 PageVo pageVo){
 
         Page<DictData> page = dictDataService.findByCondition(dictData, PageUtil.initPage(pageVo));
         return new ResultUtil<Page<DictData>>().setData(page);
@@ -66,7 +66,7 @@ public class DictDataController{
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ApiOperation(value = "添加")
-    public Result<Object> add(@ModelAttribute DictData dictData){
+    public Result<Object> add(DictData dictData){
 
         Dict dict = dictService.get(dictData.getDictId());
         if (dict == null) {
@@ -80,7 +80,7 @@ public class DictDataController{
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @ApiOperation(value = "编辑")
-    public Result<Object> edit(@ModelAttribute DictData dictData){
+    public Result<Object> edit(DictData dictData){
 
         dictDataService.update(dictData);
         // 删除缓存

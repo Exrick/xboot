@@ -48,7 +48,7 @@ public class ${entity.className}Controller {
 
     @RequestMapping(value = "/getByPage", method = RequestMethod.GET)
     @ApiOperation(value = "分页获取")
-    public Result<IPage<${entity.className}>> getByPage(@ModelAttribute PageVo page){
+    public Result<IPage<${entity.className}>> getByPage(PageVo page){
 
         IPage<${entity.className}> data = i${entity.className}Service.page(PageUtil.initMpPage(page));
         return new ResultUtil<IPage<${entity.className}>>().setData(data);
@@ -56,7 +56,7 @@ public class ${entity.className}Controller {
 
     @RequestMapping(value = "/insertOrUpdate", method = RequestMethod.POST)
     @ApiOperation(value = "编辑或更新数据")
-    public Result<${entity.className}> saveOrUpdate(@ModelAttribute ${entity.className} ${entity.classNameLowerCase}){
+    public Result<${entity.className}> saveOrUpdate(${entity.className} ${entity.classNameLowerCase}){
 
         if(i${entity.className}Service.saveOrUpdate(${entity.classNameLowerCase})){
             return new ResultUtil<${entity.className}>().setData(${entity.classNameLowerCase});

@@ -38,8 +38,8 @@ public class RedisController {
     @RequestMapping(value = "/getAllByPage", method = RequestMethod.GET)
     @ApiOperation(value = "分页获取全部")
     public Result<Page<RedisVo>> getAllByPage(@RequestParam(required = false) String key,
-                                              @ModelAttribute SearchVo searchVo,
-                                              @ModelAttribute PageVo pageVo){
+                                              SearchVo searchVo,
+                                              PageVo pageVo){
 
         List<RedisVo> list = new ArrayList<>();
 
