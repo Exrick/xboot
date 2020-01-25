@@ -35,6 +35,12 @@ spring:
         allow:
         # IP黑名单
         deny:
+      filter:
+        stat:
+          # 开启监控sql
+          enabled: true
+          # 显示并标注慢sql 默认当超过3秒显示
+          log-slow-sql: true
   jpa:
     show-sql: true
     # 自动生成表结构

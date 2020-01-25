@@ -122,7 +122,7 @@ public class SecurityUtil {
         return deparmentIds;
     }
 
-    public void getRecursion(String departmentId, List<String> ids){
+    private void getRecursion(String departmentId, List<String> ids){
 
         Department department = departmentService.get(departmentId);
         ids.add(department.getId());
