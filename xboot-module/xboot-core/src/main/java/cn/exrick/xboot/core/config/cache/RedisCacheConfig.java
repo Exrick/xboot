@@ -1,4 +1,4 @@
-package cn.exrick.xboot.config.cache;
+package cn.exrick.xboot.core.config.cache;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
