@@ -1,5 +1,6 @@
 package cn.exrick.xboot.base.controller.manage;
 
+import cn.exrick.xboot.core.common.redis.RedisTemplateHelper;
 import cn.exrick.xboot.core.common.utils.PageUtil;
 import cn.exrick.xboot.core.common.utils.ResultUtil;
 import cn.exrick.xboot.core.common.vo.PageVo;
@@ -49,6 +50,9 @@ public class RoleController {
 
     @Autowired
     private StringRedisTemplate redisTemplate;
+
+    @Autowired
+    private RedisTemplateHelper redisTemplateHelper;
 
     @RequestMapping(value = "/getAllList",method = RequestMethod.GET)
     @ApiOperation(value = "获取全部角色")
@@ -103,13 +107,13 @@ public class RoleController {
             rolePermissionService.save(rolePermission);
         }
         //手动批量删除缓存
-        Set<String> keysUser = redisTemplate.keys("user:" + "*");
+        Set<String> keysUser = redisTemplateHelper.keys("user:" + "*");
         redisTemplate.delete(keysUser);
-        Set<String> keysUserRole = redisTemplate.keys("userRole:" + "*");
+        Set<String> keysUserRole = redisTemplateHelper.keys("userRole:" + "*");
         redisTemplate.delete(keysUserRole);
-        Set<String> keysUserPerm = redisTemplate.keys("userPermission:" + "*");
+        Set<String> keysUserPerm = redisTemplateHelper.keys("userPermission:" + "*");
         redisTemplate.delete(keysUserPerm);
-        Set<String> keysUserMenu = redisTemplate.keys("permission::userMenuList:*");
+        Set<String> keysUserMenu = redisTemplateHelper.keys("permission::userMenuList:*");
         redisTemplate.delete(keysUserMenu);
         return ResultUtil.data(null);
     }
@@ -133,9 +137,9 @@ public class RoleController {
             roleDepartmentService.save(roleDepartment);
         }
         // 手动删除相关缓存
-        Set<String> keys = redisTemplate.keys("department:" + "*");
+        Set<String> keys = redisTemplateHelper.keys("department:" + "*");
         redisTemplate.delete(keys);
-        Set<String> keysUserRole = redisTemplate.keys("userRole:" + "*");
+        Set<String> keysUserRole = redisTemplateHelper.keys("userRole:" + "*");
         redisTemplate.delete(keysUserRole);
 
         return ResultUtil.data(null);
@@ -155,9 +159,9 @@ public class RoleController {
 
         Role r = roleService.update(entity);
         //手动批量删除缓存
-        Set<String> keysUser = redisTemplate.keys("user:" + "*");
+        Set<String> keysUser = redisTemplateHelper.keys("user:" + "*");
         redisTemplate.delete(keysUser);
-        Set<String> keysUserRole = redisTemplate.keys("userRole:" + "*");
+        Set<String> keysUserRole = redisTemplateHelper.keys("userRole:" + "*");
         redisTemplate.delete(keysUserRole);
         return new ResultUtil<Role>().setData(r);
     }

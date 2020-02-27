@@ -1,6 +1,7 @@
 package cn.exrick.xboot.base.controller.manage;
 
 import cn.exrick.xboot.core.common.constant.CommonConstant;
+import cn.exrick.xboot.core.common.redis.RedisTemplateHelper;
 import cn.exrick.xboot.core.common.utils.PageUtil;
 import cn.exrick.xboot.core.common.utils.ResultUtil;
 import cn.exrick.xboot.core.common.utils.SecurityUtil;
@@ -64,6 +65,9 @@ public class UserController {
 
     @Autowired
     private StringRedisTemplate redisTemplate;
+
+    @Autowired
+    private RedisTemplateHelper redisTemplateHelper;
 
     @Autowired
     private SecurityUtil securityUtil;
@@ -366,7 +370,7 @@ public class UserController {
             redisTemplate.delete("userRole::" + u.getId());
             redisTemplate.delete("userRole::depIds:" + u.getId());
             redisTemplate.delete("permission::userMenuList:" + u.getId());
-            Set<String> keys = redisTemplate.keys("department::*");
+            Set<String> keys = redisTemplateHelper.keys("department::*");
             redisTemplate.delete(keys);
             userService.delete(id);
             //删除关联角色

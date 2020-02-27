@@ -28,6 +28,9 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
     @Autowired
     private PermissionService permissionService;
 
+    @Autowired
+    private PathMatcher pathMatcher;
+
     private Map<String, Collection<ConfigAttribute>> map = null;
 
     /**
@@ -68,7 +71,6 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
         }
         //Object中包含用户请求request
         String url = ((FilterInvocation) o).getRequestUrl();
-        PathMatcher pathMatcher = new AntPathMatcher();
         Iterator<String> iterator = map.keySet().iterator();
         while (iterator.hasNext()) {
             String resURL = iterator.next();

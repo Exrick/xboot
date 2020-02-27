@@ -13,4 +13,6 @@ public class RedisVo {
     private String key;
 
     private String value;
+
+    private Long expireTime;
 }

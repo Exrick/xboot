@@ -1,5 +1,6 @@
 package cn.exrick.xboot.core.common.utils;
 
+import cn.exrick.xboot.core.common.exception.XbootException;
 import cn.exrick.xboot.core.common.vo.PageVo;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
@@ -15,6 +16,9 @@ import java.util.List;
  * @author Exrickx
  */
 public class PageUtil {
+
+    private final static String[] KEYWORDS = {"master", "truncate", "insert", "select",
+            "delete", "update", "declare", "alter", "drop", "sleep", "updatexml"};
 
     /**
      * JPA分页封装
@@ -66,6 +70,8 @@ public class PageUtil {
         String sort = page.getSort();
         String order = page.getOrder();
 
+        SQLInject(sort);
+
         if(pageNumber<1){
             pageNumber = 1;
         }
@@ -88,9 +94,9 @@ public class PageUtil {
             }
             p = new Page(pageNumber, pageSize);
             if(isAsc){
-                p.addOrder(OrderItem.asc(sort));
+                p.addOrder(OrderItem.asc(camel2Underline(sort)));
             } else {
-                p.addOrder(OrderItem.desc(sort));
+                p.addOrder(OrderItem.desc(camel2Underline(sort)));
             }
 
         } else {
@@ -129,6 +135,48 @@ public class PageUtil {
             return list.subList(fromIndex, list.size());
         } else {
             return list.subList(fromIndex, toIndex);
+        }
+    }
+
+    /**
+     * 驼峰法转下划线
+     */
+    public static String camel2Underline(String str) {
+
+        if (StrUtil.isBlank(str)) {
+            return "";
+        }
+        if(str.length()==1){
+            return str.toLowerCase();
+        }
+        StringBuffer sb = new StringBuffer();
+        for(int i=1;i<str.length();i++){
+            if(Character.isUpperCase(str.charAt(i))){
+                sb.append("_"+Character.toLowerCase(str.charAt(i)));
+            }else{
+                sb.append(str.charAt(i));
+            }
+        }
+        return (str.charAt(0)+sb.toString()).toLowerCase();
+    }
+
+    /**
+     * 防Mybatis-Plus order by注入
+     * @param param
+     */
+    public static void SQLInject(String param){
+
+        if (StrUtil.isBlank(param)) {
+            return;
+        }
+
+        // 转换成小写
+        param = param.toLowerCase();
+        // 判断是否包含非法字符
+        for (String keyword : KEYWORDS) {
+            if (param.contains(keyword)) {
+                throw new XbootException(param + "包含非法字符");
+            }
         }
     }
 }

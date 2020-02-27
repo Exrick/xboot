@@ -58,7 +58,7 @@ public class DictDataController{
 
         Dict dict = dictService.findByType(type);
         if (dict == null) {
-            return ResultUtil.error("字典类型Type不存在");
+            return ResultUtil.error("字典类型 "+ type +" 不存在");
         }
         List<DictData> list = dictDataService.findByDictId(dict.getId());
         return ResultUtil.data(list);

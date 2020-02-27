@@ -1,0 +1,55 @@
+@Override
+public Page<${entity.className}> findByCondition(${entity.className} ${entity.classNameLowerCase}, SearchVo searchVo, Pageable pageable) {
+
+    return ${entity.classNameLowerCase}Dao.findAll(new Specification<${entity.className}>() {
+        @Nullable
+        @Override
+        public Predicate toPredicate(Root<${entity.className}> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
+
+            // TODO 请根据实际需求修改你的搜索条件
+            <%
+            for(item in items){
+            %>
+            Path<${item.type}> ${item.lowerName}Field = root.get("${item.lowerName}");
+            <%
+            }
+            %>
+            Path<Date> createTimeField = root.get("createTime");
+
+            List<Predicate> list = new ArrayList<Predicate>();
+
+            <%
+            for(item in items){
+              if(item.type=="String"){
+              %>
+            // ${item.title}模糊搜素
+            if(StrUtil.isNotBlank(${entity.classNameLowerCase}.get${item.upperName}())){
+                list.add(cb.like(${item.lowerName}Field,'%'+${entity.classNameLowerCase}.get${item.upperName}()+'%'));
+            }
+              <%
+              }else{
+              %>
+            // ${item.title}相等匹配
+            if(${entity.classNameLowerCase}.get${item.upperName}()!=null){
+                list.add(cb.equal(${item.lowerName}Field, ${entity.classNameLowerCase}.get${item.upperName}()));
+            }
+              <%
+              }
+            %>
+            <%
+            }
+            %>
+
+            // 创建时间
+            if(StrUtil.isNotBlank(searchVo.getStartDate())&&StrUtil.isNotBlank(searchVo.getEndDate())){
+                Date start = DateUtil.parse(searchVo.getStartDate());
+                Date end = DateUtil.parse(searchVo.getEndDate());
+                list.add(cb.between(createTimeField, start, DateUtil.endOfDay(end)));
+            }
+
+            Predicate[] arr = new Predicate[list.size()];
+            cq.where(list.toArray(arr));
+            return null;
+        }
+    }, pageable);
+}

@@ -36,7 +36,7 @@ public class SystemLogAspect {
 
     private static final ThreadLocal<Date> beginTimeThreadLocal = new NamedThreadLocal<Date>("ThreadLocal beginTime");
 
-    @Value("${xboot.logRecord.es}")
+    @Value("${xboot.logRecord.es:false}")
     private Boolean esRecord;
 
     @Autowired

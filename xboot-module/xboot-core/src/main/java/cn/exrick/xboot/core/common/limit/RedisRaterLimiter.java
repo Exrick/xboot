@@ -39,24 +39,11 @@ public class RedisRaterLimiter {
             String currCount = redisTemplate.opsForValue().get(currCountKey);
             // 初始
             if(StrUtil.isBlank(valueMaxCount)&&StrUtil.isBlank(currCount)){
-                // 事务
-                SessionCallback sessionCallback = new SessionCallback() {
-                    @Override
-                    public Object execute(RedisOperations redisOperations) throws DataAccessException {
-
-                        redisOperations.multi();
-
-                        // 计数加1
-                        redisTemplate.opsForValue().increment(currCountKey);
-                        redisTemplate.expire(currCountKey, timeout, TimeUnit.MILLISECONDS);
-                        // 总数
-                        redisTemplate.opsForValue().set(maxCountKey, String.valueOf(limit), timeout, TimeUnit.MILLISECONDS);
-
-                        return redisOperations.exec();
-                    }
-                };
-                redisTemplate.execute(sessionCallback);
-
+                // 计数加1
+                redisTemplate.opsForValue().increment(currCountKey);
+                redisTemplate.expire(currCountKey, timeout, TimeUnit.MILLISECONDS);
+                // 总数
+                redisTemplate.opsForValue().set(maxCountKey, String.valueOf(limit), timeout, TimeUnit.MILLISECONDS);
                 return token;
             } else if (StrUtil.isNotBlank(valueMaxCount)&&StrUtil.isNotBlank(currCount)){
                 // 判断是否超过限制

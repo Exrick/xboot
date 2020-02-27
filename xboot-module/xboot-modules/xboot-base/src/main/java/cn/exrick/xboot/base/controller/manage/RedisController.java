@@ -2,6 +2,7 @@ package cn.exrick.xboot.base.controller.manage;
 
 import cn.exrick.xboot.base.vo.RedisInfo;
 import cn.exrick.xboot.base.vo.RedisVo;
+import cn.exrick.xboot.core.common.redis.RedisTemplateHelper;
 import cn.exrick.xboot.core.common.utils.PageUtil;
 import cn.exrick.xboot.core.common.utils.ResultUtil;
 import cn.exrick.xboot.core.common.vo.PageVo;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -32,13 +34,20 @@ import java.util.*;
 @Transactional
 public class RedisController {
 
+    /**
+     * 最大获取10万个键值
+     */
+    private static final int maxSize = 100000;
+
     @Autowired
     private StringRedisTemplate redisTemplate;
+
+    @Autowired
+    private RedisTemplateHelper redisTemplateHelper;
 
     @RequestMapping(value = "/getAllByPage", method = RequestMethod.GET)
     @ApiOperation(value = "分页获取全部")
     public Result<Page<RedisVo>> getAllByPage(@RequestParam(required = false) String key,
-                                              SearchVo searchVo,
                                               PageVo pageVo){
 
         List<RedisVo> list = new ArrayList<>();
@@ -48,17 +57,28 @@ public class RedisController {
         }else{
             key = "*";
         }
-        for (String s : redisTemplate.keys(key)) {
-            RedisVo redisVo = new RedisVo(s, "");
-            list.add(redisVo);
+        Set<String> keys = redisTemplateHelper.keys(key);
+        int size = keys.size();
+        // 限制10万个
+        if(size>maxSize){
+            size = maxSize;
         }
-        Page<RedisVo> page = new PageImpl<RedisVo>(PageUtil.listToPage(pageVo, list), PageUtil.initPage(pageVo), list.size());
+        int i = 0;
+        for (String s : keys) {
+            if(i>size){
+                break;
+            }
+            RedisVo redisVo = new RedisVo(s, "", redisTemplate.getExpire(s, TimeUnit.SECONDS));
+            list.add(redisVo);
+            i++;
+        }
+        Page<RedisVo> page = new PageImpl<RedisVo>(PageUtil.listToPage(pageVo, list), PageUtil.initPage(pageVo), size);
         page.getContent().forEach(e->{
             String value = "";
             try {
                 value =  redisTemplate.opsForValue().get(e.getKey());
                 if(value.length()>150){
-                    value = value.substring(0, 149) + "...";
+                    value = value.substring(0, 150) + "...";
                 }
             } catch (Exception exception){
                 value = "非字符格式数据";
@@ -72,17 +92,26 @@ public class RedisController {
     @ApiOperation(value = "通过key获取")
     public Result<Object> getByKey(@PathVariable String key){
 
+        Map<String, Object> map = new HashMap<>();
         String value = redisTemplate.opsForValue().get(key);
-        return ResultUtil.data(value);
+        Long expireTime = redisTemplate.getExpire(key, TimeUnit.SECONDS);
+        map.put("value", value);
+        map.put("expireTime", expireTime);
+        return ResultUtil.data(map);
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ApiOperation(value = "添加或编辑")
     public Result<Object> save(@RequestParam String key,
-                               @RequestParam String value){
+                               @RequestParam String value,
+                               @RequestParam Long expireTime){
 
-        redisTemplate.opsForValue().set(key ,value);
-        return ResultUtil.success("删除成功");
+        if(expireTime<0){
+            redisTemplate.opsForValue().set(key ,value);
+        }else if(expireTime>0){
+            redisTemplate.opsForValue().set(key ,value, expireTime, TimeUnit.SECONDS);
+        }
+        return ResultUtil.success("保存成功");
     }
 
     @RequestMapping(value = "/delByKeys", method = RequestMethod.DELETE)
@@ -99,7 +128,7 @@ public class RedisController {
     @ApiOperation(value = "全部删除")
     public Result<Object> delAll(){
 
-        redisTemplate.delete(redisTemplate.keys("*"));
+        redisTemplate.delete(redisTemplateHelper.keys("*"));
         return ResultUtil.success("删除成功");
     }
 

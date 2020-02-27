@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.*;
 @Transactional
 public class LogController{
 
-    @Value("${xboot.logRecord.es}")
+    @Value("${xboot.logRecord.es:false}")
     private Boolean esRecord;
 
     @Autowired

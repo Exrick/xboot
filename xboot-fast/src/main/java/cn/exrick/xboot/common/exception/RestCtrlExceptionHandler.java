@@ -17,12 +17,36 @@ public class RestCtrlExceptionHandler {
 
     @ExceptionHandler(XbootException.class)
     @ResponseStatus(value = HttpStatus.OK)
-    public Result<Object> handleXCloudException(XbootException e) {
+    public Result<Object> handleXbootException(XbootException e) {
 
-        String errorMsg="Xboot exception";
+        String errorMsg = "XBoot exception";
         if (e!=null){
             errorMsg = e.getMsg();
             log.error(e.toString(), e);
+        }
+        return new ResultUtil<>().setErrorMsg(500, errorMsg);
+    }
+
+    @ExceptionHandler(LimitException.class)
+    @ResponseStatus(value = HttpStatus.OK)
+    public Result<Object> handleLimitException(LimitException e) {
+
+        String errorMsg = "Limit exception";
+        if (e!=null){
+            errorMsg = e.getMsg();
+            log.warn(e.getMsg());
+        }
+        return new ResultUtil<>().setErrorMsg(500, errorMsg);
+    }
+
+    @ExceptionHandler(CaptchaException.class)
+    @ResponseStatus(value = HttpStatus.OK)
+    public Result<Object> handleCaptchaExceptionException(CaptchaException e) {
+
+        String errorMsg = "CaptchaException exception";
+        if (e!=null){
+            errorMsg = e.getMsg();
+            log.warn(e.getMsg());
         }
         return new ResultUtil<>().setErrorMsg(500, errorMsg);
     }
@@ -31,7 +55,7 @@ public class RestCtrlExceptionHandler {
     @ResponseStatus(value = HttpStatus.OK)
     public Result<Object> handleException(Exception e) {
 
-        String errorMsg="Exception";
+        String errorMsg = "Exception";
         if (e!=null){
             errorMsg = e.getMessage();
             log.error(e.toString(), e);

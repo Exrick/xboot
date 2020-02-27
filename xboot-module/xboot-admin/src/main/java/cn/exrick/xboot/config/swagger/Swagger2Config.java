@@ -25,25 +25,25 @@ import java.util.List;
 @EnableSwagger2
 public class Swagger2Config {
 
-    @Value("${swagger.title}")
+    @Value("${swagger.title:XBoot}")
     private String title;
 
-    @Value("${swagger.description}")
+    @Value("${swagger.description:Api Documentation}")
     private String description;
 
-    @Value("${swagger.version}")
+    @Value("${swagger.version:1.0}")
     private String version;
 
-    @Value("${swagger.termsOfServiceUrl}")
+    @Value("${swagger.termsOfServiceUrl:http://xboot.exrick.cn}")
     private String termsOfServiceUrl;
 
-    @Value("${swagger.contact.name}")
+    @Value("${swagger.contact.name:Exrick}")
     private String name;
 
-    @Value("${swagger.contact.url}")
+    @Value("${swagger.contact.url:http://exrick.cn}")
     private String url;
 
-    @Value("${swagger.contact.email}")
+    @Value("${swagger.contact.email:1012139570@qq.com}")
     private String email;
 
     private List<ApiKey> securitySchemes() {

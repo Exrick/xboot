@@ -41,6 +41,13 @@ spring:
           enabled: true
           # 显示并标注慢sql 默认当超过3秒显示
           log-slow-sql: true
+          slow-sql-millis: 3000
+          merge-sql: true
+        # 防SQL注入过滤
+        wall:
+          config:
+            # 允许多条sql同时执行
+            multi-statement-allow: true
   jpa:
     show-sql: true
     # 自动生成表结构
@@ -122,6 +129,12 @@ xboot:
     loginTimeLimit: 10
     # 错误超过次数后多少分钟后才能继续登录（分钟）
     loginAfterTime: 10
+  # 使用Spring @Cacheable注解失效时间
+  cache:
+    # 过期时间单位 支持day、hour、minute对应天、小时、分钟
+    unit: day
+    # 过期时间 永久不过期设为-1
+    time: 15
   # 日志记录方式 true使用Elasticsearch记录 false记录至数据库中
   logRecord:
     es: false
@@ -163,6 +176,12 @@ ignored:
     - /**/*.png
     - /**/*.ico
     - /xboot/test/**
+  # 限流及黑名单不拦截的路径
+  limitUrls:
+    - /**/*.js
+    - /**/*.css
+    - /**/*.png
+    - /**/*.ico
 
 # Actuator
 management:

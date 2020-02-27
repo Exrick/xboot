@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
@@ -18,12 +19,20 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import java.time.Duration;
+
 /**
  * @author Exrick
  */
 @Slf4j
 @Configuration
 public class RedisCacheConfig extends CachingConfigurerSupport {
+
+    @Value("${xboot.cache.unit:day}")
+    private String unit;
+
+    @Value("${xboot.cache.time:-1}")
+    private Integer time;
 
     /**
      * 自定义序列化方式
@@ -48,7 +57,20 @@ public class RedisCacheConfig extends CachingConfigurerSupport {
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer))
                 .disableCachingNullValues();
 
-        RedisCacheManager cacheManager = RedisCacheManager.builder(factory).cacheDefaults(config).build();
+        if(time<0){
+            time = -1;
+        }
+        Duration expireTime;
+        if("hour".equals(unit)){
+            expireTime = Duration.ofHours(time);
+        }else if("minute".equals(unit)){
+            expireTime = Duration.ofMinutes(time);
+        }else{
+            expireTime = Duration.ofDays(time);
+        }
+        RedisCacheManager cacheManager = RedisCacheManager.builder(factory)
+                .cacheDefaults(config.entryTtl(expireTime))
+                .build();
         return cacheManager;
     }
 

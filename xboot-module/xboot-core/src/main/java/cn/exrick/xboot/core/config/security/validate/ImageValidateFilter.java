@@ -31,13 +31,15 @@ public class ImageValidateFilter extends OncePerRequestFilter {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
+    @Autowired
+    private PathMatcher pathMatcher;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
 
         // 判断URL是否需要验证
         Boolean flag = false;
         String requestUrl = request.getRequestURI();
-        PathMatcher pathMatcher = new AntPathMatcher();
         for(String url : captchaProperties.getImage()){
             if(pathMatcher.match(url, requestUrl)){
                 flag = true;

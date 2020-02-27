@@ -66,7 +66,7 @@ public class ${entity.className}ServiceImpl implements ${entity.className}Servic
 
                 List<Predicate> list = new ArrayList<Predicate>();
 
-                //创建时间
+                // 创建时间
                 if(StrUtil.isNotBlank(searchVo.getStartDate())&&StrUtil.isNotBlank(searchVo.getEndDate())){
                     Date start = DateUtil.parse(searchVo.getStartDate());
                     Date end = DateUtil.parse(searchVo.getEndDate());

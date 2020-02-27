@@ -1,6 +1,6 @@
 package cn.exrick.xboot.core.common.utils;
 
-import cn.exrick.xboot.core.common.exception.XbootException;
+import cn.exrick.xboot.core.common.exception.CaptchaException;
 import cn.hutool.core.util.StrUtil;
 
 import javax.imageio.ImageIO;
@@ -138,7 +138,7 @@ public class CreateVerifyCode {
     private void creatImage(String code) {
 
         if(StrUtil.isBlank(code)){
-            throw new XbootException("验证码为空或已过期，请重新获取");
+            throw new CaptchaException("验证码为空或已过期，请重新获取");
         }
         // 字体的宽度
         int fontWidth = width / codeCount;

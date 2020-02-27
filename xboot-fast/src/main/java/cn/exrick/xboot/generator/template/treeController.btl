@@ -1,6 +1,7 @@
 package ${entity.controllerPackage};
 
 import cn.exrick.xboot.common.constant.CommonConstant;
+import cn.exrick.xboot.common.redis.RedisTemplateHelper;
 import cn.exrick.xboot.common.utils.CommonUtil;
 import cn.exrick.xboot.common.utils.ResultUtil;
 import cn.exrick.xboot.common.vo.Result;
@@ -12,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,8 +39,12 @@ public class ${entity.className}Controller {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
+    @Autowired
+    private RedisTemplateHelper redisTemplateHelper;
+
     @RequestMapping(value = "/getByParentId/{parentId}", method = RequestMethod.GET)
     @ApiOperation(value = "通过id获取")
+    @Cacheable(key = "#parentId")
     public Result<List<${entity.className}>> getByParentId(@PathVariable String parentId){
 
         List<${entity.className}> list = ${entity.classNameLowerCase}Service.findByParentIdOrderBySortOrder(parentId);
@@ -60,7 +66,7 @@ public class ${entity.className}Controller {
             }
         }
         // 更新缓存
-        Set<String> keys = redisTemplate.keys("${entity.classNameLowerCase}::*");
+        Set<String> keys = redisTemplateHelper.keys("${entity.classNameLowerCase}::*");
         redisTemplate.delete(keys);
         return ResultUtil.success("添加成功");
     }
@@ -71,7 +77,7 @@ public class ${entity.className}Controller {
 
         ${entity.classNameLowerCase}Service.update(${entity.classNameLowerCase});
         // 手动删除所有分类缓存
-        Set<String> keys = redisTemplate.keys("${entity.classNameLowerCase}:" + "*");
+        Set<String> keys = redisTemplateHelper.keys("${entity.classNameLowerCase}:" + "*");
         redisTemplate.delete(keys);
         return ResultUtil.success("编辑成功");
     }
@@ -84,7 +90,7 @@ public class ${entity.className}Controller {
             deleteRecursion(id, ids);
         }
         // 手动删除所有缓存
-        Set<String> keys = redisTemplate.keys("${entity.classNameLowerCase}:" + "*");
+        Set<String> keys = redisTemplateHelper.keys("${entity.classNameLowerCase}:" + "*");
         redisTemplate.delete(keys);
         return ResultUtil.success("批量通过id删除数据成功");
     }

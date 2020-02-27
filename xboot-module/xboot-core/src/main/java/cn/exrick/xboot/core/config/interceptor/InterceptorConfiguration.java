@@ -26,7 +26,7 @@ public class InterceptorConfiguration implements WebMvcConfigurer {
         InterceptorRegistration ir = registry.addInterceptor(limitRaterInterceptor);
         // 配置拦截的路径
         ir.addPathPatterns("/**");
-        // 配置不拦截的路径
-        ir.excludePathPatterns(ignoredUrlsProperties.getUrls());
+        // 配置不拦截的路径 避免加载css也拦截（可根据实际情况放开限流配置或拦截路径）
+        ir.excludePathPatterns(ignoredUrlsProperties.getLimitUrls());
     }
 }

@@ -1,0 +1,26 @@
+@RequestMapping(value = "/getByCondition", method = RequestMethod.GET)
+@ApiOperation(value = "多条件分页获取")
+public Result<IPage<${entity.className}>> getByCondition(${entity.className} ${entity.classNameLowerCase},
+                                             PageVo page){
+
+    QueryWrapper<${entity.className}> qw = new QueryWrapper<>();
+    <%
+    for(item in items){
+      if(item.type=="String"){
+      %>
+    // ${item.title}模糊搜素
+    qw.like(StrUtil.isNotBlank(${entity.classNameLowerCase}.get${item.upperName}()), "${item.lineName}", ${entity.classNameLowerCase}.get${item.upperName}());
+      <%
+      }else{
+      %>
+    // ${item.title}相等匹配
+    qw.eq(${entity.classNameLowerCase}.get${item.upperName}()!=null, "${item.lineName}", ${entity.classNameLowerCase}.get${item.upperName}());
+      <%
+      }
+    %>
+    <%
+    }
+    %>
+    IPage<${entity.className}> data = i${entity.className}Service.page(PageUtil.initMpPage(page), qw);
+    return new ResultUtil<IPage<${entity.className}>>().setData(data);
+}

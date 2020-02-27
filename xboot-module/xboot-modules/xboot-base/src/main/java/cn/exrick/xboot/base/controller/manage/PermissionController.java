@@ -3,6 +3,7 @@ package cn.exrick.xboot.base.controller.manage;
 import cn.exrick.xboot.base.utils.VoUtil;
 import cn.exrick.xboot.base.vo.MenuVo;
 import cn.exrick.xboot.core.common.constant.CommonConstant;
+import cn.exrick.xboot.core.common.redis.RedisTemplateHelper;
 import cn.exrick.xboot.core.common.utils.ResultUtil;
 import cn.exrick.xboot.core.common.utils.SecurityUtil;
 import cn.exrick.xboot.core.common.vo.Result;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Exrick
@@ -53,6 +55,9 @@ public class PermissionController {
 
     @Autowired
     private StringRedisTemplate redisTemplate;
+
+    @Autowired
+    private RedisTemplateHelper redisTemplateHelper;
 
     @Autowired
     private SecurityUtil securityUtil;
@@ -137,7 +142,7 @@ public class PermissionController {
         }
 
         // 缓存
-        redisTemplate.opsForValue().set(key, new Gson().toJson(menuList));
+        redisTemplate.opsForValue().set(key, new Gson().toJson(menuList), 15L, TimeUnit.DAYS);
         return new ResultUtil<List<MenuVo>>().setData(menuList);
     }
 
@@ -205,11 +210,11 @@ public class PermissionController {
         //重新加载权限
         mySecurityMetadataSource.loadResourceDefine();
         //手动批量删除缓存
-        Set<String> keys = redisTemplate.keys("userPermission:" + "*");
+        Set<String> keys = redisTemplateHelper.keys("userPermission:" + "*");
         redisTemplate.delete(keys);
-        Set<String> keysUser = redisTemplate.keys("user:" + "*");
+        Set<String> keysUser = redisTemplateHelper.keys("user:" + "*");
         redisTemplate.delete(keysUser);
-        Set<String> keysUserMenu = redisTemplate.keys("permission::userMenuList:*");
+        Set<String> keysUserMenu = redisTemplateHelper.keys("permission::userMenuList:*");
         redisTemplate.delete(keysUserMenu);
         redisTemplate.delete("permission::allList");
         return new ResultUtil<Permission>().setData(u);

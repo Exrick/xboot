@@ -2,7 +2,7 @@ package cn.exrick.xboot.core.config.interceptor;
 
 import cn.exrick.xboot.core.common.annotation.RateLimiter;
 import cn.exrick.xboot.core.common.constant.CommonConstant;
-import cn.exrick.xboot.core.common.exception.XbootException;
+import cn.exrick.xboot.core.common.exception.LimitException;
 import cn.exrick.xboot.core.common.limit.RedisRaterLimiter;
 import cn.exrick.xboot.core.common.utils.IpInfoUtil;
 import cn.exrick.xboot.core.config.properties.XbootIpLimitProperties;
@@ -55,7 +55,7 @@ public class LimitRaterInterceptor extends HandlerInterceptorAdapter {
             String token1 = redisRaterLimiter.acquireToken(ip,
                     ipLimitProperties.getLimit(), ipLimitProperties.getTimeout());
             if (StrUtil.isBlank(token1)) {
-                throw new XbootException("你手速怎么这么快，请点慢一点");
+                throw new LimitException("你手速怎么这么快，请点慢一点");
             }
         }
 
@@ -63,7 +63,7 @@ public class LimitRaterInterceptor extends HandlerInterceptorAdapter {
             String token2 = redisRaterLimiter.acquireToken(CommonConstant.LIMIT_ALL,
                     limitProperties.getLimit(), limitProperties.getTimeout());
             if (StrUtil.isBlank(token2)) {
-                throw new XbootException("当前访问总人数太多啦，请稍后再试");
+                throw new LimitException("当前访问总人数太多啦，请稍后再试");
             }
         }
 
@@ -76,11 +76,11 @@ public class LimitRaterInterceptor extends HandlerInterceptorAdapter {
                 int timeout = rateLimiter.timeout();
                 String token3 = redisRaterLimiter.acquireToken(method.getName(), limit, timeout);
                 if (StrUtil.isBlank(token3)) {
-                    throw new XbootException("当前访问人数太多啦，请稍后再试");
+                    throw new LimitException("当前访问人数太多啦，请稍后再试");
                 }
             }
-        }catch (XbootException e){
-            throw new XbootException(e.getMsg());
+        }catch (LimitException e){
+            throw new LimitException(e.getMsg());
         }catch (Exception e){
 
         }

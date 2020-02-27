@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  * @author Exrickx
  */
 @Configuration
-@MapperScan({"cn.exrick.xboot.modules.*.*.mapper"})
+@MapperScan({"cn.exrick.xboot.modules.*.mapper", "cn.exrick.xboot.modules.*.*.mapper"})
 public class MybatisPlusConfig {
 
     /**
