@@ -115,7 +115,7 @@ xboot:
     limit: 20
   # token交互方式
   token:
-    # 设置为true后，token将存入redis，并具有单点登录功能 默认false使用JWT交互
+    # 默认为true，token将存入redis，并具有单点登录功能 设为false使用JWT交互
     redis: true
     # 是否开启单设备登陆 仅当token交互方式为redis时生效
     sdl: true
@@ -157,8 +157,9 @@ captcha:
     - /xboot/login # 登录接口
     - /xboot/oauth2/authorize # 认证接口
 
-# 忽略鉴权url
+# 忽略url
 ignored:
+  # 无需登录认证的请求
   urls:
     - /xboot/oauth2/**
     - /xboot/actuator/**
