@@ -3,9 +3,6 @@ package cn.exrick.xboot.common.limit;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.core.RedisOperations;
-import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -35,28 +32,25 @@ public class RedisRaterLimiter {
             if(limit<=0||timeout<=0){
                 return token;
             }
-            String valueMaxCount = redisTemplate.opsForValue().get(maxCountKey);
+            // maxCount为主要判断标志
+            String maxCount = redisTemplate.opsForValue().get(maxCountKey);
             String currCount = redisTemplate.opsForValue().get(currCountKey);
             // 初始
-            if(StrUtil.isBlank(valueMaxCount)&&StrUtil.isBlank(currCount)){
-                // 计数加1
-                redisTemplate.opsForValue().increment(currCountKey);
-                redisTemplate.expire(currCountKey, timeout, TimeUnit.MILLISECONDS);
+            if(StrUtil.isBlank(maxCount)){
+                // 初始计数为1
+                redisTemplate.opsForValue().set(currCountKey, "1", timeout, TimeUnit.MILLISECONDS);
                 // 总数
                 redisTemplate.opsForValue().set(maxCountKey, String.valueOf(limit), timeout, TimeUnit.MILLISECONDS);
                 return token;
-            } else if (StrUtil.isNotBlank(valueMaxCount)&&StrUtil.isNotBlank(currCount)){
+            } else if (StrUtil.isNotBlank(maxCount)&&StrUtil.isNotBlank(currCount)){
                 // 判断是否超过限制
-                if(StrUtil.isNotBlank(currCount)&&Integer.valueOf(currCount)<Integer.valueOf(valueMaxCount)){
+                if(Integer.valueOf(currCount)<Integer.valueOf(maxCount)){
                     // 计数加1
-                    redisTemplate.opsForValue().increment(currCountKey);
-                    // 避免key失效 上述语句未设置失效时间
-                    if(redisTemplate.getExpire(currCountKey)==-1){
-                        redisTemplate.delete(currCountKey);
-                    }
+                    redisTemplate.opsForValue().set(currCountKey, String.valueOf(Integer.valueOf(currCount)+1), timeout, TimeUnit.MILLISECONDS);
                     return token;
                 }
             } else {
+                // currCount变量先失效（几乎不可能） 返回token
                 return token;
             }
         } catch (Exception e) {

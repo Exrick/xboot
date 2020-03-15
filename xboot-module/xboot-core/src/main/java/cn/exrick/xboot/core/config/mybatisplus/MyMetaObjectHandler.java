@@ -3,9 +3,7 @@ package cn.exrick.xboot.core.config.mybatisplus;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -21,10 +19,9 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication!=null){
-            UserDetails user = (UserDetails) authentication.getPrincipal();
-            this.setFieldValByName("createBy", user.getUsername(), metaObject);
+        String principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        if(!"anonymousUser".equals(principal)){
+            this.setFieldValByName("createBy", principal, metaObject);
         }
         this.setFieldValByName("createTime", new Date(), metaObject);
     }
@@ -32,10 +29,9 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void updateFill(MetaObject metaObject) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication!=null){
-            UserDetails user = (UserDetails) authentication.getPrincipal();
-            this.setFieldValByName("updateBy", user.getUsername(), metaObject);
+        String principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        if(!"anonymousUser".equals(principal)){
+            this.setFieldValByName("updateBy", principal, metaObject);
         }
         this.setFieldValByName("updateTime", new Date(), metaObject);
     }
