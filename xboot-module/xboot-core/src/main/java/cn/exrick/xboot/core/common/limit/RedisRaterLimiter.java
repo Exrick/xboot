@@ -19,7 +19,7 @@ public class RedisRaterLimiter {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
-    public String acquireToken(String point, int limit, long timeout) {
+    public String acquireToken(String point, Integer limit, Long timeout) {
 
         String maxCountKey = "BUCKET:MAX_COUNT:" + point;
 
@@ -40,7 +40,7 @@ public class RedisRaterLimiter {
                 // 初始计数为1
                 redisTemplate.opsForValue().set(currCountKey, "1", timeout, TimeUnit.MILLISECONDS);
                 // 总数
-                redisTemplate.opsForValue().set(maxCountKey, String.valueOf(limit), timeout, TimeUnit.MILLISECONDS);
+                redisTemplate.opsForValue().set(maxCountKey, limit.toString(), timeout, TimeUnit.MILLISECONDS);
                 return token;
             } else if (StrUtil.isNotBlank(maxCount)&&StrUtil.isNotBlank(currCount)){
                 // 判断是否超过限制

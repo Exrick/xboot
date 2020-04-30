@@ -18,7 +18,7 @@ import java.util.List;
 public class PageUtil {
 
     private final static String[] KEYWORDS = {"master", "truncate", "insert", "select",
-            "delete", "update", "declare", "alter", "drop", "sleep", "updatexml"};
+            "delete", "update", "declare", "alter", "drop", "sleep"};
 
     /**
      * JPA分页封装

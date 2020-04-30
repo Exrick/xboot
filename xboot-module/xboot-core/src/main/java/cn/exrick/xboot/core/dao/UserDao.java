@@ -2,6 +2,8 @@ package cn.exrick.xboot.core.dao;
 
 import cn.exrick.xboot.core.base.XbootBaseDao;
 import cn.exrick.xboot.core.entity.User;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -40,10 +42,11 @@ public interface UserDao extends XbootBaseDao<User, String> {
     List<User> findByDepartmentId(String departmentId);
 
     /**
-     * 通过用户名模糊搜索
-     * @param username
-     * @param status
-     * @return
+     * 更新部门名称
+     * @param departmentId
+     * @param departmentTitle
      */
-    List<User> findByUsernameLikeAndStatus(String username, Integer status);
+    @Modifying
+    @Query("update User u set u.departmentTitle=?2 where u.departmentId=?1")
+    void updateDepartmentTitle(String departmentId, String departmentTitle);
 }

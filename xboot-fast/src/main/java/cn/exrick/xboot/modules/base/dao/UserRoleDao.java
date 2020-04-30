@@ -2,6 +2,8 @@ package cn.exrick.xboot.modules.base.dao;
 
 import cn.exrick.xboot.base.XbootBaseDao;
 import cn.exrick.xboot.modules.base.entity.UserRole;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -22,5 +24,7 @@ public interface UserRoleDao extends XbootBaseDao<UserRole,String> {
      * 删除用户角色
      * @param userId
      */
+    @Modifying
+    @Query("delete from UserRole u where u.userId = ?1")
     void deleteByUserId(String userId);
 }

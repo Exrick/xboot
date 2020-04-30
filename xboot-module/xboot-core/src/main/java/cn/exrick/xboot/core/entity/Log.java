@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +19,8 @@ import java.util.Map;
  */
 @Data
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Table(name = "t_log")
 @TableName("t_log")
 @ApiModel(value = "日志")
@@ -37,7 +41,6 @@ public class Log extends XbootBaseEntity {
     private String requestType;
 
     @ApiModelProperty(value = "请求参数")
-    @Column(length = 1000)
     private String requestParam;
 
     @ApiModelProperty(value = "请求用户")

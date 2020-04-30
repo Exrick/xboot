@@ -220,10 +220,10 @@ public class PermissionController {
         return new ResultUtil<Permission>().setData(u);
     }
 
-    @RequestMapping(value = "/delByIds/{ids}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delByIds", method = RequestMethod.POST)
     @ApiOperation(value = "批量通过id删除")
     @CacheEvict(key = "'menuList'")
-    public Result<Object> delByIds(@PathVariable String[] ids){
+    public Result<Object> delByIds(@RequestParam String[] ids){
 
         for(String id:ids){
             List<RolePermission> list = rolePermissionService.findByPermissionId(id);
@@ -234,9 +234,9 @@ public class PermissionController {
         for(String id:ids){
             permissionService.delete(id);
         }
-        //重新加载权限
+        // 重新加载权限
         mySecurityMetadataSource.loadResourceDefine();
-        //手动删除缓存
+        // 手动删除缓存
         redisTemplate.delete("permission::allList");
         return ResultUtil.success("批量通过id删除数据成功");
     }

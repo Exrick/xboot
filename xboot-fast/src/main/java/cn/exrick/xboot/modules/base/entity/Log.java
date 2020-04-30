@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -16,6 +18,8 @@ import java.util.Map;
  */
 @Data
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Table(name = "t_log")
 @TableName("t_log")
 @ApiModel(value = "日志")

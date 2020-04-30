@@ -29,7 +29,7 @@ public class EsLog implements Serializable{
 
     @Id
     @ApiModelProperty(value = "唯一标识")
-    private String id = String.valueOf(SnowFlakeUtil.getFlowIdInstance().nextId());
+    private String id = SnowFlakeUtil.nextId().toString();
 
     @ApiModelProperty(value = "创建者")
     private String createBy;

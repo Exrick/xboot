@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 <%
 if(entity.isTree){
 %>
@@ -24,6 +26,8 @@ import javax.persistence.Table;
  */
 @Data
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Table(name = "${entity.tableName}")
 @TableName("${entity.tableName}")
 @ApiModel(value = "${entity.description}")

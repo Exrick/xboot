@@ -34,7 +34,7 @@ public abstract class XbootBaseEntity implements Serializable{
     @Id
     @TableId
     @ApiModelProperty(value = "唯一标识")
-    private String id = String.valueOf(SnowFlakeUtil.getFlowIdInstance().nextId());
+    private String id = SnowFlakeUtil.nextId().toString();
 
     @ApiModelProperty(value = "创建者")
     @CreatedBy

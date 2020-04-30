@@ -51,7 +51,7 @@ public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticatio
     @SystemLog(description = "登录系统", type = LogType.LOGIN)
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
-        //用户选择保存登录状态几天
+        // 用户选择保存登录状态几天（记住我）
         String saveLogin = request.getParameter(SecurityConstant.SAVE_LOGIN);
         Boolean saved = false;
         if(StrUtil.isNotBlank(saveLogin) && Boolean.valueOf(saveLogin)){
@@ -92,11 +92,9 @@ public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticatio
                 redisTemplate.opsForValue().set(SecurityConstant.TOKEN_PRE + token, new Gson().toJson(user), tokenProperties.getTokenExpireTime(), TimeUnit.MINUTES);
             }
         }else{
-            // 不缓存权限
-            if(!tokenProperties.getStorePerms()){
-                list = null;
-            }
-            // jwt
+            // JWT不缓存权限 避免JWT长度过长
+            list = null;
+            // JWT
             token = SecurityConstant.TOKEN_SPLIT + Jwts.builder()
                     //主题 放入用户名
                     .setSubject(username)

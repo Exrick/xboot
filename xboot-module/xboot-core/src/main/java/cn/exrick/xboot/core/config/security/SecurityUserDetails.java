@@ -22,14 +22,20 @@ public class SecurityUserDetails extends User implements UserDetails {
 
     private static final long serialVersionUID = 1L;
 
+    private List<Permission> permissions;
+
+    private List<Role> roles;
+
     public SecurityUserDetails(User user) {
 
         if(user!=null) {
+            // Principal用户信息
             this.setUsername(user.getUsername());
             this.setPassword(user.getPassword());
             this.setStatus(user.getStatus());
-            this.setRoles(user.getRoles());
-            this.setPermissions(user.getPermissions());
+
+            this.permissions  = user.getPermissions();
+            this.roles = user.getRoles();
         }
     }
 
@@ -41,7 +47,6 @@ public class SecurityUserDetails extends User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         List<GrantedAuthority> authorityList = new ArrayList<>();
-        List<Permission> permissions = this.getPermissions();
         // 添加请求权限
         if(permissions!=null&&permissions.size()>0){
             for (Permission permission : permissions) {
@@ -54,7 +59,6 @@ public class SecurityUserDetails extends User implements UserDetails {
             }
         }
         // 添加角色
-        List<Role> roles = this.getRoles();
         if(roles!=null&&roles.size()>0){
             // lambda表达式
             roles.forEach(item -> {

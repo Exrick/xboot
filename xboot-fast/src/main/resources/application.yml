@@ -51,7 +51,6 @@ spring:
   jpa:
     show-sql: true
     # 自动生成表结构
-    generate-ddl: true
     hibernate:
       ddl-auto: update
   # Redis
@@ -121,9 +120,9 @@ xboot:
     sdl: true
     # token中存储用户权限数据 设为true开启后可避免每次请求再获取用户权限，但有可能导致编辑权限菜单后无法读取到最新权限数据（需用户重新登录）
     storePerms: true
-    # token过期时间（分钟）
+    # token过期时间 redis模式有请求自动刷新（分钟）
     tokenExpireTime: 60
-    # 用户选择保存登录状态对应token过期时间（天）
+    # 用户选择 保存登录状态/记住我 对应token过期时间（天）
     saveLoginTime: 7
     # 限制用户登陆错误次数（次）
     loginTimeLimit: 10

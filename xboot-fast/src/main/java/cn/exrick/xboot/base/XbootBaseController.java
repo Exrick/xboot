@@ -70,10 +70,10 @@ public abstract class XbootBaseController<E, ID extends Serializable> {
         return new ResultUtil<E>().setData(e);
     }
 
-    @RequestMapping(value = "/delByIds/{ids}",method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delByIds", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "批量通过id删除")
-    public Result<Object> delAllByIds(@PathVariable ID[] ids){
+    public Result<Object> delByIds(@RequestParam ID[] ids){
 
         for(ID id:ids){
             getService().delete(id);

@@ -2,6 +2,8 @@ package cn.exrick.xboot.modules.base.dao;
 
 import cn.exrick.xboot.base.XbootBaseDao;
 import cn.exrick.xboot.modules.base.entity.DictData;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -24,5 +26,7 @@ public interface DictDataDao extends XbootBaseDao<DictData,String> {
      * 通过dictId删除
      * @param dictId
      */
+    @Modifying
+    @Query("delete from DictData d where d.dictId = ?1")
     void deleteByDictId(String dictId);
 }

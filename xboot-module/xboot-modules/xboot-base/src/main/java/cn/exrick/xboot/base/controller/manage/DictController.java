@@ -67,16 +67,17 @@ public class DictController{
         return ResultUtil.success("编辑成功");
     }
 
-    @RequestMapping(value = "/delByIds/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delByIds", method = RequestMethod.POST)
     @ApiOperation(value = "通过id删除")
-    public Result<Object> delAllByIds(@PathVariable String id){
+    public Result<Object> delAllByIds(@RequestParam String[] ids){
 
-
-        Dict dict = dictService.get(id);
-        dictService.delete(id);
-        dictDataService.deleteByDictId(id);
-        // 删除缓存
-        redisTemplate.delete("dictData::"+dict.getType());
+        for (String id : ids){
+            Dict dict = dictService.get(id);
+            dictService.delete(id);
+            dictDataService.deleteByDictId(id);
+            // 删除缓存
+            redisTemplate.delete("dictData::"+dict.getType());
+        }
         return ResultUtil.success("删除成功");
     }
 

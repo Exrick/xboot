@@ -89,77 +89,74 @@ public class SystemLogAspect {
         try {
             String username = "";
             String description = getControllerMethodInfo(joinPoint).get("description").toString();
+            int type = (int)getControllerMethodInfo(joinPoint).get("type");
             Map<String, String[]> logParams = request.getParameterMap();
-            String principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-            // 判断允许不用登录的注解
-            if("anonymousUser".equals(principal)&&!description.contains("短信登录")){
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if("anonymousUser".equals(principal.toString())){
                 return;
             }
-            if(!"anonymousUser".equals(principal)){
-                UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-                username = user.getUsername();
-            }
-            if(description.contains("短信登录")){
-                if(logParams.get("mobile")!=null){
-                    String mobile = logParams.get("mobile")[0];
-                    username = userService.findByMobile(mobile).getUsername()+"("+mobile+")";
-                }
-            }
+            UserDetails user = (UserDetails) principal;
+            username = user.getUsername();
+
             if(esRecord){
                 EsLog esLog = new EsLog();
 
-                //请求用户
-                esLog.setUsername(username);
                 //日志标题
                 esLog.setName(description);
                 //日志类型
-                esLog.setLogType((int)getControllerMethodInfo(joinPoint).get("type"));
+                esLog.setLogType(type);
                 //日志请求url
                 esLog.setRequestUrl(request.getRequestURI());
                 //请求方式
                 esLog.setRequestType(request.getMethod());
                 //请求参数
                 esLog.setMapToParams(logParams);
-                ipInfoUtil.getInfo(request, ObjectUtil.mapToStringAll(request.getParameterMap()));
+                //请求用户
+                esLog.setUsername(username);
                 //请求IP
                 esLog.setIp(ipInfoUtil.getIpAddr(request));
                 //IP地址
                 esLog.setIpInfo(ipInfoUtil.getIpCity(request));
                 //请求开始时间
+                Date logStartTime = beginTimeThreadLocal.get();
+
                 long beginTime = beginTimeThreadLocal.get().getTime();
                 long endTime = System.currentTimeMillis();
                 //请求耗时
                 Long logElapsedTime = endTime - beginTime;
                 esLog.setCostTime(logElapsedTime.intValue());
+                ipInfoUtil.getInfo(request, ObjectUtil.mapToStringAll(request.getParameterMap()));
 
                 //调用线程保存至ES
                 ThreadPoolUtil.getPool().execute(new SaveEsSystemLogThread(esLog, esLogService));
             }else{
                 Log log = new Log();
 
-                //请求用户
-                log.setUsername(username);
                 //日志标题
                 log.setName(description);
                 //日志类型
-                log.setLogType((int)getControllerMethodInfo(joinPoint).get("type"));
+                log.setLogType(type);
                 //日志请求url
                 log.setRequestUrl(request.getRequestURI());
                 //请求方式
                 log.setRequestType(request.getMethod());
                 //请求参数
                 log.setMapToParams(logParams);
-				ipInfoUtil.getInfo(request, ObjectUtil.mapToStringAll(request.getParameterMap()));
+                //请求用户
+                log.setUsername(username);
                 //请求IP
                 log.setIp(ipInfoUtil.getIpAddr(request));
                 //IP地址
                 log.setIpInfo(ipInfoUtil.getIpCity(request));
                 //请求开始时间
+                Date logStartTime = beginTimeThreadLocal.get();
+
                 long beginTime = beginTimeThreadLocal.get().getTime();
                 long endTime = System.currentTimeMillis();
                 //请求耗时
                 Long logElapsedTime = endTime - beginTime;
                 log.setCostTime(logElapsedTime.intValue());
+                ipInfoUtil.getInfo(request, ObjectUtil.mapToStringAll(request.getParameterMap()));
 
                 //调用线程保存至ES
                 ThreadPoolUtil.getPool().execute(new SaveSystemLogThread(log, logService));

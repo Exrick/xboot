@@ -95,9 +95,9 @@ public class QuartzJobController {
         return ResultUtil.success("恢复定时任务成功");
     }
 
-    @RequestMapping(value = "/delByIds/{ids}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delByIds", method = RequestMethod.POST)
     @ApiOperation(value = "删除定时任务")
-    public Result<Object> deleteJob(@PathVariable String[] ids){
+    public Result<Object> deleteJob(@RequestParam String[] ids){
 
         for(String id:ids){
             QuartzJob job = quartzJobService.get(id);

@@ -2,6 +2,8 @@ package cn.exrick.xboot.modules.base.dao;
 
 import cn.exrick.xboot.base.XbootBaseDao;
 import cn.exrick.xboot.modules.base.entity.RolePermission;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -28,5 +30,7 @@ public interface RolePermissionDao extends XbootBaseDao<RolePermission,String> {
      * 通过roleId删除
      * @param roleId
      */
+    @Modifying
+    @Query("delete from RolePermission r where r.roleId = ?1")
     void deleteByRoleId(String roleId);
 }

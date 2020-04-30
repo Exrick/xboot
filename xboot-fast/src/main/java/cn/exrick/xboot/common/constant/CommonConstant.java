@@ -121,4 +121,9 @@ public interface CommonConstant {
      * 部门负责人类型 副负责人
      */
     Integer HEADER_TYPE_VICE = 1;
+
+    /**
+     * 禁用词 英文请小写
+     */
+    String[] STOP_WORDS = {"anonymoususer"};
 }

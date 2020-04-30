@@ -13,19 +13,21 @@ import java.util.regex.Pattern;
 public class UsernameUtil {
 
     /**
-     * 由字母数字下划线组成且开头必须是字母，不能超过16位
+     * 由字母、数字、下划线、中文组成，不能超过16位
      */
-    private static final Pattern pUsername = Pattern.compile("[a-zA-Z]{1}[a-zA-Z0-9_]{1,15}");
+    private static final Pattern pUsername = Pattern.compile("^[a-zA-Z0-9_\\u4e00-\\u9fa5]{1,16}$");
 
     /**
-     * 手机号
+     * 普通用户11位手机号
+     * 10、11、12开头的号码已分配给特定机构
      */
-    private static final Pattern pMobile = Pattern.compile("^1[3|4|5|8][0-9]\\d{8}$");
+    private static final Pattern pMobile = Pattern.compile("^[1][3,4,5,6,7,8,9][0-9]{9}$");
 
     /**
      * 邮箱
+     * http://emailregex.com/
      */
-    private static final Pattern pEmail = Pattern.compile("^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z0-9]{2,6}$");
+    private static final Pattern pEmail = Pattern.compile("^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$");
 
     public static boolean Username(String v){
 

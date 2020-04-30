@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +19,8 @@ import java.math.BigDecimal;
  */
 @Data
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Table(name = "t_dict_data")
 @TableName("t_dict_data")
 @ApiModel(value = "字典数据")

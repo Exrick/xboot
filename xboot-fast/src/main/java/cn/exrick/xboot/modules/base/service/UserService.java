@@ -55,4 +55,11 @@ public interface UserService extends XbootBaseService<User,String> {
      * @return
      */
     List<User> findByDepartmentId(String departmentId);
+
+    /**
+     * 更新部门名称
+     * @param departmentId
+     * @param departmentTitle
+     */
+    void updateDepartmentTitle(String departmentId, String departmentTitle);
 }

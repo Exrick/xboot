@@ -1,6 +1,7 @@
 package cn.exrick.xboot.common.utils;
 
 import cn.exrick.xboot.common.constant.CommonConstant;
+import cn.exrick.xboot.common.exception.XbootException;
 import cn.exrick.xboot.modules.base.entity.Department;
 import cn.exrick.xboot.modules.base.entity.Permission;
 import cn.exrick.xboot.modules.base.entity.Role;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Exrickx
@@ -49,7 +51,11 @@ public class SecurityUtil {
      */
     public User getCurrUser(){
 
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if("anonymousUser".equals(principal.toString())){
+            throw new XbootException("未检测到登录用户");
+        }
+        UserDetails user = (UserDetails) principal;
         return userService.findByUsername(user.getUsername());
     }
 
@@ -118,7 +124,7 @@ public class SecurityUtil {
         deparmentIds.clear();
         deparmentIds.addAll(set);
         // 缓存
-        redisTemplate.opsForValue().set(key, new Gson().toJson(deparmentIds));
+        redisTemplate.opsForValue().set(key, new Gson().toJson(deparmentIds), 15L, TimeUnit.DAYS);
         return deparmentIds;
     }
 
@@ -142,7 +148,11 @@ public class SecurityUtil {
     public List<GrantedAuthority> getCurrUserPerms(String username){
 
         List<GrantedAuthority> authorities = new ArrayList<>();
-        for(Permission p : userService.findByUsername(username).getPermissions()){
+        User user = userService.findByUsername(username);
+        if(user==null||user.getPermissions()==null||user.getPermissions().isEmpty()){
+            return authorities;
+        }
+        for(Permission p : user.getPermissions()){
             authorities.add(new SimpleGrantedAuthority(p.getTitle()));
         }
         return authorities;

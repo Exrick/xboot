@@ -98,7 +98,9 @@ public class SecurityUtil {
                 redisTemplate.opsForValue().set(SecurityConstant.TOKEN_PRE + token, new Gson().toJson(user), tokenProperties.getTokenExpireTime(), TimeUnit.MINUTES);
             }
         }else{
-            // jwt
+            // JWT不缓存权限 避免JWT长度过长
+            list = null;
+            // JWT
             token = SecurityConstant.TOKEN_SPLIT + Jwts.builder()
                     //主题 放入用户名
                     .setSubject(u.getUsername())
@@ -119,7 +121,11 @@ public class SecurityUtil {
      */
     public User getCurrUser(){
 
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if("anonymousUser".equals(principal.toString())){
+            throw new XbootException("未检测到登录用户");
+        }
+        UserDetails user = (UserDetails) principal;
         return userService.findByUsername(user.getUsername());
     }
 
@@ -188,7 +194,7 @@ public class SecurityUtil {
         deparmentIds.clear();
         deparmentIds.addAll(set);
         // 缓存
-        redisTemplate.opsForValue().set(key, new Gson().toJson(deparmentIds));
+        redisTemplate.opsForValue().set(key, new Gson().toJson(deparmentIds), 15L, TimeUnit.DAYS);
         return deparmentIds;
     }
 
@@ -212,7 +218,11 @@ public class SecurityUtil {
     public List<GrantedAuthority> getCurrUserPerms(String username){
 
         List<GrantedAuthority> authorities = new ArrayList<>();
-        for(Permission p : userService.findByUsername(username).getPermissions()){
+        User user = userService.findByUsername(username);
+        if(user==null||user.getPermissions()==null||user.getPermissions().isEmpty()){
+            return authorities;
+        }
+        for(Permission p : user.getPermissions()){
             authorities.add(new SimpleGrantedAuthority(p.getTitle()));
         }
         return authorities;

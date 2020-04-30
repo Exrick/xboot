@@ -110,41 +110,49 @@ public class DepartmentController {
         return ResultUtil.success("添加成功");
     }
 
-    @RequestMapping(value = "/edit",method = RequestMethod.POST)
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @ApiOperation(value = "编辑")
     public Result<Object> edit(Department department,
                                @RequestParam(required = false) String[] mainHeader,
                                @RequestParam(required = false) String[] viceHeader){
 
+        Department old = departmentService.get(department.getId());
         Department d = departmentService.update(department);
         // 先删除原数据
         departmentHeaderService.deleteByDepartmentId(department.getId());
-        for(String id:mainHeader){
-            DepartmentHeader dh = new DepartmentHeader();
-            dh.setUserId(id);
-            dh.setDepartmentId(d.getId());
-            dh.setType(CommonConstant.HEADER_TYPE_MAIN);
-            departmentHeaderService.save(dh);
+        List<DepartmentHeader> headers = new ArrayList<>();
+        if(mainHeader!=null){
+            for(String id : mainHeader){
+                DepartmentHeader dh = new DepartmentHeader().setUserId(id).setDepartmentId(d.getId())
+                        .setType(CommonConstant.HEADER_TYPE_MAIN);
+                headers.add(dh);
+            }
         }
-        for(String id:viceHeader){
-            DepartmentHeader dh = new DepartmentHeader();
-            dh.setUserId(id);
-            dh.setDepartmentId(d.getId());
-            dh.setType(CommonConstant.HEADER_TYPE_VICE);
-            departmentHeaderService.save(dh);
+        if(viceHeader!=null){
+            for(String id:viceHeader){
+                DepartmentHeader dh = new DepartmentHeader().setUserId(id).setDepartmentId(d.getId())
+                        .setType(CommonConstant.HEADER_TYPE_VICE);
+                headers.add(dh);
+            }
+        }
+        // 批量保存
+        departmentHeaderService.saveOrUpdateAll(headers);
+        // 若修改了部门名称
+        if(!old.getTitle().equals(department.getTitle())){
+            userService.updateDepartmentTitle(department.getId(), department.getTitle());
+            // 删除所有用户缓存
+            Set<String> keysUser = redisTemplateHelper.keys("user:" + "*");
+            redisTemplate.delete(keysUser);
         }
         // 手动删除所有部门缓存
         Set<String> keys = redisTemplateHelper.keys("department:" + "*");
         redisTemplate.delete(keys);
-        // 删除所有用户缓存
-        Set<String> keysUser = redisTemplateHelper.keys("user:" + "*");
-        redisTemplate.delete(keysUser);
         return ResultUtil.success("编辑成功");
     }
 
-    @RequestMapping(value = "/delByIds/{ids}",method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delByIds", method = RequestMethod.POST)
     @ApiOperation(value = "批量通过id删除")
-    public Result<Object> delByIds(@PathVariable String[] ids){
+    public Result<Object> delByIds(@RequestParam String[] ids){
 
         for(String id : ids){
             deleteRecursion(id, ids);

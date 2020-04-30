@@ -25,5 +25,5 @@ public class XbootLimitProperties {
     /**
      * 每单位时间内（毫秒）
      */
-    private Integer timeout = 1000;
+    private Long timeout = 1000L;
 }

@@ -120,20 +120,8 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
 
                 // 获取用户名
                 username = claims.getSubject();
-                // 获取权限
-                if(tokenProperties.getStorePerms()) {
-                    // 缓存了权限
-                    String authority = claims.get(SecurityConstant.AUTHORITIES).toString();
-                    if(StrUtil.isNotBlank(authority)){
-                        List<String> list = new Gson().fromJson(authority, new TypeToken<List<String>>(){}.getType());
-                        for(String ga : list){
-                            authorities.add(new SimpleGrantedAuthority(ga));
-                        }
-                    }
-                }else{
-                    // 未缓存 读取权限数据
-                    authorities = securityUtil.getCurrUserPerms(username);
-                }
+                // JWT不缓存权限 读取权限数据 避免JWT长度过长
+                authorities = securityUtil.getCurrUserPerms(username);
             } catch (ExpiredJwtException e) {
                 ResponseUtil.out(response, ResponseUtil.resultMap(false,401,"登录已失效，请重新登录"));
             } catch (Exception e){
@@ -143,7 +131,7 @@ public class JWTAuthenticationFilter extends BasicAuthenticationFilter   {
         }
 
         if(StrUtil.isNotBlank(username)) {
-            //Exrick踩坑提醒 此处password不能为null
+            // 踩坑提醒 此处password不能为null
             User principal = new User(username, "", authorities);
             return new UsernamePasswordAuthenticationToken(principal, null, authorities);
         }

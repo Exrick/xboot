@@ -114,7 +114,7 @@ public class RedisController {
         return ResultUtil.success("保存成功");
     }
 
-    @RequestMapping(value = "/delByKeys", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delByKeys", method = RequestMethod.POST)
     @ApiOperation(value = "批量删除")
     public Result<Object> delByKeys(@RequestParam String[] keys){
 
@@ -124,7 +124,7 @@ public class RedisController {
         return ResultUtil.success("删除成功");
     }
 
-    @RequestMapping(value = "/delAll", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delAll", method = RequestMethod.POST)
     @ApiOperation(value = "全部删除")
     public Result<Object> delAll(){
 

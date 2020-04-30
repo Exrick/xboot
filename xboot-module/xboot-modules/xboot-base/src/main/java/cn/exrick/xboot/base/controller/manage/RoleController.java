@@ -1,5 +1,6 @@
 package cn.exrick.xboot.base.controller.manage;
 
+import cn.exrick.xboot.core.common.constant.CommonConstant;
 import cn.exrick.xboot.core.common.redis.RedisTemplateHelper;
 import cn.exrick.xboot.core.common.utils.PageUtil;
 import cn.exrick.xboot.core.common.utils.ResultUtil;
@@ -22,8 +23,10 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -54,7 +57,7 @@ public class RoleController {
     @Autowired
     private RedisTemplateHelper redisTemplateHelper;
 
-    @RequestMapping(value = "/getAllList",method = RequestMethod.GET)
+    @RequestMapping(value = "/getAllList", method = RequestMethod.GET)
     @ApiOperation(value = "获取全部角色")
     public Result<Object> roleGetAll(){
 
@@ -62,7 +65,7 @@ public class RoleController {
         return ResultUtil.data(list);
     }
 
-    @RequestMapping(value = "/getAllByPage",method = RequestMethod.GET)
+    @RequestMapping(value = "/getAllByPage", method = RequestMethod.GET)
     @ApiOperation(value = "分页获取角色")
     public Result<Page<Role>> getRoleByPage(PageVo page){
 
@@ -78,7 +81,7 @@ public class RoleController {
         return new ResultUtil<Page<Role>>().setData(list);
     }
 
-    @RequestMapping(value = "/setDefault",method = RequestMethod.POST)
+    @RequestMapping(value = "/setDefault", method = RequestMethod.POST)
     @ApiOperation(value = "设置或取消默认角色")
     public Result<Object> setDefault(@RequestParam String id,
                                      @RequestParam Boolean isDefault){
@@ -92,19 +95,19 @@ public class RoleController {
         return ResultUtil.success("设置成功");
     }
 
-    @RequestMapping(value = "/editRolePerm",method = RequestMethod.POST)
+    @RequestMapping(value = "/editRolePerm", method = RequestMethod.POST)
     @ApiOperation(value = "编辑角色分配菜单权限")
     public Result<Object> editRolePerm(@RequestParam String roleId,
                                        @RequestParam(required = false) String[] permIds){
 
-        //删除其关联权限
+        // 删除其关联权限
         rolePermissionService.deleteByRoleId(roleId);
-        //分配新权限
-        for(String permId : permIds){
-            RolePermission rolePermission = new RolePermission();
-            rolePermission.setRoleId(roleId);
-            rolePermission.setPermissionId(permId);
-            rolePermissionService.save(rolePermission);
+        // 批量分配新权限
+        if(permIds!=null){
+            List<RolePermission> list = Arrays.asList(permIds).stream().map(e -> {
+                return new RolePermission().setRoleId(roleId).setPermissionId(e);
+            }).collect(Collectors.toList());
+            rolePermissionService.saveOrUpdateAll(list);
         }
         //手动批量删除缓存
         Set<String> keysUser = redisTemplateHelper.keys("user:" + "*");
@@ -118,7 +121,7 @@ public class RoleController {
         return ResultUtil.data(null);
     }
 
-    @RequestMapping(value = "/editRoleDep",method = RequestMethod.POST)
+    @RequestMapping(value = "/editRoleDep", method = RequestMethod.POST)
     @ApiOperation(value = "编辑角色分配数据权限")
     public Result<Object> editRoleDep(@RequestParam String roleId,
                                       @RequestParam Integer dataType,
@@ -127,14 +130,16 @@ public class RoleController {
         Role r = roleService.get(roleId);
         r.setDataType(dataType);
         roleService.update(r);
-        // 删除其关联数据权限
-        roleDepartmentService.deleteByRoleId(roleId);
-        // 分配新数据权限
-        for(String depId : depIds){
-            RoleDepartment roleDepartment = new RoleDepartment();
-            roleDepartment.setRoleId(roleId);
-            roleDepartment.setDepartmentId(depId);
-            roleDepartmentService.save(roleDepartment);
+        if(CommonConstant.DATA_TYPE_CUSTOM.equals(dataType)){
+            // 删除其关联数据权限
+            roleDepartmentService.deleteByRoleId(roleId);
+            // 批量分配新数据权限
+            if(depIds!=null){
+                List<RoleDepartment> list = Arrays.asList(depIds).stream().map(e -> {
+                    return new RoleDepartment().setRoleId(roleId).setDepartmentId(e);
+                }).collect(Collectors.toList());
+                roleDepartmentService.saveOrUpdateAll(list);
+            }
         }
         // 手动删除相关缓存
         Set<String> keys = redisTemplateHelper.keys("department:" + "*");
@@ -145,7 +150,7 @@ public class RoleController {
         return ResultUtil.data(null);
     }
 
-    @RequestMapping(value = "/save",method = RequestMethod.POST)
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ApiOperation(value = "保存数据")
     public Result<Role> save(Role role){
 
@@ -153,7 +158,7 @@ public class RoleController {
         return new ResultUtil<Role>().setData(r);
     }
 
-    @RequestMapping(value = "/edit",method = RequestMethod.POST)
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
     @ApiOperation(value = "更新数据")
     public Result<Role> edit(Role entity){
 
@@ -166,9 +171,9 @@ public class RoleController {
         return new ResultUtil<Role>().setData(r);
     }
 
-    @RequestMapping(value = "/delAllByIds/{ids}",method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delByIds", method = RequestMethod.POST)
     @ApiOperation(value = "批量通过ids删除")
-    public Result<Object> delByIds(@PathVariable String[] ids){
+    public Result<Object> delByIds(@RequestParam String[] ids){
 
         for(String id:ids){
             List<UserRole> list = userRoleService.findByRoleId(id);
@@ -185,5 +190,4 @@ public class RoleController {
         }
         return ResultUtil.success("批量通过id删除数据成功");
     }
-
 }

@@ -46,9 +46,6 @@ public class UserServiceImpl implements UserService {
     private PermissionMapper permissionMapper;
 
     @Autowired
-    private DepartmentDao departmentDao;
-
-    @Autowired
     private SecurityUtil securityUtil;
 
     @Override
@@ -62,13 +59,6 @@ public class UserServiceImpl implements UserService {
         User user = userDao.findByUsername(username);
         if(user==null){
             return null;
-        }
-        // 关联部门
-        if(StrUtil.isNotBlank(user.getDepartmentId())){
-            Department department = departmentDao.findById(user.getDepartmentId()).orElse(null);
-            if(department!=null){
-                user.setDepartmentTitle(department.getTitle());
-            }
         }
         // 关联角色
         List<Role> roleList = userRoleMapper.findByUserId(user.getId());
@@ -99,20 +89,29 @@ public class UserServiceImpl implements UserService {
             @Override
             public Predicate toPredicate(Root<User> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
 
+                Path<String> idField = root.get("id");
                 Path<String> usernameField = root.get("username");
+                Path<String> nicknameField = root.get("nickname");
                 Path<String> mobileField = root.get("mobile");
                 Path<String> emailField = root.get("email");
                 Path<String> departmentIdField = root.get("departmentId");
-                Path<String> sexField=root.get("sex");
-                Path<Integer> typeField=root.get("type");
-                Path<Integer> statusField=root.get("status");
-                Path<Date> createTimeField=root.get("createTime");
+                Path<String> sexField = root.get("sex");
+                Path<Integer> typeField = root.get("type");
+                Path<Integer> statusField = root.get("status");
+                Path<Date> createTimeField = root.get("createTime");
 
                 List<Predicate> list = new ArrayList<Predicate>();
+
+                if(StrUtil.isNotBlank(user.getId())){
+                    list.add(cb.equal(idField, user.getId()));
+                }
 
                 //模糊搜素
                 if(StrUtil.isNotBlank(user.getUsername())){
                     list.add(cb.like(usernameField,'%'+user.getUsername()+'%'));
+                }
+                if(StrUtil.isNotBlank(user.getNickname())){
+                    list.add(cb.like(nicknameField,'%'+user.getNickname()+'%'));
                 }
                 if(StrUtil.isNotBlank(user.getMobile())){
                     list.add(cb.like(mobileField,'%'+user.getMobile()+'%'));
@@ -162,5 +161,11 @@ public class UserServiceImpl implements UserService {
     public List<User> findByDepartmentId(String departmentId) {
 
         return userDao.findByDepartmentId(departmentId);
+    }
+
+    @Override
+    public void updateDepartmentTitle(String departmentId, String departmentTitle) {
+
+        userDao.updateDepartmentTitle(departmentId, departmentTitle);
     }
 }

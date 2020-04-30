@@ -4,21 +4,30 @@ import cn.exrick.xboot.core.base.XbootBaseEntity;
 import cn.exrick.xboot.core.common.constant.CommonConstant;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.util.Date;
 import java.util.List;
 
 /**
  * @author Exrickx
  */
 @Data
+@Accessors(chain = true)
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Table(name = "t_user")
 @TableName("t_user")
 @ApiModel(value = "用户")
@@ -26,15 +35,15 @@ public class User extends XbootBaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "用户名")
+    @ApiModelProperty(value = "登录名")
     @Column(unique = true, nullable = false)
     private String username;
 
     @ApiModelProperty(value = "密码")
     private String password;
 
-    @ApiModelProperty(value = "昵称")
-    private String nickName;
+    @ApiModelProperty(value = "用户名/昵称/姓名")
+    private String nickname;
 
     @ApiModelProperty(value = "手机")
     private String mobile;
@@ -56,7 +65,6 @@ public class User extends XbootBaseEntity {
     private String passStrength;
 
     @ApiModelProperty(value = "用户头像")
-    @Column(length = 1000)
     private String avatar = CommonConstant.USER_DEFAULT_AVATAR;
 
     @ApiModelProperty(value = "用户类型 0普通用户 1管理员")
@@ -71,10 +79,13 @@ public class User extends XbootBaseEntity {
     @ApiModelProperty(value = "所属部门id")
     private String departmentId;
 
-    @Transient
-    @TableField(exist=false)
     @ApiModelProperty(value = "所属部门名称")
     private String departmentTitle;
+
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @ApiModelProperty(value = "生日")
+    private Date birth;
 
     @Transient
     @TableField(exist=false)

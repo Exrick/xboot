@@ -20,9 +20,9 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
 
-        String principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        if(!"anonymousUser".equals(principal)){
-            UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(!"anonymousUser".equals(principal.toString())){
+            UserDetails user = (UserDetails) principal;
             this.setFieldValByName("createBy", user.getUsername(), metaObject);
         }
         this.setFieldValByName("createTime", new Date(), metaObject);
@@ -31,9 +31,9 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void updateFill(MetaObject metaObject) {
 
-        String principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
-        if(!"anonymousUser".equals(principal)){
-            UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(!"anonymousUser".equals(principal.toString())){
+            UserDetails user = (UserDetails) principal;
             this.setFieldValByName("updateBy", user.getUsername(), metaObject);
         }
         this.setFieldValByName("updateTime", new Date(), metaObject);

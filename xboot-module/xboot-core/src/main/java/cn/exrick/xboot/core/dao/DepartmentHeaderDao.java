@@ -2,6 +2,8 @@ package cn.exrick.xboot.core.dao;
 
 import cn.exrick.xboot.core.base.XbootBaseDao;
 import cn.exrick.xboot.core.entity.DepartmentHeader;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -30,11 +32,15 @@ public interface DepartmentHeaderDao extends XbootBaseDao<DepartmentHeader,Strin
      * 通过部门id删除
      * @param departmentId
      */
+    @Modifying
+    @Query("delete from DepartmentHeader d where d.departmentId = ?1")
     void deleteByDepartmentId(String departmentId);
 
     /**
      * 通过userId删除
      * @param userId
      */
+    @Modifying
+    @Query("delete from DepartmentHeader d where d.userId = ?1")
     void deleteByUserId(String userId);
 }

@@ -75,8 +75,8 @@ public class AuthenticationFailHandler extends SimpleUrlAuthenticationFailureHan
         if(StrUtil.isBlank(value)){
             value = "0";
         }
-        //获取已登录错误次数
-        int loginFailTime = Integer.parseInt(value) + 1;
+        // 获取已登录错误次数
+        Integer loginFailTime = Integer.parseInt(value) + 1;
         redisTemplate.opsForValue().set(key, String.valueOf(loginFailTime), tokenProperties.getLoginAfterTime(), TimeUnit.MINUTES);
         if(loginFailTime>=tokenProperties.getLoginTimeLimit()){
             redisTemplate.opsForValue().set(flagKey, "fail", tokenProperties.getLoginAfterTime(), TimeUnit.MINUTES);

@@ -1,6 +1,10 @@
 package cn.exrick.xboot.common.utils;
 
 
+import cn.exrick.xboot.common.constant.CommonConstant;
+import cn.exrick.xboot.common.exception.XbootException;
+import cn.hutool.core.util.StrUtil;
+
 import java.util.Random;
 import java.util.UUID;
 
@@ -48,5 +52,25 @@ public class CommonUtil {
             }
         }
         return flag;
+    }
+
+    /**
+     * 禁用词判断
+     * @param param
+     */
+    public static void stopwords(String param){
+
+        if (StrUtil.isBlank(param)) {
+            return;
+        }
+
+        // 转换成小写
+        param = param.toLowerCase();
+        // 判断是否包含非法字符
+        for (String keyword : CommonConstant.STOP_WORDS) {
+            if (param.contains(keyword)) {
+                throw new XbootException("名称包含禁用词：" + keyword);
+            }
+        }
     }
 }
