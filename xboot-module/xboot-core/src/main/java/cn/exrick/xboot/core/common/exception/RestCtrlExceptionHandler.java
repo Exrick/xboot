@@ -5,6 +5,8 @@ import cn.exrick.xboot.core.common.vo.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.validation.BindException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -26,6 +28,40 @@ public class RestCtrlExceptionHandler {
             log.error(e.toString(), e);
         }
         return new ResultUtil<>().setErrorMsg(500, errorMsg);
+    }
+
+    @ExceptionHandler(BindException.class)
+    @ResponseStatus(value = HttpStatus.OK)
+    public Result<Object> handleBindException(BindException e) {
+
+        StringBuilder sb = new StringBuilder();
+        e.getFieldErrors().forEach(error->{
+            String fieldName = error.getField();
+            String message = error.getDefaultMessage();
+            sb.append(fieldName + "-" + message + "；");
+        });
+        String result = sb.toString();
+        if(result.length()>0){
+            result = result.substring(0, result.length()-1);
+        }
+        return new ResultUtil<>().setErrorMsg(500, result);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(value = HttpStatus.OK)
+    public Result<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+
+        StringBuilder sb = new StringBuilder();
+        e.getBindingResult().getFieldErrors().forEach(error->{
+            String fieldName = error.getField();
+            String message = error.getDefaultMessage();
+            sb.append(fieldName + "-" + message + "；");
+        });
+        String result = sb.toString();
+        if(result.length()>0){
+            result = result.substring(0, result.length()-1);
+        }
+        return new ResultUtil<>().setErrorMsg(500, result);
     }
 
     @ExceptionHandler(LimitException.class)
