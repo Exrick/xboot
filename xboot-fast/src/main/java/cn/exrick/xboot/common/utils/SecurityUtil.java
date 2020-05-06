@@ -2,6 +2,7 @@ package cn.exrick.xboot.common.utils;
 
 import cn.exrick.xboot.common.constant.CommonConstant;
 import cn.exrick.xboot.common.exception.XbootException;
+import cn.exrick.xboot.common.vo.PermissionDTO;
 import cn.exrick.xboot.modules.base.entity.Department;
 import cn.exrick.xboot.modules.base.entity.Permission;
 import cn.exrick.xboot.modules.base.entity.Role;
@@ -152,7 +153,7 @@ public class SecurityUtil {
         if(user==null||user.getPermissions()==null||user.getPermissions().isEmpty()){
             return authorities;
         }
-        for(Permission p : user.getPermissions()){
+        for(PermissionDTO p : user.getPermissions()){
             authorities.add(new SimpleGrantedAuthority(p.getTitle()));
         }
         return authorities;

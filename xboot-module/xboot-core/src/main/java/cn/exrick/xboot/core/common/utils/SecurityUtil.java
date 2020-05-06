@@ -3,6 +3,7 @@ package cn.exrick.xboot.core.common.utils;
 import cn.exrick.xboot.core.common.constant.CommonConstant;
 import cn.exrick.xboot.core.common.constant.SecurityConstant;
 import cn.exrick.xboot.core.common.exception.XbootException;
+import cn.exrick.xboot.core.common.vo.PermissionDTO;
 import cn.exrick.xboot.core.common.vo.TokenUser;
 import cn.exrick.xboot.core.config.properties.XbootTokenProperties;
 import cn.exrick.xboot.core.entity.Department;
@@ -35,9 +36,6 @@ import java.util.concurrent.TimeUnit;
 public class SecurityUtil {
 
     @Autowired
-    private XbootTokenProperties tokenProperties;
-
-    @Autowired
     private UserService userService;
 
     @Autowired
@@ -48,72 +46,6 @@ public class SecurityUtil {
 
     @Autowired
     private StringRedisTemplate redisTemplate;
-
-    public String getToken(String username, Boolean saveLogin){
-
-        if(StrUtil.isBlank(username)){
-            throw new XbootException("username不能为空");
-        }
-        Boolean saved = false;
-        if(saveLogin==null||saveLogin){
-            saved = true;
-            if(!tokenProperties.getRedis()){
-                tokenProperties.setTokenExpireTime(tokenProperties.getSaveLoginTime() * 60 * 24);
-            }
-        }
-        // 生成token
-        User u = userService.findByUsername(username);
-        List<String> list = new ArrayList<>();
-        // 缓存权限
-        if(tokenProperties.getStorePerms()){
-            for(Permission p : u.getPermissions()){
-                if(CommonConstant.PERMISSION_OPERATION.equals(p.getType())
-                        && StrUtil.isNotBlank(p.getTitle())
-                        && StrUtil.isNotBlank(p.getPath())) {
-                    list.add(p.getTitle());
-                }
-            }
-            for(Role r : u.getRoles()){
-                list.add(r.getName());
-            }
-        }
-        // 登陆成功生成token
-        String token;
-        if(tokenProperties.getRedis()){
-            // redis
-            token = UUID.randomUUID().toString().replace("-", "");
-            TokenUser user = new TokenUser(u.getUsername(), list, saved);
-            // 单设备登录 之前的token失效
-            if(tokenProperties.getSdl()) {
-                String oldToken = redisTemplate.opsForValue().get(SecurityConstant.USER_TOKEN + u.getUsername());
-                if (StrUtil.isNotBlank(oldToken)) {
-                    redisTemplate.delete(SecurityConstant.TOKEN_PRE + oldToken);
-                }
-            }
-            if(saved){
-                redisTemplate.opsForValue().set(SecurityConstant.USER_TOKEN + u.getUsername(), token, tokenProperties.getSaveLoginTime(), TimeUnit.DAYS);
-                redisTemplate.opsForValue().set(SecurityConstant.TOKEN_PRE + token, new Gson().toJson(user), tokenProperties.getSaveLoginTime(), TimeUnit.DAYS);
-            }else{
-                redisTemplate.opsForValue().set(SecurityConstant.USER_TOKEN + u.getUsername(), token, tokenProperties.getTokenExpireTime(), TimeUnit.MINUTES);
-                redisTemplate.opsForValue().set(SecurityConstant.TOKEN_PRE + token, new Gson().toJson(user), tokenProperties.getTokenExpireTime(), TimeUnit.MINUTES);
-            }
-        }else{
-            // JWT不缓存权限 避免JWT长度过长
-            list = null;
-            // JWT
-            token = SecurityConstant.TOKEN_SPLIT + Jwts.builder()
-                    //主题 放入用户名
-                    .setSubject(u.getUsername())
-                    //自定义属性 放入用户拥有请求权限
-                    .claim(SecurityConstant.AUTHORITIES, new Gson().toJson(list))
-                    //失效时间
-                    .setExpiration(new Date(System.currentTimeMillis() + tokenProperties.getTokenExpireTime() * 60 * 1000))
-                    //签名算法和密钥
-                    .signWith(SignatureAlgorithm.HS512, SecurityConstant.JWT_SIGN_KEY)
-                    .compact();
-        }
-        return token;
-    }
 
     /**
      * 获取当前登录用户
@@ -222,7 +154,7 @@ public class SecurityUtil {
         if(user==null||user.getPermissions()==null||user.getPermissions().isEmpty()){
             return authorities;
         }
-        for(Permission p : user.getPermissions()){
+        for(PermissionDTO p : user.getPermissions()){
             authorities.add(new SimpleGrantedAuthority(p.getTitle()));
         }
         return authorities;

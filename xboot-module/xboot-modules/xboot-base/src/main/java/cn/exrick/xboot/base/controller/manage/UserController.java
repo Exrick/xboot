@@ -6,6 +6,7 @@ import cn.exrick.xboot.core.common.redis.RedisTemplateHelper;
 import cn.exrick.xboot.core.common.utils.*;
 import cn.exrick.xboot.core.common.vo.PageVo;
 import cn.exrick.xboot.core.common.vo.Result;
+import cn.exrick.xboot.core.common.vo.RoleDTO;
 import cn.exrick.xboot.core.common.vo.SearchVo;
 import cn.exrick.xboot.core.entity.Department;
 import cn.exrick.xboot.core.entity.Role;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -78,14 +80,10 @@ public class UserController {
 
     @RequestMapping(value = "/regist",method = RequestMethod.POST)
     @ApiOperation(value = "注册用户")
-    public Result<Object> regist(User u){
+    public Result<Object> regist(@Valid User u){
 
-        if(StrUtil.isBlank(u.getUsername()) || StrUtil.isBlank(u.getPassword())){
-            return ResultUtil.error("缺少必需表单字段");
-        }
-
-        // 校验格式和是否已存在
-        checkUserInfo(u.getUsername(), u.getMobile(), u.getEmail(), true, true);
+        // 校验是否已存在
+        checkUserInfo(u.getUsername(), u.getMobile(), u.getEmail());
 
         String encryptPass = new BCryptPasswordEncoder().encode(u.getPassword());
         u.setPassword(encryptPass).setType(CommonConstant.USER_TYPE_NORMAL);
@@ -188,11 +186,13 @@ public class UserController {
 
         Page<User> page = userService.findByCondition(user, searchVo, PageUtil.initPage(pageVo));
         for(User u: page.getContent()){
-            // 关联角色
             List<Role> list = iUserRoleService.findByUserId(u.getId());
-            u.setRoles(list);
-            // 清除持久上下文环境 避免后面语句导致持久化
-            entityManager.clear();
+            List<RoleDTO> roleDTOList = list.stream().map(e->{
+                return new RoleDTO().setId(e.getId()).setName(e.getName()).setDescription(e.getDescription());
+            }).collect(Collectors.toList());
+            u.setRoles(roleDTOList);
+            // 游离态 避免后面语句导致持久化
+            entityManager.detach(u);
             u.setPassword(null);
         }
         return new ResultUtil<Page<User>>().setData(page);
@@ -226,15 +226,11 @@ public class UserController {
 
     @RequestMapping(value = "/admin/add",method = RequestMethod.POST)
     @ApiOperation(value = "添加用户")
-    public Result<Object> regist(User u,
-                                 @RequestParam(required = false) String[] roles){
+    public Result<Object> add(@Valid User u,
+                              @RequestParam(required = false) String[] roles){
 
-        if(StrUtil.isBlank(u.getUsername()) || StrUtil.isBlank(u.getPassword())){
-            return ResultUtil.error("缺少必需表单字段");
-        }
-
-        // 校验格式和是否已存在
-        checkUserInfo(u.getUsername(), u.getMobile(), u.getEmail(), true, true);
+        // 校验是否已存在
+        checkUserInfo(u.getUsername(), u.getMobile(), u.getEmail());
 
         String encryptPass = new BCryptPasswordEncoder().encode(u.getPassword());
         u.setPassword(encryptPass);
@@ -365,35 +361,20 @@ public class UserController {
      * @param username 用户名 不校验传空字符或null 下同
      * @param mobile 手机号
      * @param email 邮箱
-     * @param isValid 是否校验格式
-     * @param isExist 是否校验已存在
      */
-    public void checkUserInfo(String username, String mobile, String email, Boolean isValid, Boolean isExist){
+    public void checkUserInfo(String username, String mobile, String email){
 
         // 禁用词
         CommonUtil.stopwords(username);
 
-        if(isValid){
-            if(StrUtil.isNotBlank(username)&&!UsernameUtil.Username(username)){
-                throw new XbootException("登录账号格式不合法，不能包含特殊字符且长度不能>16");
-            }
-            if(StrUtil.isNotBlank(email)&&!UsernameUtil.Email(email)){
-                throw new XbootException("邮箱格式不正确");
-            }
-            if(StrUtil.isNotBlank(mobile)&&!UsernameUtil.Mobile(mobile)){
-                throw new XbootException("11位手机号格式不正确");
-            }
+        if(StrUtil.isNotBlank(username)&&userService.findByUsername(username)!=null){
+            throw new XbootException("该登录账号已被注册");
         }
-        if(isExist){
-            if(StrUtil.isNotBlank(username)&&userService.findByUsername(username)!=null){
-                throw new XbootException("该登录账号已被注册");
-            }
-            if(StrUtil.isNotBlank(email)&&userService.findByEmail(email)!=null){
-                throw new XbootException("该邮箱已被注册");
-            }
-            if(StrUtil.isNotBlank(mobile)&&userService.findByMobile(mobile)!=null){
-                throw new XbootException("该手机号已被注册");
-            }
+        if(StrUtil.isNotBlank(email)&&userService.findByEmail(email)!=null){
+            throw new XbootException("该邮箱已被注册");
+        }
+        if(StrUtil.isNotBlank(mobile)&&userService.findByMobile(mobile)!=null){
+            throw new XbootException("该手机号已被注册");
         }
     }
 }

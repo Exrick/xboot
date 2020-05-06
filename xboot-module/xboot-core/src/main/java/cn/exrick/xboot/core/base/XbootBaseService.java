@@ -91,7 +91,7 @@ public interface XbootBaseService<E, ID extends Serializable> {
      * @param entities
      */
     public default void delete(Iterable<E> entities) {
-        getRepository().deleteAll(entities);
+        getRepository().deleteInBatch(entities);
     }
 
     /**

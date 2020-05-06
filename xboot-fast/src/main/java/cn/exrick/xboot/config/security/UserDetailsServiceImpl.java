@@ -1,6 +1,6 @@
 package cn.exrick.xboot.config.security;
 
-import cn.exrick.xboot.common.utils.UsernameUtil;
+import cn.exrick.xboot.common.utils.NameUtil;
 import cn.exrick.xboot.modules.base.entity.User;
 import cn.exrick.xboot.common.exception.LoginFailLimitException;
 import cn.exrick.xboot.modules.base.service.UserService;
@@ -39,9 +39,9 @@ public class UserDetailsServiceImpl implements UserDetailsService{
             throw new LoginFailLimitException("登录错误次数超过限制，请"+timeRest+"分钟后再试");
         }
         User user;
-        if(UsernameUtil.Mobile(username)){
+        if(NameUtil.mobile(username)){
             user = userService.findByMobile(username);
-        }else if(UsernameUtil.Email(username)){
+        }else if(NameUtil.email(username)){
             user = userService.findByEmail(username);
         }else{
             user = userService.findByUsername(username);

@@ -1,6 +1,8 @@
 package cn.exrick.xboot.core.config.security;
 
 import cn.exrick.xboot.core.common.constant.CommonConstant;
+import cn.exrick.xboot.core.common.vo.PermissionDTO;
+import cn.exrick.xboot.core.common.vo.RoleDTO;
 import cn.exrick.xboot.core.entity.Permission;
 import cn.exrick.xboot.core.entity.Role;
 import cn.exrick.xboot.core.entity.User;
@@ -22,9 +24,9 @@ public class SecurityUserDetails extends User implements UserDetails {
 
     private static final long serialVersionUID = 1L;
 
-    private List<Permission> permissions;
+    private List<PermissionDTO> permissions;
 
-    private List<Role> roles;
+    private List<RoleDTO> roles;
 
     public SecurityUserDetails(User user) {
 
@@ -49,11 +51,8 @@ public class SecurityUserDetails extends User implements UserDetails {
         List<GrantedAuthority> authorityList = new ArrayList<>();
         // 添加请求权限
         if(permissions!=null&&permissions.size()>0){
-            for (Permission permission : permissions) {
-                if(CommonConstant.PERMISSION_OPERATION.equals(permission.getType())
-                        &&StrUtil.isNotBlank(permission.getTitle())
-                        &&StrUtil.isNotBlank(permission.getPath())) {
-
+            for (PermissionDTO permission : permissions) {
+                if(StrUtil.isNotBlank(permission.getTitle()) &&StrUtil.isNotBlank(permission.getPath())) {
                     authorityList.add(new SimpleGrantedAuthority(permission.getTitle()));
                 }
             }
