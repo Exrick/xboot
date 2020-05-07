@@ -207,11 +207,9 @@ public class PermissionController {
             }
         }
         Permission u = permissionService.update(permission);
-        //重新加载权限
+        // 重新加载权限
         mySecurityMetadataSource.loadResourceDefine();
-        //手动批量删除缓存
-        Set<String> keys = redisTemplateHelper.keys("userPermission:" + "*");
-        redisTemplate.delete(keys);
+        // 手动批量删除缓存
         Set<String> keysUser = redisTemplateHelper.keys("user:" + "*");
         redisTemplate.delete(keysUser);
         Set<String> keysUserMenu = redisTemplateHelper.keys("permission::userMenuList:*");

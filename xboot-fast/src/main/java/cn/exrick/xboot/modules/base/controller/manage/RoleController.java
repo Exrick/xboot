@@ -109,13 +109,11 @@ public class RoleController {
             }).collect(Collectors.toList());
             rolePermissionService.saveOrUpdateAll(list);
         }
-        //手动批量删除缓存
+        // 手动批量删除缓存
         Set<String> keysUser = redisTemplateHelper.keys("user:" + "*");
         redisTemplate.delete(keysUser);
         Set<String> keysUserRole = redisTemplateHelper.keys("userRole:" + "*");
         redisTemplate.delete(keysUserRole);
-        Set<String> keysUserPerm = redisTemplateHelper.keys("userPermission:" + "*");
-        redisTemplate.delete(keysUserPerm);
         Set<String> keysUserMenu = redisTemplateHelper.keys("permission::userMenuList:*");
         redisTemplate.delete(keysUserMenu);
         return ResultUtil.data(null);

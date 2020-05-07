@@ -224,10 +224,10 @@ public class UserController {
         return new ResultUtil<List<User>>().setData(list);
     }
 
-    @RequestMapping(value = "/admin/add",method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/add", method = RequestMethod.POST)
     @ApiOperation(value = "添加用户")
     public Result<Object> add(@Valid User u,
-                              @RequestParam(required = false) String[] roles){
+                              @RequestParam(required = false) String[] roleIds){
 
         // 校验是否已存在
         checkUserInfo(u.getUsername(), u.getMobile(), u.getEmail());
@@ -245,9 +245,9 @@ public class UserController {
         }
         User user = userService.save(u);
 
-        if(roles!=null){
+        if(roleIds!=null){
             // 添加角色
-            List<UserRole> userRoles = Arrays.asList(roles).stream().map(e -> {
+            List<UserRole> userRoles = Arrays.asList(roleIds).stream().map(e -> {
                 return new UserRole().setUserId(u.getId()).setRoleId(e);
             }).collect(Collectors.toList());
             userRoleService.saveOrUpdateAll(userRoles);
@@ -256,11 +256,11 @@ public class UserController {
         return ResultUtil.success("添加成功");
     }
 
-    @RequestMapping(value = "/admin/edit",method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/edit", method = RequestMethod.POST)
     @ApiOperation(value = "管理员修改资料",notes = "需要通过id获取原用户信息 需要username更新缓存")
     @CacheEvict(key = "#u.username")
     public Result<Object> edit(User u,
-                               @RequestParam(required = false) String[] roles){
+                               @RequestParam(required = false) String[] roleIds){
 
         User old = userService.get(u.getId());
 
@@ -287,9 +287,9 @@ public class UserController {
         userService.update(u);
         // 删除该用户角色
         userRoleService.deleteByUserId(u.getId());
-        if(roles!=null){
+        if(roleIds!=null){
             // 新角色
-            List<UserRole> userRoles = Arrays.asList(roles).stream().map(e -> {
+            List<UserRole> userRoles = Arrays.asList(roleIds).stream().map(e -> {
                 return new UserRole().setRoleId(e).setUserId(u.getId());
             }).collect(Collectors.toList());
             userRoleService.saveOrUpdateAll(userRoles);
@@ -297,7 +297,6 @@ public class UserController {
         // 手动删除缓存
         redisTemplate.delete("userRole::"+u.getId());
         redisTemplate.delete("userRole::depIds:"+u.getId());
-        redisTemplate.delete("userPermission::"+u.getId());
         redisTemplate.delete("permission::userMenuList:"+u.getId());
         return ResultUtil.success("修改成功");
     }
