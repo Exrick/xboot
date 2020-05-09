@@ -95,7 +95,7 @@ public class UserServiceImpl implements UserService {
         // 关联角色
         List<Role> roleList = userRoleMapper.findByUserId(user.getId());
         List<RoleDTO> roleDTOList = roleList.stream().map(e->{
-            return new RoleDTO().setName(e.getName());
+            return new RoleDTO().setId(e.getId()).setName(e.getName());
         }).collect(Collectors.toList());
         user.setRoles(roleDTOList);
         // 关联权限菜单
