@@ -1,5 +1,7 @@
 package cn.exrick.xboot.core.common.constant;
 
+import java.util.UUID;
+
 /**
  * @author Exrickx
  */
@@ -13,7 +15,7 @@ public interface SecurityConstant {
     /**
      * JWT签名加密key
      */
-    String JWT_SIGN_KEY = "xboot";
+    String JWT_SIGN_KEY = UUID.randomUUID().toString();
 
     /**
      * token参数头
