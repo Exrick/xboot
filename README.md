@@ -70,7 +70,7 @@ https://www.kancloud.cn/exrick/xboot/content
 <img src=https://ooo.0o0.ooo/2019/11/25/gUiynavBAHd6hY8.jpg width=1000/>
 
 ##### 各框架依赖版本皆使用目前最新版本
-- Spring Boot 2.2.6.RELEASE
+- Spring Boot
 - SpringMVC
 - Spring Security
 - [Spring Data JPA](https://docs.spring.io/spring-data/jpa/docs/2.2.2.RELEASE/reference/html/)
