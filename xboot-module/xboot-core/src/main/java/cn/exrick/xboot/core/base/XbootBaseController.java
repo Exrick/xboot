@@ -22,12 +22,12 @@ public abstract class XbootBaseController<E, ID extends Serializable> {
      * @return
      */
     @Autowired
-    public abstract XbootBaseService<E,ID> getService();
+    public abstract XbootBaseService<E, ID> getService();
 
     @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(value = "通过id获取")
-    public Result<E> get(@PathVariable ID id){
+    public Result<E> get(@PathVariable ID id) {
 
         E entity = getService().get(id);
         return new ResultUtil<E>().setData(entity);
@@ -36,7 +36,7 @@ public abstract class XbootBaseController<E, ID extends Serializable> {
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(value = "获取全部数据")
-    public Result<List<E>> getAll(){
+    public Result<List<E>> getAll() {
 
         List<E> list = getService().getAll();
         return new ResultUtil<List<E>>().setData(list);
@@ -45,7 +45,7 @@ public abstract class XbootBaseController<E, ID extends Serializable> {
     @RequestMapping(value = "/getByPage", method = RequestMethod.GET)
     @ResponseBody
     @ApiOperation(value = "分页获取")
-    public Result<Page<E>> getByPage(PageVo page){
+    public Result<Page<E>> getByPage(PageVo page) {
 
         Page<E> data = getService().findAll(PageUtil.initPage(page));
         return new ResultUtil<Page<E>>().setData(data);
@@ -54,7 +54,7 @@ public abstract class XbootBaseController<E, ID extends Serializable> {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "保存数据")
-    public Result<E> save(E entity){
+    public Result<E> save(E entity) {
 
         E e = getService().save(entity);
         return new ResultUtil<E>().setData(e);
@@ -63,7 +63,7 @@ public abstract class XbootBaseController<E, ID extends Serializable> {
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
     @ResponseBody
     @ApiOperation(value = "更新数据")
-    public Result<E> update(E entity){
+    public Result<E> update(E entity) {
 
         E e = getService().update(entity);
         return new ResultUtil<E>().setData(e);
@@ -72,9 +72,9 @@ public abstract class XbootBaseController<E, ID extends Serializable> {
     @RequestMapping(value = "/delByIds", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "批量通过id删除")
-    public Result<Object> delByIds(@RequestParam ID[] ids){
+    public Result<Object> delByIds(@RequestParam ID[] ids) {
 
-        for(ID id:ids){
+        for (ID id : ids) {
             getService().delete(id);
         }
         return ResultUtil.success("批量通过id删除数据成功");

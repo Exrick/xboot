@@ -11,9 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -30,21 +31,21 @@ public class TestController {
     private RedisLockTemplate redisLockTemplate;
 
     @RequestMapping(value = "/lockAndLimit", method = RequestMethod.GET)
-    @RateLimiter(limit = 1, timeout = 5000)
+    @RateLimiter(rate = 1, rateInterval = 5000)
     @ApiOperation(value = "同步锁限流测试")
     @ResponseBody
-    public Result<Object> test1(HttpServletRequest request) {
+    public Result<Object> test() {
 
-        redisLockTemplate.execute("订单流水号", 3, TimeUnit.SECONDS, new Callback() {
+        redisLockTemplate.execute("订单流水号", 3, null, TimeUnit.SECONDS, new Callback() {
             @Override
-            public Object onGetLock() throws InterruptedException {
+            public Object onGetLock() {
                 // TODO 获得锁后要做的事
                 log.info("生成订单流水号");
                 return null;
             }
 
             @Override
-            public Object onTimeout() throws InterruptedException {
+            public Object onTimeout() {
                 // TODO 未获取到锁（获取锁超时）后要做的事
                 log.info("oops 没拿到锁");
                 return null;

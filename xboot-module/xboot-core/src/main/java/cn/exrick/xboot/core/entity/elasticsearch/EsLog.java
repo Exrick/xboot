@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @Data
 @Document(indexName = "log", type = "log", shards = 1, replicas = 0, refreshInterval = "-1")
-public class EsLog implements Serializable{
+public class EsLog implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

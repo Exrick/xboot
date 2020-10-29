@@ -27,11 +27,11 @@ public class IpInfoController {
     @Autowired
     private IpInfoUtil ipInfoUtil;
 
-    @RequestMapping(value = "/info",method = RequestMethod.GET)
+    @RequestMapping(value = "/info", method = RequestMethod.GET)
     @ApiOperation(value = "IP及天气相关信息")
     public Result<Object> upload(HttpServletRequest request) {
 
-        String result= ipInfoUtil.getIpCity(request);
+        String result = ipInfoUtil.getIpCity(request);
         return ResultUtil.data(result);
     }
 }

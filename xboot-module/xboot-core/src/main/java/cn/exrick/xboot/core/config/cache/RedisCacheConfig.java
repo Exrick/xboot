@@ -28,11 +28,8 @@ import java.time.Duration;
 @Configuration
 public class RedisCacheConfig extends CachingConfigurerSupport {
 
-    @Value("${xboot.cache.unit:day}")
-    private String unit;
-
-    @Value("${xboot.cache.time:-1}")
-    private Integer time;
+    @Value("${xboot.cache.timeToLive:-1}")
+    private Duration timeToLive;
 
     /**
      * 自定义序列化方式
@@ -57,19 +54,8 @@ public class RedisCacheConfig extends CachingConfigurerSupport {
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer))
                 .disableCachingNullValues();
 
-        if(time<0){
-            time = -1;
-        }
-        Duration expireTime;
-        if("hour".equals(unit)){
-            expireTime = Duration.ofHours(time);
-        }else if("minute".equals(unit)){
-            expireTime = Duration.ofMinutes(time);
-        }else{
-            expireTime = Duration.ofDays(time);
-        }
         RedisCacheManager cacheManager = RedisCacheManager.builder(factory)
-                .cacheDefaults(config.entryTtl(expireTime))
+                .cacheDefaults(config.entryTtl(timeToLive))
                 .build();
         return cacheManager;
     }
@@ -79,21 +65,25 @@ public class RedisCacheConfig extends CachingConfigurerSupport {
      * @return
      */
     @Override
-    public CacheErrorHandler errorHandler(){
+    public CacheErrorHandler errorHandler() {
 
         CacheErrorHandler cacheErrorHandler = new CacheErrorHandler() {
             @Override
             public void handleCacheGetError(RuntimeException e, Cache cache, Object key) {
                 log.warn("Redis occur handleCacheGetError：key: [{}]", key);
             }
+
             @Override
             public void handleCachePutError(RuntimeException e, Cache cache, Object key, Object value) {
+
                 log.warn("Redis occur handleCachePutError：key: [{}]；value: [{}]", key, value);
             }
+
             @Override
             public void handleCacheEvictError(RuntimeException e, Cache cache, Object key) {
                 log.warn("Redis occur handleCacheEvictError：key: [{}]", key);
             }
+
             @Override
             public void handleCacheClearError(RuntimeException e, Cache cache) {
                 log.warn("Redis occur handleCacheClearError");

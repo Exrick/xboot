@@ -5,11 +5,9 @@ import cn.exrick.xboot.common.utils.SecurityUtil;
 import cn.exrick.xboot.common.vo.PermissionDTO;
 import cn.exrick.xboot.common.vo.RoleDTO;
 import cn.exrick.xboot.common.vo.SearchVo;
-import cn.exrick.xboot.modules.base.dao.DepartmentDao;
 import cn.exrick.xboot.modules.base.dao.UserDao;
 import cn.exrick.xboot.modules.base.dao.mapper.PermissionMapper;
 import cn.exrick.xboot.modules.base.dao.mapper.UserRoleMapper;
-import cn.exrick.xboot.modules.base.entity.Department;
 import cn.exrick.xboot.modules.base.entity.Permission;
 import cn.exrick.xboot.modules.base.entity.Role;
 import cn.exrick.xboot.modules.base.entity.User;
@@ -61,10 +59,6 @@ public class UserServiceImpl implements UserService {
     public User findByUsername(String username) {
 
         User user = userDao.findByUsername(username);
-        if(user==null){
-            return null;
-        }
-
         return userToDTO(user);
     }
 
@@ -72,10 +66,6 @@ public class UserServiceImpl implements UserService {
     public User findByMobile(String mobile) {
 
         User user = userDao.findByMobile(mobile);
-        if(user==null){
-            return null;
-        }
-
         return userToDTO(user);
     }
 
@@ -83,18 +73,17 @@ public class UserServiceImpl implements UserService {
     public User findByEmail(String email) {
 
         User user = userDao.findByEmail(email);
-        if(user==null){
-            return null;
-        }
-
         return userToDTO(user);
     }
 
-    public User userToDTO(User user){
+    public User userToDTO(User user) {
 
+        if (user == null) {
+            return null;
+        }
         // 关联角色
         List<Role> roleList = userRoleMapper.findByUserId(user.getId());
-        List<RoleDTO> roleDTOList = roleList.stream().map(e->{
+        List<RoleDTO> roleDTOList = roleList.stream().map(e -> {
             return new RoleDTO().setId(e.getId()).setName(e.getName());
         }).collect(Collectors.toList());
         user.setRoles(roleDTOList);
@@ -102,7 +91,9 @@ public class UserServiceImpl implements UserService {
         List<Permission> permissionList = permissionMapper.findByUserId(user.getId());
         List<PermissionDTO> permissionDTOList = permissionList.stream()
                 .filter(e -> CommonConstant.PERMISSION_OPERATION.equals(e.getType()))
-                .map(e->{ return new PermissionDTO().setTitle(e.getTitle()).setPath(e.getPath()); }).collect(Collectors.toList());
+                .map(e -> {
+                    return new PermissionDTO().setTitle(e.getTitle()).setPath(e.getPath());
+                }).collect(Collectors.toList());
         user.setPermissions(permissionDTOList);
         return user;
     }
@@ -126,53 +117,53 @@ public class UserServiceImpl implements UserService {
                 Path<Integer> statusField = root.get("status");
                 Path<Date> createTimeField = root.get("createTime");
 
-                List<Predicate> list = new ArrayList<Predicate>();
+                List<Predicate> list = new ArrayList<>();
 
-                if(StrUtil.isNotBlank(user.getId())){
+                if (StrUtil.isNotBlank(user.getId())) {
                     list.add(cb.equal(idField, user.getId()));
                 }
 
-                //模糊搜素
-                if(StrUtil.isNotBlank(user.getUsername())){
-                    list.add(cb.like(usernameField,'%'+user.getUsername()+'%'));
+                // 模糊搜素
+                if (StrUtil.isNotBlank(user.getUsername())) {
+                    list.add(cb.like(usernameField, '%' + user.getUsername() + '%'));
                 }
-                if(StrUtil.isNotBlank(user.getNickname())){
-                    list.add(cb.like(nicknameField,'%'+user.getNickname()+'%'));
+                if (StrUtil.isNotBlank(user.getNickname())) {
+                    list.add(cb.like(nicknameField, '%' + user.getNickname() + '%'));
                 }
-                if(StrUtil.isNotBlank(user.getMobile())){
-                    list.add(cb.like(mobileField,'%'+user.getMobile()+'%'));
+                if (StrUtil.isNotBlank(user.getMobile())) {
+                    list.add(cb.like(mobileField, '%' + user.getMobile() + '%'));
                 }
-                if(StrUtil.isNotBlank(user.getEmail())){
-                    list.add(cb.like(emailField,'%'+user.getEmail()+'%'));
+                if (StrUtil.isNotBlank(user.getEmail())) {
+                    list.add(cb.like(emailField, '%' + user.getEmail() + '%'));
                 }
 
-                //部门
-                if(StrUtil.isNotBlank(user.getDepartmentId())){
+                // 部门
+                if (StrUtil.isNotBlank(user.getDepartmentId())) {
                     list.add(cb.equal(departmentIdField, user.getDepartmentId()));
                 }
 
-                //性别
-                if(StrUtil.isNotBlank(user.getSex())){
+                // 性别
+                if (StrUtil.isNotBlank(user.getSex())) {
                     list.add(cb.equal(sexField, user.getSex()));
                 }
-                //类型
-                if(user.getType()!=null){
+                // 类型
+                if (user.getType() != null) {
                     list.add(cb.equal(typeField, user.getType()));
                 }
-                //状态
-                if(user.getStatus()!=null){
+                // 状态
+                if (user.getStatus() != null) {
                     list.add(cb.equal(statusField, user.getStatus()));
                 }
-                //创建时间
-                if(StrUtil.isNotBlank(searchVo.getStartDate())&&StrUtil.isNotBlank(searchVo.getEndDate())){
+                // 创建时间
+                if (StrUtil.isNotBlank(searchVo.getStartDate()) && StrUtil.isNotBlank(searchVo.getEndDate())) {
                     Date start = DateUtil.parse(searchVo.getStartDate());
                     Date end = DateUtil.parse(searchVo.getEndDate());
                     list.add(cb.between(createTimeField, start, DateUtil.endOfDay(end)));
                 }
 
-                //数据权限
+                // 数据权限
                 List<String> depIds = securityUtil.getDeparmentIds();
-                if(depIds!=null&&depIds.size()>0){
+                if (depIds != null && depIds.size() > 0) {
                     list.add(departmentIdField.in(depIds));
                 }
 

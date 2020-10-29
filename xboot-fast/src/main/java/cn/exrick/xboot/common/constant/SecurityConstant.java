@@ -1,5 +1,7 @@
 package cn.exrick.xboot.common.constant;
 
+import cn.hutool.core.util.IdUtil;
+
 /**
  * @author Exrickx
  */
@@ -13,7 +15,7 @@ public interface SecurityConstant {
     /**
      * JWT签名加密key
      */
-    String JWT_SIGN_KEY = "xboot";
+    String JWT_SIGN_KEY = IdUtil.simpleUUID();
 
     /**
      * token参数头

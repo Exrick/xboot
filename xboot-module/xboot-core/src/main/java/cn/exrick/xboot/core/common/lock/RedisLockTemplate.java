@@ -1,12 +1,12 @@
 package cn.exrick.xboot.core.common.lock;
 
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.integration.redis.util.RedisLockRegistry;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Lock;
 
 
 /**
@@ -17,30 +17,37 @@ import java.util.concurrent.locks.Lock;
 public class RedisLockTemplate implements DistributedLockTemplate {
 
     @Autowired
-    private RedisLockRegistry redisLockRegistry;
+    private RedissonClient redisson;
 
     @Override
-    public Object execute(String lockId, Integer timeout, TimeUnit unit, Callback callback) {
+    public Object execute(String lockId, Integer timeout, Integer leaseTime, TimeUnit unit, Callback callback) {
 
-        Lock lock = null;
+        if (timeout == null) {
+            timeout = 0;
+        }
+        RLock lock = null;
         boolean getLock = false;
         try {
-            lock = redisLockRegistry.obtain(lockId);
-            getLock = lock.tryLock(timeout, unit);
-            if(getLock){
+            lock = redisson.getLock(lockId);
+            if (leaseTime == null || leaseTime <= 0) {
+                getLock = lock.tryLock(timeout, unit);
+            } else {
+                getLock = lock.tryLock(timeout, leaseTime, unit);
+            }
+            if (getLock) {
                 // 拿到锁
                 return callback.onGetLock();
-            }else{
+            } else {
                 // 未拿到锁
                 return callback.onTimeout();
             }
-        }catch(InterruptedException ex){
+        } catch (InterruptedException ex) {
             log.error(ex.getMessage(), ex);
             Thread.currentThread().interrupt();
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.error(e.getMessage(), e);
-        }finally {
-            if(getLock) {
+        } finally {
+            if (getLock) {
                 // 释放锁
                 lock.unlock();
             }

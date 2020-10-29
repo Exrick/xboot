@@ -11,7 +11,7 @@ import java.util.List;
  * 部门负责人数据处理层
  * @author Exrick
  */
-public interface DepartmentHeaderDao extends XbootBaseDao<DepartmentHeader,String> {
+public interface DepartmentHeaderDao extends XbootBaseDao<DepartmentHeader, String> {
 
     /**
      * 通过部门和负责人类型获取

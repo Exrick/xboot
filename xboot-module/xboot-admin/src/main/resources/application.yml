@@ -9,13 +9,19 @@ server:
     context-path: /
   tomcat:
     uri-encoding: UTF-8
-    max-threads: 1000
-    min-spare-threads: 30
+    threads:
+      max: 1000
+      min-spare: 30
+  # 优雅停机 关闭容器后默认等待30秒继续执行没处理完的任务 避免数据不一致
+  shutdown: graceful
 
 spring:
+  lifecycle:
+    # 配置优雅停机后的缓冲器 最大等待时间
+    timeout-per-shutdown-phase: 10S
   # 数据源
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/xboot?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://127.0.0.1:3306/xboot?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
     username: root
     # Jasypt加密 可到common-utils中找到JasyptUtil加解密工具类生成加密结果 格式为ENC(加密结果) 以下解密结果为123456
     password: ENC(uOtmALFgsfxgYzEg1uLXl3O/tg6X1Dy25I3SdAeqqETOyZbDwmaW0/EZEusIh6hK)
@@ -56,7 +62,6 @@ spring:
   # Redis
   redis:
     host: 127.0.0.1
-    password:
     # 数据库索引 默认0
     database: 1
     port: 6379
@@ -65,22 +70,20 @@ spring:
   # Elasticsearch
   data:
     elasticsearch:
-      client:
-        reactive:
-          # 要连接的ES客户端 多个逗号分隔
-          endpoints: 127.0.0.1:9300
       # 未使用到ES 关闭其持久化存储
       repositories:
         enabled: false
+  elasticsearch:
+    rest:
+      # 要连接的ES客户端Rest Uri 多个逗号分隔
+      uris: http://localhost:9200
   # 定时任务
   quartz:
     # 任务信息存储至数据库
     job-store-type: jdbc
-    properties:
-      org:
-        quartz:
-          jobStore:
-            misfireThreshold: 100
+    jdbc:
+      # 自动生成表
+      initialize-schema: always
   # 文件大小上传配置
   servlet:
     multipart:
@@ -100,6 +103,7 @@ spring:
 xboot:
   # 全局限流
   ratelimit:
+    # 开启
     enable: true
     # 每1秒内
     timeout: 1000
@@ -107,12 +111,13 @@ xboot:
     limit: 200
   # IP限流
   iplimit:
+    # 开启
     enable: true
     # 每1秒内
     timeout: 1000
-    # 每个ip限制20个请求
-    limit: 20
-  # token交互方式
+    # 每个ip限制30个请求
+    limit: 30
+  # 后台token交互方式
   token:
     # 默认为true，token将存入redis，并具有单点登录功能 设为false使用JWT交互
     redis: true
@@ -130,10 +135,8 @@ xboot:
     loginAfterTime: 10
   # 使用Spring @Cacheable注解失效时间
   cache:
-    # 过期时间单位 支持day、hour、minute对应天、小时、分钟
-    unit: day
-    # 过期时间 永久不过期设为-1
-    time: 15
+    # 缓存过期时间 Duration类型 D–天 H小时 M–分钟 S–秒 永久不过期设为非正值
+    timeToLive: 15D
   # 日志记录方式 true使用Elasticsearch记录 false记录至数据库中
   logRecord:
     es: false
@@ -218,6 +221,9 @@ swagger:
 # Mybatis-plus
 mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml
+#  configuration:
+    # 日志控制台打印
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 # 日志
 logging:

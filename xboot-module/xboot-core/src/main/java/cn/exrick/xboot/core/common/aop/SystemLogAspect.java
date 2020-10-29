@@ -7,7 +7,6 @@ import cn.exrick.xboot.core.common.utils.ThreadPoolUtil;
 import cn.exrick.xboot.core.entity.Log;
 import cn.exrick.xboot.core.entity.elasticsearch.EsLog;
 import cn.exrick.xboot.core.service.LogService;
-import cn.exrick.xboot.core.service.UserService;
 import cn.exrick.xboot.core.service.elasticsearch.EsLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -18,8 +17,9 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.NamedThreadLocal;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +37,7 @@ import java.util.Map;
 @Slf4j
 public class SystemLogAspect {
 
-    private static final ThreadLocal<Date> beginTimeThreadLocal = new NamedThreadLocal<Date>("ThreadLocal beginTime");
+    private static final ThreadLocal<Date> THREAD_LOCAL_BEGIN_TIME = new NamedThreadLocal<>("ThreadLocal beginTime");
 
     @Value("${xboot.logRecord.es:false}")
     private Boolean esRecord;
@@ -48,9 +48,6 @@ public class SystemLogAspect {
     @Autowired
     private LogService logService;
 
-    @Autowired
-    private UserService userService;
-
     @Autowired(required = false)
     private HttpServletRequest request;
 
@@ -60,7 +57,7 @@ public class SystemLogAspect {
     /**
      * Controller层切点,注解方式
      */
-    //@Pointcut("execution(* *..controller..*Controller*.*(..))")
+    // @Pointcut("execution(* *..controller..*Controller*.*(..))")
     @Pointcut("@annotation(cn.exrick.xboot.core.common.annotation.SystemLog)")
     public void controllerAspect() {
 
@@ -72,11 +69,11 @@ public class SystemLogAspect {
      * @throws InterruptedException
      */
     @Before("controllerAspect()")
-    public void doBefore(JoinPoint joinPoint) throws InterruptedException{
+    public void doBefore(JoinPoint joinPoint) {
 
-        //线程绑定变量（该数据只有当前请求的线程可见）
+        // 线程绑定变量（该数据只有当前请求的线程可见）
         Date beginTime = new Date();
-        beginTimeThreadLocal.set(beginTime);
+        THREAD_LOCAL_BEGIN_TIME.set(beginTime);
     }
 
 
@@ -85,82 +82,79 @@ public class SystemLogAspect {
      * @param joinPoint 切点
      */
     @AfterReturning("controllerAspect()")
-    public void after(JoinPoint joinPoint){
+    public void after(JoinPoint joinPoint) {
+
         try {
             String username = "";
             String description = getControllerMethodInfo(joinPoint).get("description").toString();
-            int type = (int)getControllerMethodInfo(joinPoint).get("type");
+            int type = (int) getControllerMethodInfo(joinPoint).get("type");
             Map<String, String[]> logParams = request.getParameterMap();
-            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            if("anonymousUser".equals(principal.toString())){
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication == null || !authentication.isAuthenticated() || authentication.getName() == null
+                    || (authentication instanceof AnonymousAuthenticationToken)) {
                 return;
             }
-            UserDetails user = (UserDetails) principal;
-            username = user.getUsername();
-
-            if(esRecord){
+            username = authentication.getName();
+            if (esRecord) {
                 EsLog esLog = new EsLog();
 
-                //日志标题
-                esLog.setName(description);
-                //日志类型
-                esLog.setLogType(type);
-                //日志请求url
-                esLog.setRequestUrl(request.getRequestURI());
-                //请求方式
-                esLog.setRequestType(request.getMethod());
-                //请求参数
-                esLog.setMapToParams(logParams);
-                //请求用户
+                // 请求用户
                 esLog.setUsername(username);
-                //请求IP
+                // 日志标题
+                esLog.setName(description);
+                // 日志类型
+                esLog.setLogType(type);
+                // 日志请求url
+                esLog.setRequestUrl(request.getRequestURI());
+                // 请求方式
+                esLog.setRequestType(request.getMethod());
+                // 请求参数
+                esLog.setMapToParams(logParams);
+                ipInfoUtil.getInfo(request, ObjectUtil.mapToStringAll(request.getParameterMap()));
+                // 请求IP
                 esLog.setIp(ipInfoUtil.getIpAddr(request));
-                //IP地址
+                // IP地址
                 esLog.setIpInfo(ipInfoUtil.getIpCity(request));
-                //请求开始时间
-                Date logStartTime = beginTimeThreadLocal.get();
-
-                long beginTime = beginTimeThreadLocal.get().getTime();
+                // 请求开始时间
+                long beginTime = THREAD_LOCAL_BEGIN_TIME.get().getTime();
                 long endTime = System.currentTimeMillis();
-                //请求耗时
+                // 请求耗时
                 Long logElapsedTime = endTime - beginTime;
                 esLog.setCostTime(logElapsedTime.intValue());
-                ipInfoUtil.getInfo(request, ObjectUtil.mapToStringAll(request.getParameterMap()));
 
-                //调用线程保存至ES
+                // 调用线程保存至ES
                 ThreadPoolUtil.getPool().execute(new SaveEsSystemLogThread(esLog, esLogService));
-            }else{
+            } else {
                 Log log = new Log();
 
-                //日志标题
-                log.setName(description);
-                //日志类型
-                log.setLogType(type);
-                //日志请求url
-                log.setRequestUrl(request.getRequestURI());
-                //请求方式
-                log.setRequestType(request.getMethod());
-                //请求参数
-                log.setMapToParams(logParams);
-                //请求用户
+                // 请求用户
                 log.setUsername(username);
-                //请求IP
+                // 日志标题
+                log.setName(description);
+                // 日志类型
+                log.setLogType(type);
+                // 日志请求url
+                log.setRequestUrl(request.getRequestURI());
+                // 请求方式
+                log.setRequestType(request.getMethod());
+                // 请求参数
+                log.setMapToParams(logParams);
+                ipInfoUtil.getInfo(request, ObjectUtil.mapToStringAll(request.getParameterMap()));
+                // 请求IP
                 log.setIp(ipInfoUtil.getIpAddr(request));
-                //IP地址
+                // IP地址
                 log.setIpInfo(ipInfoUtil.getIpCity(request));
-                //请求开始时间
-                Date logStartTime = beginTimeThreadLocal.get();
-
-                long beginTime = beginTimeThreadLocal.get().getTime();
+                // 请求开始时间
+                long beginTime = THREAD_LOCAL_BEGIN_TIME.get().getTime();
                 long endTime = System.currentTimeMillis();
-                //请求耗时
+                // 请求耗时
                 Long logElapsedTime = endTime - beginTime;
                 log.setCostTime(logElapsedTime.intValue());
-                ipInfoUtil.getInfo(request, ObjectUtil.mapToStringAll(request.getParameterMap()));
 
-                //调用线程保存至ES
+                // 调用线程保存至ES
                 ThreadPoolUtil.getPool().execute(new SaveSystemLogThread(log, logService));
             }
+            THREAD_LOCAL_BEGIN_TIME.remove();
         } catch (Exception e) {
             log.error("AOP后置通知异常", e);
         }
@@ -212,9 +206,9 @@ public class SystemLogAspect {
      * @return 方法描述
      * @throws Exception
      */
-    public static Map<String, Object> getControllerMethodInfo(JoinPoint joinPoint) throws Exception{
+    public static Map<String, Object> getControllerMethodInfo(JoinPoint joinPoint) throws ClassNotFoundException {
 
-        Map<String, Object> map = new HashMap<String, Object>(16);
+        Map<String, Object> map = new HashMap<>(16);
         //获取目标类名
         String targetName = joinPoint.getTarget().getClass().getName();
         //获取方法名
@@ -229,12 +223,12 @@ public class SystemLogAspect {
         String description = "";
         Integer type = null;
 
-        for(Method method : methods) {
-            if(!method.getName().equals(methodName)) {
+        for (Method method : methods) {
+            if (!method.getName().equals(methodName)) {
                 continue;
             }
             Class[] clazzs = method.getParameterTypes();
-            if(clazzs.length != arguments.length) {
+            if (clazzs.length != arguments.length) {
                 //比较方法中参数个数与从切点中获取的参数个数是否相同，原因是方法可以重载哦
                 continue;
             }
@@ -245,5 +239,4 @@ public class SystemLogAspect {
         }
         return map;
     }
-
 }

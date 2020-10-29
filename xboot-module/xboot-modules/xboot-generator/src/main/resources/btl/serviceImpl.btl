@@ -28,7 +28,6 @@ if(!entity.isTree){
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.Date;
-import java.lang.reflect.Field;
 <%
 }
 %>
@@ -64,7 +63,7 @@ public class ${entity.className}ServiceImpl implements ${entity.className}Servic
                 // TODO 可添加你的其他搜索过滤条件 默认已有创建时间过滤
                 Path<Date> createTimeField = root.get("createTime");
 
-                List<Predicate> list = new ArrayList<Predicate>();
+                List<Predicate> list = new ArrayList<>();
 
                 // 创建时间
                 if(StrUtil.isNotBlank(searchVo.getStartDate())&&StrUtil.isNotBlank(searchVo.getEndDate())){

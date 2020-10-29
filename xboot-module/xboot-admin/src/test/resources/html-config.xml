@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extentreports>
+    <configuration>
+        <!-- 报告主题 -->
+        <!-- STANDARD, DARK -->
+        <theme>DARK</theme>
+
+        <!-- document encoding -->
+        <!-- defaults to UTF-8 -->
+        <encoding>UTF-8</encoding>
+
+        <!-- protocol for script and stylesheets -->
+        <!-- defaults to https -->
+        <!-- HTTP, HTTPS -->
+        <protocol>HTTPS</protocol>
+
+        <!-- timeline report -->
+        <timelineEnabled>true</timelineEnabled>
+
+        <!-- offline report -->
+        <offlineMode>true</offlineMode>
+
+        <!-- title of the document -->
+        <documentTitle>XBoot测试报告</documentTitle>
+
+        <!-- report name - displayed at top-nav -->
+        <reportName>XBoot</reportName>
+
+        <!-- timestamp format -->
+        <timeStampFormat>MMM dd, yyyy HH:mm:ss</timeStampFormat>
+
+        <!-- custom javascript -->
+        <scripts>
+            <![CDATA[
+        $(document).ready(function() {
+
+        });
+      ]]>
+        </scripts>
+
+        <!-- custom styles -->
+        <styles>
+            <![CDATA[
+
+      ]]>
+        </styles>
+
+    </configuration>
+</extentreports>

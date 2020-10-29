@@ -1,5 +1,7 @@
 package cn.exrick.xboot.core.common.utils;
 
+import cn.hutool.core.util.IdUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -10,6 +12,7 @@ import java.util.Base64.Decoder;
  * base64转为multipartFile工具类
  * @author Exrickx
  */
+@Slf4j
 public class Base64DecodeMultipartFile implements MultipartFile {
 
     private final byte[] imgContent;
@@ -17,17 +20,17 @@ public class Base64DecodeMultipartFile implements MultipartFile {
 
     public Base64DecodeMultipartFile(byte[] imgContent, String header) {
         this.imgContent = imgContent;
-        this.header = header.split(";")[0]; 
+        this.header = header.split(";")[0];
     }
 
     @Override
     public String getName() {
-        return System.currentTimeMillis() + Math.random() + "." + header.split("/")[1];
+        return IdUtil.simpleUUID() + "." + header.split("/")[1];
     }
 
     @Override
     public String getOriginalFilename() {
-        return System.currentTimeMillis() + (int)Math.random() * 10000 + "." + header.split("/")[1];
+        return IdUtil.simpleUUID() + "." + header.split("/")[1];
     }
 
     @Override
@@ -57,9 +60,13 @@ public class Base64DecodeMultipartFile implements MultipartFile {
 
     @Override
     public void transferTo(File dest) throws IOException, IllegalStateException {
-        new FileOutputStream(dest).write(imgContent);
-    }
 
+        try (FileOutputStream fos = new FileOutputStream(dest)) {
+            fos.write(imgContent);
+        } catch (Exception e) {
+            log.error(e.toString());
+        }
+    }
 
     public static MultipartFile base64Convert(String base64) {
 

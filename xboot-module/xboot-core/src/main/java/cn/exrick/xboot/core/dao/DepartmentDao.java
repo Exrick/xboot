@@ -9,7 +9,7 @@ import java.util.List;
  * 部门数据处理层
  * @author Exrick
  */
-public interface DepartmentDao extends XbootBaseDao<Department,String> {
+public interface DepartmentDao extends XbootBaseDao<Department, String> {
 
     /**
      * 通过父id获取 升序

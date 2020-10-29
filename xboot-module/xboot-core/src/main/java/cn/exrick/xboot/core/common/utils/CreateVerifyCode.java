@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Random;
+import java.security.SecureRandom;
 
 /**
  * 随机字符验证码生成工具类
@@ -41,7 +41,7 @@ public class CreateVerifyCode {
      */
     private BufferedImage buffImg = null;
 
-    Random random = new Random();
+    SecureRandom random = new SecureRandom();
 
     public CreateVerifyCode() {
         creatImage();
@@ -95,7 +95,7 @@ public class CreateVerifyCode {
         g.fillRect(0, 0, width, height);
 
         // 设置字体
-        //Font font1 = getFont(fontHeight);
+        // Font font1 = getFont(fontHeight);
         Font font = new Font("Fixedsys", Font.BOLD, fontHeight);
         g.setFont(font);
 
@@ -127,7 +127,7 @@ public class CreateVerifyCode {
             g.setColor(getRandColor(1, 255));
             // g.drawString(a,x,y);
             // a为要画出来的东西，x和y表示要画的东西最左侧字符的基线位于此图形上下文坐标系的 (x, y) 位置处
-            g.drawString(strRand, i*fontWidth+3, codeY);
+            g.drawString(strRand, i * fontWidth + 3, codeY);
         }
 
     }
@@ -137,7 +137,7 @@ public class CreateVerifyCode {
      */
     private void creatImage(String code) {
 
-        if(StrUtil.isBlank(code)){
+        if (StrUtil.isBlank(code)) {
             throw new CaptchaException("验证码为空或已过期，请重新获取");
         }
         // 字体的宽度
@@ -185,7 +185,7 @@ public class CreateVerifyCode {
             g.setColor(getRandColor(1, 255));
             // g.drawString(a,x,y);
             // a为要画出来的东西，x和y表示要画的东西最左侧字符的基线位于此图形上下文坐标系的 (x, y) 位置处
-            g.drawString(strRand, i*fontWidth+3, codeY);
+            g.drawString(strRand, i * fontWidth + 3, codeY);
         }
 
     }
@@ -196,12 +196,13 @@ public class CreateVerifyCode {
      * @return
      */
     public String randomStr(int n) {
+
         String str1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
         String str2 = "";
         int len = str1.length() - 1;
         double r;
         for (int i = 0; i < n; i++) {
-            r = (Math.random()) * len;
+            r = random.nextDouble() * len;
             str2 = str2 + str1.charAt((int) r);
         }
         return str2;
@@ -215,10 +216,10 @@ public class CreateVerifyCode {
      */
     private Color getRandColor(int fc, int bc) {
         // 给定范围获得随机颜色
-        if (fc > 255){
+        if (fc > 255) {
             fc = 255;
         }
-        if (bc > 255){
+        if (bc > 255) {
             bc = 255;
         }
         int r = fc + random.nextInt(bc - fc);
@@ -231,7 +232,7 @@ public class CreateVerifyCode {
      * 产生随机字体
      */
     private Font getFont(int size) {
-        Random random = new Random();
+
         Font[] font = new Font[5];
         font[0] = new Font("Ravie", Font.PLAIN, size);
         font[1] = new Font("Antique Olive Compact", Font.PLAIN, size);

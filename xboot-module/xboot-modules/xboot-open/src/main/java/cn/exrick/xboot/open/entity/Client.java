@@ -28,12 +28,18 @@ public class Client extends XbootBaseEntity {
     @ApiModelProperty(value = "网站名称")
     private String name;
 
-    @ApiModelProperty(value = "秘钥")
-    private String clientSecret;
+    @ApiModelProperty(value = "网站Logo")
+    private String logo;
 
     @ApiModelProperty(value = "网站主页")
     private String homeUri;
 
+    @ApiModelProperty(value = "秘钥")
+    private String clientSecret;
+
     @ApiModelProperty(value = "成功授权后的回调地址")
     private String redirectUri;
+
+    @ApiModelProperty(value = "自动授权 默认false")
+    private Boolean autoApprove = false;
 }

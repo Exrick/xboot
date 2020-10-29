@@ -13,8 +13,11 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
@@ -38,7 +41,7 @@ public class ClientController extends XbootBaseController<Client, String> {
 
     @RequestMapping(value = "/getName/{clientId}", method = RequestMethod.GET)
     @ApiOperation(value = "获取网站基本信息")
-    public Result<String> getName(@PathVariable String clientId){
+    public Result<String> getName(@PathVariable String clientId) {
 
         Client client = clientService.get(clientId);
         return new ResultUtil<String>().setData(client.getName());
@@ -49,7 +52,7 @@ public class ClientController extends XbootBaseController<Client, String> {
     @ApiOperation(value = "多条件分页获取")
     public Result<Page<Client>> getByCondition(Client client,
                                                SearchVo searchVo,
-                                               PageVo pageVo){
+                                               PageVo pageVo) {
 
         Page<Client> page = clientService.findByCondition(client, searchVo, PageUtil.initPage(pageVo));
         return new ResultUtil<Page<Client>>().setData(page);
@@ -57,7 +60,7 @@ public class ClientController extends XbootBaseController<Client, String> {
 
     @RequestMapping(value = "/getSecretKey", method = RequestMethod.GET)
     @ApiOperation(value = "生成随机secretKey")
-    public Result<String> getSecretKey(){
+    public Result<String> getSecretKey() {
 
         String secretKey = UUID.randomUUID().toString().replaceAll("-", "");
         return new ResultUtil<String>().setData(secretKey);

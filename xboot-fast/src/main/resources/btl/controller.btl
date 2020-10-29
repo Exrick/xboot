@@ -1,11 +1,11 @@
 package ${entity.controllerPackage};
 
-import cn.exrick.xboot.core.base.XbootBaseController;
-import cn.exrick.xboot.core.common.utils.PageUtil;
-import cn.exrick.xboot.core.common.utils.ResultUtil;
-import cn.exrick.xboot.core.common.vo.PageVo;
-import cn.exrick.xboot.core.common.vo.Result;
-import cn.exrick.xboot.core.common.vo.SearchVo;
+import cn.exrick.xboot.base.XbootBaseController;
+import cn.exrick.xboot.common.utils.PageUtil;
+import cn.exrick.xboot.common.utils.ResultUtil;
+import cn.exrick.xboot.common.vo.PageVo;
+import cn.exrick.xboot.common.vo.Result;
+import cn.exrick.xboot.common.vo.SearchVo;
 import ${entity.entityPackage}.${entity.className};
 import ${entity.servicePackage}.${entity.className}Service;
 import io.swagger.annotations.Api;
@@ -36,9 +36,7 @@ public class ${entity.className}Controller extends XbootBaseController<${entity.
 
     @RequestMapping(value = "/getByCondition", method = RequestMethod.GET)
     @ApiOperation(value = "多条件分页获取")
-    public Result<Page<${entity.className}>> getByCondition(${entity.className} ${entity.classNameLowerCase},
-                                                            SearchVo searchVo,
-                                                            PageVo pageVo){
+    public Result<Page<${entity.className}>> getByCondition(${entity.className} ${entity.classNameLowerCase}, SearchVo searchVo, PageVo pageVo) {
 
         Page<${entity.className}> page = ${entity.classNameLowerCase}Service.findByCondition(${entity.classNameLowerCase}, searchVo, PageUtil.initPage(pageVo));
         return new ResultUtil<Page<${entity.className}>>().setData(page);

@@ -9,7 +9,7 @@ import java.util.List;
  * 字典接口
  * @author Exrick
  */
-public interface DictService extends XbootBaseService<Dict,String> {
+public interface DictService extends XbootBaseService<Dict, String> {
 
     /**
      * 排序获取全部

@@ -3,17 +3,18 @@ package cn.exrick.xboot.core.config.security.jwt;
 import cn.exrick.xboot.core.common.annotation.SystemLog;
 import cn.exrick.xboot.core.common.constant.SecurityConstant;
 import cn.exrick.xboot.core.common.enums.LogType;
+import cn.exrick.xboot.core.common.redis.RedisTemplateHelper;
 import cn.exrick.xboot.core.common.utils.IpInfoUtil;
 import cn.exrick.xboot.core.common.utils.ResponseUtil;
 import cn.exrick.xboot.core.common.vo.TokenUser;
 import cn.exrick.xboot.core.config.properties.XbootTokenProperties;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.gson.Gson;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,7 +28,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -45,7 +45,7 @@ public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticatio
     private IpInfoUtil ipInfoUtil;
 
     @Autowired
-    private StringRedisTemplate redisTemplate;
+    private RedisTemplateHelper redisTemplate;
 
     @Override
     @SystemLog(description = "登录系统", type = LogType.LOGIN)
@@ -54,59 +54,59 @@ public class AuthenticationSuccessHandler extends SavedRequestAwareAuthenticatio
         // 用户选择保存登录状态几天（记住我）
         String saveLogin = request.getParameter(SecurityConstant.SAVE_LOGIN);
         Boolean saved = false;
-        if(StrUtil.isNotBlank(saveLogin) && Boolean.valueOf(saveLogin)){
+        if (StrUtil.isNotBlank(saveLogin) && Boolean.valueOf(saveLogin)) {
             saved = true;
-            if(!tokenProperties.getRedis()){
+            if (!tokenProperties.getRedis()) {
                 tokenProperties.setTokenExpireTime(tokenProperties.getSaveLoginTime() * 60 * 24);
             }
         }
-        String username = ((UserDetails)authentication.getPrincipal()).getUsername();
-        List<GrantedAuthority> authorities = (List<GrantedAuthority>) ((UserDetails)authentication.getPrincipal()).getAuthorities();
+        String username = ((UserDetails) authentication.getPrincipal()).getUsername();
+        List<GrantedAuthority> authorities = (List<GrantedAuthority>) ((UserDetails) authentication.getPrincipal()).getAuthorities();
         List<String> list = new ArrayList<>();
-        for(GrantedAuthority g : authorities){
+        for (GrantedAuthority g : authorities) {
             list.add(g.getAuthority());
         }
         ipInfoUtil.getUrl(request);
         // 登陆成功生成token
         String token;
-        if(tokenProperties.getRedis()){
+        if (tokenProperties.getRedis()) {
             // redis
-            token = UUID.randomUUID().toString().replace("-", "");
+            token = IdUtil.simpleUUID();
             TokenUser user = new TokenUser(username, list, saved);
             // 不缓存权限
-            if(!tokenProperties.getStorePerms()){
+            if (!tokenProperties.getStorePerms()) {
                 user.setPermissions(null);
             }
             // 单设备登录 之前的token失效
-            if(tokenProperties.getSdl()){
-                String oldToken = redisTemplate.opsForValue().get(SecurityConstant.USER_TOKEN + username);
-                if(StrUtil.isNotBlank(oldToken)){
+            if (tokenProperties.getSdl()) {
+                String oldToken = redisTemplate.get(SecurityConstant.USER_TOKEN + username);
+                if (StrUtil.isNotBlank(oldToken)) {
                     redisTemplate.delete(SecurityConstant.TOKEN_PRE + oldToken);
                 }
             }
-            if(saved){
-                redisTemplate.opsForValue().set(SecurityConstant.USER_TOKEN + username, token, tokenProperties.getSaveLoginTime(), TimeUnit.DAYS);
-                redisTemplate.opsForValue().set(SecurityConstant.TOKEN_PRE + token, new Gson().toJson(user), tokenProperties.getSaveLoginTime(), TimeUnit.DAYS);
-            }else{
-                redisTemplate.opsForValue().set(SecurityConstant.USER_TOKEN + username, token, tokenProperties.getTokenExpireTime(), TimeUnit.MINUTES);
-                redisTemplate.opsForValue().set(SecurityConstant.TOKEN_PRE + token, new Gson().toJson(user), tokenProperties.getTokenExpireTime(), TimeUnit.MINUTES);
+            if (saved) {
+                redisTemplate.set(SecurityConstant.USER_TOKEN + username, token, tokenProperties.getSaveLoginTime(), TimeUnit.DAYS);
+                redisTemplate.set(SecurityConstant.TOKEN_PRE + token, new Gson().toJson(user), tokenProperties.getSaveLoginTime(), TimeUnit.DAYS);
+            } else {
+                redisTemplate.set(SecurityConstant.USER_TOKEN + username, token, tokenProperties.getTokenExpireTime(), TimeUnit.MINUTES);
+                redisTemplate.set(SecurityConstant.TOKEN_PRE + token, new Gson().toJson(user), tokenProperties.getTokenExpireTime(), TimeUnit.MINUTES);
             }
-        }else{
+        } else {
             // JWT不缓存权限 避免JWT长度过长
             list = null;
             // JWT
             token = SecurityConstant.TOKEN_SPLIT + Jwts.builder()
-                    //主题 放入用户名
+                    // 主题 放入用户名
                     .setSubject(username)
-                    //自定义属性 放入用户拥有请求权限
+                    // 自定义属性 放入用户拥有请求权限
                     .claim(SecurityConstant.AUTHORITIES, new Gson().toJson(list))
-                    //失效时间
+                    // 失效时间
                     .setExpiration(new Date(System.currentTimeMillis() + tokenProperties.getTokenExpireTime() * 60 * 1000))
-                    //签名算法和密钥
+                    // 签名算法和密钥
                     .signWith(SignatureAlgorithm.HS512, SecurityConstant.JWT_SIGN_KEY)
                     .compact();
         }
 
-        ResponseUtil.out(response, ResponseUtil.resultMap(true,200,"登录成功", token));
+        ResponseUtil.out(response, ResponseUtil.resultMap(true, 200, "登录成功", token));
     }
 }

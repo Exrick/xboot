@@ -13,12 +13,12 @@ import org.springframework.data.domain.Pageable;
 public interface ClientService extends XbootBaseService<Client, String> {
 
     /**
-    * 多条件分页获取
-    * @param client
-    * @param searchVo
-    * @param pageable
-    * @return
-    */
+     * 多条件分页获取
+     * @param client
+     * @param searchVo
+     * @param pageable
+     * @return
+     */
     Page<Client> findByCondition(Client client, SearchVo searchVo, Pageable pageable);
 
 }

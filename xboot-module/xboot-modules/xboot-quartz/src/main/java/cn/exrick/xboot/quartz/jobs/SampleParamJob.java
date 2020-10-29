@@ -25,6 +25,6 @@ public class SampleParamJob implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
 
-        log.info(String.format("Hello %s! 欢迎使用XBoot前后端分离开发平台!作者:Exrick 时间:"+ DateUtil.now(), this.parameter));
+        log.info(String.format("Hello %s! 欢迎使用XBoot前后端分离开发平台!作者:Exrick 时间:" + DateUtil.now(), this.parameter));
     }
 }

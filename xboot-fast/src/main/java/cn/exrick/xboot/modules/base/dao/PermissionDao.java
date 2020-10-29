@@ -9,15 +9,7 @@ import java.util.List;
  * 权限数据处理层
  * @author Exrick
  */
-public interface PermissionDao extends XbootBaseDao<Permission,String> {
-
-    /**
-     * 通过层级查找
-     * 默认升序
-     * @param level
-     * @return
-     */
-    List<Permission> findByLevelOrderBySortOrder(Integer level);
+public interface PermissionDao extends XbootBaseDao<Permission, String> {
 
     /**
      * 通过parendId查找

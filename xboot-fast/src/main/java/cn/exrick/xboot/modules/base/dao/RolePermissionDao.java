@@ -11,7 +11,7 @@ import java.util.List;
  * 角色权限数据处理层
  * @author Exrick
  */
-public interface RolePermissionDao extends XbootBaseDao<RolePermission,String> {
+public interface RolePermissionDao extends XbootBaseDao<RolePermission, String> {
 
     /**
      * 通过permissionId获取

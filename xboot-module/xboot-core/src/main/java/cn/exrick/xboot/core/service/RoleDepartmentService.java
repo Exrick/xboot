@@ -9,7 +9,7 @@ import java.util.List;
  * 角色部门接口
  * @author Exrick
  */
-public interface RoleDepartmentService extends XbootBaseService<RoleDepartment,String> {
+public interface RoleDepartmentService extends XbootBaseService<RoleDepartment, String> {
 
     /**
      * 通过roleId获取

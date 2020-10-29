@@ -9,13 +9,16 @@ server:
     context-path: /
   tomcat:
     uri-encoding: UTF-8
-    max-threads: 1000
-    min-spare-threads: 30
+    threads:
+      max: 1000
+      min-spare: 30
+  # 优雅停机 关闭容器后默认等待30秒继续执行没处理完的任务 避免数据不一致
+  shutdown: graceful
 
 spring:
   # 数据源
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/xboot?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://127.0.0.1:3306/xboot?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
     username: root
     # Jasypt加密 可到common-utils中找到JasyptUtil加解密工具类生成加密结果 格式为ENC(加密结果) 以下解密结果为123456
     password: ENC(uOtmALFgsfxgYzEg1uLXl3O/tg6X1Dy25I3SdAeqqETOyZbDwmaW0/EZEusIh6hK)
@@ -56,7 +59,6 @@ spring:
   # Redis
   redis:
     host: 127.0.0.1
-    password:
     # 数据库索引 默认0
     database: 0
     port: 6379
@@ -65,13 +67,13 @@ spring:
   # Elasticsearch
   data:
     elasticsearch:
-      client:
-        reactive:
-          # 要连接的ES客户端 多个逗号分隔
-          endpoints: 127.0.0.1:9300
       # 未使用到ES 关闭其持久化存储
       repositories:
         enabled: false
+  elasticsearch:
+    rest:
+      # 要连接的ES客户端Rest Uri 多个逗号分隔
+      uris: http://localhost:9200
   # 定时任务
   quartz:
     # 任务信息存储至数据库
@@ -100,6 +102,7 @@ spring:
 xboot:
   # 全局限流
   ratelimit:
+    # 开启
     enable: true
     # 每1秒内
     timeout: 1000
@@ -107,6 +110,7 @@ xboot:
     limit: 200
   # IP限流
   iplimit:
+    # 开启
     enable: true
     # 每1秒内
     timeout: 1000
@@ -114,15 +118,15 @@ xboot:
     limit: 20
   # token交互方式
   token:
-    # 默认为true，token将存入redis，并具有单点登录功能 设为false使用JWT交互
+    # 默认为true，token将存入redis，并具有单设备登录、自动刷新token过期时间功能 设为false使用JWT交互
     redis: true
-    # 是否开启单设备登陆 仅当token交互方式为redis时生效
+    # 是否开启单设备登陆 一个账号仅支持同时一台设备登录 仅当token交互方式为redis时生效
     sdl: true
-    # token中存储用户权限数据 设为true开启后可避免每次请求再获取用户权限，但有可能导致编辑权限菜单后无法读取到最新权限数据（需用户重新登录）
+    # token中存储用户权限数据 开启后可避免每次请求再获取用户权限，但有可能导致编辑权限菜单后无法读取到最新权限数据（需用户重新登录）
     storePerms: true
-    # token过期时间 redis模式有请求自动刷新（分钟）
+    # token过期时间 redis模式有请求自动刷新过期时间（分钟）
     tokenExpireTime: 60
-    # 用户选择 保存登录状态/记住我 对应token过期时间（天）
+    # 用户选择 保存登录状态/记住我 对应token过期时间 不会自动刷新过期时间（天）
     saveLoginTime: 7
     # 限制用户登陆错误次数（次）
     loginTimeLimit: 10
@@ -130,10 +134,8 @@ xboot:
     loginAfterTime: 10
   # 使用Spring @Cacheable注解失效时间
   cache:
-    # 过期时间单位 支持day、hour、minute对应天、小时、分钟
-    unit: day
-    # 过期时间 永久不过期设为-1
-    time: 15
+    # 缓存过期时间 Duration类型 D–天 H小时 M–分钟 S–秒 永久不过期设为非正值
+    timeToLive: 15D
   # 日志记录方式 true使用Elasticsearch记录 false记录至数据库中
   logRecord:
     es: false
@@ -218,6 +220,9 @@ swagger:
 # Mybatis-plus
 mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml
+#  configuration:
+    # 日志控制台打印
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 # 日志
 logging:

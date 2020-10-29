@@ -28,7 +28,7 @@ public class SecurityController {
 
     @RequestMapping(value = "/needLogin", method = RequestMethod.GET)
     @ApiOperation(value = "没有登录")
-    public Result<Object> needLogin(){
+    public Result<Object> needLogin() {
 
         return ResultUtil.error(401, "您还未登录");
     }
@@ -41,7 +41,7 @@ public class SecurityController {
                                        @ApiParam("记住密码") @RequestParam(required = false, defaultValue = "true") Boolean saveLogin,
                                        @ApiParam("可自定义登录接口地址")
                                        @RequestParam(required = false, defaultValue = "http://127.0.0.1:8888/xboot/login")
-                                               String loginUrl){
+                                               String loginUrl) {
 
         Map<String, Object> params = new HashMap<>(16);
         params.put("username", username);

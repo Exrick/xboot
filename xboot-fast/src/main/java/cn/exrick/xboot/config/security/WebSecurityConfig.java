@@ -1,5 +1,6 @@
 package cn.exrick.xboot.config.security;
 
+import cn.exrick.xboot.common.redis.RedisTemplateHelper;
 import cn.exrick.xboot.common.utils.SecurityUtil;
 import cn.exrick.xboot.config.properties.IgnoredUrlsProperties;
 import cn.exrick.xboot.config.properties.XbootTokenProperties;
@@ -12,7 +13,6 @@ import cn.exrick.xboot.config.security.validate.ImageValidateFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,7 +30,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  */
 @Slf4j
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled=true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -58,7 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private ImageValidateFilter imageValidateFilter;
 
     @Autowired
-    private StringRedisTemplate redisTemplate;
+    private RedisTemplateHelper redisTemplate;
 
     @Autowired
     private SecurityUtil securityUtil;
@@ -75,7 +75,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests();
 
         // 除配置文件忽略路径其它所有请求都需经过认证和授权
-        for(String url:ignoredUrlsProperties.getUrls()){
+        for (String url : ignoredUrlsProperties.getUrls()) {
             registry.antMatchers(url).permitAll();
         }
 

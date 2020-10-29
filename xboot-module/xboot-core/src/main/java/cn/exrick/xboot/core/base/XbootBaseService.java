@@ -16,7 +16,7 @@ import java.util.List;
 public interface XbootBaseService<E, ID extends Serializable> {
 
     public XbootBaseDao<E, ID> getRepository();
-    
+
     /**
      * 根据ID获取
      * @param id
@@ -115,7 +115,7 @@ public interface XbootBaseService<E, ID extends Serializable> {
      * @param pageable
      * @return
      */
-    public default Page<E> findAll(Pageable pageable){
+    public default Page<E> findAll(Pageable pageable) {
         return getRepository().findAll(pageable);
     }
 

@@ -13,7 +13,7 @@ public class ThreadPoolUtil {
     /**
      * 线程缓冲队列
      */
-    private static BlockingQueue<Runnable> bqueue = new ArrayBlockingQueue<Runnable>(100);
+    private static BlockingQueue<Runnable> bqueue = new ArrayBlockingQueue<>(100);
 
     /**
      * 核心线程数，会一直存活，即使没有任务，线程池也会维护线程的最少数量
@@ -42,7 +42,8 @@ public class ThreadPoolUtil {
         return pool;
     }
 
-    public static void main(String[] args) {
-        System.out.println(pool.getPoolSize());
+    private ThreadPoolUtil() {
+        // 工具类建议不提供public构造入口
+        throw new IllegalStateException("Utility class");
     }
 }

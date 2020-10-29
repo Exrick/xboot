@@ -1,9 +1,9 @@
 package ${entity.controllerPackage};
 
-import cn.exrick.xboot.core.common.utils.PageUtil;
-import cn.exrick.xboot.core.common.utils.ResultUtil;
-import cn.exrick.xboot.core.common.vo.PageVo;
-import cn.exrick.xboot.core.common.vo.Result;
+import cn.exrick.xboot.common.utils.PageUtil;
+import cn.exrick.xboot.common.utils.ResultUtil;
+import cn.exrick.xboot.common.vo.PageVo;
+import cn.exrick.xboot.common.vo.Result;
 import ${entity.entityPackage}.${entity.className};
 import ${entity.servicePackage}.I${entity.className}Service;
 import cn.hutool.core.util.StrUtil;
@@ -33,7 +33,7 @@ public class ${entity.className}Controller {
 
     @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
     @ApiOperation(value = "通过id获取")
-    public Result<${entity.className}> get(@PathVariable ${entity.primaryKeyType} id){
+    public Result<${entity.className}> get(@PathVariable ${entity.primaryKeyType} id) {
 
         ${entity.className} ${entity.classNameLowerCase} = i${entity.className}Service.getById(id);
         return new ResultUtil<${entity.className}>().setData(${entity.classNameLowerCase});
@@ -41,7 +41,7 @@ public class ${entity.className}Controller {
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     @ApiOperation(value = "获取全部数据")
-    public Result<List<${entity.className}>> getAll(){
+    public Result<List<${entity.className}>> getAll() {
 
         List<${entity.className}> list = i${entity.className}Service.list();
         return new ResultUtil<List<${entity.className}>>().setData(list);
@@ -49,7 +49,7 @@ public class ${entity.className}Controller {
 
     @RequestMapping(value = "/getByPage", method = RequestMethod.GET)
     @ApiOperation(value = "分页获取")
-    public Result<IPage<${entity.className}>> getByPage(PageVo page){
+    public Result<IPage<${entity.className}>> getByPage(PageVo page) {
 
         IPage<${entity.className}> data = i${entity.className}Service.page(PageUtil.initMpPage(page));
         return new ResultUtil<IPage<${entity.className}>>().setData(data);
@@ -57,9 +57,9 @@ public class ${entity.className}Controller {
 
     @RequestMapping(value = "/insertOrUpdate", method = RequestMethod.POST)
     @ApiOperation(value = "编辑或更新数据")
-    public Result<${entity.className}> saveOrUpdate(${entity.className} ${entity.classNameLowerCase}){
+    public Result<${entity.className}> saveOrUpdate(${entity.className} ${entity.classNameLowerCase}) {
 
-        if(i${entity.className}Service.saveOrUpdate(${entity.classNameLowerCase})){
+        if (i${entity.className}Service.saveOrUpdate(${entity.classNameLowerCase})) {
             return new ResultUtil<${entity.className}>().setData(${entity.classNameLowerCase});
         }
         return new ResultUtil<${entity.className}>().setErrorMsg("操作失败");
@@ -67,9 +67,9 @@ public class ${entity.className}Controller {
 
     @RequestMapping(value = "/delByIds", method = RequestMethod.POST)
     @ApiOperation(value = "批量通过id删除")
-    public Result<Object> delAllByIds(@RequestParam ${entity.primaryKeyType}[] ids){
+    public Result<Object> delAllByIds(@RequestParam ${entity.primaryKeyType}[] ids) {
 
-        for(${entity.primaryKeyType} id : ids){
+        for (${entity.primaryKeyType} id : ids) {
             i${entity.className}Service.removeById(id);
         }
         return ResultUtil.success("批量通过id删除数据成功");

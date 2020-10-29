@@ -13,14 +13,14 @@ import org.springframework.context.annotation.Configuration;
 public class XbootIpLimitProperties {
 
     /**
-     * 是否开启全局限流
+     * 是否开启IP限流
      */
     private Boolean enable = false;
 
     /**
      * 限制请求个数
      */
-    private Integer limit = 100;
+    private Long limit = 100L;
 
     /**
      * 每单位时间内（毫秒）

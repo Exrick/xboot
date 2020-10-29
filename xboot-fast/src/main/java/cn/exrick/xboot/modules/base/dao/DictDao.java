@@ -11,7 +11,7 @@ import java.util.List;
  * 字典数据处理层
  * @author Exrick
  */
-public interface DictDao extends XbootBaseDao<Dict,String> {
+public interface DictDao extends XbootBaseDao<Dict, String> {
 
     /**
      * 排序获取全部

@@ -3,7 +3,6 @@ package cn.exrick.xboot.common.utils;
 import lombok.extern.slf4j.Slf4j;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
 import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
-import org.jasypt.util.password.BasicPasswordEncryptor;
 
 
 /**
@@ -15,10 +14,10 @@ public class JasyptUtil {
     /**
      * Jasypt生成加密结果
      * @param password 配置文件中设定的加密密码 jasypt.encryptor.password
-     * @param value 待加密值
+     * @param value    待加密值
      * @return
      */
-    public static String encyptPwd(String password,String value){
+    public static String encyptPwd(String password, String value) {
         PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
         encryptor.setConfig(cryptor(password));
         String result = encryptor.encrypt(value);
@@ -28,17 +27,18 @@ public class JasyptUtil {
     /**
      * 解密
      * @param password 配置文件中设定的加密密码 jasypt.encryptor.password
-     * @param value 待解密密文
+     * @param value    待解密密文
      * @return
      */
-    public static String decyptPwd(String password,String value){
+    public static String decyptPwd(String password, String value) {
         PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
         encryptor.setConfig(cryptor(password));
+        encryptor.decrypt(value);
         String result = encryptor.decrypt(value);
         return result;
     }
 
-    public static SimpleStringPBEConfig cryptor(String password){
+    public static SimpleStringPBEConfig cryptor(String password) {
         SimpleStringPBEConfig config = new SimpleStringPBEConfig();
         config.setPassword(password);
         config.setAlgorithm("PBEWITHHMACSHA512ANDAES_256");
@@ -51,11 +51,11 @@ public class JasyptUtil {
         return config;
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
-        //加密
-        System.out.println(encyptPwd("xboot","123456"));
+        //加密 若修改了第一个参数加密password记得在配置文件同步修改
+        System.out.println(encyptPwd("xboot", "123456"));
         //解密
-        System.out.println(decyptPwd("xboot","uOtmALFgsfxgYzEg1uLXl3O/tg6X1Dy25I3SdAeqqETOyZbDwmaW0/EZEusIh6hK"));
+        System.out.println(decyptPwd("xboot", "PYVnAYh+j5C3jkMV1d+myj6JzDaUk7pcfTWUaYsvQdEVkuvIVf7Y0mOU9XkffxT8"));
     }
 }

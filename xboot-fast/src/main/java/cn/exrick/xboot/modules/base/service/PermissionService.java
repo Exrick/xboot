@@ -9,15 +9,7 @@ import java.util.List;
  * 权限接口
  * @author Exrick
  */
-public interface PermissionService extends XbootBaseService<Permission,String> {
-
-    /**
-     * 通过层级查找
-     * 默认升序
-     * @param level
-     * @return
-     */
-    List<Permission> findByLevelOrderBySortOrder(Integer level);
+public interface PermissionService extends XbootBaseService<Permission, String> {
 
     /**
      * 通过parendId查找

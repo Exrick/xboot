@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ConstraintViolationException;
+
 /**
  * @author Exrickx
  */
@@ -23,7 +25,7 @@ public class RestCtrlExceptionHandler {
     public Result<Object> handleXbootException(XbootException e) {
 
         String errorMsg = "XBoot exception";
-        if (e!=null){
+        if (e != null) {
             errorMsg = e.getMsg();
             log.error(e.toString(), e);
         }
@@ -35,14 +37,14 @@ public class RestCtrlExceptionHandler {
     public Result<Object> handleBindException(BindException e) {
 
         StringBuilder sb = new StringBuilder();
-        e.getFieldErrors().forEach(error->{
+        e.getFieldErrors().forEach(error -> {
             String fieldName = error.getField();
             String message = error.getDefaultMessage();
             sb.append(fieldName + "-" + message + "；");
         });
         String result = sb.toString();
-        if(result.length()>0){
-            result = result.substring(0, result.length()-1);
+        if (result.length() > 0) {
+            result = result.substring(0, result.length() - 1);
         }
         return new ResultUtil<>().setErrorMsg(500, result);
     }
@@ -52,14 +54,31 @@ public class RestCtrlExceptionHandler {
     public Result<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
 
         StringBuilder sb = new StringBuilder();
-        e.getBindingResult().getFieldErrors().forEach(error->{
+        e.getBindingResult().getFieldErrors().forEach(error -> {
             String fieldName = error.getField();
             String message = error.getDefaultMessage();
             sb.append(fieldName + "-" + message + "；");
         });
         String result = sb.toString();
-        if(result.length()>0){
-            result = result.substring(0, result.length()-1);
+        if (result.length() > 0) {
+            result = result.substring(0, result.length() - 1);
+        }
+        return new ResultUtil<>().setErrorMsg(500, result);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(value = HttpStatus.OK)
+    public Result<Object> handleConstraintViolationException(ConstraintViolationException e) {
+
+        StringBuilder sb = new StringBuilder();
+        e.getConstraintViolations().forEach(error -> {
+            String fieldName = error.getPropertyPath().toString();
+            String message = error.getMessageTemplate();
+            sb.append(fieldName + "-" + message + "；");
+        });
+        String result = sb.toString();
+        if (result.length() > 0) {
+            result = result.substring(0, result.length() - 1);
         }
         return new ResultUtil<>().setErrorMsg(500, result);
     }
@@ -69,7 +88,7 @@ public class RestCtrlExceptionHandler {
     public Result<Object> handleLimitException(LimitException e) {
 
         String errorMsg = "Limit exception";
-        if (e!=null){
+        if (e != null) {
             errorMsg = e.getMsg();
             log.warn(e.getMsg(), e);
         }
@@ -81,7 +100,7 @@ public class RestCtrlExceptionHandler {
     public Result<Object> handleCaptchaExceptionException(CaptchaException e) {
 
         String errorMsg = "CaptchaException exception";
-        if (e!=null){
+        if (e != null) {
             errorMsg = e.getMsg();
             log.warn(e.getMsg(), e);
         }
@@ -93,7 +112,7 @@ public class RestCtrlExceptionHandler {
     public Result<Object> handleAccessDeniedExceptionException(AccessDeniedException e) {
 
         String errorMsg = "AccessDeniedException exception";
-        if (e!=null){
+        if (e != null) {
             errorMsg = e.getMessage();
             log.warn(e.getMessage(), e);
         }
@@ -105,7 +124,7 @@ public class RestCtrlExceptionHandler {
     public Result<Object> handleException(Exception e) {
 
         String errorMsg = "Exception";
-        if (e!=null){
+        if (e != null) {
             errorMsg = e.getMessage();
             log.error(e.toString(), e);
         }

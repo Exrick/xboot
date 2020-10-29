@@ -1,5 +1,6 @@
 package cn.exrick.xboot.core.config.security;
 
+import cn.exrick.xboot.core.common.redis.RedisTemplateHelper;
 import cn.exrick.xboot.core.common.utils.SecurityUtil;
 import cn.exrick.xboot.core.config.properties.IgnoredUrlsProperties;
 import cn.exrick.xboot.core.config.properties.XbootTokenProperties;
@@ -12,7 +13,6 @@ import cn.exrick.xboot.core.config.security.validate.ImageValidateFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,7 +30,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  */
 @Slf4j
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled=true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -58,7 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private ImageValidateFilter imageValidateFilter;
 
     @Autowired
-    private StringRedisTemplate redisTemplate;
+    private RedisTemplateHelper redisTemplate;
 
     @Autowired
     private SecurityUtil securityUtil;
@@ -75,7 +75,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests();
 
         // 除配置文件忽略路径其它所有请求都需经过认证和授权
-        for(String url : ignoredUrlsProperties.getUrls()){
+        for (String url : ignoredUrlsProperties.getUrls()) {
             registry.antMatchers(url).permitAll();
         }
 
@@ -113,11 +113,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 自定义权限拒绝处理类
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler)
                 .and()
-                // 图形验证码过滤器
-                .addFilterBefore(imageValidateFilter, UsernamePasswordAuthenticationFilter.class)
                 // 添加自定义权限过滤器
                 .addFilterBefore(myFilterSecurityInterceptor, FilterSecurityInterceptor.class)
-                // 添加JWT认证过滤器
+                // 图形验证码过滤器
+                .addFilterBefore(imageValidateFilter, UsernamePasswordAuthenticationFilter.class)
+                // 添加JWT过滤器 除已配置的其它请求都需经过此过滤器
                 .addFilter(new JWTAuthenticationFilter(authenticationManager(), tokenProperties, redisTemplate, securityUtil));
     }
 }

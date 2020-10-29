@@ -1,9 +1,13 @@
 package cn.exrick.xboot.common.limit;
 
-import cn.hutool.core.util.StrUtil;
+import cn.exrick.xboot.common.constant.CommonConstant;
+import com.google.common.util.concurrent.RateLimiter;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RRateLimiter;
+import org.redisson.api.RateIntervalUnit;
+import org.redisson.api.RateType;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
@@ -17,46 +21,39 @@ import java.util.concurrent.TimeUnit;
 public class RedisRaterLimiter {
 
     @Autowired
-    private StringRedisTemplate redisTemplate;
+    private RedissonClient redisson;
 
-    public String acquireToken(String point, Integer limit, Long timeout) {
+    private RateLimiter guavaRateLimiter = RateLimiter.create(Double.MAX_VALUE);
 
-        String maxCountKey = "BUCKET:MAX_COUNT:" + point;
+    /**
+     * 基于Redis令牌桶算法
+     * @param name         限流标识（限流点）
+     * @param rate         限制的数量 速率
+     * @param rateInterval 单位时间内（毫秒）
+     * @return
+     */
+    public Boolean acquireByRedis(String name, Long rate, Long rateInterval) {
 
-        String currCountKey = "BUCKET:CURR_COUNT:" + point;
+        RRateLimiter rateLimiter = redisson.getRateLimiter(CommonConstant.LIMIT_PRE + name);
+        rateLimiter.trySetRate(RateType.OVERALL, rate, rateInterval, RateIntervalUnit.MILLISECONDS);
+        rateLimiter.expire(rateInterval, TimeUnit.MILLISECONDS);
 
-        try {
-            // 令牌值
-            String token = "T";
-            // 无效的限流值 返回token
-            if(limit<=0||timeout<=0){
-                return token;
-            }
-            // maxCount为主要判断标志
-            String maxCount = redisTemplate.opsForValue().get(maxCountKey);
-            String currCount = redisTemplate.opsForValue().get(currCountKey);
-            // 初始
-            if(StrUtil.isBlank(maxCount)){
-                // 初始计数为1
-                redisTemplate.opsForValue().set(currCountKey, "1", timeout, TimeUnit.MILLISECONDS);
-                // 总数
-                redisTemplate.opsForValue().set(maxCountKey, limit.toString(), timeout, TimeUnit.MILLISECONDS);
-                return token;
-            } else if (StrUtil.isNotBlank(maxCount)&&StrUtil.isNotBlank(currCount)){
-                // 判断是否超过限制
-                if(Integer.valueOf(currCount)<Integer.valueOf(maxCount)){
-                    // 计数加1
-                    redisTemplate.opsForValue().set(currCountKey, String.valueOf(Integer.valueOf(currCount)+1), timeout, TimeUnit.MILLISECONDS);
-                    return token;
-                }
-            } else {
-                // currCount变量先失效（几乎不可能） 返回token
-                return token;
-            }
-        } catch (Exception e) {
-            log.error("限流出错，请检查Redis运行状态\n"+e.toString());
-        }
-        return null;
+        boolean getToken = rateLimiter.tryAcquire();
+        return getToken;
+    }
+
+    /**
+     * 基于内存令牌桶算法
+     * @param permitsPerSecond 1秒内限制的数量（QPS）
+     * @return
+     */
+    public Boolean acquireByGuava(Double permitsPerSecond) {
+
+        guavaRateLimiter.setRate(permitsPerSecond);
+
+        boolean getToken = guavaRateLimiter.tryAcquire();
+
+        return getToken;
     }
 }
 

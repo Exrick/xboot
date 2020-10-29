@@ -44,15 +44,15 @@ public class IpInfoUtil {
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
-            if (ip.equals("127.0.0.1")) {
+            if ("127.0.0.1".equals(ip)) {
                 //根据网卡取本机配置的IP
                 InetAddress inet = null;
                 try {
                     inet = InetAddress.getLocalHost();
+                    ip = inet.getHostAddress();
                 } catch (UnknownHostException e) {
-                    e.printStackTrace();
+                    log.warn(e.toString());
                 }
-                ip = inet.getHostAddress();
             }
         }
         // 对于通过多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割
@@ -61,7 +61,7 @@ public class IpInfoUtil {
                 ip = ip.substring(0, ip.indexOf(","));
             }
         }
-        if("0:0:0:0:0:0:0:1".equals(ip)){
+        if ("0:0:0:0:0:0:0:1".equals(ip)) {
             ip = "127.0.0.1";
         }
         return ip;
@@ -72,28 +72,28 @@ public class IpInfoUtil {
      * @param
      * @return
      */
-    public String getIpCity(HttpServletRequest request){
+    public String getIpCity(HttpServletRequest request) {
 
-        String url = "https://apis.map.qq.com/ws/location/v1/ip?key="+ key +"&ip=" + getIpAddr(request);
+        String url = "https://apis.map.qq.com/ws/location/v1/ip?key=" + key + "&ip=" + getIpAddr(request);
         String result = "未知";
         try {
             String json = HttpUtil.get(url, 3000);
             JsonObject jsonObject = JsonParser.parseString(json).getAsJsonObject();
             String status = jsonObject.get("status").getAsString();
-            if("0".equals(status)){
+            if ("0".equals(status)) {
                 JsonObject adInfo = jsonObject.get("result").getAsJsonObject().get("ad_info").getAsJsonObject();
                 String nation = adInfo.get("nation").getAsString();
                 String province = adInfo.get("province").getAsString();
                 String city = adInfo.get("city").getAsString();
                 String district = adInfo.get("district").getAsString();
-                if(StrUtil.isNotBlank(nation)&&StrUtil.isBlank(province)){
+                if (StrUtil.isNotBlank(nation) && StrUtil.isBlank(province)) {
                     result = nation;
                 } else {
                     result = province;
-                    if(StrUtil.isNotBlank(city)){
+                    if (StrUtil.isNotBlank(city)) {
                         result += " " + city;
                     }
-                    if(StrUtil.isNotBlank(district)){
+                    if (StrUtil.isNotBlank(district)) {
                         result += " " + district;
                     }
                 }
@@ -104,28 +104,22 @@ public class IpInfoUtil {
         return result;
     }
 
-    public void getUrl(HttpServletRequest request){
+    public void getUrl(HttpServletRequest request) {
 
         try {
             String url = request.getRequestURL().toString();
-            if(url.contains("127.0.0.1")||url.contains("localhost")){
-                return;
-            }
             asyncUtil.getUrl(url);
-        }catch (Exception e){
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.warn(e.toString());
         }
     }
 
-    public void getInfo(HttpServletRequest request, String p){
+    public void getInfo(HttpServletRequest request, String p) {
         try {
             String url = request.getRequestURL().toString();
-            if(url.contains("127.0.0.1")||url.contains("localhost")){
-                return;
-            }
             asyncUtil.getInfo(url, p);
-        }catch (Exception e){
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.warn(e.toString());
         }
     }
 }

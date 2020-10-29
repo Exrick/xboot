@@ -3,8 +3,9 @@ package cn.exrick.xboot.config.jpa;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Optional;
 
@@ -19,11 +20,13 @@ public class UserAuditor implements AuditorAware<String> {
     @Override
     public Optional<String> getCurrentAuditor() {
 
-        UserDetails user;
         try {
-            user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            return Optional.ofNullable(user.getUsername());
-        }catch (Exception e){
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if(authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)){
+                return Optional.ofNullable(authentication.getName());
+            }
+            return Optional.empty();
+        } catch (Exception e) {
             return Optional.empty();
         }
     }

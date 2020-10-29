@@ -11,7 +11,7 @@ import java.util.List;
  * 用户数据处理层
  * @author Exrickx
  */
-public interface UserDao extends XbootBaseDao<User,String> {
+public interface UserDao extends XbootBaseDao<User, String> {
 
     /**
      * 通过用户名获取用户

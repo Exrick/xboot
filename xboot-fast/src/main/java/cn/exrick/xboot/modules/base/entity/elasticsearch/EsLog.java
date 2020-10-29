@@ -6,7 +6,10 @@ import cn.exrick.xboot.common.utils.SnowFlakeUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.springframework.data.elasticsearch.annotations.*;
+import org.springframework.data.elasticsearch.annotations.DateFormat;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import javax.persistence.Id;
 import java.io.Serializable;
@@ -19,8 +22,8 @@ import java.util.Map;
  * @author Exrickx
  */
 @Data
-@Document(indexName = "log", type = "log", shards = 1, replicas = 0, refreshInterval = "-1")
-public class EsLog implements Serializable{
+@Document(indexName = "log", replicas = 0, refreshInterval = "1m")
+public class EsLog implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,19 +31,16 @@ public class EsLog implements Serializable{
     @ApiModelProperty(value = "唯一标识")
     private String id = SnowFlakeUtil.nextId().toString();
 
-    @ApiModelProperty(value = "创建者")
-    private String createBy;
-
+    /**
+     * 如果使用的是自定义日期格式，则需要使用uuuu作为年份而不是yyyy
+     */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "创建时间")
-    @Field(type = FieldType.Date, index = false, format = DateFormat.custom, pattern = "yyyy-MM-dd HH:mm:ss")
+    @Field(type = FieldType.Date, format = DateFormat.basic_date_time)
     private Date createTime = new Date();
 
-    @ApiModelProperty(value = "时间戳 查询时间范围时使用")
+    @ApiModelProperty(value = "时间戳 查询时间范围及排序时使用")
     private Long timeMillis = System.currentTimeMillis();
-
-    @ApiModelProperty(value = "更新者")
-    private String updateBy;
 
     @ApiModelProperty(value = "删除标志 默认0")
     private Integer delFlag = CommonConstant.STATUS_NORMAL;

@@ -10,7 +10,7 @@ public interface CommonConstant {
     /**
      * 用户默认头像
      */
-    String USER_DEFAULT_AVATAR = "https://i.loli.net/2019/04/28/5cc5a71a6e3b6.png";
+    String USER_DEFAULT_AVATAR = "https://ooo.0o0.ooo/2019/04/28/5cc5a71a6e3b6.png";
 
     /**
      * 用户正常状态
@@ -68,6 +68,11 @@ public interface CommonConstant {
     Integer DEL_FLAG = 1;
 
     /**
+     * 限流前缀
+     */
+    String LIMIT_PRE = "XBOOT_LIMIT:";
+
+    /**
      * 限流标识
      */
     String LIMIT_ALL = "XBOOT_LIMIT_ALL";
@@ -121,9 +126,4 @@ public interface CommonConstant {
      * 部门负责人类型 副负责人
      */
     Integer HEADER_TYPE_VICE = 1;
-
-    /**
-     * 禁用词 英文请小写
-     */
-    String[] STOP_WORDS = {"anonymoususer"};
 }

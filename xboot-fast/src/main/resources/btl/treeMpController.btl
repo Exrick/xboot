@@ -1,0 +1,138 @@
+package ${entity.controllerPackage};
+
+import cn.exrick.xboot.common.constant.CommonConstant;
+import cn.exrick.xboot.common.redis.RedisTemplateHelper;
+import cn.exrick.xboot.common.utils.CommonUtil;
+import cn.exrick.xboot.common.utils.ResultUtil;
+import cn.exrick.xboot.common.vo.Result;
+import ${entity.entityPackage}.${entity.className};
+import ${entity.servicePackage}.I${entity.className}Service;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.transaction.annotation.Transactional;
+
+
+import java.util.List;
+
+/**
+ * @author ${entity.author}
+ */
+@Slf4j
+@RestController
+@Api(description = "${entity.description}管理接口")
+@RequestMapping("/xboot/${entity.classNameLowerCase}")
+@CacheConfig(cacheNames = "${entity.classNameLowerCase}")
+@Transactional
+public class ${entity.className}Controller {
+
+    @Autowired
+    private I${entity.className}Service i${entity.className}Service;
+
+    @Autowired
+    private RedisTemplateHelper redisTemplate;
+
+    @RequestMapping(value = "/getByParentId/{parentId}", method = RequestMethod.GET)
+    @ApiOperation(value = "通过id获取")
+    @Cacheable(key = "#parentId")
+    public Result<List<${entity.className}>> getByParentId(@PathVariable String parentId) {
+
+        List<${entity.className}> list = i${entity.className}Service.list(new QueryWrapper<${entity.className}>().eq("parent_id", parentId).orderByAsc("sort_order"));
+        setInfo(list);
+        return new ResultUtil<List<${entity.className}>>().setData(list);
+    }
+
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @ApiOperation(value = "添加")
+    public Result<Object> add(${entity.className} ${entity.classNameLowerCase}) {
+
+        i${entity.className}Service.save(${entity.classNameLowerCase});
+        // 如果不是添加的一级 判断设置上级为父节点标识
+        if (!CommonConstant.PARENT_ID.equals(${entity.classNameLowerCase}.getParentId())) {
+            ${entity.className} parent = i${entity.className}Service.getById(${entity.classNameLowerCase}.getParentId());
+            if (parent.getIsParent() == null || !parent.getIsParent()) {
+                parent.setIsParent(true);
+                i${entity.className}Service.updateById(parent);
+            }
+        }
+        // 更新缓存
+        redisTemplate.deleteByPattern("${entity.classNameLowerCase}::*");
+        return ResultUtil.success("添加成功");
+    }
+
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    @ApiOperation(value = "编辑")
+    public Result<Object> edit(${entity.className} ${entity.classNameLowerCase}) {
+
+        i${entity.className}Service.updateById(${entity.classNameLowerCase});
+        // 手动删除所有分类缓存
+        redisTemplate.deleteByPattern("${entity.classNameLowerCase}:" + "*");
+        return ResultUtil.success("编辑成功");
+    }
+
+    @RequestMapping(value = "/delByIds", method = RequestMethod.POST)
+    @ApiOperation(value = "批量通过id删除")
+    public Result<Object> delByIds(@RequestParam String[] ids) {
+
+        for (String id : ids) {
+            deleteRecursion(id, ids);
+        }
+        // 手动删除所有缓存
+        redisTemplate.deleteByPattern("${entity.classNameLowerCase}:" + "*");
+        return ResultUtil.success("批量通过id删除数据成功");
+    }
+
+    public void deleteRecursion(String id, String[] ids) {
+
+        // 获得其父节点
+        ${entity.className} o = i${entity.className}Service.getById(id);
+        ${entity.className} parent = null;
+        if (o != null && StrUtil.isNotBlank(o.getParentId())) {
+            parent = i${entity.className}Service.getById(o.getParentId());
+        }
+        i${entity.className}Service.removeById(id);
+        // 判断父节点是否还有子节点
+        if (parent != null) {
+            List<${entity.className}> children = i${entity.className}Service.list(new QueryWrapper<${entity.className}>().eq("parent_id", parent.getId()).orderByAsc("sort_order"));
+            if (children==null || children.isEmpty()) {
+                parent.setIsParent(false);
+                i${entity.className}Service.updateById(parent);
+            }
+        }
+        // 递归删除
+        List<${entity.className}> objs = i${entity.className}Service.list(new QueryWrapper<Student>().eq("parent_id", id).orderByAsc("sort_order"));
+        for (${entity.className} obj : objs) {
+            if (!CommonUtil.judgeIds(obj.getId(), ids)) {
+                deleteRecursion(obj.getId(), ids);
+            }
+        }
+    }
+
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    @ApiOperation(value = "名称模糊搜索")
+    public Result<List<${entity.className}>> searchByTitle(@RequestParam String title) {
+
+        List<${entity.className}> list = i${entity.className}Service.list(new QueryWrapper<Student>().like("title", title).orderByAsc("sort_order"));
+        setInfo(list);
+        return new ResultUtil<List<${entity.className}>>().setData(list);
+    }
+
+    public void setInfo(List<${entity.className}> list){
+
+        // lambda表达式
+        list.forEach(item -> {
+            if (!CommonConstant.PARENT_ID.equals(item.getParentId())) {
+                ${entity.className} parent = i${entity.className}Service.getById(item.getParentId());
+                item.setParentTitle(parent.getTitle());
+            } else {
+                item.setParentTitle("一级节点");
+            }
+        });
+    }
+}

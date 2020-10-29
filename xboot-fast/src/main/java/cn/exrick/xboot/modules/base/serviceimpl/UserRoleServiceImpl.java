@@ -1,5 +1,6 @@
 package cn.exrick.xboot.modules.base.serviceimpl;
 
+import cn.exrick.xboot.modules.base.dao.UserDao;
 import cn.exrick.xboot.modules.base.dao.UserRoleDao;
 import cn.exrick.xboot.modules.base.entity.UserRole;
 import cn.exrick.xboot.modules.base.service.UserRoleService;
@@ -21,6 +22,9 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Autowired
     private UserRoleDao userRoleDao;
+
+    @Autowired
+    private UserDao userDao;
 
     @Override
     public UserRoleDao getRepository() {

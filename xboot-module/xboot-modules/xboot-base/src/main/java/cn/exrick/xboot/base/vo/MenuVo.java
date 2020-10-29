@@ -41,8 +41,14 @@ public class MenuVo {
     @ApiModelProperty(value = "图标")
     private String icon;
 
+    @ApiModelProperty(value = "是否为站内菜单")
+    private Boolean isMenu;
+
     @ApiModelProperty(value = "网页链接")
     private String url;
+
+    @ApiModelProperty(value = "描述/备注")
+    private String description;
 
     @ApiModelProperty(value = "按钮权限类型")
     private String buttonType;

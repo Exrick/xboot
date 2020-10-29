@@ -36,37 +36,37 @@ public class NameUtil {
      */
     private static final Pattern pEmail = Pattern.compile(regEmail);
 
-    public static boolean username(String v){
+    public static boolean username(String v) {
 
-        if(StrUtil.isBlank(v)){
+        if (StrUtil.isBlank(v)) {
             return false;
         }
         Matcher m = pUsername.matcher(v);
-        if(m.matches()){
+        if (m.matches()) {
             return true;
         }
         return false;
     }
 
-    public static boolean mobile(String v){
+    public static boolean mobile(String v) {
 
-        if(StrUtil.isBlank(v)){
+        if (StrUtil.isBlank(v)) {
             return false;
         }
         Matcher m = pMobile.matcher(v);
-        if(m.matches()){
+        if (m.matches()) {
             return true;
         }
         return false;
     }
 
-    public static boolean email(String v){
+    public static boolean email(String v) {
 
-        if(StrUtil.isBlank(v)){
+        if (StrUtil.isBlank(v)) {
             return false;
         }
         Matcher m = pEmail.matcher(v);
-        if(m.matches()){
+        if (m.matches()) {
             return true;
         }
         return false;

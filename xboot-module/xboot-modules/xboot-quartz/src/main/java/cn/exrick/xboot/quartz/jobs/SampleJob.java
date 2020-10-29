@@ -17,6 +17,6 @@ public class SampleJob implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
 
-        log.info(String.format("欢迎使用XBoot前后端分离开发平台!作者:Exrick 时间:"+ DateUtil.now()));
+        log.info(String.format("欢迎使用XBoot前后端分离开发平台!作者:Exrick 时间:" + DateUtil.now()));
     }
 }

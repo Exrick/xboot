@@ -9,7 +9,7 @@ import java.util.List;
  * 角色数据处理层
  * @author Exrickx
  */
-public interface RoleDao extends XbootBaseDao<Role,String> {
+public interface RoleDao extends XbootBaseDao<Role, String> {
 
     /**
      * 获取默认角色

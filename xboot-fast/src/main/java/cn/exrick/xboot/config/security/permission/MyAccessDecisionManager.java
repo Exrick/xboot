@@ -24,16 +24,16 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
     @Override
     public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> configAttributes) throws AccessDeniedException, InsufficientAuthenticationException {
 
-        if(configAttributes==null){
+        if (configAttributes == null) {
             return;
         }
         Iterator<ConfigAttribute> iterator = configAttributes.iterator();
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             ConfigAttribute c = iterator.next();
             String needPerm = c.getAttribute();
-            for(GrantedAuthority ga : authentication.getAuthorities()) {
+            for (GrantedAuthority ga : authentication.getAuthorities()) {
                 // 匹配用户拥有的ga 和 系统中的needPerm
-                if(needPerm.trim().equals(ga.getAuthority())) {
+                if (needPerm.trim().equals(ga.getAuthority())) {
                     return;
                 }
             }

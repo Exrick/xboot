@@ -3,8 +3,6 @@ package cn.exrick.xboot.core.config.security;
 import cn.exrick.xboot.core.common.constant.CommonConstant;
 import cn.exrick.xboot.core.common.vo.PermissionDTO;
 import cn.exrick.xboot.core.common.vo.RoleDTO;
-import cn.exrick.xboot.core.entity.Permission;
-import cn.exrick.xboot.core.entity.Role;
 import cn.exrick.xboot.core.entity.User;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -30,13 +28,13 @@ public class SecurityUserDetails extends User implements UserDetails {
 
     public SecurityUserDetails(User user) {
 
-        if(user!=null) {
+        if (user != null) {
             // Principal用户信息
             this.setUsername(user.getUsername());
             this.setPassword(user.getPassword());
             this.setStatus(user.getStatus());
 
-            this.permissions  = user.getPermissions();
+            this.permissions = user.getPermissions();
             this.roles = user.getRoles();
         }
     }
@@ -50,18 +48,18 @@ public class SecurityUserDetails extends User implements UserDetails {
 
         List<GrantedAuthority> authorityList = new ArrayList<>();
         // 添加请求权限
-        if(permissions!=null&&permissions.size()>0){
+        if (permissions != null && permissions.size() > 0) {
             for (PermissionDTO permission : permissions) {
-                if(StrUtil.isNotBlank(permission.getTitle()) &&StrUtil.isNotBlank(permission.getPath())) {
+                if (StrUtil.isNotBlank(permission.getTitle()) && StrUtil.isNotBlank(permission.getPath())) {
                     authorityList.add(new SimpleGrantedAuthority(permission.getTitle()));
                 }
             }
         }
         // 添加角色
-        if(roles!=null&&roles.size()>0){
+        if (roles != null && roles.size() > 0) {
             // lambda表达式
             roles.forEach(item -> {
-                if(StrUtil.isNotBlank(item.getName())){
+                if (StrUtil.isNotBlank(item.getName())) {
                     authorityList.add(new SimpleGrantedAuthority(item.getName()));
                 }
             });

@@ -13,15 +13,15 @@ import java.lang.annotation.*;
 @Documented
 public @interface SystemLog {
 
-        /**
-         * 日志名称
-         * @return
-         */
-        String description() default "";
+    /**
+     * 日志名称
+     * @return
+     */
+    String description() default "";
 
-        /**
-         * 日志类型
-         * @return
-         */
-        LogType type() default LogType.OPERATION;
+    /**
+     * 日志类型
+     * @return
+     */
+    LogType type() default LogType.OPERATION;
 }

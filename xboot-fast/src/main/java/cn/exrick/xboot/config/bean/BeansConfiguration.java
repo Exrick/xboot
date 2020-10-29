@@ -15,7 +15,7 @@ import org.springframework.util.PathMatcher;
 public class BeansConfiguration {
 
     @Bean
-    public PathMatcher pathMatcher(){
+    public PathMatcher pathMatcher() {
 
         return new AntPathMatcher();
     }

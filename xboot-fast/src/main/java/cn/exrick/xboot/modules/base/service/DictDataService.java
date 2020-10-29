@@ -11,7 +11,7 @@ import java.util.List;
  * 字典数据接口
  * @author Exrick
  */
-public interface DictDataService extends XbootBaseService<DictData,String> {
+public interface DictDataService extends XbootBaseService<DictData, String> {
 
     /**
      * 多条件获取

@@ -36,7 +36,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         // 数据权限
         List<String> depIds = securityUtil.getDeparmentIds();
-        if(depIds!=null&&depIds.size()>0&&openDataFilter){
+        if (depIds != null && depIds.size() > 0 && openDataFilter) {
             return departmentDao.findByParentIdAndIdInOrderBySortOrder(parentId, depIds);
         }
         return departmentDao.findByParentIdOrderBySortOrder(parentId);
@@ -53,7 +53,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         // 数据权限
         List<String> depIds = securityUtil.getDeparmentIds();
-        if(depIds!=null&&depIds.size()>0&&openDataFilter){
+        if (depIds != null && depIds.size() > 0 && openDataFilter) {
             return departmentDao.findByTitleLikeAndIdInOrderBySortOrder(title, depIds);
         }
         return departmentDao.findByTitleLikeOrderBySortOrder(title);

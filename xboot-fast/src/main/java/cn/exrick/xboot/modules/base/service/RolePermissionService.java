@@ -9,7 +9,7 @@ import java.util.List;
  * 角色权限接口
  * @author Exrick
  */
-public interface RolePermissionService extends XbootBaseService<RolePermission,String> {
+public interface RolePermissionService extends XbootBaseService<RolePermission, String> {
 
     /**
      * 通过permissionId获取
@@ -21,6 +21,7 @@ public interface RolePermissionService extends XbootBaseService<RolePermission,S
     /**
      * 通过roleId获取
      * @param roleId
+     * @return
      */
     List<RolePermission> findByRoleId(String roleId);
 

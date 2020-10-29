@@ -32,13 +32,13 @@ public class UploadController {
     @Autowired
     private QiniuUtil qiniuUtil;
 
-    @RequestMapping(value = "/file",method = RequestMethod.POST)
+    @RequestMapping(value = "/file", method = RequestMethod.POST)
     @ApiOperation(value = "文件上传")
     public Result<Object> upload(@RequestParam(required = false) MultipartFile file,
                                  @RequestParam(required = false) String base64,
                                  HttpServletRequest request) {
 
-        if(StrUtil.isNotBlank(base64)){
+        if (StrUtil.isNotBlank(base64)) {
             // base64上传
             file = Base64DecodeMultipartFile.base64Convert(base64);
         }
@@ -47,7 +47,7 @@ public class UploadController {
         try {
             InputStream inputStream = file.getInputStream();
             //上传七牛云服务器
-            result = qiniuUtil.qiniuInputStreamUpload(inputStream,fileName);
+            result = qiniuUtil.qiniuInputStreamUpload(inputStream, fileName);
         } catch (Exception e) {
             log.error(e.toString());
             return ResultUtil.error(e.toString());

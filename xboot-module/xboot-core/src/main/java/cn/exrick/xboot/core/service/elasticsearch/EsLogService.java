@@ -36,5 +36,5 @@ public interface EsLogService {
      * @param pageable
      * @return
      */
-    Page<EsLog> findByConfition(Integer type, String key, SearchVo searchVo, Pageable pageable);
+    Page<EsLog> findByCondition(Integer type, String key, SearchVo searchVo, Pageable pageable);
 }

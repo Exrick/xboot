@@ -11,7 +11,7 @@ import java.util.List;
  */
 @Data
 @AllArgsConstructor
-public class TokenUser implements Serializable{
+public class TokenUser implements Serializable {
 
     private String username;
 

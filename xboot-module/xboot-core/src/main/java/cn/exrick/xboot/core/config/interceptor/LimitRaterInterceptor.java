@@ -51,37 +51,45 @@ public class LimitRaterInterceptor extends HandlerInterceptorAdapter {
 
         String ip = ipInfoUtil.getIpAddr(request);
 
-        if(ipLimitProperties.getEnable()) {
-            String token1 = redisRaterLimiter.acquireToken(ip,
+        if (ipLimitProperties.getEnable()) {
+            Boolean token1 = redisRaterLimiter.acquireByRedis(ip,
                     ipLimitProperties.getLimit(), ipLimitProperties.getTimeout());
-            if (StrUtil.isBlank(token1)) {
+            if (!token1) {
                 throw new LimitException("你手速怎么这么快，请点慢一点");
             }
         }
 
-        if(limitProperties.getEnable()){
-            String token2 = redisRaterLimiter.acquireToken(CommonConstant.LIMIT_ALL,
+        if (limitProperties.getEnable()) {
+            Boolean token2 = redisRaterLimiter.acquireByRedis(CommonConstant.LIMIT_ALL,
                     limitProperties.getLimit(), limitProperties.getTimeout());
-            if (StrUtil.isBlank(token2)) {
+            if (!token2) {
                 throw new LimitException("当前访问总人数太多啦，请稍后再试");
             }
         }
 
         try {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
+            Object bean = handlerMethod.getBean();
             Method method = handlerMethod.getMethod();
             RateLimiter rateLimiter = method.getAnnotation(RateLimiter.class);
             if (rateLimiter != null) {
-                Integer limit = rateLimiter.limit();
-                Long timeout = rateLimiter.timeout();
-                String token3 = redisRaterLimiter.acquireToken(method.getName(), limit, timeout);
-                if (StrUtil.isBlank(token3)) {
+                String name = rateLimiter.name();
+                Long limit = rateLimiter.rate();
+                Long timeout = rateLimiter.rateInterval();
+                if(StrUtil.isBlank(name)){
+                    name = StrUtil.subBefore(bean.toString(), "@", false) + "_" + method.getName();
+                }
+                if (rateLimiter.ipLimit()) {
+                    name += "_" + ip;
+                }
+                Boolean token3 = redisRaterLimiter.acquireByRedis(name, limit, timeout);
+                if (!token3) {
                     throw new LimitException("当前访问人数太多啦，请稍后再试");
                 }
             }
-        }catch (LimitException e){
+        } catch (LimitException e) {
             throw new LimitException(e.getMsg());
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -107,5 +115,4 @@ public class LimitRaterInterceptor extends HandlerInterceptorAdapter {
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
                                 Object handler, Exception ex) throws Exception {
     }
-
 }

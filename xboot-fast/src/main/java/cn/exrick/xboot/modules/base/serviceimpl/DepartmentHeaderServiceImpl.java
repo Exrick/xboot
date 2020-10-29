@@ -34,7 +34,7 @@ public class DepartmentHeaderServiceImpl implements DepartmentHeaderService {
 
         List<String> list = new ArrayList<>();
         List<DepartmentHeader> headers = departmentHeaderDao.findByDepartmentIdAndType(departmentId, type);
-        headers.forEach(e->{
+        headers.forEach(e -> {
             list.add(e.getUserId());
         });
         return list;

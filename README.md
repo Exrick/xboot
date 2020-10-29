@@ -22,7 +22,7 @@ https://www.kancloud.cn/exrick/xboot/content
 - xboot-fast：单应用版本
 - xboot-module：多模块版本
 ### 项目简介 
-- [x] 代码拥有详细注释 无复杂逻辑 核心使用 SpringBoot 2.2.6.RELEASE
+- [x] 代码拥有详细注释 无复杂逻辑 核心使用 SpringBoot 2.3.4.RELEASE
 - [x] JWT / 基于Redis可配置单设备登录Token交互 任意切换 支持点单登录 提供开放平台
 - [x] JPA + Mybatis-Plus 任意切换
 - [x] 操作日志记录方式任意切换Mysql或Elasticseach记录
@@ -35,39 +35,39 @@ https://www.kancloud.cn/exrick/xboot/content
 - [x] 为什么要前后端分离
     - 都什么时代了还在用JQuery？ 
 
-![](https://i.loli.net/2019/04/29/5cc70cac4b7a4.png)
+![](https://ooo.0o0.ooo/2019/04/29/5cc70cac4b7a4.png)
 
 ### 截图预览
 
 - PC
 
-![QQ截图20180826163917.png](https://i.loli.net/2018/08/26/5b826868e2359.png)
+![QQ截图20180826163917.png](https://ooo.0o0.ooo/2018/08/26/5b826868e2359.png)
 
-![QQ截图20180826164058.png](https://i.loli.net/2018/08/26/5b8268d63d156.png)
+![QQ截图20180826164058.png](https://ooo.0o0.ooo/2018/08/26/5b8268d63d156.png)
 
-![QQ截图20180826164144.png](https://i.loli.net/2018/08/26/5b8268e6a091f.png)
+![QQ截图20180826164144.png](https://ooo.0o0.ooo/2018/08/26/5b8268e6a091f.png)
 
 - iPad Mini 5
 
-<img src=https://i.loli.net/2019/11/25/2tiloPbTcqfnRDQ.jpg width=600/>
+<img src=https://ooo.0o0.ooo/2019/11/25/2tiloPbTcqfnRDQ.jpg width=600/>
 
 - iPhone X
 
-<img src=https://i.loli.net/2019/11/25/EaLfVxmli2Tg8PY.jpg width=300/>
+<img src=https://ooo.0o0.ooo/2019/11/25/EaLfVxmli2Tg8PY.jpg width=300/>
 
 
 ### [完整版截图细节展示](https://github.com/Exrick/x-boot/wiki/%E5%AE%8C%E6%95%B4%E7%89%88%E6%88%AA%E5%9B%BE%E7%BB%86%E8%8A%82%E5%B1%95%E7%A4%BA)
 
 ### 系统架构
 
-<img src="https://i.loli.net/2019/05/01/5cc87695f109d.png" width="600px"/>
+<img src="https://ooo.0o0.ooo/2019/05/01/5cc87695f109d.png" width="600px"/>
 
 ### 前端所用技术
 - Vue 2.5.x、Vue Cli 4.x、iView、iview-admin、iview-area、Vuex、Vue Router、ES6、webpack、axios、echarts、cookie等
 - 前台为基于Vue+iView的独立项目请跳转至 [xboot-front](https://github.com/Exrick/xboot-front) 项目仓库查看
 ### 后端所用技术
 
-<img src=https://i.loli.net/2019/11/25/gUiynavBAHd6hY8.jpg width=1000/>
+<img src=https://ooo.0o0.ooo/2019/11/25/gUiynavBAHd6hY8.jpg width=1000/>
 
 ##### 各框架依赖版本皆使用目前最新版本
 - Spring Boot 2.2.6.RELEASE
@@ -163,7 +163,7 @@ https://www.kancloud.cn/exrick/xboot/content
 
 - [XMall：基于SOA架构的分布式电商购物商城](https://github.com/Exrick/xmall)
 
-    ![](https://i.loli.net/2018/07/22/5b54615b95788.jpg)
+    ![](https://ooo.0o0.ooo/2018/07/22/5b54615b95788.jpg)
     
 - [XPay个人免签收款支付系统](https://github.com/Exrick/xpay)
 

@@ -48,17 +48,17 @@ public class Department extends XbootBaseEntity {
     private Integer status = CommonConstant.STATUS_NORMAL;
 
     @Transient
-    @TableField(exist=false)
+    @TableField(exist = false)
     @ApiModelProperty(value = "父节点名称")
     private String parentTitle;
 
     @Transient
-    @TableField(exist=false)
+    @TableField(exist = false)
     @ApiModelProperty(value = "主负责人")
     private List<String> mainHeader;
 
     @Transient
-    @TableField(exist=false)
+    @TableField(exist = false)
     @ApiModelProperty(value = "副负责人")
     private List<String> viceHeader;
 }

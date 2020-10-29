@@ -53,29 +53,29 @@ public class LogServiceImpl implements LogService {
                 Path<String> ipField = root.get("ip");
                 Path<String> ipInfoField = root.get("ipInfo");
                 Path<Integer> logTypeField = root.get("logType");
-                Path<Date> createTimeField=root.get("createTime");
+                Path<Date> createTimeField = root.get("createTime");
 
                 List<Predicate> list = new ArrayList<Predicate>();
 
-                //类型
-                if(type!=null){
+                // 类型
+                if (type != null) {
                     list.add(cb.equal(logTypeField, type));
                 }
 
-                //模糊搜素
-                if(StrUtil.isNotBlank(key)){
-                    Predicate p1 = cb.like(requestUrlField,'%'+key+'%');
-                    Predicate p2 = cb.like(requestTypeField,'%'+key+'%');
-                    Predicate p3 = cb.like(requestParamField,'%'+key+'%');
-                    Predicate p4 = cb.like(usernameField,'%'+key+'%');
-                    Predicate p5 = cb.like(ipField,'%'+key+'%');
-                    Predicate p6 = cb.like(ipInfoField,'%'+key+'%');
-                    Predicate p7 = cb.like(nameField,'%'+key+'%');
-                    list.add(cb.or(p1,p2,p3,p4,p5,p6, p7));
+                // 模糊搜素
+                if (StrUtil.isNotBlank(key)) {
+                    Predicate p1 = cb.like(requestUrlField, '%' + key + '%');
+                    Predicate p2 = cb.like(requestTypeField, '%' + key + '%');
+                    Predicate p3 = cb.like(requestParamField, '%' + key + '%');
+                    Predicate p4 = cb.like(usernameField, '%' + key + '%');
+                    Predicate p5 = cb.like(ipField, '%' + key + '%');
+                    Predicate p6 = cb.like(ipInfoField, '%' + key + '%');
+                    Predicate p7 = cb.like(nameField, '%' + key + '%');
+                    list.add(cb.or(p1, p2, p3, p4, p5, p6, p7));
                 }
 
-                //创建时间
-                if(StrUtil.isNotBlank(searchVo.getStartDate())&&StrUtil.isNotBlank(searchVo.getEndDate())){
+                // 创建时间
+                if (StrUtil.isNotBlank(searchVo.getStartDate()) && StrUtil.isNotBlank(searchVo.getEndDate())) {
                     Date start = DateUtil.parse(searchVo.getStartDate());
                     Date end = DateUtil.parse(searchVo.getEndDate());
                     list.add(cb.between(createTimeField, start, DateUtil.endOfDay(end)));

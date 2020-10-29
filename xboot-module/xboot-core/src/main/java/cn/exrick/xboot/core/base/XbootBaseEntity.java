@@ -28,8 +28,8 @@ import java.util.Date;
 @Data
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(value={"hibernateLazyInitializer","handler","fieldHandler"})
-public abstract class XbootBaseEntity implements Serializable{
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler", "fieldHandler"})
+public abstract class XbootBaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

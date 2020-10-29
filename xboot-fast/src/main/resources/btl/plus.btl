@@ -16,7 +16,7 @@ public Page<${entity.className}> findByCondition(${entity.className} ${entity.cl
             %>
             Path<Date> createTimeField = root.get("createTime");
 
-            List<Predicate> list = new ArrayList<Predicate>();
+            List<Predicate> list = new ArrayList<>();
 
             <%
             for(item in items){

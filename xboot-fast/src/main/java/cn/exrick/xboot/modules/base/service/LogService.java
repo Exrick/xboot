@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
  * 日志接口
  * @author Exrickx
  */
-public interface LogService extends XbootBaseService<Log,String> {
+public interface LogService extends XbootBaseService<Log, String> {
 
     /**
      * 分页搜索获取日志
@@ -22,6 +22,7 @@ public interface LogService extends XbootBaseService<Log,String> {
      * @return
      */
     Page<Log> findByConfition(Integer type, String key, SearchVo searchVo, Pageable pageable);
+
     /**
      * 删除所有
      */

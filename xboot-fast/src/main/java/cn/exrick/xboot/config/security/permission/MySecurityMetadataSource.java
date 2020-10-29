@@ -11,7 +11,6 @@ import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 
 import java.util.*;
@@ -36,20 +35,20 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
     /**
      * 加载权限表中所有操作请求权限
      */
-    public void loadResourceDefine(){
+    public void loadResourceDefine() {
 
         map = new HashMap<>(16);
         Collection<ConfigAttribute> configAttributes;
         ConfigAttribute cfg;
         // 获取启用的权限操作请求
         List<Permission> permissions = permissionService.findByTypeAndStatusOrderBySortOrder(CommonConstant.PERMISSION_OPERATION, CommonConstant.STATUS_NORMAL);
-        for(Permission permission : permissions) {
-            if(StrUtil.isNotBlank(permission.getTitle())&&StrUtil.isNotBlank(permission.getPath())){
+        for (Permission permission : permissions) {
+            if (StrUtil.isNotBlank(permission.getTitle()) && StrUtil.isNotBlank(permission.getPath())) {
                 configAttributes = new ArrayList<>();
                 cfg = new SecurityConfig(permission.getTitle());
-                //作为MyAccessDecisionManager类的decide的第三个参数
+                // 作为MyAccessDecisionManager类的decide的第三个参数
                 configAttributes.add(cfg);
-                //用权限的path作为map的key，用ConfigAttribute的集合作为value
+                // 用权限的path作为map的key，用ConfigAttribute的集合作为value
                 map.put(permission.getPath(), configAttributes);
             }
         }
@@ -66,15 +65,15 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
     @Override
     public Collection<ConfigAttribute> getAttributes(Object o) throws IllegalArgumentException {
 
-        if(map == null){
+        if (map == null) {
             loadResourceDefine();
         }
-        //Object中包含用户请求request
+        // Object中包含用户请求request
         String url = ((FilterInvocation) o).getRequestUrl();
         Iterator<String> iterator = map.keySet().iterator();
         while (iterator.hasNext()) {
             String resURL = iterator.next();
-            if (StrUtil.isNotBlank(resURL)&&pathMatcher.match(resURL,url)) {
+            if (StrUtil.isNotBlank(resURL) && pathMatcher.match(resURL, url)) {
                 return map.get(resURL);
             }
         }

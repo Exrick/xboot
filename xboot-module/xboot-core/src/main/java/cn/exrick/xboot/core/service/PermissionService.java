@@ -12,14 +12,6 @@ import java.util.List;
 public interface PermissionService extends XbootBaseService<Permission, String> {
 
     /**
-     * 通过层级查找
-     * 默认升序
-     * @param level
-     * @return
-     */
-    List<Permission> findByLevelOrderBySortOrder(Integer level);
-
-    /**
      * 通过parendId查找
      * @param parentId
      * @return

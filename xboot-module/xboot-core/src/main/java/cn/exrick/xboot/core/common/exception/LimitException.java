@@ -10,7 +10,7 @@ public class LimitException extends RuntimeException {
 
     private String msg;
 
-    public LimitException(String msg){
+    public LimitException(String msg) {
         super(msg);
         this.msg = msg;
     }

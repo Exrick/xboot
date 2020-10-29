@@ -20,12 +20,16 @@ public class PageUtil {
     private final static String[] KEYWORDS = {"master", "truncate", "insert", "select",
             "delete", "update", "declare", "alter", "drop", "sleep"};
 
+    private PageUtil() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * JPA分页封装
      * @param page
      * @return
      */
-    public static Pageable initPage(PageVo page){
+    public static Pageable initPage(PageVo page) {
 
         Pageable pageable = null;
         int pageNumber = page.getPageNumber();
@@ -33,26 +37,26 @@ public class PageUtil {
         String sort = page.getSort();
         String order = page.getOrder();
 
-        if(pageNumber<1){
+        if (pageNumber < 1) {
             pageNumber = 1;
         }
-        if(pageSize<1){
+        if (pageSize < 1) {
             pageSize = 10;
         }
-        if(pageSize>100){
+        if (pageSize > 100) {
             pageSize = 100;
         }
-        if(StrUtil.isNotBlank(sort)) {
+        if (StrUtil.isNotBlank(sort)) {
             Sort.Direction d;
-            if(StrUtil.isBlank(order)) {
+            if (StrUtil.isBlank(order)) {
                 d = Sort.Direction.DESC;
             } else {
                 d = Sort.Direction.valueOf(order.toUpperCase());
             }
             Sort s = Sort.by(d, sort);
-            pageable = PageRequest.of(pageNumber-1, pageSize, s);
+            pageable = PageRequest.of(pageNumber - 1, pageSize, s);
         } else {
-            pageable = PageRequest.of(pageNumber-1, pageSize);
+            pageable = PageRequest.of(pageNumber - 1, pageSize);
         }
         return pageable;
     }
@@ -62,7 +66,7 @@ public class PageUtil {
      * @param page
      * @return
      */
-    public static Page initMpPage(PageVo page){
+    public static Page initMpPage(PageVo page) {
 
         Page p = null;
         int pageNumber = page.getPageNumber();
@@ -72,28 +76,28 @@ public class PageUtil {
 
         SQLInject(sort);
 
-        if(pageNumber<1){
+        if (pageNumber < 1) {
             pageNumber = 1;
         }
-        if(pageSize<1){
+        if (pageSize < 1) {
             pageSize = 10;
         }
-        if(pageSize>100){
+        if (pageSize > 100) {
             pageSize = 100;
         }
-        if(StrUtil.isNotBlank(sort)) {
+        if (StrUtil.isNotBlank(sort)) {
             Boolean isAsc = false;
-            if(StrUtil.isBlank(order)) {
+            if (StrUtil.isBlank(order)) {
                 isAsc = false;
             } else {
-                if("desc".equals(order.toLowerCase())){
+                if ("desc".equals(order.toLowerCase())) {
                     isAsc = false;
-                } else if("asc".equals(order.toLowerCase())){
+                } else if ("asc".equals(order.toLowerCase())) {
                     isAsc = true;
                 }
             }
             p = new Page(pageNumber, pageSize);
-            if(isAsc){
+            if (isAsc) {
                 p.addOrder(OrderItem.asc(camel2Underline(sort)));
             } else {
                 p.addOrder(OrderItem.desc(camel2Underline(sort)));
@@ -116,22 +120,22 @@ public class PageUtil {
         int pageNumber = page.getPageNumber() - 1;
         int pageSize = page.getPageSize();
 
-        if(pageNumber<0){
+        if (pageNumber < 0) {
             pageNumber = 0;
         }
-        if(pageSize<1){
+        if (pageSize < 1) {
             pageSize = 10;
         }
-        if(pageSize>100){
+        if (pageSize > 100) {
             pageSize = 100;
         }
 
         int fromIndex = pageNumber * pageSize;
         int toIndex = pageNumber * pageSize + pageSize;
 
-        if(fromIndex > list.size()){
+        if (fromIndex > list.size()) {
             return new ArrayList();
-        } else if(toIndex >= list.size()) {
+        } else if (toIndex >= list.size()) {
             return list.subList(fromIndex, list.size());
         } else {
             return list.subList(fromIndex, toIndex);
@@ -146,25 +150,25 @@ public class PageUtil {
         if (StrUtil.isBlank(str)) {
             return "";
         }
-        if(str.length()==1){
+        if (str.length() == 1) {
             return str.toLowerCase();
         }
-        StringBuffer sb = new StringBuffer();
-        for(int i=1;i<str.length();i++){
-            if(Character.isUpperCase(str.charAt(i))){
-                sb.append("_"+Character.toLowerCase(str.charAt(i)));
-            }else{
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i < str.length(); i++) {
+            if (Character.isUpperCase(str.charAt(i))) {
+                sb.append("_" + Character.toLowerCase(str.charAt(i)));
+            } else {
                 sb.append(str.charAt(i));
             }
         }
-        return (str.charAt(0)+sb.toString()).toLowerCase();
+        return (str.charAt(0) + sb.toString()).toLowerCase();
     }
 
     /**
      * 防Mybatis-Plus order by注入
      * @param param
      */
-    public static void SQLInject(String param){
+    public static void SQLInject(String param) {
 
         if (StrUtil.isBlank(param)) {
             return;

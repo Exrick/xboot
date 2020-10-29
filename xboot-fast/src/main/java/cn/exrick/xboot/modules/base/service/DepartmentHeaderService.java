@@ -9,7 +9,7 @@ import java.util.List;
  * 部门负责人接口
  * @author Exrick
  */
-public interface DepartmentHeaderService extends XbootBaseService<DepartmentHeader,String> {
+public interface DepartmentHeaderService extends XbootBaseService<DepartmentHeader, String> {
 
     /**
      * 通过部门和负责人类型获取

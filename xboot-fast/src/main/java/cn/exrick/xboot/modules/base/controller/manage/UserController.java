@@ -3,7 +3,9 @@ package cn.exrick.xboot.modules.base.controller.manage;
 import cn.exrick.xboot.common.constant.CommonConstant;
 import cn.exrick.xboot.common.exception.XbootException;
 import cn.exrick.xboot.common.redis.RedisTemplateHelper;
-import cn.exrick.xboot.common.utils.*;
+import cn.exrick.xboot.common.utils.PageUtil;
+import cn.exrick.xboot.common.utils.ResultUtil;
+import cn.exrick.xboot.common.utils.SecurityUtil;
 import cn.exrick.xboot.common.vo.PageVo;
 import cn.exrick.xboot.common.vo.Result;
 import cn.exrick.xboot.common.vo.RoleDTO;
@@ -12,8 +14,8 @@ import cn.exrick.xboot.modules.base.entity.Department;
 import cn.exrick.xboot.modules.base.entity.Role;
 import cn.exrick.xboot.modules.base.entity.User;
 import cn.exrick.xboot.modules.base.entity.UserRole;
-import cn.exrick.xboot.modules.base.service.mybatis.IUserRoleService;
 import cn.exrick.xboot.modules.base.service.*;
+import cn.exrick.xboot.modules.base.service.mybatis.IUserRoleService;
 import cn.hutool.core.util.StrUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,7 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,6 @@ import javax.persistence.PersistenceContext;
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -48,6 +48,8 @@ import java.util.stream.Collectors;
 @Transactional
 public class UserController {
 
+    public static final String USER = "user::";
+
     @Autowired
     private UserService userService;
 
@@ -58,19 +60,16 @@ public class UserController {
     private DepartmentService departmentService;
 
     @Autowired
+    private DepartmentHeaderService departmentHeaderService;
+
+    @Autowired
     private IUserRoleService iUserRoleService;
 
     @Autowired
     private UserRoleService userRoleService;
 
     @Autowired
-    private DepartmentHeaderService departmentHeaderService;
-
-    @Autowired
-    private StringRedisTemplate redisTemplate;
-
-    @Autowired
-    private RedisTemplateHelper redisTemplateHelper;
+    private RedisTemplateHelper redisTemplate;
 
     @Autowired
     private SecurityUtil securityUtil;
@@ -78,9 +77,9 @@ public class UserController {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @RequestMapping(value = "/regist",method = RequestMethod.POST)
+    @RequestMapping(value = "/regist", method = RequestMethod.POST)
     @ApiOperation(value = "注册用户")
-    public Result<Object> regist(@Valid User u){
+    public Result<Object> regist(@Valid User u) {
 
         // 校验是否已存在
         checkUserInfo(u.getUsername(), u.getMobile(), u.getEmail());
@@ -91,8 +90,8 @@ public class UserController {
 
         // 默认角色
         List<Role> roleList = roleService.findByDefaultRole(true);
-        if(roleList!=null&&roleList.size()>0){
-            for(Role role : roleList){
+        if (roleList != null && roleList.size() > 0) {
+            for (Role role : roleList) {
                 UserRole ur = new UserRole().setUserId(user.getId()).setRoleId(role.getId());
                 userRoleService.save(ur);
             }
@@ -101,9 +100,9 @@ public class UserController {
         return ResultUtil.data(user);
     }
 
-    @RequestMapping(value = "/info",method = RequestMethod.GET)
+    @RequestMapping(value = "/info", method = RequestMethod.GET)
     @ApiOperation(value = "获取当前登录用户接口")
-    public Result<User> getUserInfo(){
+    public Result<User> getUserInfo() {
 
         User u = securityUtil.getCurrUser();
         // 清除持久上下文环境 避免后面语句导致持久化
@@ -112,12 +111,24 @@ public class UserController {
         return new ResultUtil<User>().setData(u);
     }
 
-    @RequestMapping(value = "/unlock",method = RequestMethod.POST)
-    @ApiOperation(value = "解锁验证密码")
-    public Result<Object> unLock(@RequestParam String password){
+    @RequestMapping(value = "/changeMobile", method = RequestMethod.POST)
+    @ApiOperation(value = "修改绑定手机")
+    public Result<Object> changeMobile(@RequestParam String mobile) {
 
         User u = securityUtil.getCurrUser();
-        if(!new BCryptPasswordEncoder().matches(password, u.getPassword())){
+        u.setMobile(mobile);
+        userService.update(u);
+        // 删除缓存
+        redisTemplate.delete(USER + u.getUsername());
+        return ResultUtil.success("修改手机号成功");
+    }
+
+    @RequestMapping(value = "/unlock", method = RequestMethod.POST)
+    @ApiOperation(value = "解锁验证密码")
+    public Result<Object> unLock(@RequestParam String password) {
+
+        User u = securityUtil.getCurrUser();
+        if (!new BCryptPasswordEncoder().matches(password, u.getPassword())) {
             return ResultUtil.error("密码不正确");
         }
         return ResultUtil.data(null);
@@ -125,29 +136,30 @@ public class UserController {
 
     @RequestMapping(value = "/resetPass", method = RequestMethod.POST)
     @ApiOperation(value = "重置密码")
-    public Result<Object> resetPass(@RequestParam String[] ids){
+    public Result<Object> resetPass(@RequestParam String[] ids) {
 
-        for(String id:ids){
+        for (String id : ids) {
             User u = userService.get(id);
+            // 在线DEMO所需
+            if ("test".equals(u.getUsername()) || "test2".equals(u.getUsername()) || "admin".equals(u.getUsername())) {
+                throw new XbootException("测试账号及管理员账号不得重置");
+            }
             u.setPassword(new BCryptPasswordEncoder().encode("123456"));
             userService.update(u);
-            redisTemplate.delete("user::"+u.getUsername());
+            redisTemplate.delete(USER + u.getUsername());
         }
         return ResultUtil.success("操作成功");
     }
 
-    @RequestMapping(value = "/edit",method = RequestMethod.POST)
-    @ApiOperation(value = "修改用户自己资料",notes = "用户名密码不会修改 需要username更新缓存")
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    @ApiOperation(value = "修改用户自己资料", notes = "用户名密码等不会修改 需要username更新缓存")
     @CacheEvict(key = "#u.username")
-    public Result<Object> editOwn(User u){
+    public Result<Object> editOwn(User u) {
 
         User old = securityUtil.getCurrUser();
-        u.setUsername(old.getUsername());
-        u.setPassword(old.getPassword());
-        User user = userService.update(u);
-        if(user==null){
-            return ResultUtil.error("修改失败");
-        }
+        // 不能修改的字段
+        u.setUsername(old.getUsername()).setPassword(old.getPassword()).setType(old.getType()).setStatus(old.getStatus());
+        userService.update(u);
         return ResultUtil.success("修改成功");
     }
 
@@ -157,37 +169,44 @@ public class UserController {
      * @param newPass
      * @return
      */
-    @RequestMapping(value = "/modifyPass",method = RequestMethod.POST)
+    @RequestMapping(value = "/modifyPass", method = RequestMethod.POST)
     @ApiOperation(value = "修改密码")
     public Result<Object> modifyPass(@ApiParam("旧密码") @RequestParam String password,
-                                     @ApiParam("新密码") @RequestParam String newPass){
+                                     @ApiParam("新密码") @RequestParam String newPass,
+                                     @ApiParam("密码强度") @RequestParam String passStrength) {
 
         User user = securityUtil.getCurrUser();
+        // 在线DEMO所需
+        if ("test".equals(user.getUsername()) || "test2".equals(user.getUsername())) {
+            return ResultUtil.error("演示账号不支持修改密码");
+        }
 
-        if(!new BCryptPasswordEncoder().matches(password, user.getPassword())){
+        if (!new BCryptPasswordEncoder().matches(password, user.getPassword())) {
             return ResultUtil.error("旧密码不正确");
         }
 
-        String newEncryptPass= new BCryptPasswordEncoder().encode(newPass);
+        String newEncryptPass = new BCryptPasswordEncoder().encode(newPass);
         user.setPassword(newEncryptPass);
+        user.setPassStrength(passStrength);
         userService.update(user);
 
         // 手动更新缓存
-        redisTemplate.delete("user::"+user.getUsername());
+        redisTemplate.delete(USER + user.getUsername());
 
         return ResultUtil.success("修改密码成功");
     }
 
-    @RequestMapping(value = "/getByCondition",method = RequestMethod.GET)
+    @RequestMapping(value = "/getByCondition", method = RequestMethod.GET)
     @ApiOperation(value = "多条件分页获取用户列表")
     public Result<Page<User>> getByCondition(User user,
                                              SearchVo searchVo,
-                                             PageVo pageVo){
+                                             PageVo pageVo) {
 
         Page<User> page = userService.findByCondition(user, searchVo, PageUtil.initPage(pageVo));
-        for(User u: page.getContent()){
+        for (User u : page.getContent()) {
+            // 关联角色
             List<Role> list = iUserRoleService.findByUserId(u.getId());
-            List<RoleDTO> roleDTOList = list.stream().map(e->{
+            List<RoleDTO> roleDTOList = list.stream().map(e -> {
                 return new RoleDTO().setId(e.getId()).setName(e.getName()).setDescription(e.getDescription());
             }).collect(Collectors.toList());
             u.setRoles(roleDTOList);
@@ -198,10 +217,9 @@ public class UserController {
         return new ResultUtil<Page<User>>().setData(page);
     }
 
-
-    @RequestMapping(value = "/getByDepartmentId/{departmentId}",method = RequestMethod.GET)
+    @RequestMapping(value = "/getByDepartmentId/{departmentId}", method = RequestMethod.GET)
     @ApiOperation(value = "多条件分页获取用户列表")
-    public Result<List<User>> getByCondition(@PathVariable String departmentId){
+    public Result<List<User>> getByCondition(@PathVariable String departmentId) {
 
         List<User> list = userService.findByDepartmentId(departmentId);
         entityManager.clear();
@@ -211,14 +229,14 @@ public class UserController {
         return new ResultUtil<List<User>>().setData(list);
     }
 
-    @RequestMapping(value = "/getAll",method = RequestMethod.GET)
+    @RequestMapping(value = "/getAll", method = RequestMethod.GET)
     @ApiOperation(value = "获取全部用户数据")
-    public Result<List<User>> getByCondition(){
+    public Result<List<User>> getAll() {
 
         List<User> list = userService.getAll();
-        for(User u: list){
-            // 清除持久上下文环境 避免后面语句导致持久化
-            entityManager.clear();
+        // 清除持久上下文环境 避免后面语句导致持久化
+        entityManager.clear();
+        for (User u : list) {
             u.setPassword(null);
         }
         return new ResultUtil<List<User>>().setData(list);
@@ -227,25 +245,25 @@ public class UserController {
     @RequestMapping(value = "/admin/add", method = RequestMethod.POST)
     @ApiOperation(value = "添加用户")
     public Result<Object> add(@Valid User u,
-                              @RequestParam(required = false) String[] roleIds){
+                              @RequestParam(required = false) String[] roleIds) {
 
         // 校验是否已存在
         checkUserInfo(u.getUsername(), u.getMobile(), u.getEmail());
 
         String encryptPass = new BCryptPasswordEncoder().encode(u.getPassword());
         u.setPassword(encryptPass);
-        if(StrUtil.isNotBlank(u.getDepartmentId())){
+        if (StrUtil.isNotBlank(u.getDepartmentId())) {
             Department d = departmentService.get(u.getDepartmentId());
-            if(d!=null){
+            if (d != null) {
                 u.setDepartmentTitle(d.getTitle());
             }
-        }else{
+        } else {
             u.setDepartmentId(null);
             u.setDepartmentTitle("");
         }
         User user = userService.save(u);
 
-        if(roleIds!=null){
+        if (roleIds != null) {
             // 添加角色
             List<UserRole> userRoles = Arrays.asList(roleIds).stream().map(e -> {
                 return new UserRole().setUserId(u.getId()).setRoleId(e);
@@ -257,28 +275,28 @@ public class UserController {
     }
 
     @RequestMapping(value = "/admin/edit", method = RequestMethod.POST)
-    @ApiOperation(value = "管理员修改资料",notes = "需要通过id获取原用户信息 需要username更新缓存")
+    @ApiOperation(value = "管理员修改资料", notes = "需要通过id获取原用户信息 需要username更新缓存")
     @CacheEvict(key = "#u.username")
     public Result<Object> edit(User u,
-                               @RequestParam(required = false) String[] roleIds){
+                               @RequestParam(required = false) String[] roleIds) {
 
         User old = userService.get(u.getId());
 
         u.setUsername(old.getUsername());
         // 若修改了手机和邮箱判断是否唯一
-        if(!old.getMobile().equals(u.getMobile())&&userService.findByMobile(u.getMobile())!=null){
+        if (!old.getMobile().equals(u.getMobile()) && userService.findByMobile(u.getMobile()) != null) {
             return ResultUtil.error("该手机号已绑定其他账户");
         }
-        if(!old.getEmail().equals(u.getEmail())&&userService.findByEmail(u.getEmail())!=null){
+        if (!old.getEmail().equals(u.getEmail()) && userService.findByEmail(u.getEmail()) != null) {
             return ResultUtil.error("该邮箱已绑定其他账户");
         }
 
-        if(StrUtil.isNotBlank(u.getDepartmentId())){
+        if (StrUtil.isNotBlank(u.getDepartmentId())) {
             Department d = departmentService.get(u.getDepartmentId());
-            if(d!=null){
+            if (d != null) {
                 u.setDepartmentTitle(d.getTitle());
             }
-        }else{
+        } else {
             u.setDepartmentId(null);
             u.setDepartmentTitle("");
         }
@@ -287,7 +305,7 @@ public class UserController {
         userService.update(u);
         // 删除该用户角色
         userRoleService.deleteByUserId(u.getId());
-        if(roleIds!=null){
+        if (roleIds != null) {
             // 新角色
             List<UserRole> userRoles = Arrays.asList(roleIds).stream().map(e -> {
                 return new UserRole().setRoleId(e).setUserId(u.getId());
@@ -295,55 +313,48 @@ public class UserController {
             userRoleService.saveOrUpdateAll(userRoles);
         }
         // 手动删除缓存
-        redisTemplate.delete("userRole::"+u.getId());
-        redisTemplate.delete("userRole::depIds:"+u.getId());
-        redisTemplate.delete("permission::userMenuList:"+u.getId());
+        redisTemplate.delete("userRole::" + u.getId());
+        redisTemplate.delete("userRole::depIds:" + u.getId());
+        redisTemplate.delete("permission::userMenuList:" + u.getId());
         return ResultUtil.success("修改成功");
     }
 
-    @RequestMapping(value = "/admin/disable/{userId}",method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/disable/{userId}", method = RequestMethod.POST)
     @ApiOperation(value = "后台禁用用户")
-    public Result<Object> disable(@ApiParam("用户唯一id标识") @PathVariable String userId){
+    public Result<Object> disable(@ApiParam("用户唯一id标识") @PathVariable String userId) {
 
         User user = userService.get(userId);
-        if(user==null){
-            return ResultUtil.error("通过userId获取用户失败");
-        }
         user.setStatus(CommonConstant.USER_STATUS_LOCK);
         userService.update(user);
         // 手动更新缓存
-        redisTemplate.delete("user::"+user.getUsername());
-        return ResultUtil.data(null);
+        redisTemplate.delete(USER + user.getUsername());
+        return ResultUtil.success("操作成功");
     }
 
-    @RequestMapping(value = "/admin/enable/{userId}",method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/enable/{userId}", method = RequestMethod.POST)
     @ApiOperation(value = "后台启用用户")
-    public Result<Object> enable(@ApiParam("用户唯一id标识") @PathVariable String userId){
+    public Result<Object> enable(@ApiParam("用户唯一id标识") @PathVariable String userId) {
 
         User user = userService.get(userId);
-        if(user==null){
-            return ResultUtil.error("通过userId获取用户失败");
-        }
         user.setStatus(CommonConstant.USER_STATUS_NORMAL);
         userService.update(user);
         // 手动更新缓存
-        redisTemplate.delete("user::"+user.getUsername());
-        return ResultUtil.data(null);
+        redisTemplate.delete(USER + user.getUsername());
+        return ResultUtil.success("操作成功");
     }
 
-    @RequestMapping(value = "/delByIds/{ids}",method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delByIds", method = RequestMethod.POST)
     @ApiOperation(value = "批量通过ids删除")
-    public Result<Object> delAllByIds(@PathVariable String[] ids){
+    public Result<Object> delAllByIds(@RequestParam String[] ids) {
 
-        for(String id:ids){
+        for (String id : ids) {
             User u = userService.get(id);
-            // 删除缓存
-            redisTemplate.delete("user::" + u.getUsername());
+            // 删除相关缓存
+            redisTemplate.delete(USER + u.getUsername());
             redisTemplate.delete("userRole::" + u.getId());
             redisTemplate.delete("userRole::depIds:" + u.getId());
             redisTemplate.delete("permission::userMenuList:" + u.getId());
-            Set<String> keys = redisTemplateHelper.keys("department::*");
-            redisTemplate.delete(keys);
+            redisTemplate.deleteByPattern("department::*");
 
             userService.delete(id);
 
@@ -358,22 +369,20 @@ public class UserController {
     /**
      * 校验
      * @param username 用户名 不校验传空字符或null 下同
-     * @param mobile 手机号
-     * @param email 邮箱
+     * @param mobile   手机号
+     * @param email    邮箱
      */
-    public void checkUserInfo(String username, String mobile, String email){
+    public void checkUserInfo(String username, String mobile, String email) {
 
-        // 禁用词
-        CommonUtil.stopwords(username);
-
-        if(StrUtil.isNotBlank(username)&&userService.findByUsername(username)!=null){
+        if (StrUtil.isNotBlank(username) && userService.findByUsername(username) != null) {
             throw new XbootException("该登录账号已被注册");
         }
-        if(StrUtil.isNotBlank(email)&&userService.findByEmail(email)!=null){
+        if (StrUtil.isNotBlank(email) && userService.findByEmail(email) != null) {
             throw new XbootException("该邮箱已被注册");
         }
-        if(StrUtil.isNotBlank(mobile)&&userService.findByMobile(mobile)!=null){
+        if (StrUtil.isNotBlank(mobile) && userService.findByMobile(mobile) != null) {
             throw new XbootException("该手机号已被注册");
         }
     }
 }
+

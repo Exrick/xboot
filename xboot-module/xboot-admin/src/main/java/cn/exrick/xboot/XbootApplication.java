@@ -12,13 +12,13 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @author Exrickx
  */
 @SpringBootApplication
-//启用JPA审计
+// 启用JPA审计
 @EnableJpaAuditing
-//启用缓存
+// 启用缓存
 @EnableCaching
-//启用异步
+// 启用异步
 @EnableAsync
-//启用自带定时任务
+// 启用自带定时任务
 @EnableScheduling
 // 启用Admin监控
 @EnableAdminServer

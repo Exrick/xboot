@@ -20,6 +20,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -51,7 +52,7 @@ public class User extends XbootBaseEntity {
     private String password;
 
     @ApiModelProperty(value = "用户名/昵称/姓名")
-    @NotNull(message = "不能为空")
+    @NotBlank(message = "不能为空")
     @Size(max = 20, message = "昵称长度不能超过20")
     private String nickname;
 
@@ -100,17 +101,17 @@ public class User extends XbootBaseEntity {
     private Date birth;
 
     @Transient
-    @TableField(exist=false)
+    @TableField(exist = false)
     @ApiModelProperty(value = "用户拥有角色")
     private List<RoleDTO> roles;
 
     @Transient
-    @TableField(exist=false)
+    @TableField(exist = false)
     @ApiModelProperty(value = "用户拥有的权限")
     private List<PermissionDTO> permissions;
 
     @Transient
-    @TableField(exist=false)
+    @TableField(exist = false)
     @ApiModelProperty(value = "导入数据时使用")
     private Integer defaultRole;
 }

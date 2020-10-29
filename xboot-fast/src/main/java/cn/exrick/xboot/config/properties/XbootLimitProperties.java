@@ -20,7 +20,7 @@ public class XbootLimitProperties {
     /**
      * 限制请求个数
      */
-    private Integer limit = 100;
+    private Long limit = 100L;
 
     /**
      * 每单位时间内（毫秒）

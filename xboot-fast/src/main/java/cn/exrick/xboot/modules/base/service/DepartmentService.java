@@ -9,7 +9,7 @@ import java.util.List;
  * 部门接口
  * @author Exrick
  */
-public interface DepartmentService extends XbootBaseService<Department,String> {
+public interface DepartmentService extends XbootBaseService<Department, String> {
 
     /**
      * 通过父id获取 升序
