@@ -72,7 +72,7 @@ public abstract class XbootBaseController<E, ID extends Serializable> {
     @RequestMapping(value = "/delByIds", method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "批量通过id删除")
-    public Result<Object> delByIds(@RequestParam ID[] ids) {
+    public Result<Object> delByIds(ID[] ids) {
 
         for (ID id : ids) {
             getService().delete(id);

@@ -70,7 +70,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    @CacheEvict(key = "#client.id")
+    @CacheEvict(key = "#id")
     public void delete(String id) {
 
         clientDao.deleteById(id);
