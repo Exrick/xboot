@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @RestController
-@Api(description = "部门管理接口")
+@Api(tags = "部门管理接口")
 @RequestMapping("/xboot/department")
 @CacheConfig(cacheNames = "department")
 @Transactional

@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@Api(description = "日志管理接口")
+@Api(tags = "日志管理接口")
 @RequestMapping("/xboot/log")
 @Transactional
 public class LogController {

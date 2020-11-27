@@ -36,9 +36,9 @@ public class RedisRaterLimiter {
 
         RRateLimiter rateLimiter = redisson.getRateLimiter(CommonConstant.LIMIT_PRE + name);
         rateLimiter.trySetRate(RateType.OVERALL, rate, rateInterval, RateIntervalUnit.MILLISECONDS);
-        rateLimiter.expire(rateInterval, TimeUnit.MILLISECONDS);
 
         boolean getToken = rateLimiter.tryAcquire();
+        rateLimiter.expireAsync(rateInterval, TimeUnit.MILLISECONDS);
         return getToken;
     }
 

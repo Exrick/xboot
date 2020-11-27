@@ -22,21 +22,22 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <encoding>UTF-8</encoding>
         <!-- 依赖包版本 -->
-        <spring.boot.version>2.3.4.RELEASE</spring.boot.version>
-        <spring.boot.admin.version>2.3.0</spring.boot.admin.version>
-        <druid.version>1.2.1</druid.version>
+        <spring.boot.version>2.3.6.RELEASE</spring.boot.version>
+        <spring.boot.admin.version>2.3.1</spring.boot.admin.version>
+        <druid.version>1.2.3</druid.version>
         <jjwt.version>0.9.1</jjwt.version>
         <mysql.connector.version>8.0.17</mysql.connector.version>
-        <mybatis.plus.version>3.4.0</mybatis.plus.version>
+        <mybatis.plus.version>3.4.1</mybatis.plus.version>
         <redission.version>3.13.6</redission.version>
-        <swagger.ui.version>2.7.0</swagger.ui.version>
+        <knife4j.version>2.0.8</knife4j.version>
         <gson.version>2.8.6</gson.version>
-        <hutool.version>5.4.6</hutool.version>
-        <lombok.version>1.18.12</lombok.version>
+        <hutool.version>5.5.1</hutool.version>
+        <lombok.version>1.18.16</lombok.version>
         <jasypt.version>3.0.3</jasypt.version>
         <beetl.version>2.9.10</beetl.version>
         <antlr.version>4.8</antlr.version>
         <qiniu.version>7.3.0</qiniu.version>
+        <guava.version>30.0-jre</guava.version>
         <!-- 测试 -->
         <extentreports.testng.version>1.2.2</extentreports.testng.version>
         <selenuim.version>4.0.0-alpha-6</selenuim.version>
@@ -93,16 +94,11 @@
                 <artifactId>redisson-spring-boot-starter</artifactId>
                 <version>${redission.version}</version>
             </dependency>
-            <!-- Swagger -->
+            <!-- knife4j Swagger增强API文档 -->
             <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger-ui</artifactId>
-                <version>${swagger.ui.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger2</artifactId>
-                <version>${swagger.ui.version}</version>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <version>${knife4j.version}</version>
             </dependency>
             <!-- Gson -->
             <dependency>
@@ -144,6 +140,12 @@
                 <groupId>com.qiniu</groupId>
                 <artifactId>qiniu-java-sdk</artifactId>
                 <version>${qiniu.version}</version>
+            </dependency>
+            <!-- Guava 谷歌工具包 -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
             </dependency>
 
             <!-- 测试框架TestNG + 测试报告 -->

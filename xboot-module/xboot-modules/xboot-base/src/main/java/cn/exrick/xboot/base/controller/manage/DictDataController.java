@@ -27,7 +27,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@Api(description = "字典数据管理接口")
+@Api(tags = "字典数据管理接口")
 @RequestMapping("/xboot/dictData")
 @CacheConfig(cacheNames = "dictData")
 @Transactional

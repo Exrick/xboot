@@ -27,7 +27,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@Api(description = "定时任务管理接口")
+@Api(tags = "定时任务管理接口")
 @RequestMapping("/xboot/quartzJob")
 @Transactional
 public class QuartzJobController {

@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Controller
-@Api(description = "测试接口")
+@Api(tags = "测试接口")
 @Transactional
 @RequestMapping(value = "/xboot/test")
 public class TestController {

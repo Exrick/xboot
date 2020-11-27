@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @RestController
-@Api(description = "角色管理接口")
+@Api(tags = "角色管理接口")
 @RequestMapping("/xboot/role")
 @Transactional
 public class RoleController {

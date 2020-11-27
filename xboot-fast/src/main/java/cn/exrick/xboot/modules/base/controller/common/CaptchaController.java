@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author Exrickx
  */
-@Api(description = "验证码接口")
+@Api(tags = "验证码接口")
 @RequestMapping("/xboot/common/captcha")
 @RestController
 @Transactional

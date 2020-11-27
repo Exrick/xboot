@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Slf4j
 @RestController
-@Api(description = "${entity.description}管理接口")
+@Api(tags = "${entity.description}管理接口")
 @RequestMapping("/xboot/${entity.classNameLowerCase}")
 @Transactional
 public class ${entity.className}Controller extends XbootBaseController<${entity.className}, ${entity.primaryKeyType}> {

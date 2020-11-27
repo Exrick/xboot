@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Slf4j
 @RestController
-@Api(description = "IP接口")
+@Api(tags = "IP接口")
 @RequestMapping("/xboot/common/ip")
 @Transactional
 public class IpInfoController {

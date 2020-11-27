@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @RestController
-@Api(description = "用户接口")
+@Api(tags = "用户接口")
 @RequestMapping("/xboot/user")
 @CacheConfig(cacheNames = "user")
 @Transactional

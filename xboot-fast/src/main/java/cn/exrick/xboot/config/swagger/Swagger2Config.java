@@ -1,28 +1,33 @@
 package cn.exrick.xboot.config.swagger;
 
+import cn.exrick.xboot.config.properties.IgnoredUrlsProperties;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
+import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
+
+import static springfox.documentation.builders.PathSelectors.ant;
+import static springfox.documentation.builders.PathSelectors.regex;
 
 /**
  * @author Exrickx
  */
 @Slf4j
 @Configuration
-@EnableSwagger2
+@EnableSwagger2WebMvc
 public class Swagger2Config {
 
     @Value("${swagger.title:XBoot}")
@@ -37,6 +42,9 @@ public class Swagger2Config {
     @Value("${swagger.termsOfServiceUrl:http://xboot.exrick.cn}")
     private String termsOfServiceUrl;
 
+    @Value("${swagger.group:XBoot v1.0}")
+    private String group;
+
     @Value("${swagger.contact.name:Exrick}")
     private String name;
 
@@ -46,41 +54,40 @@ public class Swagger2Config {
     @Value("${swagger.contact.email:1012139570@qq.com}")
     private String email;
 
-    private List<ApiKey> securitySchemes() {
-        List<ApiKey> apiKeys = new ArrayList<>();
-        apiKeys.add(new ApiKey("Authorization", "accessToken", "header"));
-        return apiKeys;
-    }
+    @Autowired
+    private IgnoredUrlsProperties ignoredUrlsProperties;
 
-    private List<SecurityContext> securityContexts() {
-        List<SecurityContext> securityContexts = new ArrayList<>();
-        securityContexts.add(SecurityContext.builder()
-                .securityReferences(defaultAuth())
-                .forPaths(PathSelectors.regex("^(?!auth).*$")).build());
-        return securityContexts;
-    }
+    public List<SecurityContext> securityContexts() {
 
-    private List<SecurityReference> defaultAuth() {
-        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
-        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-        authorizationScopes[0] = authorizationScope;
-        List<SecurityReference> securityReferences = new ArrayList<>();
-        securityReferences.add(new SecurityReference("Authorization", authorizationScopes));
-        return securityReferences;
+        Predicate<String> paths = ant("");
+        for (String url : ignoredUrlsProperties.getUrls()) {
+            paths = paths.or(ant(url));
+        }
+
+        return Collections.singletonList(
+                SecurityContext.builder()
+                        .securityReferences(Collections.singletonList(
+                                new SecurityReference("Authorization",
+                                        new AuthorizationScope[]{
+                                                new AuthorizationScope("global", "")})))
+                        .forPaths(paths.negate())
+                        .build());
     }
 
     @Bean
     public Docket createRestApi() {
 
-        log.info("加载Swagger2");
+        List<SecurityScheme> securitySchemes = Collections.singletonList(
+                new ApiKey("Authorization", "accessToken", "header"));
 
         return new Docket(DocumentationType.SWAGGER_2)
+                .groupName(group)
                 .apiInfo(apiInfo()).select()
                 // 扫描所有有注解的api，用这种方式更灵活
                 .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
-                .paths(PathSelectors.any())
+                .paths(regex(".*/app/.*").negate())
                 .build()
-                .securitySchemes(securitySchemes())
+                .securitySchemes(securitySchemes)
                 .securityContexts(securityContexts());
     }
 

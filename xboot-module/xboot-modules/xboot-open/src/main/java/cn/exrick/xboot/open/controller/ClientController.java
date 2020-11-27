@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@Api(description = "客户端管理接口")
+@Api(tags = "客户端管理接口")
 @RequestMapping("/xboot/client")
 @Transactional
 public class ClientController extends XbootBaseController<Client, String> {

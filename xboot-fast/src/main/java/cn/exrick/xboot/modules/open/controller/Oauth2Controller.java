@@ -38,7 +38,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @RestController
-@Api(description = "OAuth2认证接口")
+@Api(tags = "OAuth2认证接口")
 @RequestMapping("/xboot/oauth2")
 public class Oauth2Controller {
 

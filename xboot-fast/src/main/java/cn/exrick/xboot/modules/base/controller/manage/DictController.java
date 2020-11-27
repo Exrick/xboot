@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@Api(description = "字典管理接口")
+@Api(tags = "字典管理接口")
 @RequestMapping("/xboot/dict")
 @Transactional
 public class DictController {

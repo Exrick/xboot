@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @RestController
-@Api(description = "菜单/权限管理接口")
+@Api(tags = "菜单权限管理接口")
 @RequestMapping("/xboot/permission")
 @CacheConfig(cacheNames = "permission")
 @Transactional

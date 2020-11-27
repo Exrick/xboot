@@ -22,7 +22,7 @@ https://www.kancloud.cn/exrick/xboot/content
 - xboot-fast：单应用版本
 - xboot-module：多模块版本
 ### 项目简介 
-- [x] 代码拥有详细注释 无复杂逻辑 核心使用 SpringBoot 2.3.4.RELEASE
+- [x] 代码拥有详细注释 无复杂逻辑 核心使用 SpringBoot 2.3.6.RELEASE
 - [x] JWT / 基于Redis可配置单设备登录Token交互 任意切换 支持点单登录 提供开放平台
 - [x] JPA + Mybatis-Plus 任意切换
 - [x] 操作日志记录方式任意切换Mysql或Elasticseach记录
@@ -63,7 +63,7 @@ https://www.kancloud.cn/exrick/xboot/content
 <img src="https://ooo.0o0.ooo/2019/05/01/5cc87695f109d.png" width="600px"/>
 
 ### 前端所用技术
-- Vue 2.5.x、Vue Cli 4.x、iView、iview-admin、iview-area、Vuex、Vue Router、ES6、webpack、axios、echarts、cookie等
+- Vue 2.6.x、Vue Cli 4.x、iView、iview-admin、iview-area、Vuex、Vue Router、ES6、webpack、axios、echarts、cookie等
 - 前台为基于Vue+iView的独立项目请跳转至 [xboot-front](https://github.com/Exrick/xboot-front) 项目仓库查看
 ### 后端所用技术
 
@@ -111,7 +111,7 @@ https://www.kancloud.cn/exrick/xboot/content
 - 建议使用IDEA([破解/免费注册](http://idea.lanyus.com/)) 安装 `Lombok` 插件后导入该Maven项目 若未自动下载依赖请在根目录下执行 `mvn install` 命令
 - MySQL数据库新建 `xboot` 数据库，配置文件已开启ddl自动生成表结构但无初始数据，请记得运行导入xboot.sql文件(当报错找不到Quartz相关表时请设置数据库忽略大小写或额外重新导入quartz.sql)
 - 修改配置文件 `application.yml` 相应配置，其中有详细注释，所有配置只需在这里修改
-- 编译器中启动运行 `XbootApplication.java` 或根目录下执行命令 `mvn spring-boot:run` 默认端口8888 访问接口文档 `http://localhost:8888/swagger-ui.html` 说明启动成功 管理员账密admin|123456
+- 编译器中启动运行 `XbootApplication.java` 或根目录下执行命令 `mvn spring-boot:run` 默认端口8888 访问接口文档 `http://localhost:8888/doc.html` 说明启动成功 管理员账密admin|123456
 - 前台页面请启动基于Vue的 [xboot-front](https://github.com/Exrick/xboot-front) 项目，并修改其接口代理配置
 > 温馨提示：若更新代码后报错，请记得更新sql并清空Redis缓存
 ### 开发指南及相关技术栈文档

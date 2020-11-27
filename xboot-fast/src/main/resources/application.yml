@@ -121,7 +121,7 @@ xboot:
     # 默认为true，token将存入redis，并具有单设备登录、自动刷新token过期时间功能 设为false使用JWT交互
     redis: true
     # 是否开启单设备登陆 一个账号仅支持同时一台设备登录 仅当token交互方式为redis时生效
-    sdl: true
+    sdl: false
     # token中存储用户权限数据 开启后可避免每次请求再获取用户权限，但有可能导致编辑权限菜单后无法读取到最新权限数据（需用户重新登录）
     storePerms: true
     # token过期时间 redis模式有请求自动刷新过期时间（分钟）
@@ -206,16 +206,21 @@ management:
       exposure:
         include: '*'
 
-# Swagger界面内容配置
+# 接口文档增强UI Swagger界面内容配置
+knife4j:
+  enable: true
+
 swagger:
   title: XBoot API接口文档
   description: XBoot Api Documentation
   version: 1.0.0
-  termsOfServiceUrl: http://blog.exrick.cn
+  termsOfServiceUrl: http://xboot.exrick.cn
   contact:
     name: Exrick
     url: http://blog.exrick.cn
     email: 1012139570@qq.com
+  # 分组名
+  group: 1.XBoot管理接口 v1.0
 
 # Mybatis-plus
 mybatis-plus:
