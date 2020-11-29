@@ -170,7 +170,7 @@ ignored:
     - /xboot/user/regist
     - /xboot/common/**
     - /druid/**
-    - /swagger-ui.html
+    - /doc.html
     - /swagger-resources/**
     - /swagger/**
     - /**/v2/api-docs
