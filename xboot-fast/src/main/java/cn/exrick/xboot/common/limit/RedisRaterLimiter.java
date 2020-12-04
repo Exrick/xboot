@@ -37,8 +37,13 @@ public class RedisRaterLimiter {
         RRateLimiter rateLimiter = redisson.getRateLimiter(CommonConstant.LIMIT_PRE + name);
         rateLimiter.trySetRate(RateType.OVERALL, rate, rateInterval, RateIntervalUnit.MILLISECONDS);
 
-        boolean getToken = rateLimiter.tryAcquire();
-        rateLimiter.expireAsync(rateInterval, TimeUnit.MILLISECONDS);
+        boolean getToken;
+        try {
+            getToken = rateLimiter.tryAcquire();
+            rateLimiter.expireAsync(rateInterval * 2, TimeUnit.MILLISECONDS);
+        } catch (Exception e) {
+            getToken = false;
+        }
         return getToken;
     }
 

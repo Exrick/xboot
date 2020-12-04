@@ -105,7 +105,7 @@
         <dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson-spring-boot-starter</artifactId>
-            <version>3.13.6</version>
+            <version>3.14.0</version>
             <exclusions>
                 <exclusion>
                     <artifactId>javassist</artifactId>
