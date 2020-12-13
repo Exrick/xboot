@@ -42,7 +42,7 @@ public class RedisRaterLimiter {
             getToken = rateLimiter.tryAcquire();
             rateLimiter.expireAsync(rateInterval * 2, TimeUnit.MILLISECONDS);
         } catch (Exception e) {
-            getToken = false;
+            getToken = true;
         }
         return getToken;
     }

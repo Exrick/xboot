@@ -97,24 +97,28 @@ spring:
       # 修改上下文路径
       context-path: /xboot/admin
       client:
+        # 服务端url
         url: http://127.0.0.1:${server.port}/xboot/admin
+        instance:
+          # 实例url
+          service-base-url: http://127.0.0.1:${server.port}/
 
 xboot:
   # 全局限流
   ratelimit:
     # 开启
     enable: true
-    # 每1秒内
+    # 每1秒内（单位毫秒）
     timeout: 1000
-    # 总限制200个请求
+    # 总限制200个请求（单位个）
     limit: 200
   # IP限流
   iplimit:
     # 开启
     enable: true
-    # 每1秒内
+    # 每1秒内（单位毫秒）
     timeout: 1000
-    # 每个ip限制20个请求
+    # 每个ip限制20个请求（单位个）
     limit: 20
   # token交互方式
   token:

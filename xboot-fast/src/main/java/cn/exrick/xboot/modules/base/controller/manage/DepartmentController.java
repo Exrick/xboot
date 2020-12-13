@@ -107,7 +107,11 @@ public class DepartmentController {
                                @RequestParam(required = false) String[] mainHeader,
                                @RequestParam(required = false) String[] viceHeader) {
 
+        if (department.getId().equals(department.getParentId())) {
+            return ResultUtil.error("上级节点不能为自己");
+        }
         Department old = departmentService.get(department.getId());
+        String oldParentId = old.getParentId();
         Department d = departmentService.update(department);
         // 先删除原数据
         departmentHeaderService.deleteByDepartmentId(department.getId());
@@ -128,14 +132,23 @@ public class DepartmentController {
         }
         // 批量保存
         departmentHeaderService.saveOrUpdateAll(headers);
+        // 如果该节点不是一级节点 且修改了级别 判断上级还有无子节点
+        if (!"0".equals(oldParentId) && !oldParentId.equals(department.getParentId())) {
+            Department parent = departmentService.get(oldParentId);
+            List<Department> children = departmentService.findByParentIdOrderBySortOrder(parent.getId(), false);
+            if (parent != null && (children == null || children.isEmpty())) {
+                parent.setIsParent(false);
+                departmentService.update(parent);
+            }
+        }
         // 若修改了部门名称
         if (!old.getTitle().equals(department.getTitle())) {
             userService.updateDepartmentTitle(department.getId(), department.getTitle());
             // 删除所有用户缓存
-            redisTemplate.deleteByPattern("user:" + "*");
+            redisTemplate.deleteByPattern("user:*");
         }
         // 手动删除所有部门缓存
-        redisTemplate.deleteByPattern("department:" + "*");
+        redisTemplate.deleteByPattern("department:*");
         return ResultUtil.success("编辑成功");
     }
 
@@ -147,9 +160,9 @@ public class DepartmentController {
             deleteRecursion(id, ids);
         }
         // 手动删除所有部门缓存
-        redisTemplate.deleteByPattern("department:" + "*");
+        redisTemplate.deleteByPattern("department:*");
         // 删除数据权限缓存
-        redisTemplate.deleteByPattern("userRole::depIds:" + "*");
+        redisTemplate.deleteByPattern("userRole::depIds:*");
         return ResultUtil.success("批量通过id删除数据成功");
     }
 

@@ -68,7 +68,11 @@ public class Permission extends XbootBaseEntity {
     private String description;
 
     @ApiModelProperty(value = "父id")
+    @Column(nullable = false)
     private String parentId;
+
+    @ApiModelProperty(value = "是否为父节点(含子节点) 默认false")
+    private Boolean isParent = false;
 
     @ApiModelProperty(value = "排序值")
     @Column(precision = 10, scale = 2)
@@ -86,6 +90,11 @@ public class Permission extends XbootBaseEntity {
     @TableField(exist = false)
     @ApiModelProperty(value = "页面拥有的权限类型")
     private List<String> permTypes;
+
+    @Transient
+    @TableField(exist = false)
+    @ApiModelProperty(value = "父节点名称")
+    private String parentTitle;
 
     @Transient
     @TableField(exist = false)

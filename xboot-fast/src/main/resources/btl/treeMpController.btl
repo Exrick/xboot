@@ -70,9 +70,23 @@ public class ${entity.className}Controller {
     @ApiOperation(value = "编辑")
     public Result<Object> edit(${entity.className} ${entity.classNameLowerCase}) {
 
+        if (${entity.classNameLowerCase}.getId().equals(${entity.classNameLowerCase}.getParentId())) {
+            return ResultUtil.error("上级节点不能为自己");
+        }
+        ${entity.className} old = i${entity.className}Service.getById(${entity.classNameLowerCase}.getId());
+        String oldParentId = old.getParentId();
         i${entity.className}Service.updateById(${entity.classNameLowerCase});
+        // 如果该节点不是一级节点 且修改了级别 判断上级还有无子节点
+        if (!"0".equals(oldParentId) && !oldParentId.equals(${entity.classNameLowerCase}.getParentId())) {
+            ${entity.className} parent = i${entity.className}Service.getById(oldParentId);
+            List<${entity.className}> children = iStudentService.list(new QueryWrapper<Student>().eq("parent_id", parent.getIsParent()));
+            if (parent != null && (children == null || children.isEmpty())) {
+                parent.setIsParent(false);
+                i${entity.className}Service.updateById(parent);
+            }
+        }
         // 手动删除所有分类缓存
-        redisTemplate.deleteByPattern("${entity.classNameLowerCase}:" + "*");
+        redisTemplate.deleteByPattern("${entity.classNameLowerCase}:*");
         return ResultUtil.success("编辑成功");
     }
 
@@ -84,7 +98,7 @@ public class ${entity.className}Controller {
             deleteRecursion(id, ids);
         }
         // 手动删除所有缓存
-        redisTemplate.deleteByPattern("${entity.classNameLowerCase}:" + "*");
+        redisTemplate.deleteByPattern("${entity.classNameLowerCase}:*");
         return ResultUtil.success("批量通过id删除数据成功");
     }
 

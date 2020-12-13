@@ -35,6 +35,7 @@ public class Department extends XbootBaseEntity {
     private String title;
 
     @ApiModelProperty(value = "父id")
+    @Column(nullable = false)
     private String parentId;
 
     @ApiModelProperty(value = "是否为父节点(含子节点) 默认false")

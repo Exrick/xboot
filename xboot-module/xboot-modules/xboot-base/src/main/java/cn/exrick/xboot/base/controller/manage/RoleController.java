@@ -108,8 +108,8 @@ public class RoleController {
             rolePermissionService.saveOrUpdateAll(list);
         }
         //手动批量删除缓存
-        redisTemplate.deleteByPattern("user:" + "*");
-        redisTemplate.deleteByPattern("userRole:" + "*");
+        redisTemplate.deleteByPattern("user:*");
+        redisTemplate.deleteByPattern("userRole:*");
         redisTemplate.deleteByPattern("permission::userMenuList:*");
         return ResultUtil.data(null);
     }
@@ -135,8 +135,8 @@ public class RoleController {
             }
         }
         // 手动删除相关缓存
-        redisTemplate.deleteByPattern("department:" + "*");
-        redisTemplate.deleteByPattern("userRole:" + "*");
+        redisTemplate.deleteByPattern("department:*");
+        redisTemplate.deleteByPattern("userRole:*");
 
         return ResultUtil.data(null);
     }
@@ -155,8 +155,8 @@ public class RoleController {
 
         Role r = roleService.update(entity);
         // 手动批量删除缓存
-        redisTemplate.deleteByPattern("user:" + "*");
-        redisTemplate.deleteByPattern("userRole:" + "*");
+        redisTemplate.deleteByPattern("user:*");
+        redisTemplate.deleteByPattern("userRole:*");
         return new ResultUtil<Role>().setData(r);
     }
 
