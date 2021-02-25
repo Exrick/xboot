@@ -97,7 +97,7 @@ public class RestCtrlExceptionHandler {
 
     @ExceptionHandler(CaptchaException.class)
     @ResponseStatus(value = HttpStatus.OK)
-    public Result<Object> handleCaptchaExceptionException(CaptchaException e) {
+    public Result<Object> handleCaptchaException(CaptchaException e) {
 
         String errorMsg = "CaptchaException exception";
         if (e != null) {
@@ -109,7 +109,7 @@ public class RestCtrlExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(value = HttpStatus.OK)
-    public Result<Object> handleAccessDeniedExceptionException(AccessDeniedException e) {
+    public Result<Object> handleAccessDeniedException(AccessDeniedException e) {
 
         String errorMsg = "AccessDeniedException exception";
         if (e != null) {

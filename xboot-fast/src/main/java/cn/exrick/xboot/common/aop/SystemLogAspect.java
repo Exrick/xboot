@@ -8,6 +8,8 @@ import cn.exrick.xboot.modules.base.entity.Log;
 import cn.exrick.xboot.modules.base.entity.elasticsearch.EsLog;
 import cn.exrick.xboot.modules.base.service.LogService;
 import cn.exrick.xboot.modules.base.service.elasticsearch.EsLogService;
+import cn.hutool.http.useragent.UserAgent;
+import cn.hutool.http.useragent.UserAgentUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -95,6 +97,17 @@ public class SystemLogAspect {
                 return;
             }
             username = authentication.getName();
+
+            String device = "", isMobile = "PC端";
+            UserAgent ua = UserAgentUtil.parse(request.getHeader("user-agent"));
+            if (ua != null) {
+                if (ua.isMobile()) {
+                    isMobile = "移动端";
+                }
+                device = ua.getBrowser().toString() + " " + ua.getVersion() + " | " + ua.getPlatform().toString()
+                        + " " + ua.getOs().toString() + " | " + isMobile;
+            }
+
             if (esRecord) {
                 EsLog esLog = new EsLog();
 
@@ -115,6 +128,8 @@ public class SystemLogAspect {
                 esLog.setIp(ipInfoUtil.getIpAddr(request));
                 // IP地址
                 esLog.setIpInfo(ipInfoUtil.getIpCity(request));
+                // 设备信息
+                esLog.setDevice(device);
                 // 请求开始时间
                 long beginTime = THREAD_LOCAL_BEGIN_TIME.get().getTime();
                 long endTime = System.currentTimeMillis();
@@ -144,6 +159,8 @@ public class SystemLogAspect {
                 log.setIp(ipInfoUtil.getIpAddr(request));
                 // IP地址
                 log.setIpInfo(ipInfoUtil.getIpCity(request));
+                // 设备信息
+                log.setDevice(device);
                 // 请求开始时间
                 long beginTime = THREAD_LOCAL_BEGIN_TIME.get().getTime();
                 long endTime = System.currentTimeMillis();

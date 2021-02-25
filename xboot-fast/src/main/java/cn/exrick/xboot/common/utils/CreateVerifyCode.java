@@ -17,6 +17,11 @@ import java.security.SecureRandom;
 public class CreateVerifyCode {
 
     /**
+     * 随机字符
+     */
+    public static final String STRING = "ABCDEFGHJKMNOPQRSTUVWXYZabcdefghjkmnopqrstuvwxyz1234567890";
+
+    /**
      * 图片的宽度
      */
     private int width = 160;
@@ -197,15 +202,14 @@ public class CreateVerifyCode {
      */
     public String randomStr(int n) {
 
-        String str1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
-        String str2 = "";
-        int len = str1.length() - 1;
+        String str = "";
+        int len = STRING.length() - 1;
         double r;
         for (int i = 0; i < n; i++) {
             r = random.nextDouble() * len;
-            str2 = str2 + str1.charAt((int) r);
+            str = str + STRING.charAt((int) r);
         }
-        return str2;
+        return str;
     }
 
     /**

@@ -2,6 +2,7 @@ package cn.exrick.xboot.core.service;
 
 import cn.exrick.xboot.core.base.XbootBaseService;
 import cn.exrick.xboot.core.entity.DepartmentHeader;
+import cn.exrick.xboot.core.vo.UserVo;
 
 import java.util.List;
 
@@ -17,7 +18,14 @@ public interface DepartmentHeaderService extends XbootBaseService<DepartmentHead
      * @param type
      * @return
      */
-    List<String> findHeaderByDepartmentId(String departmentId, Integer type);
+    List<UserVo> findHeaderByDepartmentId(String departmentId, Integer type);
+
+    /**
+     * 通过部门获取
+     * @param departmentIds
+     * @return
+     */
+    List<DepartmentHeader> findByDepartmentIdIn(List<String> departmentIds);
 
     /**
      * 通过部门id删除
@@ -30,4 +38,12 @@ public interface DepartmentHeaderService extends XbootBaseService<DepartmentHead
      * @param userId
      */
     void deleteByUserId(String userId);
+
+    /**
+     * 是否为部门负责人
+     * @param userId
+     * @param departmentId
+     * @return
+     */
+    Boolean isDepartmentHeader(String userId, String departmentId);
 }

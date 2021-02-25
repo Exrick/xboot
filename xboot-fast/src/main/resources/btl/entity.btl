@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 <%
@@ -25,6 +26,7 @@ import javax.persistence.Table;
  * @author ${entity.author}
  */
 @Data
+@Accessors(chain = true)
 @Entity
 @DynamicInsert
 @DynamicUpdate

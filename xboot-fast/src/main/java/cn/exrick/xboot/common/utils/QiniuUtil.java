@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
-import java.util.UUID;
 
 /**
  * @author Exrickx
@@ -107,15 +106,5 @@ public class QiniuUtil {
             Response r = ex.response;
             throw new XbootException("上传文件出错，请检查七牛云配置，" + r.toString());
         }
-    }
-
-    /**
-     * 以UUID重命名
-     * @param fileName
-     * @return
-     */
-    public String renamePic(String fileName) {
-        String extName = fileName.substring(fileName.lastIndexOf("."));
-        return UUID.randomUUID().toString().replace("-", "") + extName;
     }
 }

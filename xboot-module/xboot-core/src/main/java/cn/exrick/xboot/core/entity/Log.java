@@ -51,6 +51,9 @@ public class Log extends XbootBaseEntity {
     @ApiModelProperty(value = "ip信息")
     private String ipInfo;
 
+    @ApiModelProperty(value = "设备信息")
+    private String device;
+
     @ApiModelProperty(value = "花费时间")
     private Integer costTime;
 

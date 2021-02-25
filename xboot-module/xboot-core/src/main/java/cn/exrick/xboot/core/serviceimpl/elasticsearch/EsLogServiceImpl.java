@@ -61,7 +61,7 @@ public class EsLogServiceImpl implements EsLogService {
         QueryBuilder qb;
 
         QueryBuilder qb0 = QueryBuilders.termQuery("logType", type);
-        QueryBuilder qb1 = QueryBuilders.multiMatchQuery(key, "name", "requestUrl", "requestType", "requestParam", "username", "ip", "ipInfo");
+        QueryBuilder qb1 = QueryBuilders.multiMatchQuery(key, "name", "requestUrl", "requestType", "requestParam", "username", "ip", "ipInfo", "device");
         // 在有type条件下
         if (StrUtil.isNotBlank(key) && StrUtil.isBlank(searchVo.getStartDate()) && StrUtil.isBlank(searchVo.getEndDate())) {
             // 仅有key

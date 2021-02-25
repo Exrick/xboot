@@ -159,6 +159,9 @@ public class UserController {
         User old = securityUtil.getCurrUser();
         // 不能修改的字段
         u.setUsername(old.getUsername()).setPassword(old.getPassword()).setType(old.getType()).setStatus(old.getStatus());
+        if (StrUtil.isBlank(u.getDepartmentId())) {
+            u.setDepartmentId(null);
+        }
         userService.update(u);
         return ResultUtil.success("修改成功");
     }

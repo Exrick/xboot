@@ -52,6 +52,7 @@ public class LogServiceImpl implements LogService {
                 Path<String> usernameField = root.get("username");
                 Path<String> ipField = root.get("ip");
                 Path<String> ipInfoField = root.get("ipInfo");
+                Path<String> deviceField = root.get("device");
                 Path<Integer> logTypeField = root.get("logType");
                 Path<Date> createTimeField = root.get("createTime");
 
@@ -71,7 +72,8 @@ public class LogServiceImpl implements LogService {
                     Predicate p5 = cb.like(ipField, '%' + key + '%');
                     Predicate p6 = cb.like(ipInfoField, '%' + key + '%');
                     Predicate p7 = cb.like(nameField, '%' + key + '%');
-                    list.add(cb.or(p1, p2, p3, p4, p5, p6, p7));
+                    Predicate p8 = cb.like(deviceField, '%' + key + '%');
+                    list.add(cb.or(p1, p2, p3, p4, p5, p6, p7, p8));
                 }
 
                 // 创建时间

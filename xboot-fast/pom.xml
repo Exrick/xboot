@@ -67,7 +67,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.2.3</version>
+            <version>1.2.4</version>
         </dependency>
         <!-- Quartz定时任务 -->
         <dependency>
@@ -95,7 +95,7 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.4.1</version>
+            <version>3.4.2</version>
         </dependency>
         <!-- Redis-->
         <dependency>
@@ -105,7 +105,7 @@
         <dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson-spring-boot-starter</artifactId>
-            <version>3.14.0</version>
+            <version>3.15.0</version>
             <exclusions>
                 <exclusion>
                     <artifactId>javassist</artifactId>
@@ -129,7 +129,7 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.5.2</version>
+            <version>5.5.8</version>
         </dependency>
         <!-- Lombok -->
         <dependency>

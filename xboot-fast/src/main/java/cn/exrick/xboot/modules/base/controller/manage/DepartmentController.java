@@ -133,7 +133,7 @@ public class DepartmentController {
         // 批量保存
         departmentHeaderService.saveOrUpdateAll(headers);
         // 如果该节点不是一级节点 且修改了级别 判断上级还有无子节点
-        if (!"0".equals(oldParentId) && !oldParentId.equals(department.getParentId())) {
+        if (!CommonConstant.PARENT_ID.equals(oldParentId) && !oldParentId.equals(department.getParentId())) {
             Department parent = departmentService.get(oldParentId);
             List<Department> children = departmentService.findByParentIdOrderBySortOrder(parent.getId(), false);
             if (parent != null && (children == null || children.isEmpty())) {
@@ -221,8 +221,8 @@ public class DepartmentController {
                 item.setParentTitle("一级部门");
             }
             // 设置负责人
-            item.setMainHeader(departmentHeaderService.findHeaderByDepartmentId(item.getId(), CommonConstant.HEADER_TYPE_MAIN));
-            item.setViceHeader(departmentHeaderService.findHeaderByDepartmentId(item.getId(), CommonConstant.HEADER_TYPE_VICE));
+            item.setMainHeaders(departmentHeaderService.findHeaderByDepartmentId(item.getId(), CommonConstant.HEADER_TYPE_MAIN));
+            item.setViceHeaders(departmentHeaderService.findHeaderByDepartmentId(item.getId(), CommonConstant.HEADER_TYPE_VICE));
         });
     }
 }

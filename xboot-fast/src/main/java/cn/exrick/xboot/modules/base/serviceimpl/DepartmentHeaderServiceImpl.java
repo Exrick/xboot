@@ -1,8 +1,11 @@
 package cn.exrick.xboot.modules.base.serviceimpl;
 
 import cn.exrick.xboot.modules.base.dao.DepartmentHeaderDao;
+import cn.exrick.xboot.modules.base.dao.UserDao;
 import cn.exrick.xboot.modules.base.entity.DepartmentHeader;
+import cn.exrick.xboot.modules.base.entity.User;
 import cn.exrick.xboot.modules.base.service.DepartmentHeaderService;
+import cn.exrick.xboot.modules.base.vo.UserVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,9 @@ public class DepartmentHeaderServiceImpl implements DepartmentHeaderService {
     @Autowired
     private DepartmentHeaderDao departmentHeaderDao;
 
+    @Autowired
+    private UserDao userDao;
+
     @Override
     public DepartmentHeaderDao getRepository() {
         return departmentHeaderDao;
@@ -30,14 +36,23 @@ public class DepartmentHeaderServiceImpl implements DepartmentHeaderService {
 
 
     @Override
-    public List<String> findHeaderByDepartmentId(String departmentId, Integer type) {
+    public List<UserVo> findHeaderByDepartmentId(String departmentId, Integer type) {
 
-        List<String> list = new ArrayList<>();
+        List<UserVo> list = new ArrayList<>();
         List<DepartmentHeader> headers = departmentHeaderDao.findByDepartmentIdAndType(departmentId, type);
         headers.forEach(e -> {
-            list.add(e.getUserId());
+            User u = userDao.getOne(e.getUserId());
+            if (u != null) {
+                list.add(new UserVo().setId(u.getId()).setUsername(u.getUsername()).setNickname(u.getNickname()));
+            }
         });
         return list;
+    }
+
+    @Override
+    public List<DepartmentHeader> findByDepartmentIdIn(List<String> departmentIds) {
+
+        return departmentHeaderDao.findByDepartmentIdIn(departmentIds);
     }
 
     @Override
@@ -50,5 +65,15 @@ public class DepartmentHeaderServiceImpl implements DepartmentHeaderService {
     public void deleteByUserId(String userId) {
 
         departmentHeaderDao.deleteByUserId(userId);
+    }
+
+    @Override
+    public Boolean isDepartmentHeader(String userId, String departmentId) {
+
+        List<DepartmentHeader> headers = departmentHeaderDao.findByUserIdAndDepartmentId(userId, departmentId);
+        if (headers != null && !headers.isEmpty()) {
+            return true;
+        }
+        return false;
     }
 }

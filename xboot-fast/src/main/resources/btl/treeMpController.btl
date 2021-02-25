@@ -77,7 +77,7 @@ public class ${entity.className}Controller {
         String oldParentId = old.getParentId();
         i${entity.className}Service.updateById(${entity.classNameLowerCase});
         // 如果该节点不是一级节点 且修改了级别 判断上级还有无子节点
-        if (!"0".equals(oldParentId) && !oldParentId.equals(${entity.classNameLowerCase}.getParentId())) {
+        if (!CommonConstant.PARENT_ID.equals(oldParentId) && !oldParentId.equals(${entity.classNameLowerCase}.getParentId())) {
             ${entity.className} parent = i${entity.className}Service.getById(oldParentId);
             List<${entity.className}> children = iStudentService.list(new QueryWrapper<Student>().eq("parent_id", parent.getIsParent()));
             if (parent != null && (children == null || children.isEmpty())) {

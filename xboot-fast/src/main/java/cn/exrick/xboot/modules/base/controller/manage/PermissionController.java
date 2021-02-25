@@ -238,7 +238,7 @@ public class PermissionController {
 
         List<RolePermission> list = rolePermissionService.findByPermissionId(id);
         if (list != null && list.size() > 0) {
-            throw new XbootException("删除失败，包含正被用户使用关联的部门");
+            throw new XbootException("删除失败，包含正被用户使用关联的菜单");
         }
         // 获得其父节点
         Permission p = permissionService.get(id);

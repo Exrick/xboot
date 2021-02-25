@@ -12,6 +12,8 @@ server:
     threads:
       max: 1000
       min-spare: 30
+    # 最大吞吐量不限制
+    max-swallow-size: -1
   # 优雅停机 关闭容器后默认等待30秒继续执行没处理完的任务 避免数据不一致
   shutdown: graceful
 
@@ -78,16 +80,25 @@ spring:
   quartz:
     # 任务信息存储至数据库
     job-store-type: jdbc
+    jdbc:
+      # 自动生成表 若已有表数据请务必关闭 ALWAYS/EMBEDDED/NEVER
+      initialize-schema: NEVER
     properties:
       org:
         quartz:
+          scheduler:
+            # 允许调度程序节点一次获取（触发）的最大触发器数
+            batchTriggerAcquisitionMaxCount: 5
           jobStore:
-            misfireThreshold: 100
+            # 加锁调度
+            acquireTriggersWithinLock: true
+            # “容忍”触发器经过下一次触发时间的毫秒数
+            misfireThreshold: 10000
   # 文件大小上传配置
   servlet:
     multipart:
-      max-file-size: 5MB
-      max-request-size: 5MB
+      max-file-size: -1
+      max-request-size: -1
   jackson:
     time-zone: GMT+8
     serialization:
@@ -143,6 +154,8 @@ xboot:
   # 日志记录方式 true使用Elasticsearch记录 false记录至数据库中
   logRecord:
     es: false
+  # 文件大小上传配置 单位MB
+  maxUploadFile: 5
   # 七牛云配置
   qiniu:
     accessKey: 你的accessKey

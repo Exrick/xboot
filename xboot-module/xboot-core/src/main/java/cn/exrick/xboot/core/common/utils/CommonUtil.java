@@ -21,7 +21,11 @@ public class CommonUtil {
      * @return
      */
     public static String renamePic(String fileName) {
-        String extName = fileName.substring(fileName.lastIndexOf("."));
+
+        String extName = "";
+        if (fileName.contains(".")) {
+            extName = fileName.substring(fileName.lastIndexOf("."));
+        }
         return IdUtil.simpleUUID() + extName;
     }
 

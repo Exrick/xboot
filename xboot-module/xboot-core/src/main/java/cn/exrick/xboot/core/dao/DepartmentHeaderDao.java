@@ -43,4 +43,12 @@ public interface DepartmentHeaderDao extends XbootBaseDao<DepartmentHeader, Stri
     @Modifying
     @Query("delete from DepartmentHeader d where d.userId = ?1")
     void deleteByUserId(String userId);
+
+    /**
+     * 通过部门id和userId类型获取
+     * @param userId
+     * @param departmentId
+     * @return
+     */
+    List<DepartmentHeader> findByUserIdAndDepartmentId(String userId, String departmentId);
 }

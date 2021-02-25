@@ -119,16 +119,16 @@ public class QuartzJobController {
     public void add(String jobClassName, String cronExpression, String parameter) {
 
         try {
-            //构建job信息
+            // 构建job信息
             JobDetail jobDetail = JobBuilder.newJob(getClass(jobClassName).getClass())
                     .withIdentity(jobClassName)
                     .usingJobData("parameter", parameter)
                     .build();
 
-            //表达式调度构建器(即任务执行的时间) 使用withMisfireHandlingInstructionDoNothing() 忽略掉调度暂停过程中没有执行的调度
+            // 表达式调度构建器(即任务执行的时间) 使用withMisfireHandlingInstructionDoNothing() 忽略掉调度暂停过程中没有执行的调度
             CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression).withMisfireHandlingInstructionDoNothing();
 
-            //按新的cronExpression表达式构建一个新的trigger
+            // 按新的cronExpression表达式构建一个新的trigger
             CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(jobClassName)
                     .withSchedule(scheduleBuilder).build();
 
