@@ -79,7 +79,7 @@ public class ${entity.className}Controller {
         // 如果该节点不是一级节点 且修改了级别 判断上级还有无子节点
         if (!CommonConstant.PARENT_ID.equals(oldParentId) && !oldParentId.equals(${entity.classNameLowerCase}.getParentId())) {
             ${entity.className} parent = i${entity.className}Service.getById(oldParentId);
-            List<${entity.className}> children = iStudentService.list(new QueryWrapper<Student>().eq("parent_id", parent.getIsParent()));
+            List<${entity.className}> children = i${entity.className}Service.list(new QueryWrapper<${entity.className}>().eq("parent_id", parent.getIsParent()));
             if (parent != null && (children == null || children.isEmpty())) {
                 parent.setIsParent(false);
                 i${entity.className}Service.updateById(parent);
@@ -120,7 +120,7 @@ public class ${entity.className}Controller {
             }
         }
         // 递归删除
-        List<${entity.className}> objs = i${entity.className}Service.list(new QueryWrapper<Student>().eq("parent_id", id).orderByAsc("sort_order"));
+        List<${entity.className}> objs = i${entity.className}Service.list(new QueryWrapper<${entity.className}>().eq("parent_id", id).orderByAsc("sort_order"));
         for (${entity.className} obj : objs) {
             if (!CommonUtil.judgeIds(obj.getId(), ids)) {
                 deleteRecursion(obj.getId(), ids);
@@ -132,7 +132,7 @@ public class ${entity.className}Controller {
     @ApiOperation(value = "名称模糊搜索")
     public Result<List<${entity.className}>> searchByTitle(@RequestParam String title) {
 
-        List<${entity.className}> list = i${entity.className}Service.list(new QueryWrapper<Student>().like("title", title).orderByAsc("sort_order"));
+        List<${entity.className}> list = i${entity.className}Service.list(new QueryWrapper<${entity.className}>().like("title", title).orderByAsc("sort_order"));
         setInfo(list);
         return new ResultUtil<List<${entity.className}>>().setData(list);
     }
