@@ -269,6 +269,7 @@ public class PermissionController {
     public Result<List<Permission>> searchPermissionList(@RequestParam String title) {
 
         List<Permission> list = permissionService.findByTitleLikeOrderBySortOrder("%" + title + "%");
+        list.forEach(e -> setInfo(e));
         return new ResultUtil<List<Permission>>().setData(list);
     }
 
