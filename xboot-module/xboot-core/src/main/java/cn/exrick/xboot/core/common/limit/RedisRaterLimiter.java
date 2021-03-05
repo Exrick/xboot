@@ -34,11 +34,10 @@ public class RedisRaterLimiter {
      */
     public Boolean acquireByRedis(String name, Long rate, Long rateInterval) {
 
-        RRateLimiter rateLimiter = redisson.getRateLimiter(CommonConstant.LIMIT_PRE + name);
-        rateLimiter.trySetRate(RateType.OVERALL, rate, rateInterval, RateIntervalUnit.MILLISECONDS);
-
         boolean getToken;
         try {
+            RRateLimiter rateLimiter = redisson.getRateLimiter(CommonConstant.LIMIT_PRE + name);
+            rateLimiter.trySetRate(RateType.OVERALL, rate, rateInterval, RateIntervalUnit.MILLISECONDS);
             getToken = rateLimiter.tryAcquire();
             rateLimiter.expireAsync(rateInterval * 2, TimeUnit.MILLISECONDS);
         } catch (Exception e) {

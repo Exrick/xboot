@@ -4,4 +4,4 @@ ____  _____________                   __
  /     \  |    |   \(  <_> )(  <_> ) |  |
 /___/\  \ |______  / \____/  \____/  |__|
       \_/        \/
-v3.3.2 By Exrick :: Spring Boot v2.3.7.RELEASE
+v3.3.3 By Exrick :: Spring Boot v2.3.7.RELEASE

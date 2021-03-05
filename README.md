@@ -1,7 +1,7 @@
 # XBoot
 [![AUR](https://img.shields.io/badge/GPL-v3-red)](https://github.com/Exrick/xmall/blob/master/License)
 [![](https://img.shields.io/badge/Author-Exrick-orange.svg)](http://blog.exrick.cn)
-[![](https://img.shields.io/badge/version-3.3.2-brightgreen.svg)](https://github.com/Exrick/x-boot)
+[![](https://img.shields.io/badge/version-3.3.3-brightgreen.svg)](https://github.com/Exrick/x-boot)
 [![GitHub stars](https://img.shields.io/github/stars/Exrick/x-boot.svg?style=social&label=Stars)](https://github.com/Exrick/x-boot)
 [![GitHub forks](https://img.shields.io/github/forks/Exrick/x-boot.svg?style=social&label=Fork)](https://github.com/Exrick/x-boot)
 
@@ -22,8 +22,8 @@ https://www.kancloud.cn/exrick/xboot/content
 - xboot-fast：单应用版本
 - xboot-module：多模块版本
 ### 项目简介 
-- [x] 代码拥有详细注释 无复杂逻辑 核心使用 SpringBoot 2.3.6.RELEASE
-- [x] JWT / 基于Redis可配置单设备登录Token交互 任意切换 支持点单登录 提供开放平台
+- [x] 代码拥有详细注释 无复杂逻辑 核心使用 SpringBoot 2.3.7.RELEASE
+- [x] JWT / 基于Redis可配置单设备登录Token交互 任意切换 提供开放平台、OAuth2认证中心 支持点单登录
 - [x] JPA + Mybatis-Plus 任意切换
 - [x] 操作日志记录方式任意切换Mysql或Elasticseach记录
 - [x] Java、Vue、SQL代码生成效率翻四倍
