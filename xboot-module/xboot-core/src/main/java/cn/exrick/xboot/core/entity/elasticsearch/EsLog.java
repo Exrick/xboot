@@ -22,7 +22,7 @@ import java.util.Map;
  * @author Exrickx
  */
 @Data
-@Document(indexName = "log", type = "log", shards = 1, replicas = 0, refreshInterval = "-1")
+@Document(indexName = "log", replicas = 0, refreshInterval = "1m")
 public class EsLog implements Serializable {
 
     private static final long serialVersionUID = 1L;

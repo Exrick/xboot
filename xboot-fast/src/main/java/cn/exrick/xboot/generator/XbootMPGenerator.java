@@ -66,34 +66,40 @@ public class XbootMPGenerator {
     private static final String PRIMARY_KEY_TYPE = "String";
 
     /**
+     * 模块包路径
+     * （下方包路径拼接使用）
+     */
+    private static final String MODULE = "your";
+
+    /**
      * 实体类对应包
      * (文件自动生成至该包下)
      */
-    private static final String ENTITY_PACKAGE = "cn.exrick.xboot.modules.your.entity";
+    private static final String ENTITY_PACKAGE = "cn.exrick.xboot.modules." + MODULE + ".entity";
 
     /**
      * dao对应包 【注意修改后需到cn.exrick.xboot.config.mybatisplus.MybatisPlusConfig配置你的mapper路径扫描】
      * (文件自动生成至该包下)
      */
-    private static final String DAO_PACKAGE = "cn.exrick.xboot.modules.your.mapper";
+    private static final String DAO_PACKAGE = "cn.exrick.xboot.modules." + MODULE + ".mapper";
 
     /**
      * service对应包
      * (文件自动生成至该包下)
      */
-    private static final String SERVICE_PACKAGE = "cn.exrick.xboot.modules.your.service";
+    private static final String SERVICE_PACKAGE = "cn.exrick.xboot.modules." + MODULE + ".service";
 
     /**
      * serviceImpl对应包
      * (文件自动生成至该包下)
      */
-    private static final String SERVICE_IMPL_PACKAGE = "cn.exrick.xboot.modules.your.serviceimpl";
+    private static final String SERVICE_IMPL_PACKAGE = "cn.exrick.xboot.modules." + MODULE + ".serviceimpl";
 
     /**
      * controller对应包
      * (文件自动生成至该包下)
      */
-    private static final String CONTROLLER_PACKAGE = "cn.exrick.xboot.modules.your.controller";
+    private static final String CONTROLLER_PACKAGE = "cn.exrick.xboot.modules." + MODULE + ".controller";
 
     /**
      * 路径前缀

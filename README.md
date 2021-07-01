@@ -1,7 +1,7 @@
 # XBoot
 [![AUR](https://img.shields.io/badge/GPL-v3-red)](https://github.com/Exrick/xmall/blob/master/License)
 [![](https://img.shields.io/badge/Author-Exrick-orange.svg)](http://blog.exrick.cn)
-[![](https://img.shields.io/badge/version-3.3.3-brightgreen.svg)](https://github.com/Exrick/x-boot)
+[![](https://img.shields.io/badge/version-3.3.4-brightgreen.svg)](https://github.com/Exrick/x-boot)
 [![GitHub stars](https://img.shields.io/github/stars/Exrick/x-boot.svg?style=social&label=Stars)](https://github.com/Exrick/x-boot)
 [![GitHub forks](https://img.shields.io/github/forks/Exrick/x-boot.svg?style=social&label=Fork)](https://github.com/Exrick/x-boot)
 
@@ -22,7 +22,7 @@ https://www.kancloud.cn/exrick/xboot/content
 - xboot-fast：单应用版本
 - xboot-module：多模块版本
 ### 项目简介 
-- [x] 代码拥有详细注释 无复杂逻辑 核心使用 SpringBoot 2.3.7.RELEASE
+- [x] 代码拥有详细注释 无复杂逻辑 核心使用 SpringBoot 2.4.8
 - [x] JWT / 基于Redis可配置单设备登录Token交互 任意切换 提供开放平台、OAuth2认证中心 支持点单登录
 - [x] JPA + Mybatis-Plus 任意切换
 - [x] 操作日志记录方式任意切换Mysql或Elasticseach记录
@@ -41,19 +41,19 @@ https://www.kancloud.cn/exrick/xboot/content
 
 - PC
 
-![QQ截图20180826163917.png](https://ooo.0o0.ooo/2018/08/26/5b826868e2359.png)
+![QQ截图20180826163917.png](https://ooo.0o0.ooo/2021/07/01/t6RXqn8LeaY5Nu1.png)
 
-![QQ截图20180826164058.png](https://ooo.0o0.ooo/2018/08/26/5b8268d63d156.png)
+![QQ截图20180826164058.png](https://ooo.0o0.ooo/2021/07/01/TQZqrxog4ufX2SR.png)
 
-![QQ截图20180826164144.png](https://ooo.0o0.ooo/2018/08/26/5b8268e6a091f.png)
+![QQ截图20180826164144.png](https://ooo.0o0.ooo/2021/07/01/t7RdWhkbzZCawce.png)
 
 - iPad Mini 5
 
-<img src=https://ooo.0o0.ooo/2019/11/25/2tiloPbTcqfnRDQ.jpg width=600/>
+<img src=https://ooo.0o0.ooo/2021/07/01/gXl5OKkJHEIwf3N.png width=600/>
 
 - iPhone X
 
-<img src=https://ooo.0o0.ooo/2019/11/25/EaLfVxmli2Tg8PY.jpg width=300/>
+<img src=https://ooo.0o0.ooo/2021/07/01/LdNPiKMlOESvfW8.png width=300/>
 
 
 ### [完整版截图细节展示](https://github.com/Exrick/x-boot/wiki/%E5%AE%8C%E6%95%B4%E7%89%88%E6%88%AA%E5%9B%BE%E7%BB%86%E8%8A%82%E5%B1%95%E7%A4%BA)

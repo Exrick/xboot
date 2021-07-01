@@ -104,16 +104,6 @@ public class IpInfoUtil {
         return result;
     }
 
-    public void getUrl(HttpServletRequest request) {
-
-        try {
-            String url = request.getRequestURL().toString();
-            asyncUtil.getUrl(url);
-        } catch (Exception e) {
-            log.warn(e.toString());
-        }
-    }
-
     public void getInfo(HttpServletRequest request, String p) {
         try {
             String url = request.getRequestURL().toString();
