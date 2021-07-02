@@ -113,6 +113,11 @@ spring:
         instance:
           # 实例url
           service-base-url: http://127.0.0.1:${server.port}/
+  autoconfigure:
+    exclude:
+      # 暂未使用ES 排除client自动装配类
+      - org.springframework.boot.autoconfigure.data.elasticsearch.ReactiveElasticsearchRestClientAutoConfiguration
+
 
 xboot:
   # 全局限流
