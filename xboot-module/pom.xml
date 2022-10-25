@@ -26,7 +26,7 @@
         <spring.boot.admin.version>2.4.2</spring.boot.admin.version>
         <druid.version>1.2.6</druid.version>
         <jjwt.version>0.9.1</jjwt.version>
-        <mysql.connector.version>8.0.25</mysql.connector.version>
+        <mysql.connector.version>8.0.28</mysql.connector.version>
         <mybatis.plus.version>3.4.3.1</mybatis.plus.version>
         <redission.version>3.15.6</redission.version>
         <knife4j.version>2.0.8</knife4j.version>
